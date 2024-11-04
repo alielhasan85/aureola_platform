@@ -4,6 +4,8 @@ import 'package:aureola_platform/screens/main_page/widgets/nav_venue.dart';
 import 'package:aureola_platform/theme/theme.dart';
 import 'package:flutter/material.dart';
 
+import 'package:aureola_platform/localization/localization.dart';
+
 class CustomNavigation extends StatefulWidget {
   const CustomNavigation({super.key});
 
@@ -13,10 +15,8 @@ class CustomNavigation extends StatefulWidget {
 
 class _CustomNavigationState extends State<CustomNavigation> {
   int _selectedIndex = 0;
-  int _selectedMenuSubMenuIndex =
-      0; // Track selected item in Menu Management submenu
-  int _selectedSettingsSubMenuIndex =
-      0; // Track selected item in Settings submenu
+  int _selectedMenuSubMenuIndex = 0;
+  int _selectedSettingsSubMenuIndex = 0;
 
   bool get isMenuManagementSelected => _selectedIndex == 3;
   bool get isSettingsSelected => _selectedIndex == 5;
@@ -41,22 +41,27 @@ class _CustomNavigationState extends State<CustomNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
     return Row(
       children: [
         Container(
           decoration: BoxDecoration(
             color: AppTheme.white,
             border: Border(
-              right: BorderSide(
-                width: 2,
-                color: AppTheme.divider,
-              ),
+              left: isRtl
+                  ? const BorderSide(width: 2, color: AppTheme.divider)
+                  : BorderSide.none,
+              right: !isRtl
+                  ? const BorderSide(width: 2, color: AppTheme.divider)
+                  : BorderSide.none,
             ),
           ),
           width: 230,
           height: double.infinity,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment:
+                isRtl ? CrossAxisAlignment.start : CrossAxisAlignment.end,
             children: [
               const Padding(
                 padding: EdgeInsets.only(top: 12, right: 24),
@@ -74,7 +79,7 @@ class _CustomNavigationState extends State<CustomNavigation> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
+                padding: const EdgeInsets.symmetric(vertical: 24),
                 child: VenueNavigation(
                   label: 'Al bait El Shami restaurant and',
                   iconPath: 'icons/establishment.svg',
@@ -86,29 +91,34 @@ class _CustomNavigationState extends State<CustomNavigation> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      right: 21), // Right padding for alignment
+                  padding: EdgeInsets.only(
+                    right: isRtl ? 0 : 21,
+                    left: isRtl ? 21 : 0,
+                  ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: isRtl
+                        ? CrossAxisAlignment.start
+                        : CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       NavigationItem(
-                        label: 'Dashboard',
+                        label: AppLocalizations.of(context)!
+                            .translate('dashboard'),
                         leadingIconPath: 'icons/dashboard.svg',
                         isSelected: _selectedIndex == 1,
                         onTap: () => _updateIndex(1),
                       ),
                       const SizedBox(height: 10),
                       NavigationItem(
-                        label: 'Order',
+                        label: AppLocalizations.of(context)!.translate('order'),
                         leadingIconPath: 'icons/order.svg',
                         isSelected: _selectedIndex == 2,
                         onTap: () => _updateIndex(2),
                       ),
                       const SizedBox(height: 10),
-                      // Menu Management Navigation Item with Dropdown
                       NavigationItem(
-                        label: 'Menu Management',
+                        label: AppLocalizations.of(context)!
+                            .translate('menu_management'),
                         leadingIconPath: 'icons/menu_management.svg',
                         trailingIconPath: 'icons/arrow_down.svg',
                         isSelected: _selectedIndex == 3,
@@ -119,7 +129,10 @@ class _CustomNavigationState extends State<CustomNavigation> {
                         Container(
                           width: 180,
                           padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.only(left: 20),
+                          margin: EdgeInsets.only(
+                            left: isRtl ? 0 : 20,
+                            right: isRtl ? 20 : 0,
+                          ),
                           decoration: BoxDecoration(
                             color: AppTheme.background.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(8),
@@ -128,7 +141,8 @@ class _CustomNavigationState extends State<CustomNavigation> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SubMenuItem(
-                                label: 'Menus',
+                                label: AppLocalizations.of(context)!
+                                    .translate('menu'),
                                 isSelected: _selectedMenuSubMenuIndex == 0,
                                 onSelect: () => _onMenuSubMenuSelect(0),
                                 onTap: () {},
@@ -138,7 +152,8 @@ class _CustomNavigationState extends State<CustomNavigation> {
                                 thickness: 0.5,
                               ),
                               SubMenuItem(
-                                label: 'Categories',
+                                label: AppLocalizations.of(context)!
+                                    .translate('categories'),
                                 isSelected: _selectedMenuSubMenuIndex == 1,
                                 onSelect: () => _onMenuSubMenuSelect(1),
                                 onTap: () {},
@@ -148,7 +163,8 @@ class _CustomNavigationState extends State<CustomNavigation> {
                                 thickness: 0.5,
                               ),
                               SubMenuItem(
-                                label: 'Items',
+                                label: AppLocalizations.of(context)!
+                                    .translate("Items"),
                                 isSelected: _selectedMenuSubMenuIndex == 2,
                                 onSelect: () => _onMenuSubMenuSelect(2),
                                 onTap: () {},
@@ -158,7 +174,8 @@ class _CustomNavigationState extends State<CustomNavigation> {
                                 thickness: 0.5,
                               ),
                               SubMenuItem(
-                                label: 'Add-ons',
+                                label: AppLocalizations.of(context)!
+                                    .translate("Add-ons"),
                                 isSelected: _selectedMenuSubMenuIndex == 3,
                                 onSelect: () => _onMenuSubMenuSelect(3),
                                 onTap: () {},
@@ -169,15 +186,16 @@ class _CustomNavigationState extends State<CustomNavigation> {
                       ],
                       const SizedBox(height: 8),
                       NavigationItem(
-                        label: 'Feedback',
+                        label:
+                            AppLocalizations.of(context)!.translate("Feedback"),
                         leadingIconPath: 'icons/feedback.svg',
                         isSelected: _selectedIndex == 4,
                         onTap: () => _updateIndex(4),
                       ),
                       const SizedBox(height: 8),
-                      // Settings Navigation Item with Dropdown
                       NavigationItem(
-                        label: 'Settings',
+                        label:
+                            AppLocalizations.of(context)!.translate("Settings"),
                         leadingIconPath: 'icons/setting.svg',
                         trailingIconPath: 'icons/arrow_down.svg',
                         isSelected: _selectedIndex == 5,
@@ -188,7 +206,10 @@ class _CustomNavigationState extends State<CustomNavigation> {
                         Container(
                           width: 180,
                           padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.only(left: 20),
+                          margin: EdgeInsets.only(
+                            left: isRtl ? 0 : 20,
+                            right: isRtl ? 20 : 0,
+                          ),
                           decoration: BoxDecoration(
                             color: AppTheme.background.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(8),
@@ -197,7 +218,8 @@ class _CustomNavigationState extends State<CustomNavigation> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SubMenuItem(
-                                label: 'Venue Management',
+                                label: AppLocalizations.of(context)!
+                                    .translate("venue_management"),
                                 isSelected: _selectedSettingsSubMenuIndex == 0,
                                 onSelect: () => _onSettingsSubMenuSelect(0),
                                 onTap: () {},
@@ -207,7 +229,8 @@ class _CustomNavigationState extends State<CustomNavigation> {
                                 thickness: 0.5,
                               ),
                               SubMenuItem(
-                                label: 'Tables Management',
+                                label: AppLocalizations.of(context)!
+                                    .translate("tables_management"),
                                 isSelected: _selectedSettingsSubMenuIndex == 1,
                                 onSelect: () => _onSettingsSubMenuSelect(1),
                                 onTap: () {},
@@ -217,7 +240,8 @@ class _CustomNavigationState extends State<CustomNavigation> {
                                 thickness: 0.5,
                               ),
                               SubMenuItem(
-                                label: 'QR Code',
+                                label: AppLocalizations.of(context)!
+                                    .translate("QR_Code"),
                                 isSelected: _selectedSettingsSubMenuIndex == 2,
                                 onSelect: () => _onSettingsSubMenuSelect(2),
                                 onTap: () {},

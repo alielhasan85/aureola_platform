@@ -8,9 +8,21 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLanguage =
-        ref.watch(languageProvider); // Access current language
-    final languages = ['English', 'Arabic', 'French', 'Turkish'];
+    final currentLanguageCode = ref.watch(languageProvider);
+
+    // Map language labels to their respective language codes
+    final languageMap = {
+      'English': 'en',
+      'Arabic': 'ar',
+      'French': 'fr',
+      'Turkish': 'tr'
+    };
+
+    // Reverse map to display the selected language label in the dropdown
+    final currentLanguageLabel = languageMap.keys.firstWhere(
+      (key) => languageMap[key] == currentLanguageCode,
+      orElse: () => 'English', // Default to English if no match
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -20,7 +32,6 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           toolbarHeight: 73,
           title: Row(
             children: [
-              // Search Field
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -41,7 +52,6 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ],
           ),
           actions: [
-            // Notification Icon
             IconButton(
               icon: Icon(Icons.notifications),
               onPressed: () {
@@ -51,9 +61,9 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
             // Language Dropdown
             DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                value: currentLanguage,
+                value: currentLanguageLabel,
                 icon: const Icon(Icons.language),
-                items: languages.map((String language) {
+                items: languageMap.keys.map((String language) {
                   return DropdownMenuItem<String>(
                     value: language,
                     child: Text(language),
@@ -61,13 +71,13 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 }).toList(),
                 onChanged: (String? newLanguage) {
                   if (newLanguage != null) {
-                    // Update the selected language in the provider
-                    ref.read(languageProvider.notifier).state = newLanguage;
+                    // Update the provider with the selected language code
+                    ref.read(languageProvider.notifier).state =
+                        languageMap[newLanguage]!;
                   }
                 },
               ),
             ),
-            // Profile Icon
             IconButton(
               icon: Icon(Icons.account_circle),
               onPressed: () {
@@ -76,7 +86,6 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ),
           ],
         ),
-        // Divider below the AppBar
         const Divider(
           height: 2,
           thickness: 0,

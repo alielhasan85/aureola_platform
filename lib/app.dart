@@ -14,36 +14,36 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final currentLanguage = ref.watch(languageProvider);
+    final currentLanguage = ref
+        .watch(languageProvider); // This should hold 'en', 'ar', 'fr', or 'tr'
 
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Aureola Platform',
-        supportedLocales: const [
-          Locale('en', ''),
-          Locale('ar', ''),
-        ],
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        locale: Locale(currentLanguage == 'English' ? 'en' : 'ar'),
-        builder: (context, child) {
-          return Directionality(
-            textDirection: currentLanguage == 'Arabic'
-                ? TextDirection.rtl
-                : TextDirection.ltr,
-            child: child!,
-          );
-        },
-        home: const MainPage());
+      debugShowCheckedModeBanner: false,
+      title: 'Aureola Platform',
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('ar', ''),
+        Locale('fr', ''),
+        Locale('tr', ''),
+      ],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      // Use the current language code directly for locale
+      locale: Locale(currentLanguage),
+      builder: (context, child) {
+        // Use currentLanguage to determine text direction
+        final isRtl = currentLanguage == 'ar';
+        return Directionality(
+          textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
+          child: child!,
+        );
+      },
+      home: const MainPage(),
+    );
   }
 }

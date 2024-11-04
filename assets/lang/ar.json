@@ -1,1 +1,14 @@
-{}
+{
+    "dashboard": "لوحة القيادة",
+    "order": "طلب",
+    "menu_management": "إدارة القائمة",
+    "menu": "قائمة",
+    "categories": "الأقسام",
+    "Items": "العناصر",
+    "Add-ons": "الإضافات",
+    "Feedback": "الملاحظات",
+    "tables_management": "إدارة الطاولات",
+    "venue_management": "إدارة الموقع",
+    "QR_Code": "QR Code",
+    "Settings": "الإعدادات"
+}
