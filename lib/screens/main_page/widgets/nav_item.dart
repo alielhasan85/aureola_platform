@@ -1,15 +1,10 @@
-import 'package:aureola_platform/screens/main_page/widgets/nav_venue.dart';
 import 'package:aureola_platform/theme/theme.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:aureola_platform/theme/theme.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-class NavigationItem extends StatefulWidget {
+class NavigationItem extends ConsumerStatefulWidget {
   final String label;
   final String? leadingIconPath; // Optional left icon
   final String? trailingIconPath; // Optional right icon
@@ -26,17 +21,17 @@ class NavigationItem extends StatefulWidget {
   });
 
   @override
-  _NavigationItemState createState() => _NavigationItemState();
+  ConsumerState<NavigationItem> createState() => _NavigationItemState();
 }
 
-class _NavigationItemState extends State<NavigationItem> {
+class _NavigationItemState extends ConsumerState<NavigationItem> {
   bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
     // Set background color based on hover and selection
     Color backgroundColor = widget.isSelected || _isHovered
-        ? Color(0x7FF0F2F5).withOpacity(0.5)
+        ? AppTheme.grey2.withOpacity(0.5)
         : AppTheme.white;
 
     // Set icon and text color based on selection
@@ -71,13 +66,15 @@ class _NavigationItemState extends State<NavigationItem> {
               // Conditionally render the leading icon if provided
               if (widget.leadingIconPath != null)
                 Container(
-                  width: 26,
-                  height: 26,
+                  width: 24,
+                  height: 24,
                   decoration: BoxDecoration(
                     color: backgroundColor.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: SvgPicture.asset(
+                    width: 24,
+                    height: 24,
                     widget.leadingIconPath!,
                     colorFilter: ColorFilter.mode(
                       iconAndTextColor,

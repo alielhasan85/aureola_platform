@@ -26,7 +26,7 @@ class _SubMenuItemState extends State<SubMenuItem> {
   Widget build(BuildContext context) {
     // Background color changes based on hover and selected state
     Color backgroundColor = _isHovered
-        ? Color(0x7FF0F2F5).withOpacity(0.5) // Lighter shade on hover or select
+        ? Colors.transparent // Lighter shade on hover or select
         : Colors.transparent;
 
     // Text color changes based on selection
@@ -50,9 +50,9 @@ class _SubMenuItemState extends State<SubMenuItem> {
           });
         },
         child: Container(
-          width: 136,
+          width: 180,
           height: 36,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(6),

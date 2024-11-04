@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:aureola_platform/theme/theme.dart';
 
+// TODO: to manage behavior, and to change ui of overlay
+
 class VenueNavigation extends StatefulWidget {
   final String label;
   final String iconPath;

@@ -51,7 +51,7 @@ class AppTheme {
 
   static const TextStyle navigationItemText = TextStyle(
     color: secondary,
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: 'Inter',
     fontWeight: FontWeight.w500,
     height: 0,

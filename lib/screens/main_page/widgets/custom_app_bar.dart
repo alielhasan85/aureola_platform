@@ -1,17 +1,23 @@
 import 'package:aureola_platform/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aureola_platform/providers/lang_providers.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLanguage =
+        ref.watch(languageProvider); // Access current language
+    final languages = ['English', 'Arabic', 'French', 'Turkish'];
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         AppBar(
           backgroundColor: AppTheme.white,
-          toolbarHeight: 73, // Sets the height of the AppBar to 73 pixels
+          toolbarHeight: 73,
           title: Row(
             children: [
               // Search Field
@@ -41,6 +47,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: () {
                 // Handle notification action
               },
+            ),
+            // Language Dropdown
+            DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: currentLanguage,
+                icon: const Icon(Icons.language),
+                items: languages.map((String language) {
+                  return DropdownMenuItem<String>(
+                    value: language,
+                    child: Text(language),
+                  );
+                }).toList(),
+                onChanged: (String? newLanguage) {
+                  if (newLanguage != null) {
+                    // Update the selected language in the provider
+                    ref.read(languageProvider.notifier).state = newLanguage;
+                  }
+                },
+              ),
             ),
             // Profile Icon
             IconButton(
