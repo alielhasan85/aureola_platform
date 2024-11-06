@@ -9,7 +9,7 @@ class TabletLayout extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Table layout'),
         ),
-        body: Center(
+        body: const Center(
           child: Row(
             children: const [
               Expanded(child: Text('Tablet Layout')),

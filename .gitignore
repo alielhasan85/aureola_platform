@@ -9,7 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
-
+.build/
 # IntelliJ related
 *.iml
 *.ipr
@@ -29,7 +29,7 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+
 
 # Symbolication related
 app.*.symbols

@@ -12,8 +12,8 @@ class AppTheme {
   static const Color divider = Color(0xFFDAD5CF);
   static const Color grey2 = Color(0xFFE0E0E0);
   static const Color greyButton = Color(0xFFF0F2F5);
-  static const Color background = Color(0xFFF0F2F5);
-  static const Color background2 = Color(0xFFFFF4EE);
+  static const Color background = Color(0xFFF9F9F9);
+  static const Color background2 = Color(0xFFFFF9F6);
 
   static const Color red = Color(0xFFD31B27);
   static const Color green = Color(0xFF39C57F);
@@ -43,7 +43,7 @@ class AppTheme {
 
   static const TextStyle heading2 = TextStyle(
     color: red,
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w500,
     height: 0,

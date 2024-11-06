@@ -1,76 +1,71 @@
+import 'package:aureola_platform/providers/navigation_provider.dart';
+import 'package:aureola_platform/screens/main_page/widgets/nav_rail.dart';
+import 'package:aureola_platform/screens/venue_management/venue_management_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../widgets/nav_rail.dart';
 import '../widgets/custom_app_bar.dart';
 
-class DesktopLayout extends ConsumerStatefulWidget {
+class DesktopLayout extends ConsumerWidget {
   const DesktopLayout({super.key});
 
   @override
-  ConsumerState<DesktopLayout> createState() => _DesktopLayoutState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedIndex = ref.watch(selectedMenuIndexProvider);
 
-class _DesktopLayoutState extends ConsumerState<DesktopLayout> {
-  int _selectedIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
+    // Display content based on selected index
+    Widget _getContentForTab(int index) {
+      switch (index) {
+        // case of venue selection and changes
+        // case 0:
+        //   return Center(child: Text('Venue Dashboard'));
+        //case of dashboard
+        case 1:
+          return Center(child: Text('Dashboard'));
+
+        // case or order management
+        case 2:
+          return Center(child: Text('Order Management'));
+
+// case or menu managemnt (change from )
+        case 3:
+          return Center(child: Text('Menu Content'));
+        case 4:
+          return Center(child: Text('Categories Content'));
+        case 5:
+          return Center(child: Text('Items Content'));
+        case 6:
+          return Center(child: Text('Add-ons Content'));
+        case 7:
+          return Center(child: Text('Add-ons Content'));
+        // Additional cases for other tabs
+        case 8: // Venue Management section
+          return const VenueManagementContent();
+        case 9:
+          return Center(child: Text('Tables'));
+        case 10:
+          return Center(child: Text('Qr code'));
+
+        // Additional cases for other tabs
+        default:
+          return Center(child: Text('Default Content'));
+      }
+    }
+
+    return Scaffold(
       body: Row(
         children: [
-          CustomNavigation(),
-
-          // Main content area
+          const CustomNavigation(),
           Expanded(
             child: Column(
               children: [
-                // Custom AppBar that starts right after the navigation container
-                CustomAppBar(),
-
-                // Main content below the AppBar
+                const CustomAppBar(),
                 Expanded(
-                  child: Center(
-                    child: Text('content'),
-                  ),
+                  child: _getContentForTab(selectedIndex),
                 ),
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildNavButton(String label, IconData icon, int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor:
-              _selectedIndex == index ? Colors.blue : Colors.grey[200],
-          foregroundColor:
-              _selectedIndex == index ? Colors.white : Colors.black,
-          minimumSize: const Size(double.infinity, 60), // Full width button
-        ),
-        onPressed: _selectedIndex == index
-            ? null // Disable if already selected
-            : () {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-        child: Row(
-          children: [
-            Icon(icon, size: 24),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(fontSize: 18),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

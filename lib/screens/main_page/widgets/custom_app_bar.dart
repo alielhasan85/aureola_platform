@@ -71,7 +71,6 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 }).toList(),
                 onChanged: (String? newLanguage) {
                   if (newLanguage != null) {
-                    // Update the provider with the selected language code
                     ref.read(languageProvider.notifier).state =
                         languageMap[newLanguage]!;
                   }

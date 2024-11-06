@@ -1,3 +1,5 @@
+import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
+import 'package:aureola_platform/screens/venue_management/venue_management_content.dart';
 import 'package:flutter/material.dart';
 
 class MobileLayout extends StatelessWidget {
@@ -9,12 +11,16 @@ class MobileLayout extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Responsive MainPage'),
         ),
-        body: Center(
-          child: Column(
-            children: const [
-              Text('Mobile Layout'),
-              // Add more widgets specific to mobile view
-            ],
+        body: const Center(
+          child: Expanded(
+            child: Column(
+              children: [
+                const CustomAppBar(),
+                Expanded(
+                  child: VenueManagementContent(),
+                ),
+              ],
+            ),
           ),
         ));
   }

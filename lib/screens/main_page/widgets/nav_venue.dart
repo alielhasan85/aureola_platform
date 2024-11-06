@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:aureola_platform/theme/theme.dart';
 
 // TODO: to manage behavior, and to change ui of overlay
 
-class VenueNavigation extends StatefulWidget {
+class VenueNavigation extends ConsumerStatefulWidget {
   final String label;
   final String iconPath;
   final VoidCallback onCloseOverlay;
@@ -19,19 +20,27 @@ class VenueNavigation extends StatefulWidget {
   });
 
   @override
-  _VenueNavigationState createState() => _VenueNavigationState();
+  ConsumerState<VenueNavigation> createState() => _VenueNavigationState();
 }
 
-class _VenueNavigationState extends State<VenueNavigation> {
+class _VenueNavigationState extends ConsumerState<VenueNavigation> {
   bool _isHovered = false;
   OverlayEntry? _overlayEntry;
 
   void _showDropdownMenu(BuildContext context) {
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
+    // Get the position and size of the widget on the screen
+    final renderBox = context.findRenderObject() as RenderBox;
+    final offset = renderBox.localToGlobal(Offset.zero);
+    final leftPosition =
+        isRtl ? offset.dx - 200 : offset.dx + renderBox.size.width;
+
     if (_overlayEntry == null) {
       _overlayEntry = OverlayEntry(
         builder: (context) => Positioned(
-          left: 235,
-          top: 120,
+          left: leftPosition,
+          top: offset.dy + renderBox.size.height,
           child: Material(
             elevation: 4,
             child: Container(
@@ -41,14 +50,14 @@ class _VenueNavigationState extends State<VenueNavigation> {
               child: ListView(
                 children: [
                   ListTile(
-                    title: Text('Option 1'),
+                    title: const Text('Option 1'),
                     onTap: () {
                       // Perform action for Option 1
                       _removeDropdownMenu();
                     },
                   ),
                   ListTile(
-                    title: Text('Option 2'),
+                    title: const Text('Option 2'),
                     onTap: () {
                       // Perform action for Option 2
                       _removeDropdownMenu();
@@ -61,7 +70,7 @@ class _VenueNavigationState extends State<VenueNavigation> {
           ),
         ),
       );
-      Overlay.of(context)?.insert(_overlayEntry!);
+      Overlay.of(context).insert(_overlayEntry!);
     }
   }
 
@@ -101,35 +110,21 @@ class _VenueNavigationState extends State<VenueNavigation> {
           });
         },
         child: Container(
-          color: _isHovered
-              ? AppTheme.accent.withOpacity(0.2)
-              : AppTheme.background2.withOpacity(0.8),
+          color: _isHovered ? AppTheme.background2 : AppTheme.white,
           height: 71,
           width: 230,
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: SvgPicture.asset(
-                    widget.iconPath,
-                    width: 26,
-                    height: 26,
-                    colorFilter: const ColorFilter.mode(
-                      AppTheme.red,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
+                    padding: const EdgeInsets.only(left: 10),
                     child: AutoSizeText(
                       widget.label,
                       style: (_isHovered)
                           ? AppTheme.heading2.copyWith(
-                              fontSize: 20,
+                              fontSize: 24,
                               shadows: [
                                 const Shadow(
                                   offset: Offset(0, 8),
@@ -142,17 +137,22 @@ class _VenueNavigationState extends State<VenueNavigation> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       minFontSize: 14,
-                      maxFontSize: 30,
+                      maxFontSize: 24,
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
-                  child: SvgPicture.asset(
-                    'icons/arrow.svg',
-                    width: 16,
-                    height: 16,
+                  child: Transform.rotate(
+                    angle: Directionality.of(context) == TextDirection.rtl
+                        ? -3.14159
+                        : 0, // -180 degrees in radians
+                    child: SvgPicture.asset(
+                      'assets/icons/arrow.svg',
+                      width: 16,
+                      height: 16,
+                    ),
                   ),
                 ),
               ],
