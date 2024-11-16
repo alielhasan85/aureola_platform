@@ -31,10 +31,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
             color: AppTheme.white,
             border: Border(
               left: isRtl
-                  ? const BorderSide(width: 2, color: AppTheme.divider)
+                  ? const BorderSide(width: 0.5, color: AppTheme.divider)
                   : BorderSide.none,
               right: !isRtl
-                  ? const BorderSide(width: 2, color: AppTheme.divider)
+                  ? const BorderSide(width: 0.5, color: AppTheme.divider)
                   : BorderSide.none,
             ),
           ),
@@ -44,6 +44,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
             crossAxisAlignment:
                 isRtl ? CrossAxisAlignment.start : CrossAxisAlignment.end,
             children: [
+              // TODO: changing logo to png
               const Padding(
                 padding: EdgeInsets.only(top: 12, right: 24),
                 child: Text(
@@ -59,11 +60,13 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                   style: AppTheme.titlePlatform,
                 ),
               ),
+
+              // navigation of venue name
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: VenueNavigation(
                   label: 'Al bait El Shami restaurant and',
-                  iconPath: 'assets/icons/establishment.svg',
+                  iconPath: 'assets/icons/arrow.svg',
                   onCloseOverlay: () {
                     _updateIndex(0);
                   },
@@ -102,10 +105,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             .translate('menu_management'),
                         leadingIconPath: 'assets/icons/menu_management.svg',
                         trailingIconPath: 'assets/icons/arrow_down.svg',
-                        isSelected: selectedIndex >= 3 && selectedIndex <= 6,
+                        isSelected: selectedIndex >= 3 && selectedIndex <= 7,
                         onTap: () => _updateIndex(3),
                       ),
-                      if (selectedIndex >= 3 && selectedIndex <= 6) ...[
+                      if (selectedIndex >= 3 && selectedIndex <= 7) ...[
                         const SizedBox(height: 8),
                         Container(
                           width: 180,
@@ -155,6 +158,15 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 onSelect: () => _updateIndex(6),
                                 onTap: () {},
                               ),
+                              const Divider(
+                                  color: AppTheme.divider, thickness: 0.5),
+                              SubMenuItem(
+                                label: AppLocalizations.of(context)!
+                                    .translate("branding_design"),
+                                isSelected: selectedIndex == 7,
+                                onSelect: () => _updateIndex(7),
+                                onTap: () {},
+                              )
                             ],
                           ),
                         ),
@@ -164,8 +176,8 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                         label:
                             AppLocalizations.of(context)!.translate("Feedback"),
                         leadingIconPath: 'assets/icons/feedback.svg',
-                        isSelected: selectedIndex == 7,
-                        onTap: () => _updateIndex(7),
+                        isSelected: selectedIndex == 8,
+                        onTap: () => _updateIndex(8),
                       ),
                       const SizedBox(height: 8),
                       NavigationItem(
@@ -173,10 +185,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             AppLocalizations.of(context)!.translate("Settings"),
                         leadingIconPath: 'assets/icons/setting.svg',
                         trailingIconPath: 'assets/icons/arrow_down.svg',
-                        isSelected: selectedIndex >= 8 && selectedIndex <= 11,
-                        onTap: () => _updateIndex(8),
+                        isSelected: selectedIndex >= 9 && selectedIndex <= 11,
+                        onTap: () => _updateIndex(9),
                       ),
-                      if (selectedIndex >= 8 && selectedIndex <= 10) ...[
+                      if (selectedIndex >= 9 && selectedIndex <= 11) ...[
                         const SizedBox(height: 8),
                         Container(
                           width: 180,
@@ -195,17 +207,6 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                               SubMenuItem(
                                 label: AppLocalizations.of(context)!
                                     .translate("venue_management"),
-                                isSelected: selectedIndex == 8,
-                                onSelect: () => _updateIndex(8),
-                                onTap: () {},
-                              ),
-                              const Divider(
-                                color: AppTheme.divider,
-                                thickness: 0.5,
-                              ),
-                              SubMenuItem(
-                                label: AppLocalizations.of(context)!
-                                    .translate("tables_management"),
                                 isSelected: selectedIndex == 9,
                                 onSelect: () => _updateIndex(9),
                                 onTap: () {},
@@ -216,9 +217,20 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                               ),
                               SubMenuItem(
                                 label: AppLocalizations.of(context)!
-                                    .translate("QR_Code"),
+                                    .translate("tables_management"),
                                 isSelected: selectedIndex == 10,
                                 onSelect: () => _updateIndex(10),
+                                onTap: () {},
+                              ),
+                              const Divider(
+                                color: AppTheme.divider,
+                                thickness: 0.5,
+                              ),
+                              SubMenuItem(
+                                label: AppLocalizations.of(context)!
+                                    .translate("QR_Code"),
+                                isSelected: selectedIndex == 11,
+                                onSelect: () => _updateIndex(11),
                                 onTap: () {},
                               ),
                             ],

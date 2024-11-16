@@ -10,5 +10,10 @@
     "tables_management": "Gestion des tables",
     "venue_management": "Gestion du lieu",
     "QR_Code": "Code QR",
-    "Settings": "Paramètres"
+    "Settings": "Paramètres",
+
+     "available_restaurant": "Venues",
+
+     "branding_design": "Branding & Design"
+
 }

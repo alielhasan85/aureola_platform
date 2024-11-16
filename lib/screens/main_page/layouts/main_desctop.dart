@@ -36,8 +36,8 @@ class DesktopLayout extends ConsumerWidget {
         case 6:
           return Center(child: Text('Add-ons Content'));
         case 7:
-          return Center(child: Text('Add-ons Content'));
-        // Additional cases for other tabs
+          return const VenueManagementContent();
+
         case 8: // Venue Management section
           return const VenueManagementContent();
         case 9:
@@ -58,7 +58,7 @@ class DesktopLayout extends ConsumerWidget {
           Expanded(
             child: Column(
               children: [
-                const CustomAppBar(),
+                const CustomAppBar(title: 'Venue Management'),
                 Expanded(
                   child: _getContentForTab(selectedIndex),
                 ),

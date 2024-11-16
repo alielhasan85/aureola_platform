@@ -1,8 +1,10 @@
+import 'package:aureola_platform/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:aureola_platform/theme/theme.dart';
+import 'package:popover/popover.dart';
 
 // TODO: to manage behavior, and to change ui of overlay
 
@@ -11,6 +13,7 @@ class VenueNavigation extends ConsumerStatefulWidget {
   final String iconPath;
   final VoidCallback onCloseOverlay;
   final bool isSelected;
+
   const VenueNavigation({
     super.key,
     required this.label,
@@ -25,78 +28,76 @@ class VenueNavigation extends ConsumerStatefulWidget {
 
 class _VenueNavigationState extends ConsumerState<VenueNavigation> {
   bool _isHovered = false;
-  OverlayEntry? _overlayEntry;
 
-  void _showDropdownMenu(BuildContext context) {
-    final isRtl = Directionality.of(context) == TextDirection.rtl;
-
-    // Get the position and size of the widget on the screen
-    final renderBox = context.findRenderObject() as RenderBox;
-    final offset = renderBox.localToGlobal(Offset.zero);
-    final leftPosition =
-        isRtl ? offset.dx - 200 : offset.dx + renderBox.size.width;
-
-    if (_overlayEntry == null) {
-      _overlayEntry = OverlayEntry(
-        builder: (context) => Positioned(
-          left: leftPosition,
-          top: offset.dy + renderBox.size.height,
-          child: Material(
-            elevation: 4,
-            child: Container(
-              width: 200,
-              height: 200,
-              color: Colors.white,
-              child: ListView(
-                children: [
-                  ListTile(
-                    title: const Text('Option 1'),
-                    onTap: () {
-                      // Perform action for Option 1
-                      _removeDropdownMenu();
-                    },
+  void _showPopover(BuildContext context) {
+    showPopover(
+      context: context,
+      transitionDuration: const Duration(milliseconds: 200),
+      bodyBuilder: (context) => Material(
+        elevation: 4,
+        child: Container(
+          width: 200,
+          color: Colors.white,
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 12, bottom: 6),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!
+                        .translate('available_restaurant'),
+                    style: AppTheme.heading1.copyWith(
+                      fontSize: 18,
+                    ),
                   ),
-                  ListTile(
-                    title: const Text('Option 2'),
-                    onTap: () {
-                      // Perform action for Option 2
-                      _removeDropdownMenu();
-                    },
-                  ),
-                  // Add more options as needed
-                ],
+                ),
               ),
-            ),
+
+              const Divider(
+                thickness: 0.5,
+                color: AppTheme.divider,
+              ),
+              ListTile(
+                leading: SvgPicture.asset(
+                  'assets/icons/establishment.svg',
+                  width: 20,
+                  height: 20,
+                ),
+                title: const Text('Option 1'),
+                onTap: () {
+                  // Perform action for Option 1
+                  Navigator.pop(context); // Close popover
+                },
+                trailing:
+                    IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+              ),
+
+              ListTile(
+                title: const Text('Option 2'),
+                onTap: () {
+                  // Perform action for Option 2
+                  Navigator.pop(context); // Close popover
+                },
+              ),
+              // Add more options as needed
+            ],
           ),
         ),
-      );
-      Overlay.of(context).insert(_overlayEntry!);
-    }
-  }
-
-  void _removeDropdownMenu() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-  }
-
-  @override
-  void dispose() {
-    _removeDropdownMenu();
-    super.dispose();
+      ),
+      onPop: widget.onCloseOverlay,
+      width: 200,
+      arrowHeight: 10,
+      arrowWidth: 20,
+      backgroundColor: Colors.white,
+      barrierColor: Colors.transparent,
+      direction: PopoverDirection.right,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (_overlayEntry == null) {
-            _showDropdownMenu(context);
-          } else {
-            _removeDropdownMenu();
-          }
-        });
-      },
+      onTap: () => _showPopover(context),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         onEnter: (_) {
@@ -149,7 +150,7 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
                         ? -3.14159
                         : 0, // -180 degrees in radians
                     child: SvgPicture.asset(
-                      'assets/icons/arrow.svg',
+                      widget.iconPath,
                       width: 16,
                       height: 16,
                     ),

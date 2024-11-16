@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Colors extracted from the image
-
   static const Color primary = Color(0xFF2E4857);
   static const Color secondary = Color(0xFF4E6776);
   static const Color accent = Color(0xFFFF5E1E);
@@ -41,6 +39,14 @@ class AppTheme {
     color: accent, // Apply a different color or style
   );
 
+  static const TextStyle heading1 = TextStyle(
+    color: primary,
+    fontSize: 26,
+    fontFamily: 'Inter',
+    fontWeight: FontWeight.w400,
+    height: 1,
+  );
+
   static const TextStyle heading2 = TextStyle(
     color: red,
     fontSize: 22,
@@ -55,5 +61,28 @@ class AppTheme {
     fontFamily: 'Inter',
     fontWeight: FontWeight.w500,
     height: 0,
+  );
+
+  static const TextStyle tabItemText = TextStyle(
+    color: secondary,
+    fontSize: 16,
+    fontFamily: 'Inter',
+    fontWeight: FontWeight.w400,
+    height: 0,
+  );
+
+  static const TextStyle tabBarItemText = TextStyle(
+    color: primary,
+    fontSize: 18,
+    fontFamily: 'DM Sans',
+    fontWeight: FontWeight.w500,
+    height: 0,
+  );
+
+  static const TextStyle buttonText = TextStyle(
+    fontFamily: 'Roboto',
+    color: Colors.white,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
   );
 }

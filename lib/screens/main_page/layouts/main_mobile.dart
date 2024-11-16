@@ -15,7 +15,7 @@ class MobileLayout extends StatelessWidget {
           child: Expanded(
             child: Column(
               children: [
-                const CustomAppBar(),
+                const CustomAppBar(title: 'venue management'),
                 Expanded(
                   child: VenueManagementContent(),
                 ),

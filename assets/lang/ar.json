@@ -10,5 +10,10 @@
     "tables_management": "إدارة الطاولات",
     "venue_management": "إدارة الموقع",
     "QR_Code": "QR Code",
-    "Settings": "الإعدادات"
+    "Settings": "الإعدادات",
+
+     "available_restaurant": "القاعات المتاحة",
+
+     "branding_design": "العلامة التجارية والتصميم"
+
 }
