@@ -51,7 +51,7 @@ class _SubMenuItemState extends State<SubMenuItem> {
         },
         child: Container(
           width: 180,
-          height: 36,
+          height: 40,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           decoration: BoxDecoration(
             color: backgroundColor,

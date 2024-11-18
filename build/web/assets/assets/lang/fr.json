@@ -1,0 +1,23 @@
+{
+    "dashboard": "Tableau de bord",
+    "order": "Commande",
+    "menu_management": "Gestion du menu",
+    "menu": "Menu",
+    "categories": "Catégories",
+    "Items": "Articles",
+    "Add-ons": "Suppléments",
+    "Feedback": "Retour",
+    "tables_management": "Gestion des tables",
+    "venue_management": "Gestion du lieu",
+    "QR_Code": "Code QR",
+    "Settings": "Paramètres",
+
+     "available_restaurant": "Venues",
+
+     "branding_design": "Branding & Design",
+
+     "venue_info": "Venue Info",
+     "copyright": "Tous droits réservés à la plateforme Aureola 2024"
+
+
+}

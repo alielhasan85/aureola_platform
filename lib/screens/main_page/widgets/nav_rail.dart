@@ -1,3 +1,4 @@
+import 'package:aureola_platform/providers/appbar_title_provider.dart';
 import 'package:aureola_platform/providers/navigation_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,8 +16,11 @@ class CustomNavigation extends ConsumerStatefulWidget {
 }
 
 class _CustomNavigationState extends ConsumerState<CustomNavigation> {
-  void _updateIndex(int index) {
+  void _updateIndex(int index, String title) {
     ref.read(selectedMenuIndexProvider.notifier).state = index;
+    if (index != 0) {
+      ref.read(appBarTitleProvider.notifier).state = title;
+    }
   }
 
   @override
@@ -48,7 +52,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
               const Padding(
                 padding: EdgeInsets.only(top: 12, right: 24),
                 child: Text(
-                  'Aureola',
+                  'Naya',
                   style: AppTheme.titleAureola,
                 ),
               ),
@@ -68,7 +72,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                   label: 'Al bait El Shami restaurant and',
                   iconPath: 'assets/icons/arrow.svg',
                   onCloseOverlay: () {
-                    _updateIndex(0);
+                    _updateIndex(0, '');
                   },
                   isSelected: selectedIndex == 0,
                 ),
@@ -90,14 +94,21 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             .translate('dashboard'),
                         leadingIconPath: 'assets/icons/dashboard.svg',
                         isSelected: selectedIndex == 1,
-                        onTap: () => _updateIndex(1),
+                        onTap: () => _updateIndex(
+                          1,
+                          AppLocalizations.of(context)!.translate('dashboard'),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       NavigationItem(
                         label: AppLocalizations.of(context)!.translate('order'),
                         leadingIconPath: 'assets/icons/order.svg',
                         isSelected: selectedIndex == 2,
-                        onTap: () => _updateIndex(2),
+                        onTap: () => _updateIndex(
+                          2,
+                          AppLocalizations.of(context)!
+                              .translate('order_title'),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       NavigationItem(
@@ -106,7 +117,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                         leadingIconPath: 'assets/icons/menu_management.svg',
                         trailingIconPath: 'assets/icons/arrow_down.svg',
                         isSelected: selectedIndex >= 3 && selectedIndex <= 7,
-                        onTap: () => _updateIndex(3),
+                        onTap: () => _updateIndex(
+                            3,
+                            AppLocalizations.of(context)!
+                                .translate('menu_management')),
                       ),
                       if (selectedIndex >= 3 && selectedIndex <= 7) ...[
                         const SizedBox(height: 8),
@@ -128,7 +142,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 label: AppLocalizations.of(context)!
                                     .translate('menu'),
                                 isSelected: selectedIndex == 3,
-                                onSelect: () => _updateIndex(3),
+                                onSelect: () => _updateIndex(
+                                    3,
+                                    AppLocalizations.of(context)!
+                                        .translate('menu_management')),
                                 onTap: () {},
                               ),
                               const Divider(
@@ -137,7 +154,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 label: AppLocalizations.of(context)!
                                     .translate('categories'),
                                 isSelected: selectedIndex == 4,
-                                onSelect: () => _updateIndex(4),
+                                onSelect: () => _updateIndex(
+                                    4,
+                                    AppLocalizations.of(context)!
+                                        .translate('menu_management')),
                                 onTap: () {},
                               ),
                               const Divider(
@@ -146,7 +166,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 label: AppLocalizations.of(context)!
                                     .translate("Items"),
                                 isSelected: selectedIndex == 5,
-                                onSelect: () => _updateIndex(5),
+                                onSelect: () => _updateIndex(
+                                    5,
+                                    AppLocalizations.of(context)!
+                                        .translate('menu_management')),
                                 onTap: () {},
                               ),
                               const Divider(
@@ -155,7 +178,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 label: AppLocalizations.of(context)!
                                     .translate("Add-ons"),
                                 isSelected: selectedIndex == 6,
-                                onSelect: () => _updateIndex(6),
+                                onSelect: () => _updateIndex(
+                                    6,
+                                    AppLocalizations.of(context)!
+                                        .translate('menu_management')),
                                 onTap: () {},
                               ),
                               const Divider(
@@ -164,7 +190,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 label: AppLocalizations.of(context)!
                                     .translate("branding_design"),
                                 isSelected: selectedIndex == 7,
-                                onSelect: () => _updateIndex(7),
+                                onSelect: () => _updateIndex(
+                                    7,
+                                    AppLocalizations.of(context)!
+                                        .translate('menu_management')),
                                 onTap: () {},
                               )
                             ],
@@ -177,7 +206,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             AppLocalizations.of(context)!.translate("Feedback"),
                         leadingIconPath: 'assets/icons/feedback.svg',
                         isSelected: selectedIndex == 8,
-                        onTap: () => _updateIndex(8),
+                        onTap: () => _updateIndex(
+                            8,
+                            AppLocalizations.of(context)!
+                                .translate("Feedback")),
                       ),
                       const SizedBox(height: 8),
                       NavigationItem(
@@ -186,7 +218,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                         leadingIconPath: 'assets/icons/setting.svg',
                         trailingIconPath: 'assets/icons/arrow_down.svg',
                         isSelected: selectedIndex >= 9 && selectedIndex <= 11,
-                        onTap: () => _updateIndex(9),
+                        onTap: () => _updateIndex(
+                            9,
+                            AppLocalizations.of(context)!
+                                .translate("venue_info")),
                       ),
                       if (selectedIndex >= 9 && selectedIndex <= 11) ...[
                         const SizedBox(height: 8),
@@ -206,9 +241,12 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             children: [
                               SubMenuItem(
                                 label: AppLocalizations.of(context)!
-                                    .translate("venue_management"),
+                                    .translate("venue_info"),
                                 isSelected: selectedIndex == 9,
-                                onSelect: () => _updateIndex(9),
+                                onSelect: () => _updateIndex(
+                                    9,
+                                    AppLocalizations.of(context)!
+                                        .translate("venue_info")),
                                 onTap: () {},
                               ),
                               const Divider(
@@ -219,7 +257,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 label: AppLocalizations.of(context)!
                                     .translate("tables_management"),
                                 isSelected: selectedIndex == 10,
-                                onSelect: () => _updateIndex(10),
+                                onSelect: () => _updateIndex(
+                                    10,
+                                    AppLocalizations.of(context)!
+                                        .translate("tables_management")),
                                 onTap: () {},
                               ),
                               const Divider(
@@ -230,7 +271,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 label: AppLocalizations.of(context)!
                                     .translate("QR_Code"),
                                 isSelected: selectedIndex == 11,
-                                onSelect: () => _updateIndex(11),
+                                onSelect: () => _updateIndex(
+                                    11,
+                                    AppLocalizations.of(context)!
+                                        .translate("QR_Code")),
                                 onTap: () {},
                               ),
                             ],

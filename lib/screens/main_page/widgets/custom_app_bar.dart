@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/providers/lang_providers.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:popover/popover.dart';
+import 'package:aureola_platform/theme/theme.dart';
+import 'package:aureola_platform/providers/lang_providers.dart';
+
 class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
+
   const CustomAppBar({super.key, required this.title});
 
   @override
@@ -22,7 +29,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
     // Display the selected language code (e.g., EN, AR)
     final currentLanguageLabel = languageMap.keys.firstWhere(
       (key) => languageMap[key] == currentLanguageCode,
-      orElse: () => 'EN', // Default to EN if no match
+      orElse: () => 'English', // Default to English if no match
     );
 
     return Column(
@@ -36,33 +43,41 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
             style: AppTheme.heading1,
           ),
           actions: [
-            // Language Selection Button with Dropdown
+            // Language Selection Button with Popover
             TextButton(
-              onPressed: () async {
-                final selectedCode = await showMenu<String>(
+              onPressed: () {
+                showPopover(
                   context: context,
-                  position: const RelativeRect.fromLTRB(
-                      1000, 70, 30, 0), // Adjust as needed
-                  items: languageMap.keys.map((String code) {
-                    return PopupMenuItem<String>(
-                      value: code,
-                      child: Text(
-                        code,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF2E4857),
+                  bodyBuilder: (BuildContext context) => ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    children: languageMap.keys.map((String language) {
+                      return ListTile(
+                        title: Text(
+                          language,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF2E4857),
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
+                        onTap: () {
+                          // Update language based on selection
+                          ref.read(languageProvider.notifier).state =
+                              languageMap[language]!;
+                          Navigator.pop(context); // Close popover
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  onPop: () {}, // Optional callback when popover is closed
+                  direction: PopoverDirection.bottom,
+                  width: 150,
+                  height:
+                      languageMap.length * 48.0, // Adjust height dynamically
+                  arrowHeight: 10,
+                  arrowWidth: 15,
                 );
-
-                // Update language based on selection
-                if (selectedCode != null && languageMap[selectedCode] != null) {
-                  ref.read(languageProvider.notifier).state =
-                      languageMap[selectedCode]!;
-                }
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.zero, // Remove padding

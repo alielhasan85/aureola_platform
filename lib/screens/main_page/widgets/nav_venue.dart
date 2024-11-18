@@ -86,6 +86,7 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
       ),
       onPop: widget.onCloseOverlay,
       width: 200,
+      height: 48 * 4,
       arrowHeight: 10,
       arrowWidth: 20,
       backgroundColor: Colors.white,

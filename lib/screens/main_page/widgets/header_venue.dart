@@ -16,12 +16,14 @@ class HeaderContainer extends StatelessWidget {
       width: double.infinity,
       height: 43,
       color: AppTheme.white,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Padding(
-        padding: const EdgeInsets.only(right: 22, left: 22),
+        padding: const EdgeInsets.only(right: 12, left: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+//Google API key
+// AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA
+
             Text(
               'Welcome $userName.',
               style: AppTheme.tabItemText,

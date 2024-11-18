@@ -1,14 +1,17 @@
 {
     "dashboard": "Dashboard",
     "order": "Order",
+    "order_title": "Orders",
     "menu_management": "Menu Management",
     "menu": "Menu",
     "categories": "Categories",
     "Items": "Items",
     "Add-ons": "Add-ons",
     "Feedback": "Feedback",
-    "tables_management": "Tables Management",
-    "venue_management": "Venue Management",
+    "tables_management": "Tables",
+    "venue_info": "Venue Info",
+    "venue_info_title": "Venue Informations",
+
     "QR_Code": "QR Code",
     "Settings": "Settings",
 
@@ -16,7 +19,10 @@
 
 
     "available_restaurant": "Available Venues",
-"branding_design": "Branding & Design"
+"branding_design": "Branding & Design", 
+
+
+"copyright": "Copy Right Reserved Aureola Platform 2024"
 
     
 }

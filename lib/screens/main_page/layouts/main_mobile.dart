@@ -1,5 +1,5 @@
 import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
-import 'package:aureola_platform/screens/venue_management/venue_management_content.dart';
+import 'package:aureola_platform/screens/venue_management/menu_branding.dart';
 import 'package:flutter/material.dart';
 
 class MobileLayout extends StatelessWidget {
@@ -17,7 +17,7 @@ class MobileLayout extends StatelessWidget {
               children: [
                 const CustomAppBar(title: 'venue management'),
                 Expanded(
-                  child: VenueManagementContent(),
+                  child: MenuBranding(),
                 ),
               ],
             ),

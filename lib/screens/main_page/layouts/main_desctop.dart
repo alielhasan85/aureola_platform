@@ -1,6 +1,8 @@
+import 'package:aureola_platform/providers/appbar_title_provider.dart';
 import 'package:aureola_platform/providers/navigation_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_rail.dart';
-import 'package:aureola_platform/screens/venue_management/venue_management_content.dart';
+import 'package:aureola_platform/screens/venue_management/menu_branding.dart';
+import 'package:aureola_platform/screens/venue_management/venue_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/custom_app_bar.dart';
@@ -11,6 +13,7 @@ class DesktopLayout extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedMenuIndexProvider);
+    final appBarTitle = ref.watch(appBarTitleProvider);
 
     // Display content based on selected index
     Widget _getContentForTab(int index) {
@@ -36,13 +39,15 @@ class DesktopLayout extends ConsumerWidget {
         case 6:
           return Center(child: Text('Add-ons Content'));
         case 7:
-          return const VenueManagementContent();
+          return const MenuBranding();
 
         case 8: // Venue Management section
-          return const VenueManagementContent();
+          return Center(child: Text('feedback'));
         case 9:
-          return Center(child: Text('Tables'));
+          return VenueInfo();
         case 10:
+          return Center(child: Text('tables'));
+        case 11:
           return Center(child: Text('Qr code'));
 
         // Additional cases for other tabs
@@ -58,7 +63,7 @@ class DesktopLayout extends ConsumerWidget {
           Expanded(
             child: Column(
               children: [
-                const CustomAppBar(title: 'Venue Management'),
+                CustomAppBar(title: appBarTitle),
                 Expanded(
                   child: _getContentForTab(selectedIndex),
                 ),
