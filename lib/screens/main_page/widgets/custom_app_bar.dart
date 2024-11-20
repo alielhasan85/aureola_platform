@@ -3,12 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/providers/lang_providers.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:popover/popover.dart';
-import 'package:aureola_platform/theme/theme.dart';
-import 'package:aureola_platform/providers/lang_providers.dart';
-
 class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
 
@@ -26,7 +20,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
       'Turkish': 'tr'
     };
 
-    // Display the selected language code (e.g., EN, AR)
+    // Display the selected language label (e.g., English, Arabic)
     final currentLanguageLabel = languageMap.keys.firstWhere(
       (key) => languageMap[key] == currentLanguageCode,
       orElse: () => 'English', // Default to English if no match
@@ -37,52 +31,38 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
       children: [
         AppBar(
           backgroundColor: AppTheme.white,
-          toolbarHeight: 73,
+          toolbarHeight: 60,
           title: Text(
             title,
             style: AppTheme.heading1,
           ),
           actions: [
-            // Language Selection Button with Popover
-            TextButton(
-              onPressed: () {
-                showPopover(
-                  context: context,
-                  bodyBuilder: (BuildContext context) => ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    children: languageMap.keys.map((String language) {
-                      return ListTile(
-                        title: Text(
-                          language,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF2E4857),
-                          ),
-                        ),
-                        onTap: () {
-                          // Update language based on selection
-                          ref.read(languageProvider.notifier).state =
-                              languageMap[language]!;
-                          Navigator.pop(context); // Close popover
-                        },
-                      );
-                    }).toList(),
-                  ),
-                  onPop: () {}, // Optional callback when popover is closed
-                  direction: PopoverDirection.bottom,
-                  width: 150,
-                  height:
-                      languageMap.length * 48.0, // Adjust height dynamically
-                  arrowHeight: 10,
-                  arrowWidth: 15,
-                );
+            // Language Selection Button with PopupMenuButton
+            PopupMenuButton<String>(
+              position: PopupMenuPosition.under,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              onSelected: (String language) {
+                // Update language based on selection
+                ref.watch(languageProvider.notifier).state =
+                    languageMap[language]!;
               },
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero, // Remove padding
-                minimumSize: const Size(40, 40), // Set a minimum size if needed
-              ),
+              itemBuilder: (BuildContext context) {
+                return languageMap.keys.map((String language) {
+                  return PopupMenuItem<String>(
+                    value: language,
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                    child: Text(
+                      language,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.primary,
+                      ),
+                    ),
+                  );
+                }).toList();
+              },
               child: Row(
                 children: [
                   Text(
@@ -90,12 +70,12 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2E4857),
+                      color: AppTheme.primary,
                     ),
                   ),
                   const Icon(
                     Icons.arrow_drop_down,
-                    color: Color(0xFF2E4857),
+                    color: AppTheme.primary,
                   ),
                 ],
               ),
@@ -104,19 +84,26 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
             // Notification Icon Button
             IconButton(
-              icon: const Icon(Icons.notifications),
+              icon: const Icon(
+                Icons.notifications,
+                color: AppTheme.primary,
+              ),
               onPressed: () {
                 // Handle notification action
               },
             ),
-
+            const SizedBox(width: 12),
             // Profile Icon Button
             IconButton(
-              icon: const Icon(Icons.account_circle),
+              icon: const Icon(
+                Icons.account_circle,
+                color: AppTheme.primary,
+              ),
               onPressed: () {
                 // Handle profile action
               },
             ),
+            const SizedBox(width: 12),
           ],
         ),
         const Divider(

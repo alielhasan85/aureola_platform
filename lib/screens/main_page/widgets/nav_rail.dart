@@ -223,11 +223,11 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             AppLocalizations.of(context)!
                                 .translate("venue_info")),
                       ),
-                      if (selectedIndex >= 9 && selectedIndex <= 11) ...[
+                      if (selectedIndex >= 9 && selectedIndex <= 13) ...[
                         const SizedBox(height: 8),
                         Container(
                           width: 180,
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(8),
                           margin: EdgeInsets.only(
                             left: isRtl ? 0 : 20,
                             right: isRtl ? 20 : 0,
@@ -255,10 +255,38 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                               ),
                               SubMenuItem(
                                 label: AppLocalizations.of(context)!
-                                    .translate("tables_management"),
+                                    .translate("social_media"),
                                 isSelected: selectedIndex == 10,
                                 onSelect: () => _updateIndex(
                                     10,
+                                    AppLocalizations.of(context)!
+                                        .translate("social_media")),
+                                onTap: () {},
+                              ),
+                              const Divider(
+                                color: AppTheme.divider,
+                                thickness: 0.5,
+                              ),
+                              SubMenuItem(
+                                label: AppLocalizations.of(context)!
+                                    .translate("prices_option"),
+                                isSelected: selectedIndex == 11,
+                                onSelect: () => _updateIndex(
+                                    11,
+                                    AppLocalizations.of(context)!
+                                        .translate("prices_option")),
+                                onTap: () {},
+                              ),
+                              const Divider(
+                                color: AppTheme.divider,
+                                thickness: 0.5,
+                              ),
+                              SubMenuItem(
+                                label: AppLocalizations.of(context)!
+                                    .translate("tables_management"),
+                                isSelected: selectedIndex == 12,
+                                onSelect: () => _updateIndex(
+                                    12,
                                     AppLocalizations.of(context)!
                                         .translate("tables_management")),
                                 onTap: () {},
@@ -270,9 +298,9 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                               SubMenuItem(
                                 label: AppLocalizations.of(context)!
                                     .translate("QR_Code"),
-                                isSelected: selectedIndex == 11,
+                                isSelected: selectedIndex == 13,
                                 onSelect: () => _updateIndex(
-                                    11,
+                                    13,
                                     AppLocalizations.of(context)!
                                         .translate("QR_Code")),
                                 onTap: () {},

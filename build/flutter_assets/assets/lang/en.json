@@ -10,7 +10,9 @@
     "Feedback": "Feedback",
     "tables_management": "Tables",
     "venue_info": "Venue Info",
-    "venue_info_title": "Venue Informations",
+    "venue_name": "Venue Name",
+
+    "venue_info_title": "General Info",
 
     "QR_Code": "QR Code",
     "Settings": "Settings",
@@ -22,7 +24,10 @@
 "branding_design": "Branding & Design", 
 
 
-"copyright": "Copy Right Reserved Aureola Platform 2024"
+"copyright": "Copy Right Reserved Aureola Platform 2024",
+
+
+"Add_new_venue" : "+ Add New Venue"
 
     
 }

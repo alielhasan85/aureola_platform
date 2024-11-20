@@ -14,10 +14,10 @@ class HeaderContainer extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 43,
+      height: 40,
       color: AppTheme.white,
       child: Padding(
-        padding: const EdgeInsets.only(right: 12, left: 12),
+        padding: const EdgeInsets.only(right: 18, left: 18),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -25,12 +25,14 @@ class HeaderContainer extends StatelessWidget {
 // AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA
 
             Text(
-              'Welcome $userName.',
-              style: AppTheme.tabItemText,
+              'Welcome $userName',
+              style: AppTheme.tabItemText
+                  .copyWith(color: AppTheme.secondary, fontSize: 14),
             ),
             Text(
               currentDateTime,
-              style: AppTheme.tabItemText,
+              style: AppTheme.tabItemText
+                  .copyWith(color: AppTheme.secondary, fontSize: 14),
             ),
           ],
         ),

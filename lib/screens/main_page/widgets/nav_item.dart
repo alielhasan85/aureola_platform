@@ -54,8 +54,8 @@ class _NavigationItemState extends ConsumerState<NavigationItem> {
         },
         child: Container(
           width: 200,
-          height: 44,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          height: 36,
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(8),

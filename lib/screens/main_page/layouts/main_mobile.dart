@@ -17,7 +17,7 @@ class MobileLayout extends StatelessWidget {
               children: [
                 const CustomAppBar(title: 'venue management'),
                 Expanded(
-                  child: MenuBranding(),
+                  child: Text(''),
                 ),
               ],
             ),

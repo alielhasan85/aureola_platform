@@ -41,9 +41,9 @@ class AppTheme {
 
   static const TextStyle heading1 = TextStyle(
     color: primary,
-    fontSize: 26,
+    fontSize: 18,
     fontFamily: 'Inter',
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w600,
     height: 1,
   );
 
@@ -84,5 +84,15 @@ class AppTheme {
     color: Colors.white,
     fontSize: 16,
     fontWeight: FontWeight.w500,
+    height: 0.08,
+    letterSpacing: 0.10,
+  );
+
+  static const TextStyle paragraph = TextStyle(
+    color: primary,
+    fontSize: 16,
+    fontFamily: 'Inter',
+    fontWeight: FontWeight.w500,
+    height: 0,
   );
 }
