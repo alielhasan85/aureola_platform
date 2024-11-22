@@ -1,13 +1,16 @@
 //
 
-import 'package:aureola_platform/screens/main_page/layouts/main_mobile.dart';
-import 'package:aureola_platform/screens/main_page/layouts/main_tablet.dart';
+import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter/services.dart';
 
-import 'layouts/main_desctop.dart';
+import 'package:aureola_platform/providers/appbar_title_provider.dart';
+import 'package:aureola_platform/providers/navigation_provider.dart';
+import 'package:aureola_platform/screens/main_page/widgets/nav_rail.dart';
+import 'package:aureola_platform/screens/venue_management/menu_branding.dart';
+import 'package:aureola_platform/screens/venue_management/venue_info.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -25,24 +28,76 @@ class _MainPageState extends ConsumerState<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedIndex = ref.watch(selectedMenuIndexProvider);
+    final appBarTitle = ref.watch(appBarTitleProvider);
+
+    // Content based on selected index
+    Widget _getContentForTab(int index) {
+      switch (index) {
+        case 1:
+          return Center(child: Text('Dashboard'));
+        case 2:
+          return Center(child: Text('Order Management'));
+        case 3:
+          return Center(child: Text('Menu Content'));
+        case 4:
+          return Center(child: Text('Categories Content'));
+        case 5:
+          return Center(child: Text('Items Content'));
+        case 6:
+          return Center(child: Text('Add-ons Content'));
+        case 7:
+          return const MenuBranding();
+        case 8:
+          return Center(child: Text('Feedback'));
+        case 9:
+          return const VenueInfo();
+        case 10:
+          return Center(child: Text('Tables'));
+        case 11:
+          return Center(child: Text('QR Code'));
+        default:
+          return Center(child: Text('Default Content'));
+      }
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < 600) {
-          // Mobile layout
-          return const MobileLayout();
-        } else if (constraints.maxWidth < 1200) {
-          // Tablet layout
-          return const TabletLayout();
+        if (constraints.maxWidth > 800) {
+          // Desktop/Tablet layout with navigation rail
+          return Scaffold(
+            body: Row(
+              children: [
+                const CustomNavigation(),
+                Expanded(
+                  child: Column(
+                    children: [
+                      CustomAppBar(title: appBarTitle),
+                      Expanded(child: _getContentForTab(selectedIndex)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
         } else {
-          // Desktop layout
-          return const DesktopLayout();
+          // Mobile layout with Drawer
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(appBarTitle),
+            ),
+            drawer: const Drawer(
+              child: CustomNavigation(isDrawer: true),
+            ),
+            body: _getContentForTab(selectedIndex),
+          );
         }
       },
     );
   }
 
   void _setOrientation() {
-    // Use portrait for mobile, landscape for tablet and desktop
+    // Use portrait for mobile, landscape for larger screens
     if (MediaQuery.of(context).size.width < 600) {
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     } else {

@@ -95,4 +95,49 @@ class AppTheme {
     fontWeight: FontWeight.w500,
     height: 0,
   );
+
+  static InputDecoration inputDecoration({required String label}) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: AppTheme.paragraph.copyWith(fontSize: 16),
+      border: const OutlineInputBorder(),
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(
+          color: AppTheme.grey2,
+          width: 0.75,
+        ),
+        borderRadius: BorderRadius.circular(6.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(
+          color: AppTheme.accent,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(6.0),
+      ),
+    );
+  }
+
+  static ShapeDecoration get cardDecoration {
+    return ShapeDecoration(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      shadows: const [
+        BoxShadow(
+          color: Color(0x4C000000),
+          blurRadius: 2,
+          offset: Offset(0, 1),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: Color(0x26000000),
+          blurRadius: 6,
+          offset: Offset(0, 2),
+          spreadRadius: 2,
+        ),
+      ],
+    );
+  }
 }

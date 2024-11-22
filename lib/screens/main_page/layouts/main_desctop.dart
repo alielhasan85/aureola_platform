@@ -18,18 +18,10 @@ class DesktopLayout extends ConsumerWidget {
     // Display content based on selected index
     Widget _getContentForTab(int index) {
       switch (index) {
-        // case of venue selection and changes
-        // case 0:
-        //   return Center(child: Text('Venue Dashboard'));
-        //case of dashboard
         case 1:
           return Center(child: Text('Dashboard'));
-
-        // case or order management
         case 2:
           return Center(child: Text('Order Management'));
-
-// case or menu managemnt (change from )
         case 3:
           return Center(child: Text('Menu Content'));
         case 4:
@@ -40,38 +32,55 @@ class DesktopLayout extends ConsumerWidget {
           return Center(child: Text('Add-ons Content'));
         case 7:
           return const MenuBranding();
-
-        case 8: // Venue Management section
-          return Center(child: Text('feedback'));
+        case 8:
+          return Center(child: Text('Feedback'));
         case 9:
           return VenueInfo();
         case 10:
-          return Center(child: Text('tables'));
+          return Center(child: Text('Tables'));
         case 11:
-          return Center(child: Text('Qr code'));
-
-        // Additional cases for other tabs
+          return Center(child: Text('QR Code'));
         default:
           return Center(child: Text('Default Content'));
       }
     }
 
-    return Scaffold(
-      body: Row(
-        children: [
-          const CustomNavigation(),
-          Expanded(
-            child: Column(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth > 800) {
+          // Desktop layout with navigation rail
+          return Scaffold(
+            body: Row(
               children: [
-                CustomAppBar(title: appBarTitle),
+                const CustomNavigation(),
                 Expanded(
-                  child: _getContentForTab(selectedIndex),
+                  child: Column(
+                    children: [
+                      CustomAppBar(title: appBarTitle),
+                      Expanded(
+                        child: _getContentForTab(selectedIndex),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          // Mobile layout with Drawer
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(appBarTitle),
+            ),
+            drawer: Drawer(
+              child: CustomNavigation(
+                isDrawer: true,
+              ),
+            ),
+            body: _getContentForTab(selectedIndex),
+          );
+        }
+      },
     );
   }
 }
