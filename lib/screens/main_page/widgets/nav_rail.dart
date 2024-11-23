@@ -54,245 +54,254 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
       width: widget.isDrawer ? null : 230,
       height: double.infinity,
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: widget.isDrawer
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.end,
-          children: [
-            // Header (Logo, Title)
-            if (!widget.isDrawer) ...[
-              const Padding(
-                padding: EdgeInsets.only(top: 12, right: 24),
-                child: Text(
-                  'Naya',
-                  style: AppTheme.titleAureola,
+        child: Padding(
+          padding: widget.isDrawer
+              ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
+              : const EdgeInsets.only(right: 16, left: 12, top: 16, bottom: 12),
+          child: Column(
+            crossAxisAlignment: widget.isDrawer
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.end,
+            children: [
+              // Header (Logo, Title)
+              if (!widget.isDrawer) ...[
+                const Padding(
+                  padding: EdgeInsets.only(top: 12, right: 24),
+                  child: Text(
+                    'Naya',
+                    style: AppTheme.titleAureola,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              const Padding(
-                padding: EdgeInsets.only(right: 24),
-                child: Text(
-                  'Platform',
-                  style: AppTheme.titlePlatform,
+                const SizedBox(height: 8),
+                const Padding(
+                  padding: EdgeInsets.only(right: 24),
+                  child: Text(
+                    'Platform',
+                    style: AppTheme.titlePlatform,
+                  ),
                 ),
-              ),
-            ],
+              ],
 
-            // Navigation Items
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: VenueNavigation(
-                label: 'Al bait El Shami restaurant',
-                iconPath: 'assets/icons/arrow.svg',
-                onCloseOverlay: () {
-                  _updateIndex(0, '');
-                },
-                isSelected: selectedIndex == 0,
+              // Navigation Items
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                child: VenueNavigation(
+                  label: 'Al bait El Shami restaurant',
+                  iconPath: 'assets/icons/arrow.svg',
+                  onCloseOverlay: () {
+                    _updateIndex(0, '', closeDrawer: false);
+                  },
+                  isSelected: selectedIndex == 0,
+                ),
               ),
-            ),
-            NavigationItem(
-              label: AppLocalizations.of(context)!.translate('dashboard'),
-              leadingIconPath: 'assets/icons/dashboard.svg',
-              isSelected: selectedIndex == 1,
-              onTap: () => _updateIndex(
-                1,
-                AppLocalizations.of(context)!.translate('dashboard'),
+              NavigationItem(
+                label: AppLocalizations.of(context)!.translate('dashboard'),
+                leadingIconPath: 'assets/icons/dashboard.svg',
+                isSelected: selectedIndex == 1,
+                onTap: () => _updateIndex(
+                  1,
+                  AppLocalizations.of(context)!.translate('dashboard'),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            NavigationItem(
-              label: AppLocalizations.of(context)!.translate('order'),
-              leadingIconPath: 'assets/icons/order.svg',
-              isSelected: selectedIndex == 2,
-              onTap: () => _updateIndex(
-                2,
-                AppLocalizations.of(context)!.translate('order_title'),
+              const SizedBox(height: 10),
+              NavigationItem(
+                label: AppLocalizations.of(context)!.translate('order'),
+                leadingIconPath: 'assets/icons/order.svg',
+                isSelected: selectedIndex == 2,
+                onTap: () => _updateIndex(
+                  2,
+                  AppLocalizations.of(context)!.translate('order_title'),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            NavigationItem(
-              label: AppLocalizations.of(context)!.translate('menu_management'),
-              leadingIconPath: 'assets/icons/menu_management.svg',
-              trailingIconPath: 'assets/icons/arrow_down.svg',
-              isSelected: selectedIndex >= 3 && selectedIndex <= 7,
-              onTap: () => _updateIndex(
-                  3, AppLocalizations.of(context)!.translate('menu_management'),
-                  closeDrawer: false),
-            ),
-            if (selectedIndex >= 3 && selectedIndex <= 7) ...[
+              const SizedBox(height: 10),
+              NavigationItem(
+                label:
+                    AppLocalizations.of(context)!.translate('menu_management'),
+                leadingIconPath: 'assets/icons/menu_management.svg',
+                trailingIconPath: 'assets/icons/arrow_down.svg',
+                isSelected: selectedIndex >= 3 && selectedIndex <= 7,
+                onTap: () => _updateIndex(3,
+                    AppLocalizations.of(context)!.translate('menu_management'),
+                    closeDrawer: false),
+              ),
+              if (selectedIndex >= 3 && selectedIndex <= 7) ...[
+                const SizedBox(height: 8),
+                Container(
+                  width: 180,
+                  padding: const EdgeInsets.all(10),
+                  margin: EdgeInsets.only(
+                    left: isRtl ? 0 : 20,
+                    right: isRtl ? 20 : 0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTheme.background.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!.translate('menu'),
+                        isSelected: selectedIndex == 3,
+                        onSelect: () => _updateIndex(
+                            3,
+                            AppLocalizations.of(context)!
+                                .translate('menu_management')),
+                        onTap: () {},
+                      ),
+                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!
+                            .translate('categories'),
+                        isSelected: selectedIndex == 4,
+                        onSelect: () => _updateIndex(
+                            4,
+                            AppLocalizations.of(context)!
+                                .translate('menu_management')),
+                        onTap: () {},
+                      ),
+                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!.translate("Items"),
+                        isSelected: selectedIndex == 5,
+                        onSelect: () => _updateIndex(
+                            5,
+                            AppLocalizations.of(context)!
+                                .translate('menu_management')),
+                        onTap: () {},
+                      ),
+                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      SubMenuItem(
+                        label:
+                            AppLocalizations.of(context)!.translate("Add-ons"),
+                        isSelected: selectedIndex == 6,
+                        onSelect: () => _updateIndex(
+                            6,
+                            AppLocalizations.of(context)!
+                                .translate('menu_management')),
+                        onTap: () {},
+                      ),
+                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!
+                            .translate("branding_design"),
+                        isSelected: selectedIndex == 7,
+                        onSelect: () => _updateIndex(
+                            7,
+                            AppLocalizations.of(context)!
+                                .translate('menu_management')),
+                        onTap: () {},
+                      )
+                    ],
+                  ),
+                ),
+              ],
               const SizedBox(height: 8),
-              Container(
-                width: 180,
-                padding: const EdgeInsets.all(10),
-                margin: EdgeInsets.only(
-                  left: isRtl ? 0 : 20,
-                  right: isRtl ? 20 : 0,
-                ),
-                decoration: BoxDecoration(
-                  color: AppTheme.background.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SubMenuItem(
-                      label: AppLocalizations.of(context)!.translate('menu'),
-                      isSelected: selectedIndex == 3,
-                      onSelect: () => _updateIndex(
-                          3,
-                          AppLocalizations.of(context)!
-                              .translate('menu_management')),
-                      onTap: () {},
-                    ),
-                    const Divider(color: AppTheme.divider, thickness: 0.5),
-                    SubMenuItem(
-                      label:
-                          AppLocalizations.of(context)!.translate('categories'),
-                      isSelected: selectedIndex == 4,
-                      onSelect: () => _updateIndex(
-                          4,
-                          AppLocalizations.of(context)!
-                              .translate('menu_management')),
-                      onTap: () {},
-                    ),
-                    const Divider(color: AppTheme.divider, thickness: 0.5),
-                    SubMenuItem(
-                      label: AppLocalizations.of(context)!.translate("Items"),
-                      isSelected: selectedIndex == 5,
-                      onSelect: () => _updateIndex(
-                          5,
-                          AppLocalizations.of(context)!
-                              .translate('menu_management')),
-                      onTap: () {},
-                    ),
-                    const Divider(color: AppTheme.divider, thickness: 0.5),
-                    SubMenuItem(
-                      label: AppLocalizations.of(context)!.translate("Add-ons"),
-                      isSelected: selectedIndex == 6,
-                      onSelect: () => _updateIndex(
-                          6,
-                          AppLocalizations.of(context)!
-                              .translate('menu_management')),
-                      onTap: () {},
-                    ),
-                    const Divider(color: AppTheme.divider, thickness: 0.5),
-                    SubMenuItem(
-                      label: AppLocalizations.of(context)!
-                          .translate("branding_design"),
-                      isSelected: selectedIndex == 7,
-                      onSelect: () => _updateIndex(
-                          7,
-                          AppLocalizations.of(context)!
-                              .translate('menu_management')),
-                      onTap: () {},
-                    )
-                  ],
-                ),
+              NavigationItem(
+                label: AppLocalizations.of(context)!.translate("Feedback"),
+                leadingIconPath: 'assets/icons/feedback.svg',
+                isSelected: selectedIndex == 8,
+                onTap: () => _updateIndex(
+                    8, AppLocalizations.of(context)!.translate("Feedback")),
               ),
-            ],
-            const SizedBox(height: 8),
-            NavigationItem(
-              label: AppLocalizations.of(context)!.translate("Feedback"),
-              leadingIconPath: 'assets/icons/feedback.svg',
-              isSelected: selectedIndex == 8,
-              onTap: () => _updateIndex(
-                  8, AppLocalizations.of(context)!.translate("Feedback")),
-            ),
-            const SizedBox(height: 8),
-            NavigationItem(
-              label: AppLocalizations.of(context)!.translate("Settings"),
-              leadingIconPath: 'assets/icons/setting.svg',
-              trailingIconPath: 'assets/icons/arrow_down.svg',
-              isSelected: selectedIndex >= 9 && selectedIndex <= 11,
-              onTap: () => _updateIndex(
-                  9, AppLocalizations.of(context)!.translate("venue_info"),
-                  closeDrawer: false),
-            ),
-            if (selectedIndex >= 9 && selectedIndex <= 13) ...[
               const SizedBox(height: 8),
-              Container(
-                width: 180,
-                padding: const EdgeInsets.all(8),
-                margin: EdgeInsets.only(
-                  left: isRtl ? 0 : 20,
-                  right: isRtl ? 20 : 0,
-                ),
-                decoration: BoxDecoration(
-                  color: AppTheme.background.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SubMenuItem(
-                      label:
-                          AppLocalizations.of(context)!.translate("venue_info"),
-                      isSelected: selectedIndex == 9,
-                      onSelect: () => _updateIndex(
-                          9,
-                          AppLocalizations.of(context)!
-                              .translate("venue_info")),
-                      onTap: () {},
-                    ),
-                    const Divider(
-                      color: AppTheme.divider,
-                      thickness: 0.5,
-                    ),
-                    SubMenuItem(
-                      label: AppLocalizations.of(context)!
-                          .translate("social_media"),
-                      isSelected: selectedIndex == 10,
-                      onSelect: () => _updateIndex(
-                          10,
-                          AppLocalizations.of(context)!
-                              .translate("social_media")),
-                      onTap: () {},
-                    ),
-                    const Divider(
-                      color: AppTheme.divider,
-                      thickness: 0.5,
-                    ),
-                    SubMenuItem(
-                      label: AppLocalizations.of(context)!
-                          .translate("prices_option"),
-                      isSelected: selectedIndex == 11,
-                      onSelect: () => _updateIndex(
-                          11,
-                          AppLocalizations.of(context)!
-                              .translate("prices_option")),
-                      onTap: () {},
-                    ),
-                    const Divider(
-                      color: AppTheme.divider,
-                      thickness: 0.5,
-                    ),
-                    SubMenuItem(
-                      label: AppLocalizations.of(context)!
-                          .translate("tables_management"),
-                      isSelected: selectedIndex == 12,
-                      onSelect: () => _updateIndex(
-                          12,
-                          AppLocalizations.of(context)!
-                              .translate("tables_management")),
-                      onTap: () {},
-                    ),
-                    const Divider(
-                      color: AppTheme.divider,
-                      thickness: 0.5,
-                    ),
-                    SubMenuItem(
-                      label: AppLocalizations.of(context)!.translate("QR_Code"),
-                      isSelected: selectedIndex == 13,
-                      onSelect: () => _updateIndex(13,
-                          AppLocalizations.of(context)!.translate("QR_Code")),
-                      onTap: () {},
-                    ),
-                  ],
-                ),
+              NavigationItem(
+                label: AppLocalizations.of(context)!.translate("Settings"),
+                leadingIconPath: 'assets/icons/setting.svg',
+                trailingIconPath: 'assets/icons/arrow_down.svg',
+                isSelected: selectedIndex >= 9 && selectedIndex <= 11,
+                onTap: () => _updateIndex(
+                    9, AppLocalizations.of(context)!.translate("venue_info"),
+                    closeDrawer: false),
               ),
-              // Add other navigation items similarly
+              if (selectedIndex >= 9 && selectedIndex <= 13) ...[
+                const SizedBox(height: 8),
+                Container(
+                  width: 180,
+                  padding: const EdgeInsets.all(8),
+                  margin: EdgeInsets.only(
+                    left: isRtl ? 0 : 20,
+                    right: isRtl ? 20 : 0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTheme.background.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!
+                            .translate("venue_info"),
+                        isSelected: selectedIndex == 9,
+                        onSelect: () => _updateIndex(
+                            9,
+                            AppLocalizations.of(context)!
+                                .translate("venue_info")),
+                        onTap: () {},
+                      ),
+                      const Divider(
+                        color: AppTheme.divider,
+                        thickness: 0.5,
+                      ),
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!
+                            .translate("social_media"),
+                        isSelected: selectedIndex == 10,
+                        onSelect: () => _updateIndex(
+                            10,
+                            AppLocalizations.of(context)!
+                                .translate("social_media")),
+                        onTap: () {},
+                      ),
+                      const Divider(
+                        color: AppTheme.divider,
+                        thickness: 0.5,
+                      ),
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!
+                            .translate("prices_option"),
+                        isSelected: selectedIndex == 11,
+                        onSelect: () => _updateIndex(
+                            11,
+                            AppLocalizations.of(context)!
+                                .translate("prices_option")),
+                        onTap: () {},
+                      ),
+                      const Divider(
+                        color: AppTheme.divider,
+                        thickness: 0.5,
+                      ),
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!
+                            .translate("tables_management"),
+                        isSelected: selectedIndex == 12,
+                        onSelect: () => _updateIndex(
+                            12,
+                            AppLocalizations.of(context)!
+                                .translate("tables_management")),
+                        onTap: () {},
+                      ),
+                      const Divider(
+                        color: AppTheme.divider,
+                        thickness: 0.5,
+                      ),
+                      SubMenuItem(
+                        label:
+                            AppLocalizations.of(context)!.translate("QR_Code"),
+                        isSelected: selectedIndex == 13,
+                        onSelect: () => _updateIndex(13,
+                            AppLocalizations.of(context)!.translate("QR_Code")),
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                ),
+                // Add other navigation items similarly
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

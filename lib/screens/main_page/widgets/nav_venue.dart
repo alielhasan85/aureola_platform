@@ -28,7 +28,6 @@ class VenueNavigation extends ConsumerStatefulWidget {
 
 class _VenueNavigationState extends ConsumerState<VenueNavigation> {
   bool _isHovered = false;
-
   void _showPopover(BuildContext context) {
     showPopover(
       context: context,
@@ -38,7 +37,8 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
         child: Container(
           width: 200,
           color: Colors.white,
-          child: ListView(
+          child: Column(
+            // Changed from Row to Column for proper constraints
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 12, bottom: 6),
@@ -52,7 +52,6 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
                   ),
                 ),
               ),
-
               const Divider(
                 thickness: 0.5,
                 color: AppTheme.divider,
@@ -64,22 +63,24 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
                   height: 20,
                 ),
                 title: const Text('Option 1'),
-                onTap: () {
+                onTap: () async {
                   // Perform action for Option 1
-                  Navigator.pop(context); // Close popover
+                  await Future.delayed(const Duration(milliseconds: 200));
+                  if (mounted) Navigator.pop(context); // Close popover
                 },
-                trailing:
-                    IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+                trailing: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.delete),
+                ),
               ),
-
               ListTile(
                 title: const Text('Option 2'),
-                onTap: () {
+                onTap: () async {
                   // Perform action for Option 2
-                  Navigator.pop(context); // Close popover
+                  await Future.delayed(const Duration(milliseconds: 200));
+                  if (mounted) Navigator.pop(context); // Close popover
                 },
               ),
-              // Add more options as needed
             ],
           ),
         ),

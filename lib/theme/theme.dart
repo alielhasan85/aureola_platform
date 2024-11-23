@@ -98,8 +98,9 @@ class AppTheme {
 
   static InputDecoration inputDecoration({required String label}) {
     return InputDecoration(
+      floatingLabelBehavior: FloatingLabelBehavior.always,
       labelText: label,
-      labelStyle: AppTheme.paragraph.copyWith(fontSize: 16),
+      labelStyle: AppTheme.paragraph.copyWith(fontSize: 20),
       border: const OutlineInputBorder(),
       enabledBorder: OutlineInputBorder(
         borderSide: const BorderSide(

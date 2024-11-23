@@ -66,6 +66,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         if (constraints.maxWidth > 800) {
           // Desktop/Tablet layout with navigation rail
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Row(
               children: [
                 const CustomNavigation(),
@@ -81,8 +82,10 @@ class _MainPageState extends ConsumerState<MainPage> {
             ),
           );
         } else {
+          //TODO: App bar in case of mobile layout
           // Mobile layout with Drawer
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: Text(appBarTitle),
             ),
