@@ -10,6 +10,7 @@
 .svn/
 migrate_working_dir/
 .build/
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -27,9 +28,9 @@ migrate_working_dir/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
-
 
 # Symbolication related
 app.*.symbols
@@ -37,9 +38,31 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+# Build output directories
+build/
+android/app/build/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/.symlinks/
+ios/Pods/
+macos/Flutter/ephemeral/
+
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
 /android/app/release
 
+# Exclude keys or sensitive files
 ./assets/keys
+
+# Generated files
+*.dill
+*.dill.track.dill
+
+# Large APK or build files
+*.apk
+*.aab
+
+# IDE and OS related
+.vscode/
+.idea/
