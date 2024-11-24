@@ -1,10 +1,13 @@
 import 'package:aureola_platform/localization/localization.dart';
+import 'package:aureola_platform/screens/main_page/widgets/country_picker.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
 import 'package:aureola_platform/screens/main_page/widgets/header_venue.dart';
 import 'package:aureola_platform/screens/main_page/widgets/venue_type_dropdown.dart';
 import 'package:aureola_platform/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl_phone_field/countries.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class Breakpoints {
   static const double desktop = 1024;
@@ -26,11 +29,16 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
   final TextEditingController _venueNameController =
       TextEditingController(text: 'Al bait el Shami');
 
+  final TextEditingController _phoneNumberController = TextEditingController();
+
   AlcoholOption? _alcoholOption = AlcoholOption.no; // Default to 'No'
 
   @override
   void dispose() {
     _venueNameController.dispose();
+    _phoneNumberController.dispose();
+
+    // Dispose of the phone number controller
     super.dispose();
   }
 
@@ -214,14 +222,40 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             ],
           ),
           const SizedBox(height: 16),
-          // New section for "Venue sells alcohol"
-          SizedBox(
-            width: fieldWidth,
-            child: _buildAlcoholOptionSection(context),
+          Row(
+            children: [
+              SizedBox(
+                width: fieldWidth,
+                child: VenueTypeDropdown(),
+              ),
+              SizedBox(width: spacing),
+              SizedBox(
+                width: fieldWidth,
+                child: _buildAlcoholOptionSection(context),
+              )
+            ],
           ),
-
           const SizedBox(height: 16),
-
+          Row(children: [
+            SizedBox(
+              width: fieldWidth,
+              child: CustomPhoneNumberField(
+                controller: _phoneNumberController,
+                onChanged: (completeNumber) {
+                  setState(() {
+                    completeNumber = completeNumber;
+                  });
+                  print(completeNumber); // Output: +97474716942
+                },
+              ),
+            )
+          ]),
+          const SizedBox(height: 16),
+          Text(
+            AppLocalizations.of(context)!.translate("Address_"),
+            style: AppTheme.tabItemText,
+          ),
+          const SizedBox(height: 16),
           Row(
             children: [
               SizedBox(
@@ -250,9 +284,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                   )),
             ],
           ),
-
           const SizedBox(height: 16),
-
           Row(
             children: [
               SizedBox(
@@ -270,8 +302,16 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               SizedBox(width: spacing),
               SizedBox(
                 width: fieldWidth,
-                child: VenueTypeDropdown(),
-              ),
+                child: TextField(
+                  cursorColor: AppTheme.accent,
+                  decoration: AppTheme.inputDecoration(
+                    label: AppLocalizations.of(context)!.translate("web_site"),
+                  ).copyWith(
+                    hintText: AppLocalizations.of(context)!
+                        .translate("enter_web_site"),
+                  ),
+                ),
+              )
             ],
           ),
         ],

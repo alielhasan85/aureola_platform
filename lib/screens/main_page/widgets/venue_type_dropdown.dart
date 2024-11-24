@@ -14,21 +14,13 @@ class VenueTypeDropdown extends StatefulWidget {
 }
 
 class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
-  List<String> items = [
-    'Bistro',
-    'Cafe',
-    'Hotel',
-    'Fast Food',
-    'Resort'
-  ]; // Static list
-
   String? _selectedType;
 
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<String>(
       popupProps: PopupProps.menu(
-        showSearchBox: true, // Enables the search box
+        showSearchBox: false, // Enables the search box
         searchFieldProps: TextFieldProps(
           cursorColor: AppTheme.accent,
           decoration: AppTheme.inputDecoration(
@@ -37,17 +29,24 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
         ),
       ),
       items: (filter, infiniteScrollProps) => [
-        "Menu",
-        "Dialog",
-        "Modal",
-        "BottomSheet"
+        AppLocalizations.of(context)!.translate("Fine_Dining"),
+        AppLocalizations.of(context)!.translate("Fast_Food"),
+        AppLocalizations.of(context)!.translate("Fast_Casual"),
+        AppLocalizations.of(context)!.translate("Drive_Thru"),
+        AppLocalizations.of(context)!.translate("Coffe_Shop"),
+        AppLocalizations.of(context)!.translate("Buffet"),
+        AppLocalizations.of(context)!.translate("Hotel_Room_Service"),
+        AppLocalizations.of(context)!.translate("Spa"),
+        AppLocalizations.of(context)!.translate("Bar"),
+        AppLocalizations.of(context)!.translate("Flower_Shop"),
+        AppLocalizations.of(context)!.translate("Beauty_Salon"),
       ], // Use 'items' for static lists
       decoratorProps: DropDownDecoratorProps(
         decoration: AppTheme.inputDecoration(
           label: AppLocalizations.of(context)!.translate("venue_type"),
         ).copyWith(
           hintText:
-              AppLocalizations.of(context)!.translate("select_venue_type"),
+              AppLocalizations.of(context)!.translate("Type_of_your_business"),
         ),
       ),
 
@@ -60,13 +59,3 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
     );
   }
 }
-
-
-
-// decoratorProps: DropDownDecoratorProps(
-//         decoration: AppTheme.inputDecoration(
-//           label: AppLocalizations.of(context)!.translate("venue_type"),
-//         ).copyWith(
-//           hintText: AppLocalizations.of(context)!.translate("select_venue_type"),
-//         ),
-//       ),
