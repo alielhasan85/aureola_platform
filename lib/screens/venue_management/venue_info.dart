@@ -1,8 +1,18 @@
 import 'package:aureola_platform/localization/localization.dart';
-import 'package:aureola_platform/screens/main_page/widgets/country_picker.dart';
+
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
 import 'package:aureola_platform/screens/main_page/widgets/header_venue.dart';
-import 'package:aureola_platform/screens/main_page/widgets/venue_type_dropdown.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/email_fields.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/location_picker_field copy.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_type_dropdown.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/alcohol_option_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/default_language_dropdown.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/display_name_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/name_same_as_display_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/phone_number_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_address_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_name_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/website_fields.dart';
 import 'package:aureola_platform/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,33 +25,14 @@ class Breakpoints {
   static const double mobile = 480;
 }
 
-// Define the AlcoholOption enum
-enum AlcoholOption { yes, no }
-
 class VenueInfo extends ConsumerStatefulWidget {
-  const VenueInfo({super.key});
+  const VenueInfo({Key? key}) : super(key: key);
 
   @override
   ConsumerState<VenueInfo> createState() => _VenueInfoState();
 }
 
 class _VenueInfoState extends ConsumerState<VenueInfo> {
-  final TextEditingController _venueNameController =
-      TextEditingController(text: 'Al bait el Shami');
-
-  final TextEditingController _phoneNumberController = TextEditingController();
-
-  AlcoholOption? _alcoholOption = AlcoholOption.no; // Default to 'No'
-
-  @override
-  void dispose() {
-    _venueNameController.dispose();
-    _phoneNumberController.dispose();
-
-    // Dispose of the phone number controller
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -60,7 +51,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
     return Column(
       children: [
-        if (isTabletOrDesktop) HeaderContainer(userName: 'Ali Elhassan'),
+        if (isTabletOrDesktop) HeaderContainer(userName: 'Ali Elhassan  g'),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -80,7 +71,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                       // Decide the number of columns
                       int columns = isTabletOrDesktop ? 2 : 1;
 
-                      // Calculate the width for each TextField
+                      // Calculate the width for each field
                       double spacing = 16;
                       double fieldWidth = columns == 1
                           ? containerWidth
@@ -92,7 +83,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                           const SizedBox(height: 20),
                           _buildHeader(isTabletOrDesktop),
                           const SizedBox(height: 16),
-                          _buildFormFields(columns, fieldWidth, spacing),
+                          _buildFormFields(
+                              columns, fieldWidth, spacing, containerWidth),
                           const SizedBox(height: 16),
                         ],
                       );
@@ -141,53 +133,34 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     );
   }
 
-  Widget _buildFormFields(int columns, double fieldWidth, double spacing) {
+  Widget _buildFormFields(
+      int columns, double fieldWidth, double spacing, double containerWidth) {
     if (columns == 1) {
       // Mobile layout: fields in a single column
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: fieldWidth,
-            child: TextField(
-              cursorColor: AppTheme.accent,
-              controller: _venueNameController,
-              decoration: AppTheme.inputDecoration(
-                label: AppLocalizations.of(context)!.translate("venue_name"),
-              ),
-            ),
-          ),
+          VenueNameField(width: fieldWidth),
           const SizedBox(height: 16),
-          SizedBox(
-            width: fieldWidth,
-            child: TextField(
-              cursorColor: AppTheme.accent,
-              decoration: AppTheme.inputDecoration(
-                label: AppLocalizations.of(context)!.translate("display_name"),
-              ),
-            ),
-          ),
+          DisplayNameField(width: fieldWidth),
           const SizedBox(height: 16),
-          SizedBox(
-            width: fieldWidth,
-            child: _buildAlcoholOptionSection(context),
-          ),
+          NameSameAsDisplayField(width: fieldWidth),
           const SizedBox(height: 16),
-          SizedBox(
-            width: fieldWidth,
-            child: TextField(
-              cursorColor: AppTheme.accent,
-              decoration: AppTheme.inputDecoration(
-                label: AppLocalizations.of(context)!.translate("web_site"),
-              ),
-            ),
-          ),
+          VenueTypeDropdown(width: fieldWidth),
           const SizedBox(height: 16),
-          // New section for "Venue sells alcohol"
-          SizedBox(
-            width: fieldWidth,
-            child: _buildAlcoholOptionSection(context),
-          ),
+          AlcoholOptionField(width: fieldWidth),
+          const SizedBox(height: 16),
+          DefaultLanguageDropdown(width: fieldWidth),
+          const SizedBox(height: 16),
+          WebsiteFields(width: fieldWidth),
+          const SizedBox(height: 16),
+          EmailFields(width: fieldWidth),
+          const SizedBox(height: 16),
+          PhoneNumberField(width: fieldWidth),
+          const SizedBox(height: 16),
+          VenueAddressField(width: fieldWidth),
+          const SizedBox(height: 16),
+          LocationPickerField(width: containerWidth)
         ],
       );
     } else {
@@ -197,173 +170,53 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
         children: [
           Row(
             children: [
-              SizedBox(
-                width: fieldWidth,
-                child: TextField(
-                  cursorColor: AppTheme.accent,
-                  controller: _venueNameController,
-                  decoration: AppTheme.inputDecoration(
-                    label:
-                        AppLocalizations.of(context)!.translate("venue_name"),
-                  ),
-                ),
-              ),
+              VenueNameField(width: fieldWidth),
               SizedBox(width: spacing),
-              SizedBox(
-                width: fieldWidth,
-                child: TextField(
-                  cursorColor: AppTheme.accent,
-                  decoration: AppTheme.inputDecoration(
-                    label:
-                        AppLocalizations.of(context)!.translate("display_name"),
-                  ),
-                ),
-              ),
+              DisplayNameField(width: fieldWidth),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Row(
+            children: [
+              NameSameAsDisplayField(width: fieldWidth),
+              SizedBox(width: spacing),
+              AlcoholOptionField(width: fieldWidth)
+            ],
+          ),
+          const SizedBox(height: 8),
+          Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              VenueTypeDropdown(width: fieldWidth),
+              SizedBox(width: spacing),
+              DefaultLanguageDropdown(width: fieldWidth)
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              SizedBox(
-                width: fieldWidth,
-                child: VenueTypeDropdown(),
-              ),
+              WebsiteFields(width: fieldWidth),
               SizedBox(width: spacing),
-              SizedBox(
-                width: fieldWidth,
-                child: _buildAlcoholOptionSection(context),
-              )
+              EmailFields(width: fieldWidth),
             ],
           ),
           const SizedBox(height: 16),
-          Row(children: [
-            SizedBox(
-              width: fieldWidth,
-              child: CustomPhoneNumberField(
-                controller: _phoneNumberController,
-                onChanged: (completeNumber) {
-                  setState(() {
-                    completeNumber = completeNumber;
-                  });
-                  print(completeNumber); // Output: +97474716942
-                },
-              ),
-            )
-          ]),
+          PhoneNumberField(width: fieldWidth),
+          const SizedBox(height: 8),
+          Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.translate("Address_"),
             style: AppTheme.tabItemText,
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              SizedBox(
-                width: fieldWidth,
-                child: TextField(
-                  cursorColor: AppTheme.accent,
-                  decoration: AppTheme.inputDecoration(
-                    label: AppLocalizations.of(context)!.translate("web_site"),
-                  ).copyWith(
-                    hintText: AppLocalizations.of(context)!
-                        .translate("enter_web_site"),
-                  ),
-                ),
-              ),
-              SizedBox(width: spacing),
-              SizedBox(
-                  width: fieldWidth,
-                  child: TextField(
-                    cursorColor: AppTheme.accent,
-                    decoration: AppTheme.inputDecoration(
-                      label: AppLocalizations.of(context)!.translate("email"),
-                    ).copyWith(
-                      hintText: AppLocalizations.of(context)!
-                          .translate("enter_email"),
-                    ),
-                  )),
-            ],
-          ),
+          VenueAddressField(width: containerWidth),
+
           const SizedBox(height: 16),
-          Row(
-            children: [
-              SizedBox(
-                width: fieldWidth,
-                child: TextField(
-                  cursorColor: AppTheme.accent,
-                  decoration: AppTheme.inputDecoration(
-                    label: AppLocalizations.of(context)!.translate("web_site"),
-                  ).copyWith(
-                    hintText: AppLocalizations.of(context)!
-                        .translate("enter_web_site"),
-                  ),
-                ),
-              ),
-              SizedBox(width: spacing),
-              SizedBox(
-                width: fieldWidth,
-                child: TextField(
-                  cursorColor: AppTheme.accent,
-                  decoration: AppTheme.inputDecoration(
-                    label: AppLocalizations.of(context)!.translate("web_site"),
-                  ).copyWith(
-                    hintText: AppLocalizations.of(context)!
-                        .translate("enter_web_site"),
-                  ),
-                ),
-              )
-            ],
-          ),
+          LocationPickerField(width: containerWidth), // Add this line
         ],
       );
     }
-  }
-
-  // Enum for alcohol options
-
-  Widget _buildAlcoholOptionSection(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppLocalizations.of(context)!.translate("venue_sells_alcohol"),
-          style: AppTheme.paragraph,
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Radio<AlcoholOption>(
-              activeColor: AppTheme.accent,
-              value: AlcoholOption.yes,
-              groupValue: _alcoholOption,
-              onChanged: (AlcoholOption? value) {
-                setState(() {
-                  _alcoholOption = value;
-                });
-              },
-            ),
-            Text(
-              AppLocalizations.of(context)!.translate("yes"),
-              style: AppTheme.paragraph,
-            ),
-            const SizedBox(width: 16),
-            Radio<AlcoholOption>(
-              activeColor: AppTheme.accent,
-              value: AlcoholOption.no,
-              groupValue: _alcoholOption,
-              onChanged: (AlcoholOption? value) {
-                setState(() {
-                  _alcoholOption = value;
-                });
-              },
-            ),
-            Text(
-              AppLocalizations.of(context)!.translate("no"),
-              style: AppTheme.paragraph,
-            ),
-          ],
-        ),
-      ],
-    );
   }
 }
