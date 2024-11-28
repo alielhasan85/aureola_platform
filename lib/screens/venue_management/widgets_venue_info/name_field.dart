@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:aureola_platform/localization/localization.dart';
 import 'package:aureola_platform/theme/theme.dart';
 
-class EmailField extends StatelessWidget {
+class VenueNameField extends StatelessWidget {
   final double width;
   final TextEditingController controller;
 
-  EmailField({
+  VenueNameField({
     super.key,
     required this.width,
     TextEditingController? controller,
@@ -20,7 +20,7 @@ class EmailField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.of(context)!.translate("email"),
+            AppLocalizations.of(context)!.translate("venue_name"),
             style: AppTheme.paragraph,
           ),
           const SizedBox(height: 6),
@@ -29,7 +29,8 @@ class EmailField extends StatelessWidget {
             cursorColor: AppTheme.accent,
             controller: controller,
             decoration: AppTheme.textFieldinputDecoration(
-              hint: AppLocalizations.of(context)!.translate("enter_email"),
+              hint: AppLocalizations.of(context)!
+                  .translate("enter_venue_display_name"),
             ),
           ),
         ],

@@ -3,16 +3,15 @@ import 'package:aureola_platform/localization/localization.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
 import 'package:aureola_platform/screens/main_page/widgets/header_venue.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/email_fields.dart';
-import 'package:aureola_platform/screens/venue_management/widgets_venue_info/location_picker_field copy.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/location_picker_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_type_dropdown.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/alcohol_option_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/default_language_dropdown.dart';
-import 'package:aureola_platform/screens/venue_management/widgets_venue_info/display_name_field.dart';
-import 'package:aureola_platform/screens/venue_management/widgets_venue_info/name_same_as_display_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/phone_number_field.dart';
-import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_address_field.dart';
-import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_name_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/address_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/name_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/website_fields.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/whatsapp_number.dart';
 import 'package:aureola_platform/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,7 +25,7 @@ class Breakpoints {
 }
 
 class VenueInfo extends ConsumerStatefulWidget {
-  const VenueInfo({Key? key}) : super(key: key);
+  const VenueInfo({super.key});
 
   @override
   ConsumerState<VenueInfo> createState() => _VenueInfoState();
@@ -40,7 +39,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     // Determine container width based on breakpoints
     double containerWidth;
     if (screenWidth >= Breakpoints.desktop) {
-      containerWidth = screenWidth * 0.45;
+      containerWidth = screenWidth * 0.5;
     } else if (screenWidth >= Breakpoints.tablet) {
       containerWidth = screenWidth * 0.7;
     } else {
@@ -51,7 +50,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
     return Column(
       children: [
-        if (isTabletOrDesktop) HeaderContainer(userName: 'Ali Elhassan  g'),
+        // TODO: username dynamic from firebase
+        if (isTabletOrDesktop) HeaderContainer(userName: 'Ali Elhassan'),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -61,9 +61,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                 vertical: isTabletOrDesktop ? 30 : 12,
               ),
               decoration: AppTheme.cardDecoration,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: SingleChildScrollView(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final containerWidth = constraints.maxWidth;
@@ -142,10 +142,6 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
         children: [
           VenueNameField(width: fieldWidth),
           const SizedBox(height: 16),
-          DisplayNameField(width: fieldWidth),
-          const SizedBox(height: 16),
-          NameSameAsDisplayField(width: fieldWidth),
-          const SizedBox(height: 16),
           VenueTypeDropdown(width: fieldWidth),
           const SizedBox(height: 16),
           AlcoholOptionField(width: fieldWidth),
@@ -154,7 +150,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 16),
           WebsiteFields(width: fieldWidth),
           const SizedBox(height: 16),
-          EmailFields(width: fieldWidth),
+          EmailField(width: fieldWidth),
           const SizedBox(height: 16),
           PhoneNumberField(width: fieldWidth),
           const SizedBox(height: 16),
@@ -168,52 +164,65 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          VenueNameField(width: fieldWidth),
+          const SizedBox(height: 12),
+          Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.3),
+
+          const SizedBox(height: 12),
+          Text(
+            AppLocalizations.of(context)!.translate("Contact_details"),
+            style: AppTheme.heading1,
+          ),
+          const SizedBox(height: 12),
           Row(
             children: [
-              VenueNameField(width: fieldWidth),
+              PhoneNumberField(width: fieldWidth),
               SizedBox(width: spacing),
-              DisplayNameField(width: fieldWidth),
+              WhatsappNumber(width: fieldWidth)
             ],
           ),
+
           const SizedBox(height: 24),
           Row(
             children: [
-              NameSameAsDisplayField(width: fieldWidth),
+              EmailField(width: fieldWidth),
               SizedBox(width: spacing),
-              AlcoholOptionField(width: fieldWidth)
+              WebsiteFields(width: fieldWidth)
             ],
           ),
-          const SizedBox(height: 8),
+
+          const SizedBox(height: 12),
           Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
+          Text(
+            AppLocalizations.of(context)!.translate("Default_options"),
+            style: AppTheme.heading1,
+          ),
+          const SizedBox(height: 12),
           Row(
             children: [
               VenueTypeDropdown(width: fieldWidth),
               SizedBox(width: spacing),
-              DefaultLanguageDropdown(width: fieldWidth)
+              DefaultLanguageDropdown(width: fieldWidth),
             ],
           ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              WebsiteFields(width: fieldWidth),
-              SizedBox(width: spacing),
-              EmailFields(width: fieldWidth),
-            ],
-          ),
-          const SizedBox(height: 16),
-          PhoneNumberField(width: fieldWidth),
-          const SizedBox(height: 8),
+
+          const SizedBox(height: 24),
+          AlcoholOptionField(width: fieldWidth),
+
+          const SizedBox(height: 12),
+
           Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
+
           Text(
             AppLocalizations.of(context)!.translate("Address_"),
-            style: AppTheme.tabItemText,
+            style: AppTheme.heading1,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           VenueAddressField(width: containerWidth),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           LocationPickerField(width: containerWidth), // Add this line
         ],
       );

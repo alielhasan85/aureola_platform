@@ -16,14 +16,23 @@ class WebsiteFields extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      child: TextField(
-        cursorColor: AppTheme.accent,
-        controller: websiteController,
-        decoration: AppTheme.inputDecoration(
-          label: AppLocalizations.of(context)!.translate("web_site"),
-        ).copyWith(
-          hintText: AppLocalizations.of(context)!.translate("enter_web_site"),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.translate("web_site"),
+            style: AppTheme.paragraph,
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            cursorColor: AppTheme.accent,
+            controller: websiteController,
+            decoration: AppTheme.textFieldinputDecoration().copyWith(
+              hintText:
+                  AppLocalizations.of(context)!.translate("enter_web_site"),
+            ),
+          ),
+        ],
       ),
     );
   }

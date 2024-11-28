@@ -25,7 +25,6 @@ class AppTheme {
     fontWeight: FontWeight.bold,
     fontSize: 28,
     letterSpacing: 0.4,
-    height: 0.9,
     color: primary,
   );
 
@@ -35,7 +34,7 @@ class AppTheme {
         FontWeight.normal, // You can adjust the font weight or style here
     fontSize: 26, // Same font size to keep consistency
     letterSpacing: 0.4,
-    height: 0.8,
+
     color: accent, // Apply a different color or style
   );
 
@@ -44,7 +43,6 @@ class AppTheme {
     fontSize: 18,
     fontFamily: 'Inter',
     fontWeight: FontWeight.w600,
-    height: 1,
   );
 
   static const TextStyle heading2 = TextStyle(
@@ -52,7 +50,6 @@ class AppTheme {
     fontSize: 22,
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w500,
-    height: 0,
   );
 
   static const TextStyle navigationItemText = TextStyle(
@@ -60,7 +57,6 @@ class AppTheme {
     fontSize: 15,
     fontFamily: 'Inter',
     fontWeight: FontWeight.w500,
-    height: 0,
   );
 
   static const TextStyle tabItemText = TextStyle(
@@ -68,7 +64,6 @@ class AppTheme {
     fontSize: 16,
     fontFamily: 'Inter',
     fontWeight: FontWeight.w400,
-    height: 0,
   );
 
   static const TextStyle tabBarItemText = TextStyle(
@@ -76,7 +71,6 @@ class AppTheme {
     fontSize: 18,
     fontFamily: 'DM Sans',
     fontWeight: FontWeight.w500,
-    height: 0,
   );
 
   static const TextStyle buttonText = TextStyle(
@@ -84,7 +78,6 @@ class AppTheme {
     color: Colors.white,
     fontSize: 16,
     fontWeight: FontWeight.w500,
-    height: 0.08,
     letterSpacing: 0.10,
   );
 
@@ -93,15 +86,44 @@ class AppTheme {
     fontSize: 16,
     fontFamily: 'Inter',
     fontWeight: FontWeight.w500,
-    height: 0,
   );
 
-  static InputDecoration inputDecoration({required String label}) {
+  static InputDecoration textFieldinputDecoration({
+    String? label,
+    String? hint,
+    Widget? prefixIcon,
+    Widget? suffixIcon,
+    bool alwaysFloatLabel = false,
+  }) {
     return InputDecoration(
-      floatingLabelBehavior: FloatingLabelBehavior.always,
+      // Optionally include a prefix icon
+      prefixIcon: prefixIcon,
+
+      // Optionally include a suffix icon
+      suffixIcon: suffixIcon,
+
+      // Handle floating label behavior based on parameter
+      floatingLabelBehavior: alwaysFloatLabel
+          ? FloatingLabelBehavior.always
+          : FloatingLabelBehavior.auto,
+
+      // Optionally include label text
       labelText: label,
-      labelStyle: AppTheme.paragraph.copyWith(fontSize: 20),
+
+      // Optionally include hint text
+      hintText: hint,
+
+      // Apply styles conditionally
+      labelStyle:
+          label != null ? AppTheme.paragraph.copyWith(fontSize: 20) : null,
+
+      hintStyle:
+          hint != null ? AppTheme.paragraph.copyWith(fontSize: 14) : null,
+
+      // Define the default border
       border: const OutlineInputBorder(),
+
+      // Define the enabled border
       enabledBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           color: AppTheme.grey2,
@@ -109,10 +131,12 @@ class AppTheme {
         ),
         borderRadius: BorderRadius.circular(6.0),
       ),
+
+      // Define the focused border
       focusedBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           color: AppTheme.accent,
-          width: 1.0,
+          width: 0.75, // Updated to match the revised decoration
         ),
         borderRadius: BorderRadius.circular(6.0),
       ),

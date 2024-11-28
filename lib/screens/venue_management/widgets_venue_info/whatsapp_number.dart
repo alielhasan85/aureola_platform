@@ -3,21 +3,21 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:aureola_platform/localization/localization.dart';
 import 'package:aureola_platform/theme/theme.dart';
 
-class PhoneNumberField extends StatefulWidget {
+class WhatsappNumber extends StatefulWidget {
   final double width;
   final TextEditingController controller;
 
-  PhoneNumberField({
+  WhatsappNumber({
     super.key,
     required this.width,
     TextEditingController? controller,
   }) : controller = controller ?? TextEditingController();
 
   @override
-  _PhoneNumberFieldState createState() => _PhoneNumberFieldState();
+  _WhatsappNumberState createState() => _WhatsappNumberState();
 }
 
-class _PhoneNumberFieldState extends State<PhoneNumberField> {
+class _WhatsappNumberState extends State<WhatsappNumber> {
   String completeNumber = '';
 
   @override
@@ -34,7 +34,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.of(context)!.translate("phone_number"),
+            AppLocalizations.of(context)!.translate("whatsapp_number"),
             style: AppTheme.paragraph,
           ),
           const SizedBox(height: 6),
@@ -46,7 +46,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
               cursorColor: AppTheme.accent,
               decoration: AppTheme.textFieldinputDecoration(
                 hint: AppLocalizations.of(context)!
-                    .translate("enter_phone_number"),
+                    .translate("enter_whatsapp_number"),
               ),
               initialCountryCode: 'QA',
               onChanged: (phone) {

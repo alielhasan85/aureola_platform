@@ -1,6 +1,4 @@
 import 'package:aureola_platform/localization/localization.dart';
-import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
-import 'package:aureola_platform/screens/main_page/widgets/header_venue.dart';
 import 'package:aureola_platform/theme/theme.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -21,45 +19,66 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width,
-      child: DropdownSearch<String>(
-        popupProps: PopupProps.menu(
-          showSearchBox: false, // Enables the search box
-          searchFieldProps: TextFieldProps(
-            cursorColor: AppTheme.accent,
-            decoration: AppTheme.inputDecoration(
-              label:
-                  AppLocalizations.of(context)!.translate("search_venue_type"),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.translate("venue_Business_type"),
+            style: AppTheme.paragraph,
+          ),
+          const SizedBox(height: 6),
+          DropdownSearch<String>(
+            popupProps: PopupProps.menu(
+              menuProps: const MenuProps(
+                backgroundColor: AppTheme.background,
+                margin: EdgeInsets.only(top: 12),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+              ),
+              itemBuilder: (context, item, isDisabled, isSelected) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12.0, horizontal: 12),
+                  child: Text(
+                    item,
+                    style: AppTheme.paragraph
+                        .copyWith(fontStyle: FontStyle.italic),
+                    textAlign: TextAlign.start,
+                  ),
+                );
+              },
             ),
-          ),
-        ),
-        items: (filter, infiniteScrollProps) => [
-          AppLocalizations.of(context)!.translate("Fine_Dining"),
-          AppLocalizations.of(context)!.translate("Fast_Food"),
-          AppLocalizations.of(context)!.translate("Fast_Casual"),
-          AppLocalizations.of(context)!.translate("Drive_Thru"),
-          AppLocalizations.of(context)!.translate("Coffe_Shop"),
-          AppLocalizations.of(context)!.translate("Buffet"),
-          AppLocalizations.of(context)!.translate("Hotel_Room_Service"),
-          AppLocalizations.of(context)!.translate("Spa"),
-          AppLocalizations.of(context)!.translate("Bar"),
-          AppLocalizations.of(context)!.translate("Flower_Shop"),
-          AppLocalizations.of(context)!.translate("Beauty_Salon"),
-        ], // Use 'items' for static lists
-        decoratorProps: DropDownDecoratorProps(
-          decoration: AppTheme.inputDecoration(
-            label: AppLocalizations.of(context)!.translate("venue_type"),
-          ).copyWith(
-            hintText: AppLocalizations.of(context)!
-                .translate("Type_of_your_business"),
-          ),
-        ),
+            items: (filter, infiniteScrollProps) => [
+              AppLocalizations.of(context)!.translate("Fine_Dining"),
+              AppLocalizations.of(context)!.translate("Fast_Food"),
+              AppLocalizations.of(context)!.translate("Fast_Casual"),
+              AppLocalizations.of(context)!.translate("Drive_Thru"),
+              AppLocalizations.of(context)!.translate("Coffe_Shop"),
+              AppLocalizations.of(context)!.translate("Buffet"),
+              AppLocalizations.of(context)!.translate("Hotel_Room_Service"),
+              AppLocalizations.of(context)!.translate("Spa"),
+              AppLocalizations.of(context)!.translate("Bar"),
+              AppLocalizations.of(context)!.translate("Flower_Shop"),
+              AppLocalizations.of(context)!.translate("Beauty_Salon"),
+            ],
 
-        onChanged: (String? newValue) {
-          setState(() {
-            _selectedType = newValue; // Update the selected type
-          });
-        },
-        selectedItem: _selectedType,
+            // Use 'items' for static lists
+            decoratorProps: DropDownDecoratorProps(
+              baseStyle: AppTheme.paragraph,
+              decoration: AppTheme.textFieldinputDecoration(
+                hint: AppLocalizations.of(context)!
+                    .translate("Select_Type_of_your_business"),
+              ),
+            ),
+
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedType = newValue; // Update the selected type
+              });
+            },
+            selectedItem: _selectedType,
+          ),
+        ],
       ),
     );
   }

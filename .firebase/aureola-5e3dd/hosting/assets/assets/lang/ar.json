@@ -11,9 +11,6 @@
     "tables_management": "إدارة الطاولات",
     "venue_info": "المعلومات العامة",
     "venue_name": "اسم المتجر",
-
-    "venue_info_title": "المعلومات العامة",
-
     "QR_Code": "QR Code",
     "Settings": "الإعدادات",
 
@@ -24,6 +21,25 @@
      "copyright": "حقوق الطبع محفوظة لمنصة أوريولا 2024", 
 
      
-"Add_new_venue": "إضافة متجر جديد"
+     "venue_info_title": "معلومات عامة",
+     "Add_new_venue": "+ إضافة مكان جديد",
+     "Contact_details": "تفاصيل الاتصال",
+     "Default_options": "الخيارات الافتراضية",
+     "Address_": "العنوان",
+     "Detailed_address": "العنوان التفصيلي",
+     "enter_address": "أدخل العنوان التفصيلي",
+     "venue_sells_alcohol": "هل يبيع مكانك الكحول؟",
+     "yes": "نعم",
+     "no": "لا",
+     "default_language": "اللغة الافتراضية",
+     "english_": "الإنجليزية",
+     "arabic_": "العربية",
+     "french_": "الفرنسية",
+     "Select_Default_Language": "اختر اللغة الافتراضية",
+     "email": "البريد الإلكتروني",
+     "enter_email": "أدخل بريدك الإلكتروني",
+     "pickup_location": "موقع الالتقاط",
+     "selected_location:": "الموقع المحدد",
+     "select_location": "اختر الموقع"
 
 }

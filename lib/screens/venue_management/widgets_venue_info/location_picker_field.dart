@@ -1,12 +1,14 @@
 // location_picker_field.dart
+import 'package:aureola_platform/providers/lang_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:aureola_platform/theme/theme.dart';
 import 'package:aureola_platform/localization/localization.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LocationPickerField extends StatefulWidget {
+class LocationPickerField extends ConsumerStatefulWidget {
   final double width;
 
   const LocationPickerField({super.key, required this.width});
@@ -15,7 +17,7 @@ class LocationPickerField extends StatefulWidget {
   _LocationPickerFieldState createState() => _LocationPickerFieldState();
 }
 
-class _LocationPickerFieldState extends State<LocationPickerField> {
+class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
   final String apiKey =
       'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA'; // Replace with your API key
 
@@ -26,45 +28,77 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
   // Variable to track whether the map picker is active
   bool _isMapPickerActive = false;
 
+  // Flag to ensure ref.listen is only called once
+  bool _isListening = false;
+
   @override
   void initState() {
     super.initState();
     // Initialize with a default location (e.g., Doha, Qatar)
     _selectedLatLng = LatLng(25.286106, 51.534817);
-    _reverseGeocode(_selectedLatLng!);
+    // Delay reverse geocoding until after the first build to ensure context is available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final currentLanguage = ref.read(languageProvider);
+      _reverseGeocode(_selectedLatLng!, language: currentLanguage);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Watch the languageProvider to get the current language
+    final currentLanguage = ref.watch(languageProvider);
+
+    // Set up ref.listen only once
+    if (!_isListening) {
+      _isListening = true;
+      ref.listen<String>(languageProvider, (previous, next) {
+        if (_selectedLatLng != null) {
+          _reverseGeocode(_selectedLatLng!, language: next);
+        }
+      });
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Text(
-          AppLocalizations.of(context)!.translate("location"),
+          AppLocalizations.of(context)!.translate("pickup_location"),
           style: AppTheme.tabItemText,
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         if (_selectedAddress != null) ...[
-          SizedBox(height: 16),
-          Text(
-            AppLocalizations.of(context)!.translate("selected_location"),
-            style: AppTheme.paragraph,
-          ),
-          SizedBox(height: 8),
-          Text(
-            _selectedAddress!,
-            style: AppTheme.paragraph,
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.translate("selected_location:"),
+                style: AppTheme.paragraph,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Directionality(
+                  textDirection: currentLanguage == 'ar'
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  child: Text(
+                    _selectedAddress!,
+                    style: AppTheme.paragraph,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         // Display Static Map Image or Map Picker
-        _buildMapOrImage(),
+        _buildMapOrImage(currentLanguage),
       ],
     );
   }
 
-  Widget _buildMapOrImage() {
+  Widget _buildMapOrImage(String language) {
     if (_isMapPickerActive) {
       // Show interactive map
       return Container(
@@ -86,7 +120,7 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
             ),
-            Icon(Icons.place, size: 50, color: Colors.red),
+            const Icon(Icons.place, size: 50, color: Colors.red),
             Positioned(
               bottom: 10,
               child: ElevatedButton(
@@ -94,10 +128,13 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
                   setState(() {
                     _isMapPickerActive = false;
                   });
-                  _reverseGeocode(_selectedLatLng!);
+                  _reverseGeocode(_selectedLatLng!, language: language);
                 },
                 child: Text(
-                  AppLocalizations.of(context)!.translate("select_location"),
+                  AppLocalizations.of(context)!.translate(
+                    "select_location",
+                  ),
+                  style: AppTheme.buttonText,
                 ),
               ),
             ),
@@ -142,18 +179,18 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
     return staticMapUrl;
   }
 
-  Future<void> _reverseGeocode(LatLng location) async {
+  Future<void> _reverseGeocode(LatLng location,
+      {required String language}) async {
     try {
       final url = Uri.parse(
-        'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${location.latitude}&lon=${location.longitude}',
+        'https://nominatim.openstreetmap.org/reverse?format=jsonv2'
+        '&lat=${location.latitude}'
+        '&lon=${location.longitude}'
+        '&accept-language=$language', // Use the language parameter
       );
-      final response = await http.get(url
-
-          //  headers: {
-          //   'User-Agent': 'aureola-5e3dd (elhasan.ali@gmail.com)',
-          // }
-
-          );
+      final response = await http.get(
+        url,
+      );
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -178,5 +215,16 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
         _selectedAddress = '${location.latitude}, ${location.longitude}';
       });
     }
+  }
+
+  @override
+  void didUpdateWidget(covariant LocationPickerField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Optionally handle widget updates
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

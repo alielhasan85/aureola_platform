@@ -20,7 +20,35 @@
      "copyright": "Tous droits réservés à la plateforme Aureola 2024",
 
      
-"Add_new_venue" : "Add New Venue"
+    
+        "venue_info_title": "Informations Générales",
+        "Add_new_venue": "+ Ajouter un Nouveau Lieu",
+        "Contact_details": "Détails de Contact",
+        "Default_options": "Options par Défaut",
+        "Address_": "Adresse",
+        "Detailed_address": "Adresse Détaillée",
+        "enter_address": "Entrez l'Adresse Détaillée",
+        "venue_sells_alcohol": "Votre Lieu Vend-il de l'Alcool ?",
+        "yes": "Oui",
+        "no": "Non",
+        "default_language": "Langue par Défaut",
+        "english_": "Anglais",
+        "arabic_": "Arabe",
+        "french_": "Français",
+        "Select_Default_Language": "Sélectionner la Langue par Défaut",
+        "email": "Email",
+        "enter_email": "Entrez votre Email",
+        "pickup_location": "Lieu de Ramassage",
+        "selected_location:": "Lieu Sélectionné",
+        "select_location": "Sélectionner le Lieu",
+
+        "country_search_placeholder": "Rechercher un Pays",
+        "state_search_placeholder": "Rechercher un État",
+        "city_search_placeholder": "Rechercher une Ville",
+        "country_dropdown_label": "*Pays",
+        "state_dropdown_label": "*État",
+        "city_dropdown_label": "*Ville"
+      }
+      
 
 
-}

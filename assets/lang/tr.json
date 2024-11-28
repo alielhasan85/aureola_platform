@@ -20,7 +20,35 @@
      "copyright": "Telif Hakkı Saklıdır Aureola Platformu 2024",
 
      
-"Add_new_venue" : "Add New Venue"
+    
+        "venue_info_title": "Genel Bilgiler",
+        "Add_new_venue": "+ Yeni Mekan Ekle",
+        "Contact_details": "İletişim Detayları",
+        "Default_options": "Varsayılan Seçenekler",
+        "Address_": "Adres",
+        "Detailed_address": "Ayrıntılı Adres",
+        "enter_address": "Ayrıntılı Adresi Girin",
+        "venue_sells_alcohol": "Mekanınız Alkol Satıyor mu?",
+        "yes": "Evet",
+        "no": "Hayır",
+        "default_language": "Varsayılan Dil",
+        "english_": "İngilizce",
+        "arabic_": "Arapça",
+        "french_": "Fransızca",
+        "Select_Default_Language": "Varsayılan Dili Seçin",
+        "email": "Email",
+        "enter_email": "Emailinizi Girin",
+        "pickup_location": "Alış Yeri",
+        "selected_location:": "Seçilen Lokasyon",
+        "select_location": "Lokasyon Seç",
 
+        "country_search_placeholder": "Ülke Ara",
+  "state_search_placeholder": "İlçe Ara",
+  "city_search_placeholder": "Şehir Ara",
+  "country_dropdown_label": "*Ülke",
+  "state_dropdown_label": "*İlçe",
+  "city_dropdown_label": "*Şehir"
+    
+      
 
 }

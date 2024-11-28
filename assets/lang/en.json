@@ -12,14 +12,10 @@
     "venue_info": "Venue Info",
     "venue_name": "Venue Name",
 
-    "venue_info_title": "General Info",
+    
 
     "QR_Code": "QR Code",
     "Settings": "Settings",
-
-
-
-
     "available_restaurant": "Available Venues",
 "branding_design": "Branding & Design", 
 
@@ -27,7 +23,38 @@
 "copyright": "Copy Right Reserved Aureola Platform 2024",
 
 
-"Add_new_venue" : "+ Add New Venue"
 
-    
+"venue_info_title": "General Info",
+"Add_new_venue": "+ Add New Venue",
+"Contact_details": "Contact Details",
+"Default_options": "Default Options",
+"Address_": "Address",
+"Detailed_address": "Detailed Address",
+"enter_address": "Enter Detailed Address",
+"venue_sells_alcohol": "Does your Venue Sell Alcohol?",
+"yes": "Yes",
+"no": "No",
+"default_language": "Default Language",
+"english_": "English",
+"arabic_": "Arabic",
+"french_": "French",
+"Select_Default_Language": "Select Default Language",
+"email": "Email",
+"enter_email": "Enter your Email",
+"pickup_location": "Pickup Location",
+"selected_location:": "Location Selected",
+"select_location": "Select Location",
+
+
+"country_search_placeholder": "Search Country",
+"state_search_placeholder": "Search State",
+"city_search_placeholder": "Search City",
+"country_dropdown_label": "*Country",
+"state_dropdown_label": "*State",
+"city_dropdown_label": "*City"
+
+
+
+
 }
+
