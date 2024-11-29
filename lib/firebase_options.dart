@@ -25,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -71,6 +65,25 @@ class DefaultFirebaseOptions {
     projectId: 'aureola-5e3dd',
     storageBucket: 'aureola-5e3dd.firebasestorage.app',
     iosBundleId: 'com.example.aureolaPlatform',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAdsh_TKHMxxb2Cr_EVXCdlKcT29wIIFS8',
+    appId: '1:159445462515:ios:f35e8e815f0dfaef933686',
+    messagingSenderId: '159445462515',
+    projectId: 'aureola-5e3dd',
+    storageBucket: 'aureola-5e3dd.firebasestorage.app',
+    iosBundleId: 'com.example.aureolaPlatform',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAvBDgsacBs6ShYbsDqZEB89rq7BT6jyG4',
+    appId: '1:159445462515:web:cad9bbf13f56bf1e933686',
+    messagingSenderId: '159445462515',
+    projectId: 'aureola-5e3dd',
+    authDomain: 'aureola-5e3dd.firebaseapp.com',
+    storageBucket: 'aureola-5e3dd.firebasestorage.app',
+    measurementId: 'G-HBWKLWH2ZE',
   );
 
 }

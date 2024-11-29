@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:159445462515:android:481f8dbc6d2712e6933686",
+        "android_client_info": {
+          "package_name": "com.example.aureola_guest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdKz-WfiKWjF50BgULosu0Hs6KoIUZHto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:159445462515:android:d8979af035f89fc8933686",
         "android_client_info": {
           "package_name": "com.example.aureola_platform"

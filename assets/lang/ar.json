@@ -11,44 +11,66 @@
     "tables_management": "إدارة الطاولات",
     "venue_info": "المعلومات العامة",
     "venue_name": "اسم المتجر",
+
+     "enter_venue_display_name": "أدخل اسم عرض المكان",
     "QR_Code": "QR Code",
     "Settings": "الإعدادات",
 
      "available_restaurant": "القاعات المتاحة",
-
      "branding_design": "العلامة التجارية والتصميم",
-
      "copyright": "حقوق الطبع محفوظة لمنصة أوريولا 2024", 
 
      
-     "venue_info_title": "معلومات عامة",
-     "Add_new_venue": "+ إضافة مكان جديد",
-     "Contact_details": "تفاصيل الاتصال",
-     "Default_options": "الخيارات الافتراضية",
-     "Address_": "العنوان",
-     "Detailed_address": "العنوان التفصيلي",
-     "enter_address": "أدخل العنوان التفصيلي",
-     "venue_sells_alcohol": "هل يبيع مكانك الكحول؟",
-     "yes": "نعم",
-     "no": "لا",
-     "default_language": "اللغة الافتراضية",
-     "english_": "الإنجليزية",
-     "arabic_": "العربية",
-     "french_": "الفرنسية",
-     "Select_Default_Language": "اختر اللغة الافتراضية",
-     "email": "البريد الإلكتروني",
-     "enter_email": "أدخل بريدك الإلكتروني",
-     "pickup_location": "موقع الالتقاط",
-     "selected_location:": "الموقع المحدد",
-     "select_location": "اختر الموقع",
+    "venue_info_title": "معلومات عامة",
+    "Add_new_venue": "إضافة مكان جديد",
+    "Contact_details": "تفاصيل الاتصال",
+    "Default_options": "الخيارات الافتراضية",
+    "Address_": "العنوان",
+    "Detailed_address": "العنوان التفصيلي",
+    "enter_address": "أدخل العنوان التفصيلي",
+    "venue_sells_alcohol": "هل يبيع متجرك الكحول؟",
+    "yes": "نعم",
+    "no": "لا",
+    "default_language": "اللغة الافتراضية",
+    "english_": "الإنجليزية",
+    "arabic_": "العربية",
+    "french_": "الفرنسية",
+    "Select_Default_Language": "اختر اللغة الافتراضية",
+    "email": "البريد الإلكتروني",
+    "enter_email": "أدخل بريدك الإلكتروني",
+    "pickup_location": "موقع الالتقاط",
+    "selected_location:": "الموقع المحدد",
+    "select_location": "اختر الموقع",
 
-
-     "country_search_placeholder": "ابحث عن دولة",
+  "country_search_placeholder": "ابحث عن دولة",
   "state_search_placeholder": "ابحث عن ولاية",
   "city_search_placeholder": "ابحث عن مدينة",
   "country_dropdown_label": "*الدولة",
   "state_dropdown_label": "*الولاية",
-  "city_dropdown_label": "*المدينة"
+  "city_dropdown_label": "*المدينة",
 
+  "phone_number": "رقم الهاتف",
+  "enter_phone_number": "أدخل رقم الهاتف",
+
+  "whatsapp_number": "رقم الواتساب",
+  "enter_whatsapp_number": "أدخل رقم الواتساب",
+  "web_site": "موقع الويب",
+  "enter_web_site": "أدخل موقع الويب",
+
+  "venue_Business_type": "نوع عمل المكان",
+  "Fine_Dining": "تناول الطعام الراقي",
+  "Fast_Food": "الوجبات السريعة",
+  "Fast_Casual": "طعام سريع غير رسمي",
+  "Drive_Thru": "خدمة السيارات السريعة",
+  "Coffe_Shop": "مقهى",
+  "Buffet": "بوفيه",
+  "Hotel_Room_Service": "خدمة غرف الفندق",
+  "Spa": "منتجع صحي",
+  "Bar": "بار",
+  "Flower_Shop": "محل الزهور",
+  "Beauty_Salon": "صالون تجميل",
+
+  "Select_Location_from_Map":"Select Location from Map"
+  
 
 }

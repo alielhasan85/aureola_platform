@@ -17,6 +17,7 @@
      "branding_design": "Branding & Design",
 
      "venue_info": "Venue Info",
+     "enter_venue_display_name": "Mekan Görüntüleme Adını Girin",
      "copyright": "Telif Hakkı Saklıdır Aureola Platformu 2024",
 
      
@@ -40,7 +41,35 @@
         "enter_email": "Emailinizi Girin",
         "pickup_location": "Alış Yeri",
         "selected_location:": "Seçilen Lokasyon",
-        "select_location": "Lokasyon Seç"
+        "select_location": "Lokasyon Seç",
+
+        "country_search_placeholder": "Ülke Ara",
+  "state_search_placeholder": "İlçe Ara",
+  "city_search_placeholder": "Şehir Ara",
+  "country_dropdown_label": "*Ülke",
+  "state_dropdown_label": "*İlçe",
+  "city_dropdown_label": "*Şehir",
+
+  "phone_number": "Telefon Numarası",
+  "enter_phone_number": "Telefon Numarasını Girin",
+  "whatsapp_number": "WhatsApp Numarası",
+  "enter_whatsapp_number": "WhatsApp Numarasını Girin",
+  "web_site": "Web Sitesi",
+  "enter_web_site": "Web Sitesini Girin",
+  "venue_Business_type": "Mekan İşletme Türü",
+  "Fine_Dining": "Şık Yemek",
+  "Fast_Food": "Fast Food",
+  "Fast_Casual": "Hızlı Rahat",
+  "Drive_Thru": "Drive Thru",
+  "Coffe_Shop": "Kahve Dükkanı",
+  "Buffet": "Açık Büfe",
+  "Hotel_Room_Service": "Otel Oda Servisi",
+  "Spa": "Spa",
+  "Bar": "Bar",
+  "Flower_Shop": "Çiçekçi",
+  "Beauty_Salon": "Güzellik Salonu",
+
+  "Select_Location_from_Map":"Select Location from Map"
     
       
 

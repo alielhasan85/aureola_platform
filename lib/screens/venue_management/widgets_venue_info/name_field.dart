@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:aureola_platform/localization/localization.dart';
-import 'package:aureola_platform/theme/theme.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 
 class VenueNameField extends StatelessWidget {
   final double width;

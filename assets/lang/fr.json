@@ -17,6 +17,11 @@
      "branding_design": "Branding & Design",
 
      "venue_info": "Venue Info",
+     
+      "enter_venue_display_name": "Entrez le nom d'affichage du lieu",
+    
+    
+    
      "copyright": "Tous droits réservés à la plateforme Aureola 2024",
 
      
@@ -47,7 +52,29 @@
         "city_search_placeholder": "Rechercher une Ville",
         "country_dropdown_label": "*Pays",
         "state_dropdown_label": "*État",
-        "city_dropdown_label": "*Ville"
+        "city_dropdown_label": "*Ville",
+
+         "phone_number": "Numéro de téléphone",
+  "enter_phone_number": "Entrez le numéro de téléphone",
+  "whatsapp_number": "Numéro WhatsApp",
+  "enter_whatsapp_number": "Entrez le numéro WhatsApp",
+  "web_site": "Site Web",
+  "enter_web_site": "Entrez le site Web",
+  "venue_Business_type": "Type d'entreprise du lieu",
+  "Fine_Dining": "Restaurant gastronomique",
+  "Fast_Food": "Restauration rapide",
+  "Fast_Casual": "Restauration rapide décontractée",
+  "Drive_Thru": "Service au volant",
+  "Coffe_Shop": "Café",
+  "Buffet": "Buffet",
+  "Hotel_Room_Service": "Service de chambre d'hôtel",
+  "Spa": "Spa",
+  "Bar": "Bar",
+  "Flower_Shop": "Fleuriste",
+  "Beauty_Salon": "Salon de beauté",
+
+  "Select_Location_from_Map":"Select Location from Map"
+  
       }
       
 

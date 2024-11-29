@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import for date formatting
-import 'package:aureola_platform/theme/theme.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 
 class HeaderContainer extends StatelessWidget {
   final String userName;

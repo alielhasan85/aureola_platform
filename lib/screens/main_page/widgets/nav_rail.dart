@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_item.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_submenu_item.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_venue.dart';
-import 'package:aureola_platform/theme/theme.dart';
-import 'package:aureola_platform/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
 
 class CustomNavigation extends ConsumerStatefulWidget {
   final bool isDrawer;
@@ -22,10 +22,12 @@ class CustomNavigation extends ConsumerStatefulWidget {
 
 class _CustomNavigationState extends ConsumerState<CustomNavigation> {
   void _updateIndex(int index, String title, {bool closeDrawer = true}) {
-    ref.read(selectedMenuIndexProvider.notifier).state = index;
+    // Avoid changing index when venue is selected (index 0)
     if (index != 0) {
+      ref.read(selectedMenuIndexProvider.notifier).state = index;
       ref.read(appBarTitleProvider.notifier).state = title;
     }
+
     // Close the drawer only if closeDrawer is true
     if (widget.isDrawer && closeDrawer) {
       Navigator.of(context).pop();

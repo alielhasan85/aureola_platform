@@ -1,17 +1,23 @@
 // location_picker_field.dart
+
 import 'package:aureola_platform/providers/lang_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:aureola_platform/theme/theme.dart';
-import 'package:aureola_platform/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LocationPickerField extends ConsumerStatefulWidget {
   final double width;
+  final LatLng? selectedLocation;
 
-  const LocationPickerField({super.key, required this.width});
+  const LocationPickerField({
+    Key? key,
+    required this.width,
+    this.selectedLocation,
+  }) : super(key: key);
 
   @override
   _LocationPickerFieldState createState() => _LocationPickerFieldState();
@@ -19,14 +25,10 @@ class LocationPickerField extends ConsumerStatefulWidget {
 
 class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
   final String apiKey =
-      'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA'; // Replace with your API key
+      'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA'; // Replace with your actual API key
 
-  // Variables to store selected location details
   LatLng? _selectedLatLng;
   String? _selectedAddress;
-
-  // Variable to track whether the map picker is active
-  bool _isMapPickerActive = false;
 
   // Flag to ensure ref.listen is only called once
   bool _isListening = false;
@@ -34,13 +36,25 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
   @override
   void initState() {
     super.initState();
-    // Initialize with a default location (e.g., Doha, Qatar)
-    _selectedLatLng = LatLng(25.286106, 51.534817);
+    // Initialize with the selected location or default location (e.g., Doha, Qatar)
+    _selectedLatLng = widget.selectedLocation ?? LatLng(25.286106, 51.534817);
+
     // Delay reverse geocoding until after the first build to ensure context is available
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final currentLanguage = ref.read(languageProvider);
       _reverseGeocode(_selectedLatLng!, language: currentLanguage);
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant LocationPickerField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedLocation != oldWidget.selectedLocation &&
+        widget.selectedLocation != null) {
+      _selectedLatLng = widget.selectedLocation;
+      final currentLanguage = ref.read(languageProvider);
+      _reverseGeocode(_selectedLatLng!, language: currentLanguage);
+    }
   }
 
   @override
@@ -61,11 +75,6 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
-        Text(
-          AppLocalizations.of(context)!.translate("pickup_location"),
-          style: AppTheme.tabItemText,
-        ),
         const SizedBox(height: 8),
         if (_selectedAddress != null) ...[
           const SizedBox(height: 16),
@@ -92,71 +101,19 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
           ),
         ],
         const SizedBox(height: 16),
-        // Display Static Map Image or Map Picker
-        _buildMapOrImage(currentLanguage),
+        // Display Static Map Image
+        _buildStaticMapImage(),
       ],
     );
   }
 
-  Widget _buildMapOrImage(String language) {
-    if (_isMapPickerActive) {
-      // Show interactive map
-      return Container(
-        height: 300,
-        width: widget.width,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: _selectedLatLng!,
-                zoom: 17,
-              ),
-              onCameraMove: (CameraPosition position) {
-                setState(() {
-                  _selectedLatLng = position.target;
-                });
-              },
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-            ),
-            const Icon(Icons.place, size: 50, color: Colors.red),
-            Positioned(
-              bottom: 10,
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _isMapPickerActive = false;
-                  });
-                  _reverseGeocode(_selectedLatLng!, language: language);
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.translate(
-                    "select_location",
-                  ),
-                  style: AppTheme.buttonText,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      // Show static map image
-      return GestureDetector(
-        onTap: () {
-          setState(() {
-            _isMapPickerActive = true;
-          });
-        },
-        child: Image.network(
-          _buildStaticMapUrl(),
-          height: 300,
-          width: widget.width,
-          fit: BoxFit.cover,
-        ),
-      );
-    }
+  Widget _buildStaticMapImage() {
+    return Image.network(
+      _buildStaticMapUrl(),
+      height: 300,
+      width: widget.width,
+      fit: BoxFit.cover,
+    );
   }
 
   String _buildStaticMapUrl() {
@@ -171,7 +128,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
         'zoom': '17',
         'size': '600x300',
         'maptype': 'roadmap',
-        'markers': 'color:red%7C$lat,$lng',
+        'markers': 'color:red|$lat,$lng', // Corrected line
         'key': apiKey,
       },
     ).toString();
@@ -188,9 +145,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
         '&lon=${location.longitude}'
         '&accept-language=$language', // Use the language parameter
       );
-      final response = await http.get(
-        url,
-      );
+      final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -215,16 +170,5 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
         _selectedAddress = '${location.latitude}, ${location.longitude}';
       });
     }
-  }
-
-  @override
-  void didUpdateWidget(covariant LocationPickerField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Optionally handle widget updates
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

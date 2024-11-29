@@ -1,9 +1,11 @@
-import 'package:aureola_platform/localization/localization.dart';
+// venue_info.dart
 
+import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
 import 'package:aureola_platform/screens/main_page/widgets/header_venue.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/email_fields.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/location_picker_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/map_picker_dialog.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_type_dropdown.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/alcohol_option_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/default_language_dropdown.dart';
@@ -12,11 +14,10 @@ import 'package:aureola_platform/screens/venue_management/widgets_venue_info/add
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/name_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/website_fields.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/whatsapp_number.dart';
-import 'package:aureola_platform/theme/theme.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl_phone_field/countries.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Breakpoints {
   static const double desktop = 1024;
@@ -25,13 +26,15 @@ class Breakpoints {
 }
 
 class VenueInfo extends ConsumerStatefulWidget {
-  const VenueInfo({super.key});
+  const VenueInfo({Key? key}) : super(key: key);
 
   @override
   ConsumerState<VenueInfo> createState() => _VenueInfoState();
 }
 
 class _VenueInfoState extends ConsumerState<VenueInfo> {
+  LatLng? _selectedLocation;
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -156,7 +159,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 16),
           VenueAddressField(width: fieldWidth),
           const SizedBox(height: 16),
-          LocationPickerField(width: containerWidth)
+          // Pickup Location Button and Map
+          _buildPickupLocationSection(containerWidth),
         ],
       );
     } else {
@@ -165,15 +169,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           VenueNameField(width: fieldWidth),
-          const SizedBox(height: 12),
-          Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.3),
-
-          const SizedBox(height: 12),
-          Text(
-            AppLocalizations.of(context)!.translate("Contact_details"),
-            style: AppTheme.heading1,
-          ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 24),
+          Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
+          const SizedBox(height: 6),
           Row(
             children: [
               PhoneNumberField(width: fieldWidth),
@@ -181,8 +179,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               WhatsappNumber(width: fieldWidth)
             ],
           ),
-
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
           Row(
             children: [
               EmailField(width: fieldWidth),
@@ -190,15 +187,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               WebsiteFields(width: fieldWidth)
             ],
           ),
-
-          const SizedBox(height: 12),
+          const SizedBox(height: 24),
           Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
-          const SizedBox(height: 12),
-          Text(
-            AppLocalizations.of(context)!.translate("Default_options"),
-            style: AppTheme.heading1,
-          ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 6),
           Row(
             children: [
               VenueTypeDropdown(width: fieldWidth),
@@ -206,26 +197,58 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               DefaultLanguageDropdown(width: fieldWidth),
             ],
           ),
-
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
           AlcoholOptionField(width: fieldWidth),
-
-          const SizedBox(height: 12),
-
+          const SizedBox(height: 24),
           Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
-          const SizedBox(height: 12),
-
-          Text(
-            AppLocalizations.of(context)!.translate("Address_"),
-            style: AppTheme.heading1,
-          ),
+          const SizedBox(height: 6),
+          _buildPickupLocationSection(containerWidth),
           const SizedBox(height: 12),
           VenueAddressField(width: containerWidth),
 
+          // Pickup Location Button and Map
+
           const SizedBox(height: 24),
-          LocationPickerField(width: containerWidth), // Add this line
         ],
       );
     }
+  }
+
+  Widget _buildPickupLocationSection(double containerWidth) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextButton(
+          onPressed: () async {
+            LatLng? result = await showDialog<LatLng>(
+              context: context,
+              builder: (context) => MapPickerDialog(
+                initialLocation:
+                    _selectedLocation ?? LatLng(25.286106, 51.534817),
+                containerWidth: containerWidth,
+              ),
+            );
+            if (result != null) {
+              setState(() {
+                _selectedLocation = result;
+              });
+            }
+          },
+          child: Text(
+            AppLocalizations.of(context)!.translate("pickup_location"),
+            style: AppTheme.tabItemText.copyWith(
+              color: AppTheme.blue,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        LocationPickerField(
+          width: containerWidth,
+          selectedLocation: _selectedLocation,
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
   }
 }

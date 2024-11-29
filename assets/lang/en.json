@@ -11,7 +11,7 @@
     "tables_management": "Tables",
     "venue_info": "Venue Info",
     "venue_name": "Venue Name",
-
+    "enter_venue_display_name": "Enter Venue Display name",
     
 
     "QR_Code": "QR Code",
@@ -41,19 +41,42 @@
 "Select_Default_Language": "Select Default Language",
 "email": "Email",
 "enter_email": "Enter your Email",
-"pickup_location": "Pickup Location",
+"pickup_location": "Select Addres from the map",
 "selected_location:": "Location Selected",
 "select_location": "Select Location",
+"phone_number":"Phone Number",
+"enter_phone_number":"Enter Phone Number",
 
+"web_site": "Website",
+"enter_web_site":"Enter Website",
+
+"whatsapp_number":"WhatsApp Number",
+"enter_whatsapp_number":"Enter WhatsApp number",
 
 "country_search_placeholder": "Search Country",
 "state_search_placeholder": "Search State",
 "city_search_placeholder": "Search City",
 "country_dropdown_label": "*Country",
 "state_dropdown_label": "*State",
-"city_dropdown_label": "*City"
+"city_dropdown_label": "*City",
+"venue_Business_type": "Venue Business Type",
+  "Fine_Dining": "Fine Dining",
+  "Fast_Food": "Fast Food",
+  "Fast_Casual": "Fast Casual",
+  "Drive_Thru": "Drive Thru",
+  "Coffe_Shop": "Coffee Shop",
+  "Buffet": "Buffet",
+  "Hotel_Room_Service": "Hotel Room Service",
+  "Spa": "Spa",
+  "Bar": "Bar",
+  "Flower_Shop": "Flower Shop",
+  "Beauty_Salon": "Beauty Salon",
 
+  "Select_Location_from_Map":"Select Location from Map"
 
+  
+
+  
 
 
 }

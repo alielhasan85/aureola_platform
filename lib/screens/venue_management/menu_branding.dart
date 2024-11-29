@@ -1,5 +1,5 @@
 import 'package:aureola_platform/screens/main_page/widgets/header_venue.dart';
-import 'package:aureola_platform/theme/theme.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class MenuBranding extends StatelessWidget {

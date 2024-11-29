@@ -51,6 +51,9 @@ dependencies:
   place_picker_google: ^0.0.12
   google_maps_flutter: ^2.10.0
   http: ^1.2.2
+  country_state_city_picker: ^1.2.8
+  cloud_firestore: ^5.5.0
+  firebase_auth: ^5.3.3
   
   
 

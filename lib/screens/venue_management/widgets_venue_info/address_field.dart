@@ -1,8 +1,8 @@
 // venue_address_field.dart
 import 'package:flutter/material.dart';
-import 'package:aureola_platform/theme/theme.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:aureola_platform/localization/localization.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Import the languageProvider from lang_providers.dart

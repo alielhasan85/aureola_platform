@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:aureola_platform/localization/localization.dart';
-import 'package:aureola_platform/theme/theme.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 
 class WhatsappNumber extends StatefulWidget {
   final double width;

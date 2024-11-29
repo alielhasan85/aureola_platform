@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aureola_platform/theme/theme.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 
 class SubMenuItem extends StatefulWidget {
   final String label;

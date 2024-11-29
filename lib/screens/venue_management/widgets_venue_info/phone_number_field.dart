@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:aureola_platform/localization/localization.dart';
-import 'package:aureola_platform/theme/theme.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 
 class PhoneNumberField extends StatefulWidget {
   final double width;
@@ -55,8 +55,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                 });
                 print(completeNumber); // Output example: +97474716942
               },
-              dropdownTextStyle:
-                  AppTheme.paragraph.copyWith(fontStyle: FontStyle.italic),
+              dropdownTextStyle: AppTheme.paragraph,
               textAlign: TextAlign.start,
             ),
           ),
