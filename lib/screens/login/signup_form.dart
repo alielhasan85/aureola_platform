@@ -1,6 +1,8 @@
+import 'package:aureola_platform/screens/login/email_verification.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
 import 'package:aureola_platform/service/firebase/auth_user.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,6 +31,47 @@ class _SignUpFormState extends State<SignUpForm> {
   bool _showConfirmPassword = false;
   bool _isLoading = false;
   final AuthService _authService = AuthService();
+
+  Future<void> _signInWithGoogle() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      UserCredential userCredential = await _authService.signInWithGoogle();
+
+      User? user = userCredential.user;
+
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+      }
+
+      // Navigate to the main page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
+    } on AuthException catch (e) {
+      // Handle authentication errors
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message)),
+      );
+    } catch (e) {
+      // Handle unexpected errors
+      setState(() {
+        _isLoading = false;
+      });
+      print('Error during Google Sign-In: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('An unexpected error occurred. Please try again.'),
+        ),
+      );
+    }
+  }
 
   // Validate email input
   String? _validateEmail(String? value) {
@@ -80,17 +123,20 @@ class _SignUpFormState extends State<SignUpForm> {
         widget.passwordController.text,
       );
 
-      // Navigate to the next page if sign-up is successful
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MainPage()
+      User? user = userCredential.user;
 
-            // ClSignUpUserData(
-            //   userId: userCredential.user!.uid,
-            //   email: widget.emailController.text,
-            // ),
-            ),
-      );
+      if (user != null) {
+        // Send email verification
+        await user.sendEmailVerification();
+
+        // Navigate to the email verification screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EmailVerificationScreen(),
+          ),
+        );
+      }
     } on AuthException catch (e) {
       // Handle authentication errors
       setState(() {
@@ -140,43 +186,86 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 20.0),
           // Email input field
 
-          // InputField(
-          //   label: AppLocalizations.of(context)!.translate('email_label'),
-          //   hintText: AppLocalizations.of(context)!.translate('email_hint'),
-          //   controller: widget.emailController,
-          //   validator: _validateEmail,
-          //   onChanged: (value) => _checkFields(),
-          // ),
-          // const SizedBox(height: 20.0),
-          // // Password input field
-          // InputField(
-          //   label: AppLocalizations.of(context)!.translate('password_label'),
-          //   hintText: AppLocalizations.of(context)!.translate('password_hint'),
-          //   controller: widget.passwordController,
-          //   validator: _validatePassword,
-          //   onChanged: (value) => _checkFields(),
-          //   obscureText: true,
-          // ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.translate('email_label'),
+                style: AppTheme.paragraph,
+              ),
+              const SizedBox(height: 6),
+              TextFormField(
+                style: AppTheme.paragraph,
+                cursorColor: AppTheme.accent,
+                controller: widget.emailController,
+                onChanged: (value) => _checkFields(),
+                validator: _validateEmail,
+                decoration: AppTheme.textFieldinputDecoration(
+                  hint: AppLocalizations.of(context)!.translate('email_hint'),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20.0),
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.translate('password_label'),
+                style: AppTheme.paragraph,
+              ),
+              const SizedBox(height: 6),
+              TextFormField(
+                style: AppTheme.paragraph,
+                cursorColor: AppTheme.accent,
+                controller: widget.passwordController,
+                validator: _validatePassword,
+                onChanged: (value) => _checkFields(),
+                obscureText: true,
+                decoration: AppTheme.textFieldinputDecoration(
+                  hint:
+                      AppLocalizations.of(context)!.translate('password_hint'),
+                ),
+              ),
+            ],
+          ),
 
           if (_showConfirmPassword) const SizedBox(height: 20.0),
           // Confirm Password input field
           if (_showConfirmPassword)
-            // InputField(
-            //   label: AppLocalizations.of(context)!
-            //       .translate('confirm_password_label'),
-            //   hintText: AppLocalizations.of(context)!
-            //       .translate('confirm_password_hint'),
-            //   controller: widget.confirmPasswordController,
-            //   validator: (value) {
-            //     if (value != widget.passwordController.text) {
-            //       return AppLocalizations.of(context)!
-            //           .translate('passwords_do_not_match');
-            //     }
-            //     return null;
-            //   },
-            //   obscureText: true,
-            // ),
-            const SizedBox(height: 20.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!
+                      .translate('confirm_password_label'),
+                  style: AppTheme.paragraph,
+                ),
+                const SizedBox(height: 6),
+                TextFormField(
+                  style: AppTheme.paragraph,
+                  obscureText: true,
+                  cursorColor: AppTheme.accent,
+                  controller: widget.confirmPasswordController,
+                  validator: (value) {
+                    if (value != widget.passwordController.text) {
+                      return AppLocalizations.of(context)!
+                          .translate('passwords_do_not_match');
+                    }
+                    return null;
+                  },
+                  onChanged: (value) => _checkFields(),
+                  decoration: AppTheme.textFieldinputDecoration(
+                    hint: AppLocalizations.of(context)!
+                        .translate('confirm_password_hint'),
+                  ),
+                ),
+              ],
+            ),
+
+          const SizedBox(height: 20.0),
           // Sign up button
           SizedBox(
             width: 400,
@@ -213,11 +302,9 @@ class _SignUpFormState extends State<SignUpForm> {
           SizedBox(
             width: 400,
             child: ElevatedButton.icon(
-              onPressed: () {
-                // Handle Google sign-up
-              },
+              onPressed: _isLoading ? null : _signInWithGoogle,
               icon: SvgPicture.asset(
-                '/assets/icons/google.svg',
+                'assets/icons/google.svg',
                 // colorFilter: ColorFilter.mode(
                 //   iconAndTextColor,
                 //   BlendMode.srcIn,

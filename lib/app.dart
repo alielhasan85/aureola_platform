@@ -1,4 +1,4 @@
-import 'package:aureola_platform/screens/login/cl_auth_page.dart';
+import 'package:aureola_platform/screens/login/auth_page.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
 import 'package:aureola_platform/providers/lang_providers.dart';

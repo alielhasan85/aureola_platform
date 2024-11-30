@@ -1,3 +1,5 @@
+import 'package:aureola_platform/screens/login/email_verification.dart';
+import 'package:aureola_platform/screens/login/reset_password.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
 import 'package:aureola_platform/screens/main_page/widgets/progress_indicator.dart';
 import 'package:aureola_platform/service/firebase/auth_user.dart';
@@ -81,6 +83,19 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   //   }
   // }
 
+  // Fetch the user data from Firestore
+  // await ref.read(userProvider.notifier).fetchUser(userId);
+
+  // Fetch the list of venues associated with the user directly
+  // final venueList = await FirestoreVenue().getAllVenues(userId);
+
+  // if (venueList.isNotEmpty) {
+  // Set the first venue as the selected venue
+  //   ref.read(venueProvider.notifier).setVenue(venueList.first);
+  // }
+
+  // Navigate to the MainPage
+
   Future<void> _logIn() async {
     if (!widget.formKey.currentState!.validate()) return;
 
@@ -96,26 +111,33 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         widget.passwordController.text,
       );
 
-      final userId = userCredential.user!.uid;
+      User? user = userCredential.user;
 
-      // Fetch the user data from Firestore
-      // await ref.read(userProvider.notifier).fetchUser(userId);
+      if (user != null && user.emailVerified) {
+        // Navigate to the MainPage
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainPage(),
+          ),
+        );
+      } else {
+        // Email not verified
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.translate('please_verify_email')),
+          ),
+        );
 
-      // Fetch the list of venues associated with the user directly
-      // final venueList = await FirestoreVenue().getAllVenues(userId);
-
-      // if (venueList.isNotEmpty) {
-      // Set the first venue as the selected venue
-      //   ref.read(venueProvider.notifier).setVenue(venueList.first);
-      // }
-
-      // Navigate to the MainPage
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MainPage(),
-        ),
-      );
+        // Navigate to the email verification screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EmailVerificationScreen(),
+          ),
+        );
+      }
     } on AuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.message)),
@@ -140,18 +162,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         children: <Widget>[
           Text(
             AppLocalizations.of(context)!.translate('log_in_to_your_account'),
-            style: TextStyle(
-              fontSize: titleFontSize,
-              fontWeight: FontWeight.w900,
-            ),
+            style: AppTheme.heading1.copyWith(fontSize: 24),
           ),
           const SizedBox(height: 15.0),
           Text(
             AppLocalizations.of(context)!.translate('welcome_back'),
-            style: const TextStyle(
-              fontSize: 14,
-              fontStyle: FontStyle.italic,
-            ),
+            style: AppTheme.paragraph.copyWith(fontSize: 14),
           ),
           const SizedBox(height: 20.0),
           SizedBox(
@@ -221,6 +237,18 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ),
           ),
           const SizedBox(height: 20.0),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ResetPasswordScreen()),
+              );
+            },
+            child: Text(
+              AppLocalizations.of(context)!.translate('forgot_password'),
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

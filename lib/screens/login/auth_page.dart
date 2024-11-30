@@ -1,14 +1,11 @@
-import 'package:aureola_platform/screens/login/cl_login_form.dart';
-import 'package:aureola_platform/screens/login/cl_signup_form.dart';
+import 'package:aureola_platform/providers/auth_provider.dart';
+import 'package:aureola_platform/screens/login/login_form.dart';
+import 'package:aureola_platform/screens/login/signup_form.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final authFormProvider = StateProvider<AuthForm>((ref) => AuthForm.login);
-
-enum AuthForm { login, signUp }
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -92,13 +89,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Container(
-              height: 100, // Set a fixed height if needed
-              color: AppTheme.lightGreen,
             ),
           ],
         ),

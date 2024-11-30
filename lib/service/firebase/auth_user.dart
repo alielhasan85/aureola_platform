@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,6 +22,42 @@ class AuthService {
           email: email, password: password);
     } on FirebaseAuthException catch (e) {
       throw AuthException(e.code, _getErrorMessage(e));
+    }
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    try {
+      if (kIsWeb) {
+        // Web-specific implementation
+        GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+        // Optionally set custom parameters
+        googleProvider.setCustomParameters({'prompt': 'select_account'});
+
+        // Sign in with a popup
+        return await _auth.signInWithPopup(googleProvider);
+      } else {
+        // Mobile implementation
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+        if (googleUser == null) {
+          throw AuthException('sign_in_canceled', 'Sign in canceled.');
+        }
+
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final OAuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        return await _auth.signInWithCredential(credential);
+      }
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code, _getErrorMessage(e));
+    } catch (e) {
+      throw AuthException('unknown_error', 'An unknown error occurred.');
     }
   }
 

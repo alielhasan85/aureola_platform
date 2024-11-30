@@ -69,7 +69,49 @@
   "Flower_Shop": "Çiçekçi",
   "Beauty_Salon": "Güzellik Salonu",
 
-  "Select_Location_from_Map":"Select Location from Map"
+  "Select_Location_from_Map":"Select Location from Map",
+
+  
+  "tagline": "Create Your Own Special Menu!",
+  "sign_in_button": "Sign in to Get Started",
+  "login_page_title": "Let's get you set up",
+  "login_page_subtitle": "It should only take a couple of minutes to pair with your watch",
+  "log_in_to_your_account": "Log In to Your Account",
+  "welcome_back": "Welcome back!",
+  "sign_up_page_title": "Create Your Account",
+  "no_credit_card_required": "No Credit Card required.",
+  "email_label": "Email",
+  "email_hint": "Enter your email",
+  "password_label": "Password",
+  "password_hint": "Enter your password",
+  "confirm_password_label": "Confirm Password",
+  "confirm_password_hint": "Re-enter your password",
+  "passwords_do_not_match": "Passwords do not match",
+  "sign_up_button": "Sign Up",
+  "already_have_an_account": "Already have an account?",
+  "log_in_button": "Log In",
+  "weak_password_error": "The password provided is too weak.",
+  "email_in_use_error": "An account already exists for that email.",
+  "generic_error": "An error occurred. Please try again.",
+  "sign_up_with_google": "Sign Up with Google",
+  "dont_have_an_account": "Don't have an account?",
+  "sign_up": "Sign Up",
+
+
+
+  "email_verification": "Email Verification",
+      "verification_email_sent": "Verification email sent!",
+      "error_sending_verification_email": "Error sending verification email.",
+      "verification_email_sent_message": "A verification email has been sent to your email address. Please check your inbox and click on the verification link to proceed.",
+      "resend_verification_email": "Resend Verification Email",
+      "waiting_for_email_verification": "Waiting for email verification...",
+      "please_verify_email": "Please verify your email to continue.",
+      "forgot_password": "Forgot Password?",
+  "reset_password": "Reset Password",
+  "enter_email_to_reset_password": "Enter your email address to reset your password.",
+  "password_reset_email_sent": "Password reset email sent!",
+  "error_sending_email": "Error sending password reset email."
+
     
       
 
