@@ -1,4 +1,5 @@
 import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
+import 'package:aureola_platform/screens/user_management.dart/widgets_user/profile_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -92,10 +93,7 @@ class UserProfilePage extends ConsumerWidget {
   }
 
   Widget _buildNotificationsTab() {
-    return Center(
-        child: Text(
-      'Notifications Settings',
-    ));
+    return ProfileTab();
   }
 
   Widget _buildTeamsTab() {

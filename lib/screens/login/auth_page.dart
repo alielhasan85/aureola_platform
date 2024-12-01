@@ -45,10 +45,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            // const TopDecoration(),
-            // const SizedBox(
-            //   height: 12,
-            // ),
+            const TopDecoration(),
+            const SizedBox(
+              height: 12,
+            ),
             SizedBox(
               width: 500,
               child: Padding(
@@ -152,7 +152,7 @@ class TopDecoration extends StatelessWidget {
                   style: TextStyle(color: Colors.yellow),
                 ),
               ),
-              //TODO: to add language provider and seleelction
+              //TODO: to add language provider and selelction
             ],
           ),
         ),

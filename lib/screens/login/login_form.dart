@@ -1,3 +1,4 @@
+import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/screens/login/email_verification.dart';
 import 'package:aureola_platform/screens/login/reset_password.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
@@ -36,20 +37,20 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   //TODO: to delete this method
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   if (kDebugMode) {
-  //     // Set test credentials
-  //     widget.emailController.text = 'elhasan.ali@gmail.com';
-  //     widget.passwordController.text = 'rotation';
+  @override
+  void initState() {
+    super.initState();
+    if (kDebugMode) {
+      // Set test credentials
+      widget.emailController.text = 'elhasan.ali@gmail.com';
+      widget.passwordController.text = 'rotation';
 
-  //     // Automatically trigger login after the first frame
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       _logIn();
-  //     });
-  //   }
-  // }
+      // Automatically trigger login after the first frame
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _logIn();
+      });
+    }
+  }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -133,6 +134,11 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
       User? user = userCredential.user;
 
+      final userId = userCredential.user!.uid;
+
+      // Fetch the user data from Firestore
+      await ref.read(userProvider.notifier).fetchUser(userId);
+
       if (user != null && user.emailVerified) {
         // Navigate to the MainPage
         Navigator.pushReplacement(
@@ -149,7 +155,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 AppLocalizations.of(context)!.translate('please_verify_email')),
           ),
         );
-
+// // Fetch the user data from Firestore
+//   await ref.read(userProvider.notifier).fetchUser(userId);
         // Navigate to the email verification screen
         Navigator.pushReplacement(
           context,
@@ -169,6 +176,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     }
   }
 
+// TODO: to add language selection tab, could be in the bottom
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

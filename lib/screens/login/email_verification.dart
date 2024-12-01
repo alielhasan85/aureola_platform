@@ -2,29 +2,36 @@
 //TODO: to work on UI
 
 import 'dart:async';
-import 'package:aureola_platform/screens/main_page/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/screens/login/user_data.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
+  const EmailVerificationScreen({Key? key}) : super(key: key);
+
   @override
   State<EmailVerificationScreen> createState() =>
       _EmailVerificationScreenState();
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+  bool _isResending = false;
   Timer? _timer;
   bool _isEmailVerified = false;
-  bool _isResending = false;
 
   @override
   void initState() {
     super.initState();
 
-    // Start a timer to check email verification status every few seconds
-    _timer = Timer.periodic(Duration(seconds: 5), (_) => _checkEmailVerified());
+    _isEmailVerified =
+        FirebaseAuth.instance.currentUser?.emailVerified ?? false;
+
+    if (!_isEmailVerified) {
+      // Periodically check if the email is verified
+      _timer =
+          Timer.periodic(Duration(seconds: 3), (_) => _checkEmailVerified());
+    }
   }
 
   @override
@@ -35,12 +42,23 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   Future<void> _checkEmailVerified() async {
     User? user = FirebaseAuth.instance.currentUser;
-    await user?.reload(); // Refresh user data
+    await user?.reload(); // Refresh user data from Firebase
+    user = FirebaseAuth.instance.currentUser;
+
     if (user != null && user.emailVerified) {
+      setState(() {
+        _isEmailVerified = true;
+      });
       _timer?.cancel();
-      // Navigate to the main page
+
+      // Navigate to the user data collection screen
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => MainPage()),
+        MaterialPageRoute(
+          builder: (context) => SignUpUserData(
+            userId: user!.uid, // Assert that user is non-null
+            email: user.email!, // Assert that email is non-null
+          ),
+        ),
       );
     }
   }
@@ -78,8 +96,13 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isEmailVerified) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
-      // You can style this Scaffold according to your theme
       appBar: AppBar(
         title:
             Text(AppLocalizations.of(context)!.translate('email_verification')),

@@ -7,24 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-import 'package:aureola_platform/models/user/user_model.dart';
 import 'package:aureola_platform/models/user/contact.dart';
 import 'package:aureola_platform/models/user/address.dart';
 import 'package:aureola_platform/models/user/subscription.dart';
-import 'package:aureola_platform/service/firebase/firestore_user.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-// Import your providers and other necessary files
-import 'package:aureola_platform/models/user/user_model.dart';
-import 'package:aureola_platform/models/user/contact.dart';
-import 'package:aureola_platform/models/user/address.dart';
-import 'package:aureola_platform/models/user/subscription.dart';
-import 'package:aureola_platform/service/firebase/firestore_user.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-// Import your providers and other necessary files
 
 class SignUpUserData extends ConsumerStatefulWidget {
   final String userId;
@@ -190,6 +175,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        // Name Field
                         Text(
                           "What is your name?",
                           style: Theme.of(context)
@@ -212,6 +198,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                           },
                         ),
                         const SizedBox(height: 20.0),
+                        // Business Name Field
                         Text(
                           "What is your business name?",
                           style: Theme.of(context)
@@ -234,6 +221,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                           },
                         ),
                         const SizedBox(height: 20.0),
+                        // Phone Number Field
                         Text(
                           "What is your phone number?",
                           style: Theme.of(context)
@@ -264,6 +252,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                           },
                         ),
                         const SizedBox(height: 30.0),
+                        // Submit Button
                         Center(
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _submitInfo,
@@ -274,7 +263,10 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                               textStyle: const TextStyle(fontSize: 16),
                             ),
                             child: _isLoading
-                                ? const CircularProgressIndicator()
+                                ? const CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  )
                                 : const Text('Start Your Free Trial'),
                           ),
                         ),
