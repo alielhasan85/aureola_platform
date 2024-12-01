@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+//TODO: to work on UI
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
@@ -44,10 +45,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const TopDecoration(),
-            const SizedBox(
-              height: 12,
-            ),
+            // const TopDecoration(),
+            // const SizedBox(
+            //   height: 12,
+            // ),
             SizedBox(
               width: 500,
               child: Padding(

@@ -57,7 +57,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         case 11:
           return Center(child: Text('QR Code'));
         default:
-          return Center(child: Text('Default Content'));
+          return Center(child: Text('Dashboard'));
       }
     }
 

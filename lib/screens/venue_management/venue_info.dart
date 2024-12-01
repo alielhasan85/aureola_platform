@@ -26,7 +26,7 @@ class Breakpoints {
 }
 
 class VenueInfo extends ConsumerStatefulWidget {
-  const VenueInfo({Key? key}) : super(key: key);
+  const VenueInfo({super.key});
 
   @override
   ConsumerState<VenueInfo> createState() => _VenueInfoState();

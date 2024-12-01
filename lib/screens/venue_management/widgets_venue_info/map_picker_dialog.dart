@@ -62,14 +62,14 @@ class _MapPickerDialogState extends State<MapPickerDialog> {
           onPressed: () {
             Navigator.of(context).pop(); // Cancel
           },
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
         ElevatedButton(
           onPressed: () {
             Navigator.of(context)
                 .pop(_pickedLocation); // Save and return location
           },
-          child: Text('Save'),
+          child: const Text('Save'),
         ),
       ],
     );

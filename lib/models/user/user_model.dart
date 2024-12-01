@@ -19,15 +19,14 @@ the user will have this data:
 
 */
 // user_model.dart
-
-import 'package:aureola_platform/models/common/address.dart';
-import 'package:aureola_platform/models/common/contact.dart';
 import 'package:aureola_platform/models/user/notification.dart';
-
 import 'package:aureola_platform/models/user/user_setting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'contact.dart';
+import 'address.dart';
 
 import 'payment.dart';
+import 'subscription.dart';
 
 class UserModel {
   final String userId;
@@ -40,12 +39,13 @@ class UserModel {
   final List<String> staff;
   final DateTime createdAt;
   final int loginCount;
-  final String subscriptionType;
+  final Subscription subscription;
   final double totalPaid;
   final List<Payment> paymentHistory;
   final bool isActive;
   final DateTime? lastLogin;
-  final UserSettings? userSettings;
+  final UserSettings userSettings;
+  final List<String> addOns; // For additional features
 
   UserModel({
     required this.userId,
@@ -58,12 +58,13 @@ class UserModel {
     this.staff = const [],
     DateTime? createdAt,
     this.loginCount = 0,
-    this.subscriptionType = 'free',
+    required this.subscription,
     this.totalPaid = 0.0,
     this.paymentHistory = const [],
     this.isActive = true,
     this.lastLogin,
-    this.userSettings,
+    this.userSettings = const UserSettings(),
+    this.addOns = const [],
   }) : createdAt = createdAt ?? DateTime.now();
 
   UserModel copyWith({
@@ -76,30 +77,32 @@ class UserModel {
     List<String>? staff,
     DateTime? createdAt,
     int? loginCount,
-    String? subscriptionType,
+    Subscription? subscription,
     double? totalPaid,
     List<Payment>? paymentHistory,
     bool? isActive,
     DateTime? lastLogin,
     UserSettings? userSettings,
+    List<String>? addOns,
   }) {
     return UserModel(
-      userId: this.userId, // userId remains unchanged
+      userId: this.userId,
       name: name ?? this.name,
+      jobTitle: jobTitle ?? this.jobTitle,
       contact: contact ?? this.contact,
       address: address ?? this.address,
       businessName: businessName ?? this.businessName,
-      jobTitle: jobTitle ?? this.jobTitle,
       notifications: notifications ?? this.notifications,
       staff: staff ?? this.staff,
       createdAt: createdAt ?? this.createdAt,
       loginCount: loginCount ?? this.loginCount,
-      subscriptionType: subscriptionType ?? this.subscriptionType,
+      subscription: subscription ?? this.subscription,
       totalPaid: totalPaid ?? this.totalPaid,
       paymentHistory: paymentHistory ?? this.paymentHistory,
       isActive: isActive ?? this.isActive,
       lastLogin: lastLogin ?? this.lastLogin,
       userSettings: userSettings ?? this.userSettings,
+      addOns: addOns ?? this.addOns,
     );
   }
 
@@ -113,14 +116,15 @@ class UserModel {
       'businessName': businessName,
       'notifications': notifications.toMap(),
       'staff': staff,
-      'createdAt': createdAt,
+      'createdAt': Timestamp.fromDate(createdAt),
       'loginCount': loginCount,
-      'subscriptionType': subscriptionType,
+      'subscription': subscription.toMap(),
       'totalPaid': totalPaid,
       'paymentHistory': paymentHistory.map((p) => p.toMap()).toList(),
       'isActive': isActive,
-      'lastLogin': lastLogin,
-      'userSettings': userSettings?.toMap(),
+      'lastLogin': lastLogin != null ? Timestamp.fromDate(lastLogin!) : null,
+      'userSettings': userSettings.toMap(),
+      'addOns': addOns,
     };
   }
 
@@ -136,7 +140,7 @@ class UserModel {
       staff: List<String>.from(map['staff'] ?? []),
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       loginCount: map['loginCount'] ?? 0,
-      subscriptionType: map['subscriptionType'] ?? 'free',
+      subscription: Subscription.fromMap(map['subscription'] ?? {}),
       totalPaid: (map['totalPaid'] as num?)?.toDouble() ?? 0.0,
       paymentHistory: (map['paymentHistory'] as List<dynamic>?)
               ?.map((p) => Payment.fromMap(p))
@@ -144,9 +148,8 @@ class UserModel {
           [],
       isActive: map['isActive'] ?? true,
       lastLogin: (map['lastLogin'] as Timestamp?)?.toDate(),
-      userSettings: map['userSettings'] != null
-          ? UserSettings.fromMap(map['userSettings'])
-          : null,
+      userSettings: UserSettings.fromMap(map['userSettings'] ?? {}),
+      addOns: List<String>.from(map['addOns'] ?? []),
     );
   }
 }

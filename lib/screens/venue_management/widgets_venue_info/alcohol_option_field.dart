@@ -8,10 +8,10 @@ enum AlcoholOption { yes, no }
 class AlcoholOptionField extends StatefulWidget {
   final double width;
 
-  const AlcoholOptionField({Key? key, required this.width}) : super(key: key);
+  const AlcoholOptionField({super.key, required this.width});
 
   @override
-  _AlcoholOptionFieldState createState() => _AlcoholOptionFieldState();
+  State<AlcoholOptionField> createState() => _AlcoholOptionFieldState();
 }
 
 class _AlcoholOptionFieldState extends State<AlcoholOptionField> {

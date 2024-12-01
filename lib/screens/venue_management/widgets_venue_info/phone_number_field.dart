@@ -14,7 +14,7 @@ class PhoneNumberField extends StatefulWidget {
   }) : controller = controller ?? TextEditingController();
 
   @override
-  _PhoneNumberFieldState createState() => _PhoneNumberFieldState();
+  State<PhoneNumberField> createState() => _PhoneNumberFieldState();
 }
 
 class _PhoneNumberFieldState extends State<PhoneNumberField> {
@@ -53,7 +53,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                 setState(() {
                   completeNumber = phone.completeNumber;
                 });
-                print(completeNumber); // Output example: +97474716942
+                // print(completeNumber); // Output example: +97474716942
               },
               dropdownTextStyle: AppTheme.paragraph,
               textAlign: TextAlign.start,

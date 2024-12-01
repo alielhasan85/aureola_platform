@@ -1,10 +1,8 @@
-// user_settings.dart
-
 class UserSettings {
   final bool darkMode;
   final String language;
 
-  UserSettings({
+  const UserSettings({
     this.darkMode = false,
     this.language = 'English',
   });

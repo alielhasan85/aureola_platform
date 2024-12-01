@@ -14,13 +14,14 @@ class LocationPickerField extends ConsumerStatefulWidget {
   final LatLng? selectedLocation;
 
   const LocationPickerField({
-    Key? key,
+    super.key,
     required this.width,
     this.selectedLocation,
-  }) : super(key: key);
+  });
 
   @override
-  _LocationPickerFieldState createState() => _LocationPickerFieldState();
+  ConsumerState<LocationPickerField> createState() =>
+      _LocationPickerFieldState();
 }
 
 class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
@@ -37,7 +38,8 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
   void initState() {
     super.initState();
     // Initialize with the selected location or default location (e.g., Doha, Qatar)
-    _selectedLatLng = widget.selectedLocation ?? LatLng(25.286106, 51.534817);
+    _selectedLatLng =
+        widget.selectedLocation ?? const LatLng(25.286106, 51.534817);
 
     // Delay reverse geocoding until after the first build to ensure context is available
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -159,13 +161,13 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
           });
         }
       } else {
-        print('Error in reverse geocoding: ${response.statusCode}');
+        //print('Error in reverse geocoding: ${response.statusCode}');
         setState(() {
           _selectedAddress = '${location.latitude}, ${location.longitude}';
         });
       }
     } catch (e) {
-      print('Error in reverse geocoding: $e');
+      // print('Error in reverse geocoding: $e');
       setState(() {
         _selectedAddress = '${location.latitude}, ${location.longitude}';
       });

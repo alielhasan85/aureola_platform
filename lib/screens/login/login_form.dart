@@ -9,6 +9,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// TODO: delete this import
+import 'package:flutter/foundation.dart';
+
 class LoginForm extends ConsumerStatefulWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController emailController;
@@ -24,12 +27,29 @@ class LoginForm extends ConsumerStatefulWidget {
   });
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
 class _LoginFormState extends ConsumerState<LoginForm> {
   bool _isLoading = false;
   final AuthService _authService = AuthService();
+
+  //TODO: to delete this method
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   if (kDebugMode) {
+  //     // Set test credentials
+  //     widget.emailController.text = 'elhasan.ali@gmail.com';
+  //     widget.passwordController.text = 'rotation';
+
+  //     // Automatically trigger login after the first frame
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       _logIn();
+  //     });
+  //   }
+  // }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {

@@ -14,11 +14,12 @@ class MenuBranding extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // TODO: name dynamic from firebase
+          // TODO: background is changed in case of scrol down maybe to remove this header or make it prt of app bar
           HeaderContainer(userName: 'Ali Elhassan'),
           const SizedBox(height: 10), // Spacer
 
           // TabBar Section
-          Container(
+          SizedBox(
             width: 160 * 4,
             height: 40,
             child: TabBar(
@@ -29,7 +30,7 @@ class MenuBranding extends StatelessWidget {
               unselectedLabelColor: AppTheme.secondary,
               indicatorColor: AppTheme.accent,
               indicatorWeight: 2.0,
-              tabs: [
+              tabs: const [
                 Tab(text: 'Venue Details'),
                 Tab(text: 'Branding & Design'),
                 Tab(text: 'Flash Screen'),
@@ -54,17 +55,17 @@ class MenuBranding extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      shadows: [
+                      shadows: const [
                         BoxShadow(
-                          color: const Color(0x3F000000),
+                          color: Color(0x3F000000),
                           blurRadius: 4,
-                          offset: const Offset(0, 4),
+                          offset: Offset(0, 4),
                           spreadRadius: 0,
                         ),
                         BoxShadow(
-                          color: const Color(0x66000000),
+                          color: Color(0x66000000),
                           blurRadius: 4,
-                          offset: const Offset(2, 2),
+                          offset: Offset(2, 2),
                           spreadRadius: 0,
                         ),
                       ],
@@ -88,17 +89,17 @@ class MenuBranding extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      shadows: [
+                      shadows: const [
                         BoxShadow(
-                          color: const Color(0x3F000000),
+                          color: Color(0x3F000000),
                           blurRadius: 4,
-                          offset: const Offset(0, 4),
+                          offset: Offset(0, 4),
                           spreadRadius: 0,
                         ),
                         BoxShadow(
-                          color: const Color(0x66000000),
+                          color: Color(0x66000000),
                           blurRadius: 4,
-                          offset: const Offset(2, 2),
+                          offset: Offset(2, 2),
                           spreadRadius: 0,
                         ),
                       ],
@@ -122,17 +123,17 @@ class MenuBranding extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      shadows: [
+                      shadows: const [
                         BoxShadow(
-                          color: const Color(0x3F000000),
+                          color: Color(0x3F000000),
                           blurRadius: 4,
-                          offset: const Offset(0, 4),
+                          offset: Offset(0, 4),
                           spreadRadius: 0,
                         ),
                         BoxShadow(
-                          color: const Color(0x66000000),
+                          color: Color(0x66000000),
                           blurRadius: 4,
-                          offset: const Offset(2, 2),
+                          offset: Offset(2, 2),
                           spreadRadius: 0,
                         ),
                       ],

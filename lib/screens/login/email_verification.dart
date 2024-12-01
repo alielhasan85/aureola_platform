@@ -1,4 +1,5 @@
 // email_verification_screen.dart
+//TODO: to work on UI
 
 import 'dart:async';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
@@ -9,7 +10,7 @@ import 'package:aureola_platform/service/localization/localization.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   @override
-  _EmailVerificationScreenState createState() =>
+  State<EmailVerificationScreen> createState() =>
       _EmailVerificationScreenState();
 }
 
@@ -95,7 +96,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _isResending ? null : _resendVerificationEmail,
                 child: _isResending
@@ -103,7 +104,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     : Text(AppLocalizations.of(context)!
                         .translate('resend_verification_email')),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 AppLocalizations.of(context)!
                     .translate('waiting_for_email_verification'),

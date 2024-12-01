@@ -1,3 +1,4 @@
+import 'package:aureola_platform/models/user/subscription.dart';
 import 'package:aureola_platform/models/user/user_setting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aureola_platform/models/user/user_model.dart';
@@ -14,23 +15,28 @@ class FirestoreUser {
   Future<bool> checkIfUserExists(
       {required String email, String? phoneNumber}) async {
     // Check by email
-    final querySnapshot = await _usersCollection
-        .where('contact.email', isEqualTo: email)
-        .limit(1)
-        .get();
+    final emailQuery =
+        _usersCollection.where('contact.email', isEqualTo: email);
 
-    if (querySnapshot.docs.isNotEmpty) {
-      return true;
+    // Check by phone number if provided
+    Query? phoneQuery;
+    if (phoneNumber != null) {
+      phoneQuery =
+          _usersCollection.where('contact.phoneNumber', isEqualTo: phoneNumber);
     }
 
-    // Optionally check by phone number if provided
-    if (phoneNumber != null) {
-      final phoneQuerySnapshot = await _usersCollection
-          .where('contact.phoneNumber', isEqualTo: phoneNumber)
-          .limit(1)
-          .get();
+    // Combine queries
+    List<Future<QuerySnapshot>> futures = [
+      emailQuery.limit(1).get(),
+      if (phoneQuery != null) phoneQuery.limit(1).get(),
+    ];
 
-      return phoneQuerySnapshot.docs.isNotEmpty;
+    List<QuerySnapshot> querySnapshots = await Future.wait(futures);
+
+    for (var snapshot in querySnapshots) {
+      if (snapshot.docs.isNotEmpty) {
+        return true;
+      }
     }
 
     return false;
@@ -149,12 +155,12 @@ class FirestoreUser {
     });
   }
 
-  // Update the subscription type of a user.
+  // Update the subscription of a user.
   Future<void> updateUserSubscription(
-      String userId, String subscriptionType) async {
-    await _usersCollection
-        .doc(userId)
-        .update({'subscriptionType': subscriptionType});
+      String userId, Subscription subscription) async {
+    await _usersCollection.doc(userId).update({
+      'subscription': subscription.toMap(),
+    });
   }
 
   // Set a password reset token for a user.

@@ -15,7 +15,7 @@ class HeaderContainer extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 40,
-      color: AppTheme.white,
+      color: AppTheme.background,
       child: Padding(
         padding: const EdgeInsets.only(right: 18, left: 18),
         child: Row(

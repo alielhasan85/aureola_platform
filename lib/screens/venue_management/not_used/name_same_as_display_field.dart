@@ -5,11 +5,10 @@ import 'package:aureola_platform/service/localization/localization.dart';
 class NameSameAsDisplayField extends StatefulWidget {
   final double width;
 
-  const NameSameAsDisplayField({Key? key, required this.width})
-      : super(key: key);
+  const NameSameAsDisplayField({super.key, required this.width});
 
   @override
-  _NameSameAsDisplayFieldState createState() => _NameSameAsDisplayFieldState();
+  State<NameSameAsDisplayField> createState() => _NameSameAsDisplayFieldState();
 }
 
 class _NameSameAsDisplayFieldState extends State<NameSameAsDisplayField> {

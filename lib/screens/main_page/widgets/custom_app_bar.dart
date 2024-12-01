@@ -1,7 +1,43 @@
+import 'package:aureola_platform/screens/login/auth_page.dart';
+import 'package:aureola_platform/screens/user_management.dart/user_mainpage.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/providers/lang_providers.dart';
+
+// Import your destination screens
+
+// Enum for menu options
+enum AppBarMenuOption {
+  profile,
+  billing,
+  plan,
+  cards,
+  notifications,
+  teams,
+  logout,
+}
+
+extension AppBarMenuOptionExtension on AppBarMenuOption {
+  String get label {
+    switch (this) {
+      case AppBarMenuOption.profile:
+        return 'Profile';
+      case AppBarMenuOption.billing:
+        return 'Billing';
+      case AppBarMenuOption.plan:
+        return 'Plan';
+      case AppBarMenuOption.cards:
+        return 'Cards';
+      case AppBarMenuOption.notifications:
+        return 'Notifications';
+      case AppBarMenuOption.teams:
+        return 'Teams';
+      case AppBarMenuOption.logout:
+        return 'Log Out';
+    }
+  }
+}
 
 class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
@@ -43,7 +79,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               onSelected: (String language) {
                 // Update language based on selection
-                ref.watch(languageProvider.notifier).state =
+                ref.read(languageProvider.notifier).state =
                     languageMap[language]!;
               },
               itemBuilder: (BuildContext context) {
@@ -89,18 +125,40 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 color: AppTheme.primary,
               ),
               onPressed: () {
-                // Handle notification action
+                // Navigate to Notifications Page
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const NotificationsPage(),
+                //   ),
+                // );
               },
             ),
             const SizedBox(width: 12),
-            // Profile Icon Button
-            IconButton(
+
+            // Profile Dropdown Menu
+            PopupMenuButton<AppBarMenuOption>(
               icon: const Icon(
                 Icons.account_circle,
                 color: AppTheme.primary,
               ),
-              onPressed: () {
-                // Handle profile action
+              onSelected: (AppBarMenuOption option) {
+                _handleMenuSelection(context, option);
+              },
+              itemBuilder: (BuildContext context) {
+                return AppBarMenuOption.values.map((AppBarMenuOption option) {
+                  return PopupMenuItem<AppBarMenuOption>(
+                    value: option,
+                    child: Text(
+                      option.label,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.primary,
+                      ),
+                    ),
+                  );
+                }).toList();
               },
             ),
             const SizedBox(width: 12),
@@ -115,6 +173,76 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
     );
   }
 
+  void _handleMenuSelection(BuildContext context, AppBarMenuOption option) {
+    switch (option) {
+      case AppBarMenuOption.profile:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const UserProfilePage(),
+          ),
+        );
+        break;
+      case AppBarMenuOption.billing:
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const BillingPage(),
+        //   ),
+        // );
+        break;
+      case AppBarMenuOption.plan:
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const PlanPage(),
+        //   ),
+        // );
+        break;
+      case AppBarMenuOption.cards:
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const CardsPage(),
+        //   ),
+        // );
+        break;
+      case AppBarMenuOption.notifications:
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const NotificationsPage(),
+        //   ),
+        // );
+        break;
+      case AppBarMenuOption.teams:
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const TeamsPage(),
+        //   ),
+        // );
+        break;
+      case AppBarMenuOption.logout:
+        _handleLogout(context);
+        break;
+    }
+  }
+
+  void _handleLogout(BuildContext context) {
+    // Implement your logout logic here
+    // For example, clearing user data, tokens, etc.
+
+    // After logout logic, navigate to the login screen
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      ),
+    );
+  }
+
   @override
-  Size get preferredSize => const Size.fromHeight(150);
+  Size get preferredSize =>
+      const Size.fromHeight(60 + 0.5); // AppBar height + Divider
 }

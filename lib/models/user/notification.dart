@@ -1,5 +1,3 @@
-// File: notifications.dart
-
 class Notifications {
   final bool emailNotification;
   final bool smsNotification;

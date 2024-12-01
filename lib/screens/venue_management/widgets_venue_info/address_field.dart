@@ -52,7 +52,7 @@ class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
               border: Border.all(color: Colors.grey.shade300, width: 1),
             ),
             disabledDropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
               color: Colors.grey.shade300,
               border: Border.all(color: Colors.grey.shade300, width: 1),
             ),
