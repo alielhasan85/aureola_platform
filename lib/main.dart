@@ -1,3 +1,4 @@
+// lib/main.dart
 import 'package:aureola_platform/app.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,5 +25,8 @@ void main() async {
 Future<void> loadLocalizationAssets() async {
   try {
     await rootBundle.loadString('assets/lang/en.json');
-  } catch (e) {}
+  } catch (e) {
+    // Handle error or log it
+    print('Error loading localization assets: $e');
+  }
 }

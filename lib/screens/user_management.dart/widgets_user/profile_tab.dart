@@ -46,109 +46,83 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
-    double width = 300;
 
     if (user == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('User Profile', style: AppTheme.tabBarItemText),
-            const SizedBox(height: 10),
-            _buildPersonalInfoCard(context, user, width),
-            const SizedBox(height: 20),
-            Text('Login Information', style: AppTheme.tabBarItemText),
-            const SizedBox(height: 10),
-            _buildLoginInfoCard(context, user, width),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double screenWidth = constraints.maxWidth;
+        bool isTabletOrDesktop = screenWidth >= 768;
+        double fieldWidth = isTabletOrDesktop ? 400 : double.infinity;
+        EdgeInsetsGeometry padding = isTabletOrDesktop
+            ? const EdgeInsets.all(32.0)
+            : const EdgeInsets.all(16.0);
+
+        return SingleChildScrollView(
+          child: Padding(
+            padding: padding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(AppLocalizations.of(context)!.translate('user_profile'),
+                    style: AppTheme.tabBarItemText),
+                const SizedBox(height: 10),
+                _buildPersonalInfoCard(
+                    context, user, fieldWidth, isTabletOrDesktop),
+                const SizedBox(height: 20),
+                Text(
+                    AppLocalizations.of(context)!
+                        .translate('login_information'),
+                    style: AppTheme.tabBarItemText),
+                const SizedBox(height: 10),
+                _buildLoginInfoCard(
+                    context, user, fieldWidth, isTabletOrDesktop),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildPersonalInfoCard(
-      BuildContext context, UserModel user, double width) {
+  Widget _buildPersonalInfoCard(BuildContext context, UserModel user,
+      double fieldWidth, bool isTabletOrDesktop) {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: isTabletOrDesktop
+            ? const EdgeInsets.all(24.0)
+            : const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(
-              width: width,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.translate("Name"),
-                      style: AppTheme.paragraph,
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      style: AppTheme.paragraph,
-                      cursorColor: AppTheme.accent,
-                      controller: _nameController,
-                      decoration: AppTheme.textFieldinputDecoration(
-                        hint: AppLocalizations.of(context)!.translate("Name_"),
-                      ),
-                    ),
-                  ]),
+            _buildTextField(
+              context,
+              label: AppLocalizations.of(context)!.translate("Name"),
+              controller: _nameController,
+              width: fieldWidth,
+              hintText: AppLocalizations.of(context)!.translate("Name_"),
             ),
             const SizedBox(height: 20),
-            SizedBox(
-              width: width,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.translate('Job_Title'),
-                      style: AppTheme.paragraph,
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      style: AppTheme.paragraph,
-                      cursorColor: AppTheme.accent,
-                      controller: _jobTitleController,
-                      decoration: AppTheme.textFieldinputDecoration(
-                        hint: AppLocalizations.of(context)!
-                            .translate('Job_Title'),
-                      ),
-                    ),
-                  ]),
+            _buildTextField(
+              context,
+              label: AppLocalizations.of(context)!.translate('Job_Title'),
+              controller: _jobTitleController,
+              width: fieldWidth,
+              hintText: AppLocalizations.of(context)!.translate('Job_Title'),
             ),
             const SizedBox(height: 20),
-            SizedBox(
-              width: width,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.translate(
-                        'Company_Name',
-                      ),
-                      style: AppTheme.paragraph,
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      style: AppTheme.paragraph,
-                      cursorColor: AppTheme.accent,
-                      controller: _jobTitleController,
-                      decoration: AppTheme.textFieldinputDecoration(
-                        hint: AppLocalizations.of(context)!.translate(
-                          'Company _Name',
-                        ),
-                      ),
-                    ),
-                  ]),
+            _buildTextField(
+              context,
+              label: AppLocalizations.of(context)!.translate('Company_Name'),
+              controller: _businessNameController,
+              width: fieldWidth,
+              hintText: AppLocalizations.of(context)!.translate('Company_Name'),
             ),
             const SizedBox(height: 20),
             _buildSaveButton(context, user),
@@ -158,125 +132,110 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
     );
   }
 
-  Widget _buildLoginInfoCard(
-      BuildContext context, UserModel user, double width) {
+  Widget _buildLoginInfoCard(BuildContext context, UserModel user,
+      double fieldWidth, bool isTabletOrDesktop) {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: isTabletOrDesktop
+            ? const EdgeInsets.all(24.0)
+            : const EdgeInsets.all(16.0),
         child: Column(
           children: [
             // Email field (non-editable)
-            SizedBox(
-              width: width,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.translate(
-                        'Email_',
-                      ),
-                      style: AppTheme.paragraph,
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      style: AppTheme.paragraph,
-                      cursorColor: AppTheme.accent,
-                      controller: _emailController,
-                      decoration: AppTheme.textFieldinputDecoration(
-                        hint: AppLocalizations.of(context)!.translate(
-                          'Email',
-                        ),
-                      ),
-                    ),
-                  ]),
+            _buildTextField(
+              context,
+              label: AppLocalizations.of(context)!.translate('Email_'),
+              controller: _emailController,
+              width: fieldWidth,
+              hintText: AppLocalizations.of(context)!.translate('Email'),
+              enabled: false,
             ),
-
             const SizedBox(height: 20),
             // Phone number field
-            SizedBox(
-              width: width,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.translate(
-                        'Phone_Number',
-                      ),
-                      style: AppTheme.paragraph,
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      style: AppTheme.paragraph,
-                      cursorColor: AppTheme.accent,
-                      controller: _phoneNumberController,
-                      decoration: AppTheme.textFieldinputDecoration(
-                        hint: AppLocalizations.of(context)!.translate(
-                          'Phone_Number',
-                        ),
-                      ),
-                    ),
-                  ]),
+            _buildTextField(
+              context,
+              label: AppLocalizations.of(context)!.translate('Phone_Number'),
+              controller: _phoneNumberController,
+              width: fieldWidth,
+              hintText: AppLocalizations.of(context)!.translate('Phone_Number'),
             ),
-
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Handle verify phone number
               },
-              // style: AppTheme.buttonStyle,
-              child: const Text('Verify Phone Number'),
+              child: Text(AppLocalizations.of(context)!
+                  .translate('verify_phone_number')),
             ),
             const SizedBox(height: 20),
             // Password field (non-editable) with change password button
-            Row(
-              children: [
-                Expanded(
-                  child: SizedBox(
-                    width: width,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.translate(
-                              'Password',
-                            ),
-                            style: AppTheme.paragraph,
-                          ),
-                          const SizedBox(height: 6),
-                          TextField(
-                            style: AppTheme.paragraph,
-                            cursorColor: AppTheme.accent,
-                            obscureText: true,
-                            enabled: false,
-                            controller: TextEditingController(text: '********'),
-                            decoration: AppTheme.textFieldinputDecoration(
-                              hint: AppLocalizations.of(context)!.translate(
-                                'Phone_Number',
-                              ),
-                            ),
-                          ),
-                        ]),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle change password
-                  },
-                  // style: AppTheme.buttonStyle,
-                  child: const Text('Change Password'),
-                ),
-              ],
-            ),
+            _buildPasswordField(context, fieldWidth, isTabletOrDesktop),
             const SizedBox(height: 20),
             _buildSaveButton(context, user),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField(
+    BuildContext context, {
+    required String label,
+    required TextEditingController controller,
+    required double width,
+    required String hintText,
+    bool enabled = true,
+    bool obscureText = false,
+  }) {
+    return SizedBox(
+      width: width,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(
+          label,
+          style: AppTheme.paragraph,
+        ),
+        const SizedBox(height: 6),
+        TextField(
+          style: AppTheme.paragraph,
+          cursorColor: AppTheme.accent,
+          controller: controller,
+          enabled: enabled,
+          obscureText: obscureText,
+          decoration: AppTheme.textFieldinputDecoration(
+            hint: hintText,
+          ),
+        ),
+      ]),
+    );
+  }
+
+  Widget _buildPasswordField(
+      BuildContext context, double width, bool isTabletOrDesktop) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTextField(
+          context,
+          label: AppLocalizations.of(context)!.translate('Password'),
+          controller: TextEditingController(text: '********'),
+          width: width,
+          hintText: '********',
+          enabled: false,
+          obscureText: true,
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () {
+            // Handle change password
+          },
+          child:
+              Text(AppLocalizations.of(context)!.translate('change_password')),
+        ),
+      ],
     );
   }
 
@@ -287,8 +246,7 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
         onPressed: () async {
           await _saveUserInfo(user);
         },
-        // style: AppTheme.buttonStyle,
-        child: const Text('Save'),
+        child: Text(AppLocalizations.of(context)!.translate('save')),
       ),
     );
   }
@@ -305,7 +263,10 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
     await ref.read(userProvider.notifier).updateUserData(updatedData);
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Changes saved successfully!')),
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!
+            .translate('changes_saved_successfully')),
+      ),
     );
   }
 }

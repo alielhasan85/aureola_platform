@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
+  // ===========================
+  // Color Palette
+  // ===========================
+
+  // Primary Colors
   static const Color primary = Color(0xFF2E4857);
   static const Color secondary = Color(0xFF4E6776);
   static const Color accent = Color(0xFFFF5E1E);
 
+  // Neutral Colors
   static const Color white = Color(0xFFFFFFFF);
-
   static const Color divider = Color(0xFFDAD5CF);
   static const Color grey2 = Color(0xFFE0E0E0);
   static const Color greyButton = Color(0xFFF0F2F5);
   static const Color background = Color(0xFFF9F9F9);
   static const Color background2 = Color(0xFFFFF9F6);
 
+  // Feedback Colors
   static const Color red = Color(0xFFD31B27);
   static const Color green = Color(0xFF39C57F);
   static const Color blue = Color(0xFF007AFF);
 
+  // Accent Colors
   static const Color lightGreen = Color(0xFFd3f1a7);
   static const Color lightPeach = Color(0xFFFEC195);
+
+  // ===========================
+  // Text Styles
+  // ===========================
 
   static const TextStyle titleAureola = TextStyle(
     fontFamily: 'CinzelDecorative',
@@ -34,7 +45,6 @@ class AppTheme {
         FontWeight.normal, // You can adjust the font weight or style here
     fontSize: 26, // Same font size to keep consistency
     letterSpacing: 0.4,
-
     color: accent, // Apply a different color or style
   );
 
@@ -87,6 +97,10 @@ class AppTheme {
     fontFamily: 'Inter',
     fontWeight: FontWeight.w500,
   );
+
+  // ===========================
+  // Input Decoration
+  // ===========================
 
   static InputDecoration textFieldinputDecoration({
     String? label,
@@ -143,6 +157,10 @@ class AppTheme {
     );
   }
 
+  // ===========================
+  // Card Decoration
+  // ===========================
+
   static ShapeDecoration get cardDecoration {
     return ShapeDecoration(
       color: Colors.white,
@@ -165,4 +183,24 @@ class AppTheme {
       ],
     );
   }
+
+  // ===========================
+  // Color Scheme
+  // ===========================
+
+  static final ColorScheme colorScheme = ColorScheme(
+    primary: primary,
+    primaryContainer: lightGreen, // You can adjust based on your palette
+    secondary: secondary,
+    secondaryContainer: lightPeach, // You can adjust based on your palette
+    surface: white,
+    background: background,
+    error: red,
+    onPrimary: white,
+    onSecondary: white,
+    onSurface: primary,
+    onBackground: primary,
+    onError: white,
+    brightness: Brightness.light,
+  );
 }

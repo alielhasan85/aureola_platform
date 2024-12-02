@@ -155,8 +155,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 AppLocalizations.of(context)!.translate('please_verify_email')),
           ),
         );
-// // Fetch the user data from Firestore
-//   await ref.read(userProvider.notifier).fetchUser(userId);
+
         // Navigate to the email verification screen
         Navigator.pushReplacement(
           context,

@@ -1,5 +1,13 @@
+import 'package:aureola_platform/providers/navigation_provider.dart';
+import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
+import 'package:aureola_platform/screens/user_management.dart/widgets_user/navigation_rail_user.dart';
+import 'package:aureola_platform/screens/user_management.dart/widgets_user/billing.dart';
+import 'package:aureola_platform/screens/user_management.dart/widgets_user/cards.dart';
+import 'package:aureola_platform/screens/user_management.dart/widgets_user/notification.dart';
+import 'package:aureola_platform/screens/user_management.dart/widgets_user/plan.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profile_tab.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,119 +16,75 @@ class UserProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final user = ref.watch(userProvider);
+    final selectedIndex = ref.watch(selectedMenuIndexProvider);
 
-    // final selectedSection = ref.watch(selectedProfileSectionProvider);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isTabletOrDesktop = constraints.maxWidth >= 800;
 
-    String selectedSection = 'Notifications';
-
-    return Scaffold(
-      //TODO: to add localization
-      appBar: CustomAppBar(title: "Profile"),
-
-      //  CustomAppBar(
-      //   title: 'User Profile',
-      //   actions: [
-      //     IconButton(
-      //       tooltip: 'Close',
-      //       icon: Icon(Icons.close, color: AppTheme.iconTheme.color),
-      //       onPressed: () => Navigator.of(context).pop(),
-      //     ),
-      //     const SizedBox(width: 20),
-      //   ],
-      // ),
-      body: Row(
-        children: [
-          // const UserProfileNavigationRail(), // Moved to separate file
-          const VerticalDivider(thickness: 1, width: 1),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Align(
-                //   alignment: Alignment.topLeft,
-                //   child: IconButton(
-                //     tooltip: isNavigationRailExpanded ? 'Collapse' : 'Expand',
-                //     icon: Icon(
-                //       isNavigationRailExpanded
-                //           ? Icons.keyboard_arrow_left
-                //           : Icons.keyboard_arrow_right,
-                //       color: AppTheme.iconTheme.color,
-                //     ),
-                //     onPressed: () {
-                //       ref
-                //           .read(isNavigationRailExpandedProvider.notifier)
-                //           .state = !isNavigationRailExpanded;
-                //     },
-                //   ),
-                // ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: _buildSectionContent(selectedSection),
-                  ),
-                ),
-              ],
-            ),
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: _getTitle(selectedIndex, context),
+            // Add leading icon to open the drawer on mobile devices
+            leading: !isTabletOrDesktop
+                ? IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  )
+                : null,
           ),
-        ],
-      ),
+          drawer: !isTabletOrDesktop
+              ? Drawer(
+                  child: NavigationRailUser(isDrawer: true),
+                )
+              : null,
+          body: Row(
+            children: [
+              if (isTabletOrDesktop) NavigationRailUser(),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _buildSectionContent(selectedIndex),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildSectionContent(
-    String selectedSection,
-    // UserModel user
-  ) {
-    switch (selectedSection) {
-      case 'Profile':
-        return _buildNotificationsTab();
-      // return const ProfileTab(); // Keep ProfileTab as a separate widget
-      case 'Notifications':
-        return _buildNotificationsTab();
-      case 'Teams':
-        return _buildTeamsTab();
-      case 'Subscriptions':
-        return _buildSubscriptionsTab();
-      case 'Invoices & Billing':
-        return _buildInvoicesBillingTab();
-      case 'Card':
-        return _buildCardTab();
+  String _getTitle(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        return AppLocalizations.of(context)!.translate('profile_');
+      case 1:
+        return AppLocalizations.of(context)!.translate('billing_');
+      case 2:
+        return AppLocalizations.of(context)!.translate('plan_');
+      case 3:
+        return AppLocalizations.of(context)!.translate('notifications_setting');
+      case 4:
+        return AppLocalizations.of(context)!.translate('cards_');
       default:
-        return _buildNotificationsTab();
-      // return const ProfileTab();
+        return AppLocalizations.of(context)!.translate('profile_');
     }
   }
 
-  Widget _buildNotificationsTab() {
-    return ProfileTab();
-  }
-
-  Widget _buildTeamsTab() {
-    return Center(
-        child: Text(
-      'Teams Management',
-    ));
-  }
-
-  Widget _buildSubscriptionsTab() {
-    return Center(
-        child: Text(
-      'Subscription Details',
-    ));
-  }
-
-  Widget _buildInvoicesBillingTab() {
-    return Center(
-        child: Text(
-      'Invoices & Billing',
-    ));
-  }
-
-  Widget _buildCardTab() {
-    return Center(
-        child: Text(
-      'Card Management',
-    ));
+  Widget _buildSectionContent(int selectedIndex) {
+    switch (selectedIndex) {
+      case 0:
+        return ProfileTab(); // Your existing ProfileTab widget
+      case 1:
+        return BillingTab(); // Your existing BillingTab widget
+      case 2:
+        return PlanTab(); // Your existing PlanTab widget
+      case 3:
+        return NotificationsSettingTab(); // Your existing NotificationsSettingTab widget
+      case 4:
+        return CardsTab(); // Your existing CardsTab widget
+      default:
+        return ProfileTab();
+    }
   }
 }

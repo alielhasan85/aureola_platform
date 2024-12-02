@@ -1,5 +1,3 @@
-// venue_info.dart
-
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
 import 'package:aureola_platform/screens/main_page/widgets/header_venue.dart';
@@ -46,7 +44,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     } else if (screenWidth >= Breakpoints.tablet) {
       containerWidth = screenWidth * 0.7;
     } else {
-      containerWidth = screenWidth * 0.9;
+      containerWidth = double.infinity; // Full width on mobile
     }
 
     final isTabletOrDesktop = screenWidth >= Breakpoints.tablet;
@@ -57,16 +55,20 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
         if (isTabletOrDesktop) HeaderContainer(userName: 'Ali Elhassan'),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: isTabletOrDesktop
+                ? const EdgeInsets.symmetric(horizontal: 20)
+                : EdgeInsets.zero,
             child: Container(
               width: containerWidth,
               margin: EdgeInsets.symmetric(
                 vertical: isTabletOrDesktop ? 30 : 12,
               ),
-              decoration: AppTheme.cardDecoration,
+              decoration: isTabletOrDesktop ? AppTheme.cardDecoration : null,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  padding: isTabletOrDesktop
+                      ? const EdgeInsets.symmetric(horizontal: 30)
+                      : const EdgeInsets.symmetric(horizontal: 10),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final containerWidth = constraints.maxWidth;

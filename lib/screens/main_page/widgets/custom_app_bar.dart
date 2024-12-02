@@ -1,5 +1,7 @@
 import 'package:aureola_platform/screens/login/auth_page.dart';
 import 'package:aureola_platform/screens/user_management.dart/user_mainpage.dart';
+import 'package:aureola_platform/screens/user_management.dart/widgets_user/billing.dart';
+import 'package:aureola_platform/screens/user_management.dart/widgets_user/plan.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,8 +43,9 @@ extension AppBarMenuOptionExtension on AppBarMenuOption {
 
 class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
+  final IconButton? leading;
 
-  const CustomAppBar({super.key, required this.title});
+  const CustomAppBar({super.key, required this.title, this.leading});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,6 +69,8 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         AppBar(
+          leading: leading,
+          iconTheme: const IconThemeData(color: AppTheme.primary),
           backgroundColor: AppTheme.white,
           toolbarHeight: 60,
           title: Text(
@@ -184,20 +189,20 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
         );
         break;
       case AppBarMenuOption.billing:
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const BillingPage(),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const BillingTab(),
+          ),
+        );
         break;
       case AppBarMenuOption.plan:
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const PlanPage(),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const PlanTab(),
+          ),
+        );
         break;
       case AppBarMenuOption.cards:
         // Navigator.push(
