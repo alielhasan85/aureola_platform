@@ -1,5 +1,6 @@
-import 'package:aureola_platform/providers/appbar_title_provider.dart';
-import 'package:aureola_platform/providers/navigation_provider.dart';
+import 'package:aureola_platform/models/common/logo_icon.dart';
+import 'package:aureola_platform/providers/main_navigation_provider.dart';
+import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_item.dart';
@@ -66,23 +67,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                 : CrossAxisAlignment.end,
             children: [
               // Header (Logo, Title)
-              if (!widget.isDrawer) ...[
-                const Padding(
-                  padding: EdgeInsets.only(top: 12, right: 24),
-                  child: Text(
-                    'Naya',
-                    style: AppTheme.titleAureola,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Padding(
-                  padding: EdgeInsets.only(right: 24),
-                  child: Text(
-                    'Platform',
-                    style: AppTheme.titlePlatform,
-                  ),
-                ),
-              ],
+              if (!widget.isDrawer) ...[const AppLogo()],
 
               // Navigation Items
               Padding(

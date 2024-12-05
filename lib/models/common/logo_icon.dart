@@ -8,12 +8,15 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
           'Naya',
           style: AppTheme.titleAureola,
+        ),
+        SizedBox(
+          width: 8,
         ),
         Text(
           'Platform',

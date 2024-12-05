@@ -219,7 +219,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   void _handleMenuSelection(BuildContext context, AppBarMenuOption option) {
     switch (option) {
       case AppBarMenuOption.profile:
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const UserProfilePage(),
@@ -227,7 +227,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
         );
         break;
       case AppBarMenuOption.billing:
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const BillingTab(),
@@ -235,7 +235,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
         );
         break;
       case AppBarMenuOption.plan:
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const PlanTab(),

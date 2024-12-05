@@ -1,14 +1,14 @@
 // lib/screens/main_page/main_page.dart
 
 import 'package:aureola_platform/models/common/logo_icon.dart';
+import 'package:aureola_platform/providers/main_navigation_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 
-import 'package:aureola_platform/providers/appbar_title_provider.dart';
-import 'package:aureola_platform/providers/navigation_provider.dart';
+import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_rail.dart';
 import 'package:aureola_platform/screens/venue_management/menu_branding.dart';
 import 'package:aureola_platform/screens/venue_management/venue_info.dart';
@@ -22,6 +22,16 @@ class MainPage extends ConsumerStatefulWidget {
 
 class _MainPageState extends ConsumerState<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the appBar title when the page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(appBarTitleProvider.notifier).state =
+          "Dashboard"; // Set default title
+    });
+  }
 
   @override
   void didChangeDependencies() {
