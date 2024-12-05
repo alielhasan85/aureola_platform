@@ -111,7 +111,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       children: [
         Text(
           AppLocalizations.of(context)!.translate("venue_info_title"),
-          style: AppTheme.heading1,
+          style: AppTheme.appBarTitle,
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(

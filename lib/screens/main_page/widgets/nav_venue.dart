@@ -46,7 +46,7 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
                   child: Text(
                     AppLocalizations.of(context)!
                         .translate('available_restaurant'),
-                    style: AppTheme.heading1.copyWith(
+                    style: AppTheme.appBarTitle.copyWith(
                       fontSize: 18,
                     ),
                   ),

@@ -117,7 +117,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 AppLocalizations.of(context)!
                     .translate('verification_email_sent_message'),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 20),
               ElevatedButton(

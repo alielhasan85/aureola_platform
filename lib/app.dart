@@ -61,7 +61,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         textTheme: const TextTheme(
           displayLarge: AppTheme.titleAureola,
           displayMedium: AppTheme.titlePlatform,
-          displaySmall: AppTheme.heading1,
+          displaySmall: AppTheme.appBarTitle,
           headlineLarge: AppTheme.heading2,
           headlineMedium: AppTheme.navigationItemText,
           headlineSmall: AppTheme.tabItemText,

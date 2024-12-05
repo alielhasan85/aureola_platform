@@ -107,7 +107,7 @@ class _NavigationRailUserState extends ConsumerState<NavigationRailUser> {
               NavigationItem(
                 label: AppLocalizations.of(context)!
                     .translate('notifications_setting'),
-                leadingIconPath: 'assets/icons/notifications.svg',
+                leadingIconPath: 'assets/icons/notification.svg',
                 isSelected: selectedIndex == 3,
                 onTap: () => _updateIndex(
                   3,

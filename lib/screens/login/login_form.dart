@@ -189,7 +189,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         children: <Widget>[
           Text(
             AppLocalizations.of(context)!.translate('log_in_to_your_account'),
-            style: AppTheme.heading1.copyWith(fontSize: 24),
+            style: AppTheme.appBarTitle.copyWith(fontSize: 24),
           ),
           const SizedBox(height: 15.0),
           Text(

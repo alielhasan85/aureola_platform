@@ -1,6 +1,6 @@
+import 'package:aureola_platform/providers/appbar_title_provider.dart';
 import 'package:aureola_platform/providers/navigation_provider.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
-import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
+
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/navigation_rail_user.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/billing.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/cards.dart';
@@ -8,6 +8,7 @@ import 'package:aureola_platform/screens/user_management.dart/widgets_user/notif
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/plan.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profile_tab.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,21 +18,38 @@ class UserProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedMenuIndexProvider);
+    final appBarTitle = ref.watch(appBarTitleProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         bool isTabletOrDesktop = constraints.maxWidth >= 800;
 
+        // Ensure Scaffold is returned
         return Scaffold(
-          appBar: CustomAppBar(
-            title: _getTitle(selectedIndex, context),
-            // Add leading icon to open the drawer on mobile devices
-            leading: !isTabletOrDesktop
-                ? IconButton(
-                    icon: Icon(Icons.menu),
-                    onPressed: () => Scaffold.of(context).openDrawer(),
-                  )
-                : null,
+          backgroundColor: AppTheme.background,
+          appBar: AppBar(
+            bottom: const PreferredSize(
+              preferredSize: Size.fromHeight(0.5), // Height of the divider
+              child: Divider(
+                height: 0,
+                thickness: 0.5,
+                color: AppTheme.divider,
+              ),
+            ),
+            iconTheme: const IconThemeData(color: AppTheme.primary),
+            backgroundColor: AppTheme.white,
+            title: Text(
+              appBarTitle,
+              style: AppTheme.appBarTitle,
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           ),
           drawer: !isTabletOrDesktop
               ? Drawer(

@@ -1,9 +1,10 @@
-//
+// lib/screens/main_page/main_page.dart
 
+import 'package:aureola_platform/models/common/logo_icon.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter/services.dart';
 
 import 'package:aureola_platform/providers/appbar_title_provider.dart';
@@ -20,6 +21,8 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -35,45 +38,58 @@ class _MainPageState extends ConsumerState<MainPage> {
     Widget _getContentForTab(int index) {
       switch (index) {
         case 1:
-          return Center(child: Text('Dashboard'));
+          return const Center(child: Text('Dashboard'));
         case 2:
-          return Center(child: Text('Order Management'));
+          return const Center(child: Text('Order Management'));
         case 3:
-          return Center(child: Text('Menu Content'));
+          return const Center(child: Text('Menu Content'));
         case 4:
-          return Center(child: Text('Categories Content'));
+          return const Center(child: Text('Categories Content'));
         case 5:
-          return Center(child: Text('Items Content'));
+          return const Center(child: Text('Items Content'));
         case 6:
-          return Center(child: Text('Add-ons Content'));
+          return const Center(child: Text('Add-ons Content'));
         case 7:
           return const MenuBranding();
         case 8:
-          return Center(child: Text('Feedback'));
+          return const Center(child: Text('Feedback'));
         case 9:
           return const VenueInfo();
         case 10:
-          return Center(child: Text('Tables'));
+          return const Center(child: Text('Tables'));
         case 11:
-          return Center(child: Text('QR Code'));
+          return const Center(child: Text('QR Code'));
         default:
-          return Center(child: Text('Dashboard'));
+          return const Center(child: Text('Dashboard'));
       }
     }
 
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > 800) {
-          // Desktop/Tablet layout with navigation rail
+          // Desktop/Tablet layout with navigation rail and app bar inside body
           return Scaffold(
+            backgroundColor: AppTheme.background,
+            key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
             body: Row(
               children: [
-                const CustomNavigation(),
+                const CustomNavigation(), // Navigation rail
                 Expanded(
                   child: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.stretch, // Ensure children stretch
                     children: [
-                      CustomAppBar(title: appBarTitle),
+                      // Wrap CustomAppBar in SizedBox to provide fixed height
+                      SizedBox(
+                        height:
+                            60.5, // Same as CustomAppBar's preferredSize.height
+                        child: CustomAppBar(
+                          title: appBarTitle,
+                          // Optionally, add leading if needed
+                        ),
+                      ),
+                      // Main content area
                       Expanded(child: _getContentForTab(selectedIndex)),
                     ],
                   ),
@@ -82,12 +98,18 @@ class _MainPageState extends ConsumerState<MainPage> {
             ),
           );
         } else {
-          //TODO: App bar in case of mobile layout
           // Mobile layout with Drawer
           return Scaffold(
+            key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              title: Text(appBarTitle),
+            appBar: CustomAppBar(
+              title: appBarTitle,
+              leading: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  _scaffoldKey.currentState?.openDrawer();
+                },
+              ),
             ),
             drawer: const Drawer(
               child: CustomNavigation(isDrawer: true),

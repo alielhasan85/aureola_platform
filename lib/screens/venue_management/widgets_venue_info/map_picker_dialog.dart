@@ -30,7 +30,7 @@ class _MapPickerDialogState extends State<MapPickerDialog> {
     return AlertDialog(
       title: Text(
           AppLocalizations.of(context)!.translate("Select_Location_from_Map")),
-      titleTextStyle: AppTheme.heading1.copyWith(fontSize: 16),
+      titleTextStyle: AppTheme.appBarTitle.copyWith(fontSize: 16),
       content: SizedBox(
         width: widget.containerWidth,
         height: 400,

@@ -186,6 +186,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                         const SizedBox(height: 5.0),
                         TextFormField(
                           controller: _nameController,
+                          //TODO: localization needed
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'Enter your name',

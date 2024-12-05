@@ -15,7 +15,7 @@ class AppTheme {
   static const Color divider = Color(0xFFDAD5CF);
   static const Color grey2 = Color(0xFFE0E0E0);
   static const Color greyButton = Color(0xFFF0F2F5);
-  static const Color background = Color(0xFFF9F9F9);
+  static const Color background = Color(0xFFF0F2F5);
   static const Color background2 = Color(0xFFFFF9F6);
 
   // Feedback Colors
@@ -34,8 +34,8 @@ class AppTheme {
   static const TextStyle titleAureola = TextStyle(
     fontFamily: 'CinzelDecorative',
     fontWeight: FontWeight.bold,
-    fontSize: 28,
-    letterSpacing: 0.4,
+    fontSize: 24,
+    // letterSpacing: 0.4,
     color: primary,
   );
 
@@ -43,15 +43,15 @@ class AppTheme {
     fontFamily: 'comme',
     fontWeight:
         FontWeight.normal, // You can adjust the font weight or style here
-    fontSize: 26, // Same font size to keep consistency
-    letterSpacing: 0.4,
+    fontSize: 22, // Same font size to keep consistency
+    // letterSpacing: 0.4,
     color: accent, // Apply a different color or style
   );
 
-  static const TextStyle heading1 = TextStyle(
+  static const TextStyle appBarTitle = TextStyle(
     color: primary,
-    fontSize: 18,
-    fontFamily: 'Inter',
+    fontSize: 20,
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.w600,
   );
 
