@@ -17,12 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class Breakpoints {
-  static const double desktop = 1024;
-  static const double tablet = 768;
-  static const double mobile = 480;
-}
-
 class VenueInfo extends ConsumerStatefulWidget {
   const VenueInfo({super.key});
 

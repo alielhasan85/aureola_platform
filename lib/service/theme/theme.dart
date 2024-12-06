@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+class Breakpoints {
+  static const double desktop = 1024;
+  static const double tablet = 768;
+  static const double mobile = 480;
+}
+
 class AppTheme {
   // ===========================
   // Color Palette

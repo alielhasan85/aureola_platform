@@ -1,14 +1,6 @@
 import 'package:aureola_platform/models/common/logo_icon.dart';
-import 'package:aureola_platform/providers/main_navigation_provider.dart';
-import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:aureola_platform/providers/user_title.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:aureola_platform/screens/main_page/widgets/nav_item.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
-import 'package:aureola_platform/service/localization/localization.dart';
 
-import 'package:aureola_platform/providers/user_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_item.dart';

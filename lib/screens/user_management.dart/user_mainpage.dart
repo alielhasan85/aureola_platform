@@ -1,6 +1,5 @@
 // lib/screens/user_management.dart/user_profile_page.dart
 
-import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:aureola_platform/providers/user_title.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
 
@@ -10,7 +9,6 @@ import 'package:aureola_platform/screens/user_management.dart/widgets_user/cards
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/notification.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/plan.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profile_tab.dart';
-import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

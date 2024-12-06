@@ -1,6 +1,5 @@
 // lib/screens/main_page/main_page.dart
 
-import 'package:aureola_platform/models/common/logo_icon.dart';
 import 'package:aureola_platform/providers/main_navigation_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
 import 'package:aureola_platform/service/theme/theme.dart';

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/providers/lang_providers.dart';
 
+// TODO: UI of the drop down menu of profile
 // Enum for menu options
 enum AppBarMenuOption {
   profile,
@@ -117,15 +118,15 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
               // Add other options as needed
             },
             itemBuilder: (BuildContext context) => [
-              PopupMenuItem<AppBarMenuOption>(
+              const PopupMenuItem<AppBarMenuOption>(
                 value: AppBarMenuOption.profile,
                 child: Text('Profile'),
               ),
-              PopupMenuItem<AppBarMenuOption>(
+              const PopupMenuItem<AppBarMenuOption>(
                 value: AppBarMenuOption.billing,
                 child: Text('Billing'),
               ),
-              PopupMenuItem<AppBarMenuOption>(
+              const PopupMenuItem<AppBarMenuOption>(
                 value: AppBarMenuOption.logout,
                 child: Text('Log Out'),
               ),
