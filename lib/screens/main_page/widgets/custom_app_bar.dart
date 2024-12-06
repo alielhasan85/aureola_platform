@@ -1,16 +1,21 @@
 // lib/screens/main_page/widgets/custom_app_bar.dart
 
+// lib/screens/main_page/widgets/custom_app_bar.dart
+
 import 'package:aureola_platform/screens/login/auth_page.dart';
 import 'package:aureola_platform/screens/user_management.dart/user_mainpage.dart';
-
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/billing.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/plan.dart';
+import 'package:aureola_platform/screens/user_management.dart/widgets_user/cards.dart';
+
 import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:aureola_platform/widgest/language_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/providers/lang_providers.dart';
 
-// TODO: UI of the drop down menu of profile
+import 'package:aureola_platform/service/localization/localization.dart';
+
 // Enum for menu options
 enum AppBarMenuOption {
   profile,
@@ -47,26 +52,11 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
   final Widget? leading;
 
-  const CustomAppBar({super.key, required this.title, this.leading});
+  const CustomAppBar({Key? key, required this.title, this.leading})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLanguageCode = ref.watch(languageProvider);
-
-    // Map language codes to display labels
-    final languageMap = {
-      'English': 'en',
-      'Arabic': 'ar',
-      'French': 'fr',
-      'Turkish': 'tr'
-    };
-
-    // Display the selected language label
-    final currentLanguageLabel = languageMap.keys.firstWhere(
-      (key) => languageMap[key] == currentLanguageCode,
-      orElse: () => 'English', // Default to English if no match
-    );
-
     // Determine screen size
     double screenWidth = MediaQuery.of(context).size.width;
     bool isMobile = screenWidth < 600;
@@ -106,72 +96,27 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
               color: AppTheme.primary,
             ),
             onSelected: (AppBarMenuOption option) {
-              if (option == AppBarMenuOption.profile) {
-                _handleMenuSelection(context, option);
-              } else if (option == AppBarMenuOption.logout) {
-                _handleLogout(context);
-              } else if (option == AppBarMenuOption.notifications) {
-                // Handle notifications
-              } else if (option == AppBarMenuOption.billing) {
-                // Handle billing
-              }
-              // Add other options as needed
+              _handleMenuSelection(context, option);
             },
             itemBuilder: (BuildContext context) => [
-              const PopupMenuItem<AppBarMenuOption>(
+              PopupMenuItem<AppBarMenuOption>(
                 value: AppBarMenuOption.profile,
-                child: Text('Profile'),
+                child: Text(AppLocalizations.of(context)!.translate('profile')),
               ),
-              const PopupMenuItem<AppBarMenuOption>(
+              PopupMenuItem<AppBarMenuOption>(
                 value: AppBarMenuOption.billing,
-                child: Text('Billing'),
+                child: Text(AppLocalizations.of(context)!.translate('billing')),
               ),
-              const PopupMenuItem<AppBarMenuOption>(
+              PopupMenuItem<AppBarMenuOption>(
                 value: AppBarMenuOption.logout,
-                child: Text('Log Out'),
+                child: Text(AppLocalizations.of(context)!.translate('log_out')),
               ),
+              // Add other options as needed
             ],
           )
         else ...[
-          // Language Selection Button with PopupMenuButton
-          PopupMenuButton<String>(
-            position: PopupMenuPosition.under,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            onSelected: (String language) {
-              // Update language based on selection
-              ref.read(languageProvider.notifier).state =
-                  languageMap[language]!;
-            },
-            itemBuilder: (BuildContext context) {
-              return languageMap.keys.map((String language) {
-                return PopupMenuItem<String>(
-                  value: language,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                  child: Text(
-                    language,
-                    style: AppTheme.tabBarItemText,
-                  ),
-                );
-              }).toList();
-            },
-            child: Row(
-              children: [
-                Text(
-                  currentLanguageLabel,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppTheme.primary,
-                  ),
-                ),
-                const Icon(
-                  Icons.arrow_drop_down,
-                  color: AppTheme.primary,
-                ),
-              ],
-            ),
-          ),
+          // Language Selection Widget
+          const LanguageSelector(),
           const SizedBox(width: 16),
 
           // Notification Icon Button
@@ -182,7 +127,15 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ),
             onPressed: () {
               // Navigate to Notifications Page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const Scaffold(
+                          body: Center(child: Text('nitifications')),
+                        )),
+              );
             },
+            tooltip: AppLocalizations.of(context)!.translate('notifications'),
           ),
           const SizedBox(width: 12),
 
@@ -200,7 +153,9 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 return PopupMenuItem<AppBarMenuOption>(
                   value: option,
                   child: Text(
-                    option.label,
+                    AppLocalizations.of(context)!.translate(
+                      option.label.toLowerCase().replaceAll(' ', '_'),
+                    ),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -243,7 +198,32 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           ),
         );
         break;
-      // Handle other cases
+      case AppBarMenuOption.cards:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CardsTab(),
+          ),
+        );
+        break;
+      case AppBarMenuOption.notifications:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                const Scaffold(body: Center(child: Text('nitifications'))),
+          ),
+        );
+        break;
+      case AppBarMenuOption.teams:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                const Scaffold(body: Center(child: Text('teams'))),
+          ),
+        );
+        break;
       case AppBarMenuOption.logout:
         _handleLogout(context);
         break;

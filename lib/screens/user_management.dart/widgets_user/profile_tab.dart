@@ -6,6 +6,7 @@ import 'package:aureola_platform/screens/user_management.dart/widgets_user/profi
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/password_field.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/user_email_field.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/user_phone_number.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/phone_number_field.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -55,147 +56,109 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final screenWidth = MediaQuery.of(context).size.width;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double screenWidth = constraints.maxWidth;
 
-    // Determine container width based on breakpoints
-    double containerWidth;
-    if (screenWidth >= Breakpoints.desktop) {
-      containerWidth = screenWidth * 0.5;
-    } else if (screenWidth >= Breakpoints.tablet) {
-      containerWidth = screenWidth * 0.7;
-    } else {
-      containerWidth = double.infinity; // Full width on mobile
-    }
+        // Set container width based on breakpoints
+        double containerWidth;
+        if (screenWidth >= Breakpoints.desktop) {
+          // Desktop screens
+          containerWidth = 600; // Fixed max width for a nice look
+        } else if (screenWidth >= 600) {
+          // Tablet screens
+          containerWidth = 500;
+        } else {
+          // Mobile screens
+          containerWidth = double.infinity;
+        }
 
-    final isTabletOrDesktop = screenWidth >= Breakpoints.tablet;
-
-    return Column(
-      children: [
-        // TODO: username dynamic from firebase
-
-        Expanded(
-          child: Padding(
-            padding: isTabletOrDesktop
-                ? const EdgeInsets.symmetric(horizontal: 20)
-                : EdgeInsets.zero,
+        return SingleChildScrollView(
+          child: Center(
             child: Container(
               width: containerWidth,
-              margin: EdgeInsets.symmetric(
-                vertical: isTabletOrDesktop ? 30 : 12,
-              ),
-              decoration: isTabletOrDesktop ? AppTheme.cardDecoration : null,
-              child: SingleChildScrollView(
-                child: Padding(
-                    padding: isTabletOrDesktop
-                        ? const EdgeInsets.symmetric(horizontal: 30)
-                        : const EdgeInsets.symmetric(horizontal: 10),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final containerWidth = constraints.maxWidth;
+              margin: const EdgeInsets.all(16.0),
+              decoration: screenWidth >= 800 ? AppTheme.cardDecoration : null,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!
+                        .translate("Profile_Information"),
+                    style: AppTheme.tabBarItemText,
+                  ),
+                  const SizedBox(height: 16),
 
-                        // Decide the number of columns
-                        int columns = isTabletOrDesktop ? 2 : 1;
+                  // Personal Info Fields
+                  NameField(
+                      width: double.infinity, controller: _nameController),
+                  const SizedBox(height: 16),
+                  JobTitleField(
+                      width: double.infinity, controller: _jobTitleController),
+                  const SizedBox(height: 16),
+                  BusinessNameField(
+                      width: double.infinity,
+                      controller: _businessNameController),
 
-                        // Calculate the width for each field
-                        double spacing = 16;
-                        double fieldWidth = columns == 1
-                            ? containerWidth
-                            : (containerWidth - spacing) / 2;
+                  const SizedBox(height: 24),
+                  Divider(
+                      color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
+                  const SizedBox(height: 24),
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.all(columns > 1 ? 24.0 : 16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Personal Info Section
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .translate("Profile_Information"),
-                                    style: AppTheme.tabBarItemText,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  NameField(
-                                      width: fieldWidth,
-                                      controller: _nameController),
-                                  JobTitleField(
-                                      width: fieldWidth,
-                                      controller: _jobTitleController),
-                                  BusinessNameField(
-                                      width: fieldWidth,
-                                      controller: _businessNameController),
+                  // Login Info Section
+                  Text(
+                    AppLocalizations.of(context)!
+                        .translate('login_information'),
+                    style: AppTheme.tabBarItemText,
+                  ),
+                  const SizedBox(height: 16),
+                  UserEmailField(
+                      width: double.infinity,
+                      controller: _emailController,
+                      enabled: false),
+                  const SizedBox(height: 16),
+                  UserPhoneNumberField(
+                      width: containerWidth,
+                      controller: _phoneNumberController), // Updated usage
 
-                                  const SizedBox(height: 24),
-                                  Divider(
-                                      color: AppTheme.accent.withOpacity(0.5),
-                                      thickness: 0.5),
-                                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Handle verify phone number
+                    },
+                    child: Text(AppLocalizations.of(context)!
+                        .translate('verify_phone_number')),
+                  ),
 
-                                  // Login Info Section
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .translate('login_information'),
-                                    style: AppTheme.tabBarItemText,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  UserEmailField(
-                                      width: fieldWidth,
-                                      controller: _emailController,
-                                      enabled: false),
-                                  UserPhoneNumberField(
-                                      width: fieldWidth,
-                                      controller: _phoneNumberController),
+                  const SizedBox(height: 20),
+                  PasswordField(width: double.infinity),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Handle change password
+                    },
+                    child: Text(AppLocalizations.of(context)!
+                        .translate('change_password')),
+                  ),
 
-                                  const SizedBox(height: 20),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      // Handle verify phone number
-                                    },
-                                    child: Text(AppLocalizations.of(context)!
-                                        .translate('verify_phone_number')),
-                                  ),
-
-                                  const SizedBox(height: 20),
-                                  PasswordField(width: fieldWidth),
-                                  const SizedBox(height: 10),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      // Handle change password
-                                    },
-                                    child: Text(AppLocalizations.of(context)!
-                                        .translate('change_password')),
-                                  ),
-
-                                  const SizedBox(height: 20),
-                                  _buildSaveButton(context, user),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                          ],
-                        );
+                  const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await _saveUserInfo(user);
                       },
-                    )),
+                      child:
+                          Text(AppLocalizations.of(context)!.translate('save')),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSaveButton(BuildContext context, UserModel user) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: ElevatedButton(
-        onPressed: () async {
-          await _saveUserInfo(user);
-        },
-        child: Text(AppLocalizations.of(context)!.translate('save')),
-      ),
+        );
+      },
     );
   }
 
@@ -211,8 +174,9 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(AppLocalizations.of(context)!
-            .translate('changes_saved_successfully')),
+        content: Text(
+          AppLocalizations.of(context)!.translate('changes_saved_successfully'),
+        ),
       ),
     );
   }

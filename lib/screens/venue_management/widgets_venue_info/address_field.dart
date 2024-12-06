@@ -8,10 +8,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Import the languageProvider from lang_providers.dart
 import 'package:aureola_platform/providers/lang_providers.dart';
 
+import 'package:flutter/material.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:csc_picker/csc_picker.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aureola_platform/providers/lang_providers.dart';
+
 class VenueAddressField extends ConsumerStatefulWidget {
   final double width;
+  final TextEditingController addressController;
+  final void Function(String country)? onCountryChanged;
+  final void Function(String state)? onStateChanged;
+  final void Function(String city)? onCityChanged;
 
-  const VenueAddressField({super.key, required this.width});
+  const VenueAddressField({
+    super.key,
+    required this.width,
+    required this.addressController,
+    this.onCountryChanged,
+    this.onStateChanged,
+    this.onCityChanged,
+  });
 
   @override
   _VenueAddressFieldState createState() => _VenueAddressFieldState();
@@ -21,18 +39,9 @@ class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
   String? countryValue = "";
   String? stateValue = "";
   String? cityValue = "";
-  final TextEditingController addressController = TextEditingController();
-  String address = "";
-
-  @override
-  void dispose() {
-    addressController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    // Watch the languageProvider to get the current language
     final currentLanguage = ref.watch(languageProvider);
 
     return Column(
@@ -56,7 +65,6 @@ class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
               color: Colors.grey.shade300,
               border: Border.all(color: Colors.grey.shade300, width: 1),
             ),
-            // Replace placeholders and labels with localized strings
             countrySearchPlaceholder: AppLocalizations.of(context)!
                 .translate("country_search_placeholder"),
             stateSearchPlaceholder: AppLocalizations.of(context)!
@@ -79,16 +87,25 @@ class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
               setState(() {
                 countryValue = value;
               });
+              if (widget.onCountryChanged != null && value != null) {
+                widget.onCountryChanged!(value);
+              }
             },
             onStateChanged: (value) {
               setState(() {
                 stateValue = value;
               });
+              if (widget.onStateChanged != null && value != null) {
+                widget.onStateChanged!(value);
+              }
             },
             onCityChanged: (value) {
               setState(() {
                 cityValue = value;
               });
+              if (widget.onCityChanged != null && value != null) {
+                widget.onCityChanged!(value);
+              }
             },
           ),
         ),
@@ -106,7 +123,7 @@ class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
               TextField(
                 style: AppTheme.paragraph,
                 cursorColor: AppTheme.accent,
-                controller: addressController,
+                controller: widget.addressController,
                 decoration: AppTheme.textFieldinputDecoration().copyWith(
                   hintText:
                       AppLocalizations.of(context)!.translate("enter_address"),

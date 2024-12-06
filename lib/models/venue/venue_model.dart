@@ -1,14 +1,16 @@
 // venue_model.dart
 
+// venue_model.dart
+
 import 'package:aureola_platform/models/common/address.dart';
 import 'package:aureola_platform/models/common/contact.dart';
 import 'package:aureola_platform/models/venue/design_display.dart';
-
 import 'social_accounts.dart';
 import 'operations.dart';
 import 'qr_code.dart';
-
 import 'price_options.dart';
+
+// venue_model.dart
 
 class VenueModel {
   final String venueId;
@@ -17,11 +19,11 @@ class VenueModel {
   final Address address;
   final Contact contact;
   final List<String> languageOptions;
-  final SocialAccounts socialAccounts;
-  final Operations operations;
-  final List<QrCode> qrCodes;
-  final DesignAndDisplay designAndDisplay;
-  final PriceOptions priceOptions;
+  final SocialAccounts? socialAccounts; // Made optional
+  final Operations? operations; // Made optional
+  final List<QrCode>? qrCodes; // Made optional
+  final DesignAndDisplay? designAndDisplay; // Made optional
+  final PriceOptions? priceOptions; // Made optional
 
   VenueModel({
     required this.venueId,
@@ -30,11 +32,11 @@ class VenueModel {
     required this.address,
     required this.contact,
     this.languageOptions = const ['English'],
-    required this.socialAccounts,
-    required this.operations,
-    this.qrCodes = const [],
-    required this.designAndDisplay,
-    required this.priceOptions,
+    this.socialAccounts,
+    this.operations,
+    this.qrCodes,
+    this.designAndDisplay,
+    this.priceOptions,
   });
 
   VenueModel copyWith({
@@ -73,11 +75,12 @@ class VenueModel {
       'address': address.toMap(),
       'contact': contact.toMap(),
       'languageOptions': languageOptions,
-      'socialAccounts': socialAccounts.toMap(),
-      'operations': operations.toMap(),
-      'qrCodes': qrCodes.map((q) => q.toMap()).toList(),
-      'designAndDisplay': designAndDisplay.toMap(),
-      'priceOptions': priceOptions.toMap(),
+      if (socialAccounts != null) 'socialAccounts': socialAccounts!.toMap(),
+      if (operations != null) 'operations': operations!.toMap(),
+      if (qrCodes != null) 'qrCodes': qrCodes!.map((q) => q.toMap()).toList(),
+      if (designAndDisplay != null)
+        'designAndDisplay': designAndDisplay!.toMap(),
+      if (priceOptions != null) 'priceOptions': priceOptions!.toMap(),
     };
   }
 
@@ -89,14 +92,22 @@ class VenueModel {
       address: Address.fromMap(map['address'] ?? {}),
       contact: Contact.fromMap(map['contact'] ?? {}),
       languageOptions: List<String>.from(map['languageOptions'] ?? ['English']),
-      socialAccounts: SocialAccounts.fromMap(map['socialAccounts'] ?? {}),
-      operations: Operations.fromMap(map['operations'] ?? {}),
+      socialAccounts: map['socialAccounts'] != null
+          ? SocialAccounts.fromMap(map['socialAccounts'])
+          : null,
+      operations: map['operations'] != null
+          ? Operations.fromMap(map['operations'])
+          : null,
       qrCodes: (map['qrCodes'] as List<dynamic>?)
               ?.map((q) => QrCode.fromMap(q))
               .toList() ??
           [],
-      designAndDisplay: DesignAndDisplay.fromMap(map['designAndDisplay'] ?? {}),
-      priceOptions: PriceOptions.fromMap(map['priceOptions'] ?? {}),
+      designAndDisplay: map['designAndDisplay'] != null
+          ? DesignAndDisplay.fromMap(map['designAndDisplay'])
+          : null,
+      priceOptions: map['priceOptions'] != null
+          ? PriceOptions.fromMap(map['priceOptions'])
+          : null,
     );
   }
 }

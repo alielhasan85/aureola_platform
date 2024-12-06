@@ -3,13 +3,19 @@ import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
+import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/material.dart';
+
 class DefaultLanguageDropdown extends StatefulWidget {
   final double width;
+  final ValueChanged<String>? onChanged; // new callback
 
-  const DefaultLanguageDropdown({super.key, required this.width});
+  const DefaultLanguageDropdown(
+      {super.key, required this.width, this.onChanged});
 
   @override
-  // ignore: library_private_types_in_public_api
   _DefaultLanguageDropdownState createState() =>
       _DefaultLanguageDropdownState();
 }
@@ -36,10 +42,9 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
                 backgroundColor: AppTheme.background,
                 margin: EdgeInsets.only(top: 12, right: 0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
               ),
-
-              // Set constraints to control popup width
               constraints: BoxConstraints(
                 maxWidth: widget.width,
               ),
@@ -61,8 +66,6 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
               AppLocalizations.of(context)!.translate("arabic_"),
               AppLocalizations.of(context)!.translate("french_"),
             ],
-
-            // Use 'items' for static lists
             decoratorProps: DropDownDecoratorProps(
               baseStyle: AppTheme.paragraph,
               decoration: AppTheme.textFieldinputDecoration(
@@ -70,11 +73,13 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
                     .translate("Select_Default_Language"),
               ),
             ),
-
             onChanged: (String? newValue) {
               setState(() {
-                _selectedLanguage = newValue; // Update the selected language
+                _selectedLanguage = newValue;
               });
+              if (widget.onChanged != null && newValue != null) {
+                widget.onChanged!(newValue);
+              }
             },
             selectedItem: _selectedLanguage,
           ),

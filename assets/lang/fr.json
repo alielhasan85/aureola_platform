@@ -1,4 +1,14 @@
 {
+"English": "Anglais",
+  "Arabic": "Arabe",
+  "French": "Français",
+  "Turkish": "Turc",
+  "select_language": "Choisir la langue",
+  "profile": "Profil",
+  "billing": "Facturation",
+  "log_out": "Se Déconnecter",
+  "notifications": "Notifications",
+
     "dashboard": "Tableau de bord",
     "order": "Commande",
     "menu_management": "Gestion du menu",

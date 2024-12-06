@@ -1,4 +1,15 @@
 {
+"English": "الإنجليزية",
+  "Arabic": "العربية",
+  "French": "الفرنسية",
+  "Turkish": "التركية",
+  "select_language": "اختر اللغة",
+  "profile": "الملف الشخصي",
+  "billing": "الفوترة",
+  "log_out": "تسجيل الخروج",
+  "notifications": "الإشعارات",
+
+
     "dashboard": "لوحة القيادة",
     "order": "طلب",
     "order_title": "الطلبات",

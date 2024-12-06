@@ -4,11 +4,15 @@ class Contact {
   final String email;
   final String phoneNumber;
   final String countryCode;
+  final String website; // New field
+  final String whatsappNumber; // New field
 
   Contact({
     required this.email,
     required this.phoneNumber,
     required this.countryCode,
+    required this.website,
+    required this.whatsappNumber,
   });
 
   Map<String, dynamic> toMap() {
@@ -16,6 +20,8 @@ class Contact {
       'email': email,
       'phoneNumber': phoneNumber,
       'countryCode': countryCode,
+      'website': website,
+      'whatsappNumber': whatsappNumber,
     };
   }
 
@@ -24,6 +30,8 @@ class Contact {
       email: map['email'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
       countryCode: map['countryCode'] ?? '',
+      website: map['website'] ?? '',
+      whatsappNumber: map['whatsappNumber'] ?? '',
     );
   }
 }

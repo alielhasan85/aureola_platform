@@ -9,8 +9,8 @@ class EmailField extends StatelessWidget {
   EmailField({
     super.key,
     required this.width,
-    TextEditingController? controller,
-  }) : controller = controller ?? TextEditingController();
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {

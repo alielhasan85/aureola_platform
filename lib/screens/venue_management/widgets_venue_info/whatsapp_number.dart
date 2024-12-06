@@ -1,33 +1,32 @@
+import 'package:aureola_platform/providers/lang_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WhatsappNumber extends StatefulWidget {
+class WhatsappNumber extends ConsumerStatefulWidget {
   final double width;
   final TextEditingController controller;
 
   WhatsappNumber({
     super.key,
     required this.width,
-    TextEditingController? controller,
-  }) : controller = controller ?? TextEditingController();
+    required this.controller,
+  });
 
   @override
-  State<WhatsappNumber> createState() => _WhatsappNumberState();
+  ConsumerState<WhatsappNumber> createState() => _WhatsappNumberState();
 }
 
-class _WhatsappNumberState extends State<WhatsappNumber> {
+class _WhatsappNumberState extends ConsumerState<WhatsappNumber> {
   String completeNumber = '';
 
   @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Fetch the current language code from the provider
+    final languageCode = ref.watch(languageProvider);
     return SizedBox(
       width: widget.width,
       child: Column(
@@ -41,6 +40,11 @@ class _WhatsappNumberState extends State<WhatsappNumber> {
           Directionality(
             textDirection: TextDirection.ltr,
             child: IntlPhoneField(
+              languageCode: languageCode,
+              pickerDialogStyle: PickerDialogStyle(
+                width: widget.width,
+                countryNameStyle: AppTheme.paragraph,
+              ),
               controller: widget.controller,
               style: AppTheme.paragraph,
               cursorColor: AppTheme.accent,

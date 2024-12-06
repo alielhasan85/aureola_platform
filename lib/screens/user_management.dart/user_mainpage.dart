@@ -10,6 +10,7 @@ import 'package:aureola_platform/screens/user_management.dart/widgets_user/notif
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/plan.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profile_tab.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:aureola_platform/widgest/language_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -75,6 +76,8 @@ class UserProfilePage extends ConsumerWidget {
                             style: AppTheme.appBarTitle,
                           ),
                           actions: [
+                            const LanguageSelector(),
+                            const SizedBox(width: 16),
                             IconButton(
                               icon: const Icon(Icons.close),
                               onPressed: () {

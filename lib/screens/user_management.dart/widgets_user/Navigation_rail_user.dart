@@ -1,5 +1,5 @@
-import 'package:aureola_platform/models/common/logo_icon.dart';
 import 'package:aureola_platform/providers/user_title.dart';
+import 'package:aureola_platform/widgest/logo_icon.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

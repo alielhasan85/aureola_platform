@@ -2,11 +2,18 @@ import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// venue_type_dropdown.dart
 
 class VenueTypeDropdown extends StatefulWidget {
   final double width;
-  const VenueTypeDropdown({super.key, required this.width});
+  final ValueChanged<String>? onChanged; // New callback parameter
+
+  const VenueTypeDropdown({
+    super.key,
+    required this.width,
+    this.onChanged, // Accept the callback
+  });
 
   @override
   State<VenueTypeDropdown> createState() => _VenueTypeDropdownState();
@@ -61,7 +68,6 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
               AppLocalizations.of(context)!.translate("Flower_Shop"),
               AppLocalizations.of(context)!.translate("Beauty_Salon"),
             ],
-
             // Use 'items' for static lists
             decoratorProps: DropDownDecoratorProps(
               baseStyle: AppTheme.paragraph,
@@ -70,11 +76,13 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
                     .translate("Select_Type_of_your_business"),
               ),
             ),
-
             onChanged: (String? newValue) {
               setState(() {
                 _selectedType = newValue; // Update the selected type
               });
+              if (widget.onChanged != null && newValue != null) {
+                widget.onChanged!(newValue); // Notify parent
+              }
             },
             selectedItem: _selectedType,
           ),

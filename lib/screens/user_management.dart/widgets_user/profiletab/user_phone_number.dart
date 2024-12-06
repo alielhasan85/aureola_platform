@@ -1,10 +1,13 @@
+import 'package:aureola_platform/providers/lang_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
 
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-class UserPhoneNumberField extends StatefulWidget {
+class UserPhoneNumberField extends ConsumerStatefulWidget {
   final double width;
   final TextEditingController controller;
 
@@ -15,20 +18,17 @@ class UserPhoneNumberField extends StatefulWidget {
   }) : controller = controller ?? TextEditingController();
 
   @override
-  State<UserPhoneNumberField> createState() => _UserPhoneNumberFieldState();
+  ConsumerState<UserPhoneNumberField> createState() =>
+      _UserPhoneNumberFieldState();
 }
 
-class _UserPhoneNumberFieldState extends State<UserPhoneNumberField> {
+class _UserPhoneNumberFieldState extends ConsumerState<UserPhoneNumberField> {
   String completeNumber = '';
 
   @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final languageCode = ref.watch(languageProvider);
+
     return SizedBox(
       width: widget.width,
       child: Column(
@@ -42,6 +42,12 @@ class _UserPhoneNumberFieldState extends State<UserPhoneNumberField> {
           Directionality(
             textDirection: TextDirection.ltr,
             child: IntlPhoneField(
+              languageCode: languageCode,
+              pickerDialogStyle: PickerDialogStyle(
+                width: widget.width,
+                countryNameStyle: AppTheme.paragraph,
+              ),
+              // Use the fetched language code
               controller: widget.controller,
               style: AppTheme.paragraph,
               cursorColor: AppTheme.accent,

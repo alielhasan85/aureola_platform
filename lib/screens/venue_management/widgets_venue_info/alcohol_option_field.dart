@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 
-// Enum for alcohol options
 enum AlcoholOption { yes, no }
 
 class AlcoholOptionField extends StatefulWidget {
   final double width;
+  final ValueChanged<bool>? onChanged; // new callback
 
-  const AlcoholOptionField({super.key, required this.width});
+  const AlcoholOptionField({super.key, required this.width, this.onChanged});
 
   @override
   State<AlcoholOptionField> createState() => _AlcoholOptionFieldState();
@@ -39,6 +39,9 @@ class _AlcoholOptionFieldState extends State<AlcoholOptionField> {
                   setState(() {
                     _alcoholOption = value;
                   });
+                  if (widget.onChanged != null && value != null) {
+                    widget.onChanged!(value == AlcoholOption.yes);
+                  }
                 },
               ),
               Text(
@@ -54,6 +57,9 @@ class _AlcoholOptionFieldState extends State<AlcoholOptionField> {
                   setState(() {
                     _alcoholOption = value;
                   });
+                  if (widget.onChanged != null && value != null) {
+                    widget.onChanged!(value == AlcoholOption.yes);
+                  }
                 },
               ),
               Text(

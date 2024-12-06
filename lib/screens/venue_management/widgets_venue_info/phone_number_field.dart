@@ -1,33 +1,35 @@
+// lib/screens/user_management.dart/widgets_user/profiletab/phone_number_field.dart
+
+import 'package:aureola_platform/providers/lang_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 
-class PhoneNumberField extends StatefulWidget {
+class PhoneNumberField extends ConsumerStatefulWidget {
   final double width;
   final TextEditingController controller;
 
-  PhoneNumberField({
+  const PhoneNumberField({
     super.key,
     required this.width,
-    TextEditingController? controller,
-  }) : controller = controller ?? TextEditingController();
+    required this.controller,
+  });
 
   @override
-  State<PhoneNumberField> createState() => _PhoneNumberFieldState();
+  ConsumerState<PhoneNumberField> createState() => _PhoneNumberFieldState();
 }
 
-class _PhoneNumberFieldState extends State<PhoneNumberField> {
+class _PhoneNumberFieldState extends ConsumerState<PhoneNumberField> {
   String completeNumber = '';
 
   @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Fetch the current language code from the provider
+    final languageCode = ref.watch(languageProvider);
+
     return SizedBox(
       width: widget.width,
       child: Column(
@@ -41,6 +43,11 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
           Directionality(
             textDirection: TextDirection.ltr,
             child: IntlPhoneField(
+              languageCode: languageCode, // Use the fetched language code
+              pickerDialogStyle: PickerDialogStyle(
+                width: widget.width,
+                countryNameStyle: AppTheme.paragraph,
+              ),
               controller: widget.controller,
               style: AppTheme.paragraph,
               cursorColor: AppTheme.accent,
@@ -53,7 +60,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                 setState(() {
                   completeNumber = phone.completeNumber;
                 });
-                // print(completeNumber); // Output example: +97474716942
+                // Optionally handle the complete number
               },
               dropdownTextStyle: AppTheme.paragraph,
               textAlign: TextAlign.start,
@@ -63,4 +70,6 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       ),
     );
   }
+
+  // No need to override dispose() since the controller is managed by the parent
 }
