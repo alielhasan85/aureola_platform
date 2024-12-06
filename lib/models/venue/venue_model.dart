@@ -1,7 +1,5 @@
 // venue_model.dart
 
-// venue_model.dart
-
 import 'package:aureola_platform/models/common/address.dart';
 import 'package:aureola_platform/models/common/contact.dart';
 import 'package:aureola_platform/models/venue/design_display.dart';

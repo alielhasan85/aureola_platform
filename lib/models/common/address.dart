@@ -8,12 +8,28 @@ class Address {
   final String country;
 
   Address({
-    required this.street,
-    required this.city,
-    required this.state,
-    required this.postalCode,
+    this.street = '',
+    this.city = '',
+    this.state = '',
+    this.postalCode = '',
     required this.country,
   });
+
+  Address copyWith({
+    String? street,
+    String? city,
+    String? state,
+    String? postalCode,
+    String? country,
+  }) {
+    return Address(
+      street: street ?? this.street,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      postalCode: postalCode ?? this.postalCode,
+      country: country ?? this.country,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {

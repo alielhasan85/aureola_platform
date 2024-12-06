@@ -1,7 +1,6 @@
-import 'package:aureola_platform/models/user/address.dart';
-import 'package:aureola_platform/models/user/contact.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
+import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
@@ -50,14 +49,17 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
   void initState() {
     super.initState();
     final user = ref.read(userProvider);
+    final venue = ref.read(venueProvider);
     _phoneNumberController =
-        TextEditingController(text: user?.contact.phoneNumber ?? '');
+        TextEditingController(text: venue?.contact.phoneNumber ?? '');
     _whatsAppController =
-        TextEditingController(text: user?.contact.phoneNumber ?? '');
-    _venueNameController = TextEditingController();
-    _emailController = TextEditingController();
-    _websiteController = TextEditingController();
-    _addressController = TextEditingController();
+        TextEditingController(text: venue?.contact.phoneNumber ?? '');
+    _venueNameController = TextEditingController(text: venue?.venueName ?? '');
+    _emailController = TextEditingController(text: venue?.contact.email ?? '');
+    _websiteController =
+        TextEditingController(text: venue?.contact.website ?? '');
+    _addressController =
+        TextEditingController(text: venue?.address.country ?? '');
 
     _selectedVenueType = null;
     _selectedDefaultLanguage = 'English';
@@ -94,7 +96,10 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     return Column(
       children: [
         // TODO: username dynamic from firebase
-        if (isTabletOrDesktop) HeaderContainer(userName: 'Ali Elhassan'),
+        if (isTabletOrDesktop)
+          HeaderContainer(
+            userName: 'ali el hassan',
+          ),
         Expanded(
           child: Padding(
             padding: isTabletOrDesktop
@@ -235,7 +240,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          VenueNameField(width: fieldWidth),
+          VenueNameField(width: fieldWidth, controller: _venueNameController),
           const SizedBox(height: 24),
           Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
           const SizedBox(height: 6),
@@ -255,7 +260,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                 controller: _emailController,
               ),
               SizedBox(width: spacing),
-              WebsiteFields(width: fieldWidth)
+              WebsiteFields(
+                  width: fieldWidth, websiteController: _websiteController)
             ],
           ),
           const SizedBox(height: 24),
@@ -286,6 +292,13 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           // Pickup Location Button and Map
 
           const SizedBox(height: 24),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(
+              onPressed: _handleSave,
+              child: Text(AppLocalizations.of(context)!.translate('save')),
+            ),
+          ),
         ],
       );
     }
@@ -301,7 +314,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               context: context,
               builder: (context) => MapPickerDialog(
                 initialLocation:
-                    _selectedLocation ?? LatLng(25.286106, 51.534817),
+                    _selectedLocation ?? const LatLng(25.286106, 51.534817),
                 containerWidth: containerWidth,
               ),
             );
@@ -383,7 +396,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     // Step 4: Save to Firestore
     try {
       final firestoreVenue = FirestoreVenue();
-      await firestoreVenue.addVenue(VenueModel.fromMap(updatedData, venueId));
+      await firestoreVenue.addVenue(
+          userId, VenueModel.fromMap(updatedData, venueId));
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

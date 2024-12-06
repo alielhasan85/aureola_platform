@@ -47,18 +47,22 @@ class UserNotifier extends StateNotifier<UserModel?> {
                     state!.contact.phoneNumber,
                 countryCode: updatedData['contact']['countryCode'] ??
                     state!.contact.countryCode,
-                countryDial: updatedData['contact']['countryDial'] ??
-                    state!.contact.countryDial,
+                website:
+                    updatedData['contact']['website'] ?? state!.contact.website,
+                whatsappNumber: updatedData['contact']['whatsappNumber'] ??
+                    state!.contact.whatsappNumber,
               )
             : state!.contact,
         address: updatedData['address'] != null
             ? state!.address.copyWith(
+                street:
+                    updatedData['address']['street'] ?? state!.address.street,
+                city: updatedData['address']['city'] ?? state!.address.city,
+                state: updatedData['address']['state'] ?? state!.address.state,
+                postalCode: updatedData['address']['postalCode'] ??
+                    state!.address.postalCode,
                 country:
                     updatedData['address']['country'] ?? state!.address.country,
-                state: updatedData['address']['state'] ?? state!.address.state,
-                city: updatedData['address']['city'] ?? state!.address.city,
-                addressLine: updatedData['address']['addressLine'] ??
-                    state!.address.addressLine,
               )
             : state!.address,
         subscription: updatedData['subscription'] != null
@@ -75,40 +79,6 @@ class UserNotifier extends StateNotifier<UserModel?> {
               )
             : state!.subscription,
         // Update other fields as needed
-      );
-    }
-  }
-
-  // Function to update the user's subscription
-  Future<void> updateSubscription(Subscription subscription) async {
-    if (state != null) {
-      await FirestoreUser().updateUserSubscription(state!.userId, subscription);
-      state = state!.copyWith(subscription: subscription);
-    }
-  }
-
-  // Function to update notifications preferences
-  Future<void> updateNotifications(Notifications notifications) async {
-    if (state != null) {
-      await FirestoreUser().updateUserNotificationPreferences(
-        state!.userId,
-        emailNotification: notifications.emailNotification,
-        smsNotification: notifications.smsNotification,
-      );
-      state = state!.copyWith(notifications: notifications);
-    }
-  }
-
-  // Function to record a payment
-  Future<void> recordPayment(Payment payment) async {
-    if (state != null) {
-      await FirestoreUser().recordPayment(state!.userId, payment);
-      // Update local state
-      final updatedPaymentHistory = List<Payment>.from(state!.paymentHistory)
-        ..add(payment);
-      state = state!.copyWith(
-        totalPaid: state!.totalPaid + payment.amount,
-        paymentHistory: updatedPaymentHistory,
       );
     }
   }

@@ -6,14 +6,7 @@ import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Import the languageProvider from lang_providers.dart
-import 'package:aureola_platform/providers/lang_providers.dart';
-
-import 'package:flutter/material.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
-import 'package:csc_picker/csc_picker.dart';
-import 'package:aureola_platform/service/localization/localization.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:aureola_platform/providers/lang_providers.dart';
+//import 'package:aureola_platform/providers/lang_providers.dart';
 
 class VenueAddressField extends ConsumerStatefulWidget {
   final double width;
@@ -42,7 +35,7 @@ class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
 
   @override
   Widget build(BuildContext context) {
-    final currentLanguage = ref.watch(languageProvider);
+    //final currentLanguage = ref.watch(languageProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +80,7 @@ class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
               setState(() {
                 countryValue = value;
               });
-              if (widget.onCountryChanged != null && value != null) {
+              if (widget.onCountryChanged != null) {
                 widget.onCountryChanged!(value);
               }
             },

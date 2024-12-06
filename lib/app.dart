@@ -1,6 +1,5 @@
 import 'package:aureola_platform/screens/login/auth_page.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
-import 'package:aureola_platform/screens/main_page/main_page.dart';
 import 'package:aureola_platform/providers/lang_providers.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 
@@ -92,7 +91,7 @@ class _MyAppState extends ConsumerState<MyApp> {
             color: AppTheme.white,
             fontSize: 20,
           ),
-          iconTheme: IconThemeData(
+          iconTheme: const IconThemeData(
             color: AppTheme.white,
           ),
         ),
@@ -103,21 +102,21 @@ class _MyAppState extends ConsumerState<MyApp> {
           fillColor: AppTheme.greyButton,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.0),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: AppTheme.grey2,
               width: 0.75,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.0),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: AppTheme.grey2,
               width: 0.75,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.0),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: AppTheme.accent,
               width: 0.75,
             ),
@@ -127,7 +126,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         ),
 
         // BottomNavigationBar Theme
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: AppTheme.white,
           selectedItemColor: AppTheme.primary,
           unselectedItemColor: AppTheme.grey2,

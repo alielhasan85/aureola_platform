@@ -6,7 +6,6 @@ import 'package:aureola_platform/screens/user_management.dart/widgets_user/profi
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/password_field.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/user_email_field.dart';
 import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/user_phone_number.dart';
-import 'package:aureola_platform/screens/venue_management/widgets_venue_info/phone_number_field.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';

@@ -1,9 +1,11 @@
 import 'package:aureola_platform/providers/user_provider.dart';
+import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/screens/login/email_verification.dart';
 import 'package:aureola_platform/screens/login/reset_password.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
 import 'package:aureola_platform/screens/main_page/widgets/progress_indicator.dart';
 import 'package:aureola_platform/service/firebase/auth_user.dart';
+import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,20 +39,20 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   //TODO: to delete this method
 
-  @override
-  void initState() {
-    super.initState();
-    if (kDebugMode) {
-      // Set test credentials
-      widget.emailController.text = 'elhasan.ali@gmail.com';
-      widget.passwordController.text = 'rotation';
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   if (kDebugMode) {
+  //     // Set test credentials
+  //     widget.emailController.text = 'elhasan.ali@gmail.com';
+  //     widget.passwordController.text = 'rotation';
 
-      // Automatically trigger login after the first frame
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _logIn();
-      });
-    }
-  }
+  //     // Automatically trigger login after the first frame
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       _logIn();
+  //     });
+  //   }
+  // }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -139,6 +141,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       // Fetch the user data from Firestore
       await ref.read(userProvider.notifier).fetchUser(userId);
 
+      // Fetch the list of venues associated with the user directly
+      final venueList = await FirestoreVenue().getAllVenues(userId);
+
+      if (venueList.isNotEmpty) {
+        // Set the first venue as the selected venue
+        ref.read(venueProvider.notifier).setVenue(venueList.first);
+      }
+
       if (user != null && user.emailVerified) {
         // Navigate to the MainPage
         Navigator.pushReplacement(
@@ -178,9 +188,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 // TODO: to add language selection tab, could be in the bottom
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double titleFontSize = screenWidth < 600 ? 20.0 : 30.0;
-
     return Form(
       key: widget.formKey,
       child: Column(

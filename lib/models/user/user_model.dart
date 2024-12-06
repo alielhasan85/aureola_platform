@@ -19,11 +19,11 @@ the user will have this data:
 
 */
 // user_model.dart
+import 'package:aureola_platform/models/common/address.dart';
+import 'package:aureola_platform/models/common/contact.dart';
 import 'package:aureola_platform/models/user/notification.dart';
 import 'package:aureola_platform/models/user/user_setting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'contact.dart';
-import 'address.dart';
 
 import 'payment.dart';
 import 'subscription.dart';

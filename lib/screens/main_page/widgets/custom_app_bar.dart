@@ -12,7 +12,6 @@ import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/widgest/language_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:aureola_platform/providers/lang_providers.dart';
 
 import 'package:aureola_platform/service/localization/localization.dart';
 

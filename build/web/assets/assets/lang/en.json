@@ -1,4 +1,15 @@
 {
+
+  "English": "English",
+  "Arabic": "Arabic",
+  "French": "French",
+  "Turkish": "Turkish",
+  "select_language": "Select Language",
+  "profile": "Profile",
+  "billing": "Billing",
+  "log_out": "Log Out",
+  "notifications": "Notifications",
+  
     "dashboard": "Dashboard",
     "order": "Order",
     "order_title": "Orders",

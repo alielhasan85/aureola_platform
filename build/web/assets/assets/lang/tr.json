@@ -1,4 +1,15 @@
 {
+    "English": "İngilizce",
+    "Arabic": "Arapça",
+    "French": "Fransızca",
+    "Turkish": "Türkçe",
+    "select_language": "Dil Seçiniz",
+    "profile": "Profil",
+    "billing": "Faturalama",
+    "log_out": "Çıkış Yap",
+    "notifications": "Bildirimler",
+    
+    
     "dashboard": "Gösterge Paneli",
     "order": "Sipariş",
     "menu_management": "Menü Yönetimi",

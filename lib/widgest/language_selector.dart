@@ -68,7 +68,7 @@ class LanguageSelector extends ConsumerWidget {
           //     color: AppTheme.primary,
           //   ),
           // ),
-          Icon(
+          const Icon(
             Icons.arrow_drop_down,
             color: AppTheme.primary,
           ),
