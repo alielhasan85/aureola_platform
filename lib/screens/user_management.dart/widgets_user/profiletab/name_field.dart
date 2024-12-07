@@ -7,10 +7,10 @@ class NameField extends StatelessWidget {
   final TextEditingController controller;
 
   const NameField({
-    Key? key,
+    super.key,
     required this.width,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

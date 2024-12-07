@@ -133,7 +133,7 @@ class _SignUpFormState extends State<SignUpForm> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => EmailVerificationScreen(),
+            builder: (context) => const EmailVerificationScreen(),
           ),
         );
       }
@@ -271,10 +271,6 @@ class _SignUpFormState extends State<SignUpForm> {
             width: 400,
             child: ElevatedButton(
               onPressed: _isLoading ? null : _signUp,
-              child: _isLoading
-                  ? const CircularProgressIndicator()
-                  : Text(AppLocalizations.of(context)!
-                      .translate('sign_up_button')),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.greenAccent,
                 foregroundColor: Colors.white,
@@ -282,6 +278,10 @@ class _SignUpFormState extends State<SignUpForm> {
                     horizontal: 20.0, vertical: 15.0),
                 textStyle: const TextStyle(fontSize: 16.0),
               ),
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : Text(AppLocalizations.of(context)!
+                      .translate('sign_up_button')),
             ),
           ),
           const SizedBox(height: 20.0),

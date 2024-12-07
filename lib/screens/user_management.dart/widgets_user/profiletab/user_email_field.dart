@@ -7,11 +7,11 @@ class UserEmailField extends StatelessWidget {
   final TextEditingController controller;
 
   const UserEmailField({
-    Key? key,
+    super.key,
     required this.width,
     required this.controller,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   final bool enabled;
 

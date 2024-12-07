@@ -1,11 +1,9 @@
-import 'package:aureola_platform/models/user/notification.dart';
-import 'package:aureola_platform/models/user/payment.dart';
-import 'package:aureola_platform/models/user/subscription.dart';
 import 'package:aureola_platform/models/user/user_setting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/models/user/user_model.dart';
 import 'package:aureola_platform/service/firebase/firestore_user.dart';
 
+// TODO: not sure if function are repeating here and in firebase
 class UserNotifier extends StateNotifier<UserModel?> {
   UserNotifier() : super(null);
 
@@ -43,28 +41,17 @@ class UserNotifier extends StateNotifier<UserModel?> {
         contact: updatedData['contact'] != null
             ? state!.contact.copyWith(
                 email: updatedData['contact']['email'] ?? state!.contact.email,
+                countryDial: updatedData['contact']['countryDial'] ??
+                    state!.contact.countryDial,
                 phoneNumber: updatedData['contact']['phoneNumber'] ??
                     state!.contact.phoneNumber,
-                countryCode: updatedData['contact']['countryCode'] ??
-                    state!.contact.countryCode,
+                countryName: updatedData['contact']['countryName'] ??
+                    state!.contact.countryName,
                 website:
                     updatedData['contact']['website'] ?? state!.contact.website,
-                whatsappNumber: updatedData['contact']['whatsappNumber'] ??
-                    state!.contact.whatsappNumber,
               )
             : state!.contact,
-        address: updatedData['address'] != null
-            ? state!.address.copyWith(
-                street:
-                    updatedData['address']['street'] ?? state!.address.street,
-                city: updatedData['address']['city'] ?? state!.address.city,
-                state: updatedData['address']['state'] ?? state!.address.state,
-                postalCode: updatedData['address']['postalCode'] ??
-                    state!.address.postalCode,
-                country:
-                    updatedData['address']['country'] ?? state!.address.country,
-              )
-            : state!.address,
+
         subscription: updatedData['subscription'] != null
             ? state!.subscription.copyWith(
                 type: updatedData['subscription']['type'] ??

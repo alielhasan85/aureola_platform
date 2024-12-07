@@ -6,9 +6,9 @@ class PasswordField extends StatelessWidget {
   final double width;
 
   const PasswordField({
-    Key? key,
+    super.key,
     required this.width,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

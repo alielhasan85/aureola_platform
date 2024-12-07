@@ -1,6 +1,5 @@
-// lib/screens/user_management.dart/widgets_user/profiletab/phone_number_field.dart
-
 import 'package:aureola_platform/providers/lang_providers.dart';
+import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
@@ -10,12 +9,10 @@ import 'package:aureola_platform/service/theme/theme.dart';
 
 class PhoneNumberField extends ConsumerStatefulWidget {
   final double width;
-  final TextEditingController controller;
 
   const PhoneNumberField({
     super.key,
     required this.width,
-    required this.controller,
   });
 
   @override
@@ -23,12 +20,32 @@ class PhoneNumberField extends ConsumerStatefulWidget {
 }
 
 class _PhoneNumberFieldState extends ConsumerState<PhoneNumberField> {
-  String completeNumber = '';
+  late TextEditingController _phoneController;
+
+  @override
+  void initState() {
+    super.initState();
+    final venue = ref.read(venueProvider);
+    final phoneNumber = venue?.contact.phoneNumber ?? '';
+    _phoneController = TextEditingController(text: phoneNumber);
+  }
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Fetch the current language code from the provider
     final languageCode = ref.watch(languageProvider);
+    final venue = ref.watch(venueProvider);
+
+    // Determine initial country code
+    final initialCountryCode =
+        (venue != null && venue.contact.countryCode.isNotEmpty)
+            ? venue.contact.countryCode
+            : 'US';
 
     return SizedBox(
       width: widget.width,
@@ -40,27 +57,38 @@ class _PhoneNumberFieldState extends ConsumerState<PhoneNumberField> {
             style: AppTheme.paragraph,
           ),
           const SizedBox(height: 6),
+          // Remove explicit Directionality unless truly needed
           Directionality(
             textDirection: TextDirection.ltr,
             child: IntlPhoneField(
-              languageCode: languageCode, // Use the fetched language code
+              languageCode: languageCode,
               pickerDialogStyle: PickerDialogStyle(
                 width: widget.width,
                 countryNameStyle: AppTheme.paragraph,
               ),
-              controller: widget.controller,
+              controller: _phoneController,
               style: AppTheme.paragraph,
               cursorColor: AppTheme.accent,
               decoration: AppTheme.textFieldinputDecoration(
                 hint: AppLocalizations.of(context)!
                     .translate("enter_phone_number"),
               ),
-              initialCountryCode: 'QA',
+              initialCountryCode: initialCountryCode,
               onChanged: (phone) {
-                setState(() {
-                  completeNumber = phone.completeNumber;
-                });
-                // Optionally handle the complete number
+                ref
+                    .read(venueProvider.notifier)
+                    .updateContactPhoneNumber(phone.number);
+                ref
+                    .read(venueProvider.notifier)
+                    .updateContactCountryDial(phone.countryCode);
+              },
+              onCountryChanged: (country) {
+                ref
+                    .read(venueProvider.notifier)
+                    .updateContactCountryName(country.name);
+                ref
+                    .read(venueProvider.notifier)
+                    .updateContactCountryCode(country.code);
               },
               dropdownTextStyle: AppTheme.paragraph,
               textAlign: TextAlign.start,
@@ -70,6 +98,4 @@ class _PhoneNumberFieldState extends ConsumerState<PhoneNumberField> {
       ),
     );
   }
-
-  // No need to override dispose() since the controller is managed by the parent
 }

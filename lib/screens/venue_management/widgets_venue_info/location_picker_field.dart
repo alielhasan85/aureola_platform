@@ -1,13 +1,15 @@
 // location_picker_field.dart
 
 import 'package:aureola_platform/providers/lang_providers.dart';
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPickerField extends ConsumerStatefulWidget {
   final double width;
@@ -127,7 +129,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
       '/maps/api/staticmap',
       {
         'center': '$lat,$lng',
-        'zoom': '17',
+        'zoom': '15',
         'size': '600x300',
         'maptype': 'roadmap',
         'markers': 'color:red|$lat,$lng', // Corrected line
@@ -145,32 +147,39 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
         'https://nominatim.openstreetmap.org/reverse?format=jsonv2'
         '&lat=${location.latitude}'
         '&lon=${location.longitude}'
-        '&accept-language=$language', // Use the language parameter
+        '&accept-language=$language',
       );
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        print(data);
+
         if (data['display_name'] != null) {
           setState(() {
             _selectedAddress = data['display_name'];
           });
+
+          ref.read(venueProvider.notifier).updateAddress(
+                location: location,
+                displayAddress: data.display_name,
+                street: data.address['road'] ?? '',
+                city: data.address['city'] ?? '',
+                state: data.address['state'] ?? '',
+                postalCode: data.address['postcode'] ?? '',
+                country: data.address['country'] ?? '',
+              );
         } else {
           setState(() {
             _selectedAddress = '${location.latitude}, ${location.longitude}';
           });
         }
-      } else {
-        //print('Error in reverse geocoding: ${response.statusCode}');
-        setState(() {
-          _selectedAddress = '${location.latitude}, ${location.longitude}';
-        });
       }
     } catch (e) {
       // print('Error in reverse geocoding: $e');
-      setState(() {
-        _selectedAddress = '${location.latitude}, ${location.longitude}';
-      });
+      // setState(() {
+      //   _selectedAddress = '${location.latitude}, ${location.longitude}';
+      // });
     }
   }
 }

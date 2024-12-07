@@ -7,10 +7,10 @@ class BusinessNameField extends StatelessWidget {
   final TextEditingController controller;
 
   const BusinessNameField({
-    Key? key,
+    super.key,
     required this.width,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

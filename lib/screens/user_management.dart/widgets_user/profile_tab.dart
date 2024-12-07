@@ -131,7 +131,7 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
                   ),
 
                   const SizedBox(height: 20),
-                  PasswordField(width: double.infinity),
+                  const PasswordField(width: double.infinity),
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {

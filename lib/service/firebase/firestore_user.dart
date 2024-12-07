@@ -1,4 +1,4 @@
-import 'package:aureola_platform/models/user/subscription.dart';
+import 'package:aureola_platform/models/common/subscription.dart';
 import 'package:aureola_platform/models/user/user_setting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aureola_platform/models/user/user_model.dart';

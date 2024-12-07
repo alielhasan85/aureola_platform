@@ -7,27 +7,13 @@ import 'package:aureola_platform/screens/main_page/main_page.dart';
 import 'package:aureola_platform/service/firebase/firestore_user.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-import 'package:aureola_platform/models/user/subscription.dart';
+import 'package:aureola_platform/models/common/subscription.dart';
 
-// sign_up_user_data.dart
-
-import 'package:aureola_platform/models/common/contact.dart';
-import 'package:aureola_platform/models/user/user_model.dart';
-import 'package:aureola_platform/models/venue/venue_model.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
-import 'package:aureola_platform/providers/venue_provider.dart'; // New import
-import 'package:aureola_platform/screens/main_page/main_page.dart';
-import 'package:aureola_platform/service/firebase/firestore_user.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:aureola_platform/models/user/subscription.dart';
+import 'package:aureola_platform/providers/venue_provider.dart';
 
 class SignUpUserData extends ConsumerStatefulWidget {
   final String userId;
@@ -45,7 +31,7 @@ class SignUpUserData extends ConsumerStatefulWidget {
 
 class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
   // Controllers for user inputs
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameUserController = TextEditingController();
   final TextEditingController _businessController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _countryCodeController =
@@ -59,7 +45,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
   bool _isLoading = false;
 
   final FirestoreUser _firestoreUser = FirestoreUser(); // Firestore instance
-  final FirestoreVenue _firestoreVenue = FirestoreVenue(); // Firestore instance
+  // final FirestoreVenue _firestoreVenue = FirestoreVenue(); // Firestore instance
 
   Future<void> _submitInfo() async {
     if (_formKey.currentState!.validate()) {
@@ -75,17 +61,17 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
         String countryName = _countryNameController.text.trim();
 
         // Construct full phone number with dial code
-        String fullPhoneNumber = '$countryDial$phoneNumber';
 
         // Check if the email or phone number already exists
         bool userExists = await _firestoreUser.checkIfUserExists(
           email: widget.email,
-          phoneNumber: fullPhoneNumber,
+          phoneNumber: phoneNumber,
         );
 
         if (userExists) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              //TODO: change to localization
               content: Text(
                 'This email or phone number is already associated with an account. Please use different credentials.',
               ),
@@ -99,11 +85,11 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
 
         // Create Contact object
         Contact contact = Contact(
-          email: widget.email,
-          phoneNumber: fullPhoneNumber, // Store full phone number if preferred
-          countryCode: countryCode,
-          // Optional fields are left as default ''
-        );
+            email: widget.email,
+            phoneNumber: phoneNumber,
+            countryDial: countryDial,
+            countryName: countryName,
+            countryCode: countryCode);
 
         // Initialize default subscription (e.g., free trial)
         Subscription subscription = Subscription(
@@ -116,10 +102,8 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
         // Create UserModel with the provided information
         UserModel user = UserModel(
           userId: widget.userId,
-          name: _nameController.text.trim(),
+          name: _nameUserController.text.trim(),
           contact: contact,
-          address:
-              Address(country: countryName), // Minimal address with country
           businessName: _businessController.text.trim(),
           subscription: subscription,
         );
@@ -129,11 +113,14 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
 
         // Create Contact object for Venue
         Contact venueContact = Contact(
-          email: user.contact.email,
-          phoneNumber: user.contact.phoneNumber,
-          countryCode: user.contact.countryCode,
-          // Optional fields left as default ''
-        );
+            email: user.contact.email,
+            phoneNumber: user.contact.phoneNumber,
+            countryDial: user.contact.countryDial,
+            countryName: countryName,
+            countryCode: countryCode
+
+            // Optional fields left as default ''
+            );
 
         // Create Address object for Venue with empty fields
         Address venueAddress = Address(
@@ -178,7 +165,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
         );
       } catch (e) {
         // Log the error if needed
-        print('Error during signup: $e');
+        // print('Error during signup: $e');
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -196,7 +183,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
   @override
   void dispose() {
     // Dispose controllers to free resources
-    _nameController.dispose();
+    _nameUserController.dispose();
     _businessController.dispose();
     _phoneController.dispose();
     _countryCodeController.dispose();
@@ -257,7 +244,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                         ),
                         const SizedBox(height: 5.0),
                         TextFormField(
-                          controller: _nameController,
+                          controller: _nameUserController,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'Enter your name',

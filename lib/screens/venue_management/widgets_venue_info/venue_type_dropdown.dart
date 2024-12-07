@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 
 class VenueTypeDropdown extends StatefulWidget {
   final double width;
-  final ValueChanged<String>? onChanged; // New callback parameter
+  final String initialValue;
+  final ValueChanged<String>? onChanged;
 
   const VenueTypeDropdown({
     super.key,
     required this.width,
-    this.onChanged, // Accept the callback
+    this.initialValue = 'Select a Type', // A default fallback
+    this.onChanged,
   });
 
   @override
@@ -21,6 +23,13 @@ class VenueTypeDropdown extends StatefulWidget {
 
 class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
   String? _selectedType;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize _selectedType with the passed initialValue
+    _selectedType = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +77,6 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
               AppLocalizations.of(context)!.translate("Flower_Shop"),
               AppLocalizations.of(context)!.translate("Beauty_Salon"),
             ],
-            // Use 'items' for static lists
             decoratorProps: DropDownDecoratorProps(
               baseStyle: AppTheme.paragraph,
               decoration: AppTheme.textFieldinputDecoration(
@@ -78,10 +86,10 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
             ),
             onChanged: (String? newValue) {
               setState(() {
-                _selectedType = newValue; // Update the selected type
+                _selectedType = newValue;
               });
               if (widget.onChanged != null && newValue != null) {
-                widget.onChanged!(newValue); // Notify parent
+                widget.onChanged!(newValue);
               }
             },
             selectedItem: _selectedType,

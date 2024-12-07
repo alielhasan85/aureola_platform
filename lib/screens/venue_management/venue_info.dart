@@ -1,6 +1,6 @@
-import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/providers/venue_provider.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/address_field.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
@@ -12,12 +12,11 @@ import 'package:aureola_platform/screens/venue_management/widgets_venue_info/ven
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/alcohol_option_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/default_language_dropdown.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/phone_number_field.dart';
-import 'package:aureola_platform/screens/venue_management/widgets_venue_info/address_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/name_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/website_fields.dart';
-import 'package:aureola_platform/screens/venue_management/widgets_venue_info/whatsapp_number.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -30,46 +29,61 @@ class VenueInfo extends ConsumerStatefulWidget {
 }
 
 class _VenueInfoState extends ConsumerState<VenueInfo> {
-  late TextEditingController _phoneNumberController;
-  late TextEditingController _whatsAppController;
+  // 1 venue name
   late TextEditingController _venueNameController;
+
   late TextEditingController _emailController;
   late TextEditingController _websiteController;
-  late TextEditingController _addressController; // For detailed address
+  late TextEditingController _addressController;
 
   String? _selectedVenueType;
   String? _selectedDefaultLanguage;
   bool? _alcoholOption;
-  String? _country;
-  String? _state;
-  String? _city;
+
   LatLng? _selectedLocation;
 
   @override
   void initState() {
     super.initState();
-    final user = ref.read(userProvider);
-    final venue = ref.read(venueProvider);
-    _phoneNumberController =
-        TextEditingController(text: venue?.contact.phoneNumber ?? '');
-    _whatsAppController =
-        TextEditingController(text: venue?.contact.phoneNumber ?? '');
-    _venueNameController = TextEditingController(text: venue?.venueName ?? '');
-    _emailController = TextEditingController(text: venue?.contact.email ?? '');
-    _websiteController =
-        TextEditingController(text: venue?.contact.website ?? '');
-    _addressController =
-        TextEditingController(text: venue?.address.country ?? '');
 
-    _selectedVenueType = null;
-    _selectedDefaultLanguage = 'English';
-    _alcoholOption = false;
+    final venue = ref.read(venueProvider);
+    if (venue != null) {
+//initialize name from provider of venue
+      _venueNameController = TextEditingController(text: venue.venueName);
+
+      _emailController = TextEditingController(text: venue.contact.email);
+      _websiteController = TextEditingController(text: venue.contact.website);
+      _addressController =
+          TextEditingController(text: venue.address.displayAddress);
+
+      _selectedVenueType =
+          venue.additionalInfo?['venueType'] ?? 'Select a Type';
+
+      _selectedDefaultLanguage = (venue.languageOptions.isNotEmpty)
+          ? venue.languageOptions.first
+          : 'English';
+      _selectedVenueType = venue.additionalInfo?['venueType'] ??
+          AppLocalizations.of(context)!
+              .translate("Select_Type_of_your_business");
+
+      _alcoholOption = venue.additionalInfo?['sellAlcohol'] ?? false;
+
+      _selectedLocation = venue.additionalInfo?['location'] != null
+          ? LatLng(
+              venue.additionalInfo!['location']['latitude'],
+              venue.additionalInfo!['location']['longitude'],
+            )
+          : null;
+    } else {
+      _venueNameController = TextEditingController();
+      _emailController = TextEditingController();
+      _websiteController = TextEditingController();
+      _addressController = TextEditingController();
+    }
   }
 
   @override
   void dispose() {
-    _phoneNumberController.dispose();
-    _whatsAppController.dispose();
     _venueNameController.dispose();
     _emailController.dispose();
     _websiteController.dispose();
@@ -79,6 +93,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.read(userProvider);
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Determine container width based on breakpoints
@@ -95,10 +110,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
     return Column(
       children: [
-        // TODO: username dynamic from firebase
         if (isTabletOrDesktop)
           HeaderContainer(
-            userName: 'ali el hassan',
+            userName: user!.name,
           ),
         Expanded(
           child: Padding(
@@ -196,7 +210,17 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 16),
           VenueTypeDropdown(
             width: fieldWidth,
-            onChanged: (val) => setState(() => _selectedVenueType = val),
+            initialValue: _selectedVenueType ??
+                AppLocalizations.of(context)!
+                    .translate("Select_Type_of_your_business"),
+            onChanged: (val) {
+              setState(() {
+                _selectedVenueType = val; // Update local state
+              });
+              ref
+                  .read(venueProvider.notifier)
+                  .updateVenueType(val); // Update notifier
+            },
           ),
           const SizedBox(height: 16),
           AlcoholOptionField(
@@ -214,18 +238,14 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 16),
           EmailField(width: fieldWidth, controller: _emailController),
           const SizedBox(height: 16),
-          PhoneNumberField(
-              width: fieldWidth, controller: _phoneNumberController),
+          PhoneNumberField(width: fieldWidth),
+          const SizedBox(height: 16),
+          _buildPickupLocationSection(containerWidth),
           const SizedBox(height: 16),
           VenueAddressField(
             width: fieldWidth,
             addressController: _addressController,
-            onCountryChanged: (val) => _country = val,
-            onStateChanged: (val) => _state = val,
-            onCityChanged: (val) => _city = val,
           ),
-          const SizedBox(height: 16),
-          _buildPickupLocationSection(containerWidth),
           const SizedBox(height: 24),
           Align(
             alignment: Alignment.centerRight,
@@ -246,10 +266,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 6),
           Row(
             children: [
-              PhoneNumberField(
-                  width: fieldWidth, controller: _phoneNumberController),
+              PhoneNumberField(width: fieldWidth),
               SizedBox(width: spacing),
-              WhatsappNumber(width: fieldWidth, controller: _whatsAppController)
             ],
           ),
           const SizedBox(height: 12),
@@ -269,7 +287,20 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 6),
           Row(
             children: [
-              VenueTypeDropdown(width: fieldWidth),
+              VenueTypeDropdown(
+                width: fieldWidth,
+                initialValue: _selectedVenueType ??
+                    AppLocalizations.of(context)!
+                        .translate("Select_Type_of_your_business"),
+                onChanged: (val) {
+                  setState(() {
+                    _selectedVenueType = val; // Update local state
+                  });
+                  ref
+                      .read(venueProvider.notifier)
+                      .updateVenueType(val); // Update notifier
+                },
+              ),
               SizedBox(width: spacing),
               DefaultLanguageDropdown(width: fieldWidth),
             ],
@@ -284,13 +315,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           VenueAddressField(
             width: fieldWidth,
             addressController: _addressController,
-            onCountryChanged: (val) => _country = val,
-            onStateChanged: (val) => _state = val,
-            onCityChanged: (val) => _city = val,
           ),
-
-          // Pickup Location Button and Map
-
           const SizedBox(height: 24),
           Align(
             alignment: Alignment.centerRight,
@@ -342,9 +367,15 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     );
   }
 
-// venue_info.dart
-
   void _handleSave() async {
+    print("Venue Name: ${_venueNameController.text}");
+    print("Venue Type: $_selectedVenueType");
+    print("Default Language: $_selectedDefaultLanguage");
+    print("Address: ${_addressController.text}");
+    print("Email: ${_emailController.text}");
+    print("Location: $_selectedLocation");
+
+    print(ref.read(venueProvider));
     // Step 1: Validate Required Fields
     if (_venueNameController.text.isEmpty ||
         _selectedVenueType == null ||
@@ -352,8 +383,10 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
         _addressController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .translate('please_fill_all_required_fields')),
+          content: Text(
+            AppLocalizations.of(context)!
+                .translate('please_fill_all_required_fields'),
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -361,58 +394,92 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     }
 
     final user = ref.read(userProvider);
+    final venue = ref.read(venueProvider);
 
-    // Step 2: Identify the Venue ID
-    // If adding a new venue, generate a unique ID
-    // If updating an existing venue, retrieve the venueId appropriately
-    final venueId = FirebaseFirestore.instance.collection('venues').doc().id;
-    final userId = user?.userId ?? 'anonymousUser';
-
-    // Step 3: Construct the Partial Data Map
-    Map<String, dynamic> updatedData = {
-      'venueId': venueId,
-      'venueName': _venueNameController.text,
-      'userId': userId,
-      'address': {
-        'street': _addressController.text,
-        'city': _city ?? '',
-        'state': _state ?? '',
-        'postalCode': '', // Assign default or collect if available
-        'country': _country ?? '',
-      },
-      'contact': {
-        'email': _emailController.text,
-        'phoneNumber': _phoneNumberController.text,
-        'countryCode': '', // Assign default or derive from country if available
-        'website': _websiteController.text,
-        'whatsappNumber': _whatsAppController.text,
-      },
-      'languageOptions': [_selectedDefaultLanguage ?? 'English'],
-      'venueType': _selectedVenueType,
-      'alcoholOption': _alcoholOption,
-      // Add other fields as necessary
-    };
-
-    // Step 4: Save to Firestore
-    try {
-      final firestoreVenue = FirestoreVenue();
-      await firestoreVenue.addVenue(
-          userId, VenueModel.fromMap(updatedData, venueId));
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .translate('changes_saved_successfully')),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      // Optionally, reset the form or navigate away
-    } catch (e) {
+    if (user == null || venue == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              '${AppLocalizations.of(context)!.translate('save_failed')}: $e'),
+            AppLocalizations.of(context)!.translate('unable_to_save'),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    try {
+      // Step 2: Update the Venue Provider
+      ref.read(venueProvider.notifier).updateAddress(
+            street: _addressController.text.trim(),
+            displayAddress: _addressController.text.trim(),
+            city: venue.address.city,
+            state: venue.address.state,
+            postalCode: venue.address.postalCode,
+            country: venue.address.country,
+            location: _selectedLocation,
+          );
+
+      ref.read(venueProvider.notifier).setVenue(
+            venue.copyWith(
+              venueName: _venueNameController.text.trim(),
+              contact: venue.contact.copyWith(
+                email: _emailController.text.trim(),
+                website: _websiteController.text.trim(),
+              ),
+              additionalInfo: {
+                ...?venue.additionalInfo,
+                'venueType': _selectedVenueType,
+                'sellAlcohol': _alcoholOption,
+                'location': _selectedLocation != null
+                    ? {
+                        'latitude': _selectedLocation!.latitude,
+                        'longitude': _selectedLocation!.longitude,
+                      }
+                    : null,
+              },
+              languageOptions: [_selectedDefaultLanguage!],
+            ),
+          );
+
+      // Step 3: Save Changes to Firestore
+      await FirestoreVenue().updateVenue(
+        user.userId,
+        venue.venueId,
+        {
+          'venueName': _venueNameController.text.trim(),
+          'contact.email': _emailController.text.trim(),
+          'contact.website': _websiteController.text.trim(),
+          'address.street': _addressController.text.trim(),
+          'address.displayAddress': _addressController.text.trim(),
+          'additionalInfo.venueType': _selectedVenueType,
+          'additionalInfo.sellAlcohol': _alcoholOption,
+          if (_selectedLocation != null)
+            'additionalInfo.location': {
+              'latitude': _selectedLocation!.latitude,
+              'longitude': _selectedLocation!.longitude,
+            },
+          'languageOptions': [_selectedDefaultLanguage!],
+        },
+      );
+
+      // Step 4: Show Success Message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!
+                .translate('changes_saved_successfully'),
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      // Step 5: Handle Errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '${AppLocalizations.of(context)!.translate('save_failed')}: $e',
+          ),
           backgroundColor: Colors.red,
         ),
       );

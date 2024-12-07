@@ -26,14 +26,13 @@ import 'package:aureola_platform/models/user/user_setting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'payment.dart';
-import 'subscription.dart';
+import '../common/subscription.dart';
 
 class UserModel {
   final String userId;
   final String name;
   final String jobTitle;
   final Contact contact;
-  final Address address;
   final String businessName;
   final Notifications notifications;
   final List<String> staff;
@@ -51,7 +50,6 @@ class UserModel {
     required this.userId,
     required this.name,
     required this.contact,
-    required this.address,
     required this.businessName,
     this.jobTitle = '',
     this.notifications = const Notifications(),
@@ -90,7 +88,6 @@ class UserModel {
       name: name ?? this.name,
       jobTitle: jobTitle ?? this.jobTitle,
       contact: contact ?? this.contact,
-      address: address ?? this.address,
       businessName: businessName ?? this.businessName,
       notifications: notifications ?? this.notifications,
       staff: staff ?? this.staff,
@@ -112,7 +109,6 @@ class UserModel {
       'name': name,
       'jobTitle': jobTitle,
       'contact': contact.toMap(),
-      'address': address.toMap(),
       'businessName': businessName,
       'notifications': notifications.toMap(),
       'staff': staff,
@@ -134,7 +130,6 @@ class UserModel {
       name: map['name'] ?? '',
       jobTitle: map['jobTitle'] ?? '',
       contact: Contact.fromMap(map['contact'] ?? {}),
-      address: Address.fromMap(map['address'] ?? {}),
       businessName: map['businessName'] ?? '',
       notifications: Notifications.fromMap(map['notifications'] ?? {}),
       staff: List<String>.from(map['staff'] ?? []),
