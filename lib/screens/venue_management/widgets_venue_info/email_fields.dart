@@ -6,7 +6,7 @@ class EmailField extends StatelessWidget {
   final double width;
   final TextEditingController controller;
 
-  EmailField({
+  const EmailField({
     super.key,
     required this.width,
     required this.controller,

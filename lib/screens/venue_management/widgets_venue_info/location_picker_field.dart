@@ -39,6 +39,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
   @override
   void initState() {
     super.initState();
+    //TODO : to check if we can get address from GPS
     // Initialize with the selected location or default location (e.g., Doha, Qatar)
     _selectedLatLng =
         widget.selectedLocation ?? const LatLng(25.286106, 51.534817);
@@ -162,12 +163,12 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
 
           ref.read(venueProvider.notifier).updateAddress(
                 location: location,
-                displayAddress: data.display_name,
-                street: data.address['road'] ?? '',
-                city: data.address['city'] ?? '',
-                state: data.address['state'] ?? '',
-                postalCode: data.address['postcode'] ?? '',
-                country: data.address['country'] ?? '',
+                displayAddress: data['display_name'],
+                street: data['address']['road'] ?? '',
+                city: data['address']['city'] ?? '',
+                state: data['address']['state'] ?? '',
+                postalCode: data['address']['postcode'] ?? '',
+                country: data['address']['country'] ?? '',
               );
         } else {
           setState(() {

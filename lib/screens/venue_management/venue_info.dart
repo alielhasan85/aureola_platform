@@ -229,9 +229,14 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           ),
           const SizedBox(height: 16),
           DefaultLanguageDropdown(
-            width: fieldWidth,
-            onChanged: (val) => setState(() => _selectedDefaultLanguage = val),
-          ),
+              width: fieldWidth,
+              initialLanguage: _selectedDefaultLanguage ??
+                  AppLocalizations.of(context)!
+                      .translate("Select_Type_of_your_business"),
+              onChanged: (val) {
+                setState(() => _selectedDefaultLanguage = val);
+                ref.read(venueProvider.notifier).updateDefaultLanguage(val);
+              }),
           const SizedBox(height: 16),
           WebsiteFields(
               width: fieldWidth, websiteController: _websiteController),
@@ -410,37 +415,37 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
     try {
       // Step 2: Update the Venue Provider
-      ref.read(venueProvider.notifier).updateAddress(
-            street: _addressController.text.trim(),
-            displayAddress: _addressController.text.trim(),
-            city: venue.address.city,
-            state: venue.address.state,
-            postalCode: venue.address.postalCode,
-            country: venue.address.country,
-            location: _selectedLocation,
-          );
+      // ref.read(venueProvider.notifier).updateAddress(
+      //       street: _addressController.text.trim(),
+      //       displayAddress: _addressController.text.trim(),
+      //       city: venue.address.city,
+      //       state: venue.address.state,
+      //       postalCode: venue.address.postalCode,
+      //       country: venue.address.country,
+      //       location: _selectedLocation,
+      //     );
 
-      ref.read(venueProvider.notifier).setVenue(
-            venue.copyWith(
-              venueName: _venueNameController.text.trim(),
-              contact: venue.contact.copyWith(
-                email: _emailController.text.trim(),
-                website: _websiteController.text.trim(),
-              ),
-              additionalInfo: {
-                ...?venue.additionalInfo,
-                'venueType': _selectedVenueType,
-                'sellAlcohol': _alcoholOption,
-                'location': _selectedLocation != null
-                    ? {
-                        'latitude': _selectedLocation!.latitude,
-                        'longitude': _selectedLocation!.longitude,
-                      }
-                    : null,
-              },
-              languageOptions: [_selectedDefaultLanguage!],
-            ),
-          );
+      // ref.read(venueProvider.notifier).setVenue(
+      //       venue.copyWith(
+      //         venueName: _venueNameController.text.trim(),
+      //         contact: venue.contact.copyWith(
+      //           email: _emailController.text.trim(),
+      //           website: _websiteController.text.trim(),
+      //         ),
+      //         additionalInfo: {
+      //           ...?venue.additionalInfo,
+      //           'venueType': _selectedVenueType,
+      //           'sellAlcohol': _alcoholOption,
+      //           'location': _selectedLocation != null
+      //               ? {
+      //                   'latitude': _selectedLocation!.latitude,
+      //                   'longitude': _selectedLocation!.longitude,
+      //                 }
+      //               : null,
+      //         },
+      //         languageOptions: [_selectedDefaultLanguage!],
+      //       ),
+      //     );
 
       // Step 3: Save Changes to Firestore
       await FirestoreVenue().updateVenue(
@@ -450,8 +455,14 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           'venueName': _venueNameController.text.trim(),
           'contact.email': _emailController.text.trim(),
           'contact.website': _websiteController.text.trim(),
-          'address.street': _addressController.text.trim(),
-          'address.displayAddress': _addressController.text.trim(),
+          'address.street': venue.address.street,
+          'address.city': venue.address.city,
+          'address.state': venue.address.state,
+          'address.postalCode': venue.address.postalCode,
+          'address.country': venue.address.country,
+          'address.displayAddress': venue.address.displayAddress,
+          'address.location.latitude': venue.address.location.latitude,
+          'address.location.longitude': venue.address.location.longitude,
           'additionalInfo.venueType': _selectedVenueType,
           'additionalInfo.sellAlcohol': _alcoholOption,
           if (_selectedLocation != null)

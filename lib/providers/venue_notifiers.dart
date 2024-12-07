@@ -35,6 +35,18 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
       state = state!.copyWith(additionalInfo: updatedInfo);
     }
   }
+
+// Update venue type in additionalInfo
+  void updateDefaultLanguage(String defaultLanguage) {
+    if (state != null) {
+      final updatedInfo = {
+        ...?state!.additionalInfo,
+        'defaultLanguage': defaultLanguage,
+      };
+      state = state!.copyWith(additionalInfo: updatedInfo);
+    }
+  }
+
   // void updateDesignAndDisplay(String key, String value) {
   //   if (state != null) {
   //     final updatedDesignAndDisplay = {...state!.designAndDisplay, key: value};
@@ -93,12 +105,12 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
 
   // Update specific parts of the address
   void updateAddress({
+    String? displayAddress,
     String? street,
     String? city,
     String? state,
     String? postalCode,
     String? country,
-    String? displayAddress,
     LatLng? location,
   }) {
     if (state != null) {
@@ -116,25 +128,7 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  void updateAdditionalInfo({
-    String? venueType,
-    bool? sellAlcohol,
-    LatLng? location,
-  }) {
-    if (state != null) {
-      final updatedInfo = {
-        ...?state!.additionalInfo,
-        if (venueType != null) 'venueType': venueType,
-        if (sellAlcohol != null) 'sellAlcohol': sellAlcohol,
-        if (location != null)
-          'location': {
-            'latitude': location.latitude,
-            'longitude': location.longitude,
-          },
-      };
-      state = state!.copyWith(additionalInfo: updatedInfo);
-    }
-  }
+  //
 
   void updateVenueName(String venueName) {
     if (state != null) {

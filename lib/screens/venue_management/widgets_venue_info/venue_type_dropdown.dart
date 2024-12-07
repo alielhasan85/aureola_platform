@@ -13,7 +13,7 @@ class VenueTypeDropdown extends StatefulWidget {
   const VenueTypeDropdown({
     super.key,
     required this.width,
-    this.initialValue = 'Select a Type', // A default fallback
+    this.initialValue = '',
     this.onChanged,
   });
 
@@ -45,11 +45,15 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
           const SizedBox(height: 6),
           DropdownSearch<String>(
             popupProps: PopupProps.menu(
+              fit: FlexFit.loose,
               menuProps: const MenuProps(
                 backgroundColor: AppTheme.background,
                 margin: EdgeInsets.only(top: 12),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12))),
+              ),
+              constraints: BoxConstraints(
+                maxWidth: widget.width,
               ),
               itemBuilder: (context, item, isDisabled, isSelected) {
                 return Padding(

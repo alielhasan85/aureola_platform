@@ -3,25 +3,31 @@ import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aureola_platform/service/localization/localization.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
-
 class DefaultLanguageDropdown extends StatefulWidget {
   final double width;
+  final String initialLanguage;
   final ValueChanged<String>? onChanged; // new callback
 
   const DefaultLanguageDropdown(
-      {super.key, required this.width, this.onChanged});
+      {super.key,
+      this.initialLanguage = 'english',
+      required this.width,
+      this.onChanged});
 
   @override
-  _DefaultLanguageDropdownState createState() =>
+  State<DefaultLanguageDropdown> createState() =>
       _DefaultLanguageDropdownState();
 }
 
 class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
   String? _selectedLanguage;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize _selectedType with the passed initialValue
+    _selectedLanguage = widget.initialLanguage;
+  }
 
   @override
   Widget build(BuildContext context) {

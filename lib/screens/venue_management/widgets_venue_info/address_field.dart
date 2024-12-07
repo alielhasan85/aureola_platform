@@ -26,14 +26,10 @@ class VenueAddressField extends ConsumerStatefulWidget {
   });
 
   @override
-  _VenueAddressFieldState createState() => _VenueAddressFieldState();
+  ConsumerState<VenueAddressField> createState() => _VenueAddressFieldState();
 }
 
 class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
-  // String? countryValue = "";
-  // String? stateValue = "";
-  // String? cityValue = "";
-
   @override
   Widget build(BuildContext context) {
     //final currentLanguage = ref.watch(languageProvider);
