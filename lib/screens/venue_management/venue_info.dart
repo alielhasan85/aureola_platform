@@ -223,7 +223,11 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 16),
           AlcoholOptionField(
             width: fieldWidth,
-            onChanged: (val) => setState(() => _alcoholOption = val),
+            initialValue: _alcoholOption ?? false,
+            onChanged: (val) {
+              setState(() => _alcoholOption = val);
+              ref.read(venueProvider.notifier).updateSellAlcohol(val);
+            },
           ),
           const SizedBox(height: 16),
           DefaultLanguageDropdown(
@@ -317,7 +321,14 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             ],
           ),
           const SizedBox(height: 12),
-          AlcoholOptionField(width: fieldWidth),
+          AlcoholOptionField(
+            width: fieldWidth,
+            initialValue: _alcoholOption ?? false,
+            onChanged: (val) {
+              setState(() => _alcoholOption = val);
+              ref.read(venueProvider.notifier).updateSellAlcohol(val);
+            },
+          ),
           const SizedBox(height: 24),
           Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
           const SizedBox(height: 6),

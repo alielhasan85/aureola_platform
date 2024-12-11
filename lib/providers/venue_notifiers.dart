@@ -25,6 +25,17 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
+// Update venue type in additionalInfo
+  void updateSellAlcohol(bool sellAlcohol) {
+    if (state != null) {
+      final updatedInfo = {
+        ...?state!.additionalInfo,
+        'sellAlcohol': sellAlcohol,
+      };
+      state = state!.copyWith(additionalInfo: updatedInfo);
+    }
+  }
+
   // Update venue type in additionalInfo
   void updateVenueType(String venueType) {
     if (state != null) {

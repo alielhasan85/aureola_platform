@@ -67,8 +67,8 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
                   ),
                   child: Text(
                     AppLocalizations.of(context)!.translate(item),
-                    style: AppTheme.paragraph
-                        .copyWith(fontStyle: FontStyle.italic),
+                    style:
+                        AppTheme.paragraph.copyWith(color: AppTheme.secondary),
                     textAlign: TextAlign.start,
                   ),
                 );

@@ -6,16 +6,31 @@ enum AlcoholOption { yes, no }
 
 class AlcoholOptionField extends StatefulWidget {
   final double width;
-  final ValueChanged<bool>? onChanged; // new callback
+  final ValueChanged<bool>? onChanged;
 
-  const AlcoholOptionField({super.key, required this.width, this.onChanged});
+  // Add an optional parameter to accept the initial alcohol setting.
+  final bool initialValue;
+
+  const AlcoholOptionField({
+    super.key,
+    required this.width,
+    this.onChanged,
+    this.initialValue = false, // default to false if not provided
+  });
 
   @override
   State<AlcoholOptionField> createState() => _AlcoholOptionFieldState();
 }
 
 class _AlcoholOptionFieldState extends State<AlcoholOptionField> {
-  AlcoholOption? _alcoholOption = AlcoholOption.no;
+  AlcoholOption? _alcoholOption;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize based on the passed initialValue
+    _alcoholOption = widget.initialValue ? AlcoholOption.yes : AlcoholOption.no;
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,11 @@
 import 'package:aureola_platform/models/user/user_model.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/business_name.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/job_title_field.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/name_field.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/password_field.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/user_email_field.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/profiletab/user_phone_number.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/profiletab/business_name.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/profiletab/job_title_field.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/profiletab/name_field.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/profiletab/password_field.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/profiletab/user_email_field.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/profiletab/user_phone_number.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
