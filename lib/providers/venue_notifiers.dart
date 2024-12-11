@@ -47,6 +47,17 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
+  void updateMapImageUrl(String mapImageUrl) {
+    if (state != null) {
+      final updatedInfo = {
+        ...?state!.additionalInfo,
+        'mapImageUrl': mapImageUrl,
+      };
+      state = state!.copyWith(additionalInfo: updatedInfo);
+      // Ensure listeners are notified
+    }
+  }
+
   // void updateDesignAndDisplay(String key, String value) {
   //   if (state != null) {
   //     final updatedDesignAndDisplay = {...state!.designAndDisplay, key: value};

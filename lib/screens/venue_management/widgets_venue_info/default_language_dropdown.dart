@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 class DefaultLanguageDropdown extends StatefulWidget {
   final double width;
   final String initialLanguage;
-  final ValueChanged<String>? onChanged; // new callback
+  final ValueChanged<String>? onChanged;
 
-  const DefaultLanguageDropdown(
-      {super.key,
-      this.initialLanguage = 'english',
-      required this.width,
-      this.onChanged});
+  const DefaultLanguageDropdown({
+    super.key,
+    required this.width,
+    this.initialLanguage = 'english_', // store a stable key here
+    this.onChanged,
+  });
 
   @override
   State<DefaultLanguageDropdown> createState() =>
@@ -22,10 +23,12 @@ class DefaultLanguageDropdown extends StatefulWidget {
 class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
   String? _selectedLanguage;
 
+  final languageKeys = ["english_", "arabic_", "french_"];
+
   @override
   void initState() {
     super.initState();
-    // Initialize _selectedType with the passed initialValue
+    // Initialize with the provided key, not a translated string.
     _selectedLanguage = widget.initialLanguage;
   }
 
@@ -42,11 +45,12 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
           ),
           const SizedBox(height: 6),
           DropdownSearch<String>(
+            items: (filter, infiniteScrollProps) => languageKeys,
             popupProps: PopupProps.menu(
               fit: FlexFit.loose,
               menuProps: const MenuProps(
                 backgroundColor: AppTheme.background,
-                margin: EdgeInsets.only(top: 12, right: 0),
+                margin: EdgeInsets.only(top: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -54,12 +58,15 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
               constraints: BoxConstraints(
                 maxWidth: widget.width,
               ),
+              // Translate item keys in the popup menu
               itemBuilder: (context, item, isDisabled, isSelected) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 12.0, horizontal: 12),
+                    vertical: 12.0,
+                    horizontal: 12,
+                  ),
                   child: Text(
-                    item,
+                    AppLocalizations.of(context)!.translate(item),
                     style: AppTheme.paragraph
                         .copyWith(fontStyle: FontStyle.italic),
                     textAlign: TextAlign.start,
@@ -67,11 +74,25 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
                 );
               },
             ),
-            items: (filter, infiniteScrollProps) => [
-              AppLocalizations.of(context)!.translate("english_"),
-              AppLocalizations.of(context)!.translate("arabic_"),
-              AppLocalizations.of(context)!.translate("french_"),
-            ],
+            // Translate the selected key for the main field display
+            dropdownBuilder: (context, selectedItem) {
+              return Text(
+                selectedItem == null
+                    ? AppLocalizations.of(context)!
+                        .translate("Select_Default_Language")
+                    : AppLocalizations.of(context)!.translate(selectedItem),
+                style: AppTheme.paragraph,
+              );
+            },
+            selectedItem: _selectedLanguage,
+            onChanged: (String? newKey) {
+              setState(() {
+                _selectedLanguage = newKey;
+              });
+              if (widget.onChanged != null && newKey != null) {
+                widget.onChanged!(newKey);
+              }
+            },
             decoratorProps: DropDownDecoratorProps(
               baseStyle: AppTheme.paragraph,
               decoration: AppTheme.textFieldinputDecoration(
@@ -79,15 +100,6 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
                     .translate("Select_Default_Language"),
               ),
             ),
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedLanguage = newValue;
-              });
-              if (widget.onChanged != null && newValue != null) {
-                widget.onChanged!(newValue);
-              }
-            },
-            selectedItem: _selectedLanguage,
           ),
         ],
       ),

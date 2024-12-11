@@ -3,7 +3,7 @@ import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/screens/login/email_verification.dart';
 import 'package:aureola_platform/screens/login/reset_password.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
-import 'package:aureola_platform/screens/main_page/widgets/progress_indicator.dart';
+import 'package:aureola_platform/widgest/progress_indicator.dart';
 import 'package:aureola_platform/service/firebase/auth_user.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:aureola_platform/service/localization/localization.dart';

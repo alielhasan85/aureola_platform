@@ -2,6 +2,8 @@
 
 import 'package:aureola_platform/providers/lang_providers.dart';
 import 'package:aureola_platform/providers/venue_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 
@@ -13,12 +15,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPickerField extends ConsumerStatefulWidget {
   final double width;
-  final LatLng? selectedLocation;
 
   const LocationPickerField({
     super.key,
     required this.width,
-    this.selectedLocation,
   });
 
   @override
@@ -32,17 +32,21 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
 
   LatLng? _selectedLatLng;
   String? _selectedAddress;
-
+  String? mapImageUrl;
   // Flag to ensure ref.listen is only called once
   bool _isListening = false;
 
   @override
   void initState() {
+    final venue = ref.read(venueProvider);
+
     super.initState();
     //TODO : to check if we can get address from GPS
     // Initialize with the selected location or default location (e.g., Doha, Qatar)
     _selectedLatLng =
-        widget.selectedLocation ?? const LatLng(25.286106, 51.534817);
+        venue?.address.location ?? const LatLng(25.286106, 51.534817);
+
+    mapImageUrl = venue?.additionalInfo!['mapImageUrl'];
 
     // Delay reverse geocoding until after the first build to ensure context is available
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -51,22 +55,21 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
     });
   }
 
-  @override
-  void didUpdateWidget(covariant LocationPickerField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedLocation != oldWidget.selectedLocation &&
-        widget.selectedLocation != null) {
-      _selectedLatLng = widget.selectedLocation;
-      final currentLanguage = ref.read(languageProvider);
-      _reverseGeocode(_selectedLatLng!, language: currentLanguage);
-    }
-  }
+  // @override
+  // void didUpdateWidget(covariant LocationPickerField oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (widget.selectedLocation != oldWidget.selectedLocation &&
+  //       widget.selectedLocation != null) {
+  //     _selectedLatLng = widget.selectedLocation;
+  //     final currentLanguage = ref.read(languageProvider);
+  //     _reverseGeocode(_selectedLatLng!, language: currentLanguage);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     // Watch the languageProvider to get the current language
     final currentLanguage = ref.watch(languageProvider);
-
     // Set up ref.listen only once
     if (!_isListening) {
       _isListening = true;
@@ -113,32 +116,69 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
   }
 
   Widget _buildStaticMapImage() {
-    return Image.network(
-      _buildStaticMapUrl(),
-      height: 300,
-      width: widget.width,
-      fit: BoxFit.cover,
-    );
-  }
+    final venue =
+        ref.watch(venueProvider); // Watch venueProvider for state changes
+    final mapImageUrl = venue?.additionalInfo?['mapImageUrl'];
 
-  String _buildStaticMapUrl() {
-    final lat = _selectedLatLng!.latitude;
-    final lng = _selectedLatLng!.longitude;
+    if (mapImageUrl != null && mapImageUrl.isNotEmpty) {
+      print('Inside location picker: $mapImageUrl');
+      return CachedNetworkImage(
+        imageUrl: mapImageUrl,
+        height: 300,
+        width: widget.width,
+        fit: BoxFit.cover,
+        placeholder: (context, url) =>
+            const Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) {
+          print('Error loading image from URL: $url');
+          print('Error details: $error');
+          return const Icon(Icons.error);
+        },
+      );
 
-    final staticMapUrl = Uri.https(
-      'maps.googleapis.com',
-      '/maps/api/staticmap',
-      {
-        'center': '$lat,$lng',
-        'zoom': '15',
-        'size': '600x300',
-        'maptype': 'roadmap',
-        'markers': 'color:red|$lat,$lng', // Corrected line
-        'key': apiKey,
-      },
-    ).toString();
-
-    return staticMapUrl;
+      // Image.network(
+      //   mapImageUrl,
+      //   height: 300,
+      //   width: widget.width,
+      //   fit: BoxFit.cover,
+      //   loadingBuilder: (context, child, loadingProgress) {
+      //     if (loadingProgress == null) return child; // Image loaded
+      //     return Center(
+      //       child: CircularProgressIndicator(
+      //         value: loadingProgress.expectedTotalBytes != null
+      //             ? loadingProgress.cumulativeBytesLoaded /
+      //                 loadingProgress.expectedTotalBytes!
+      //             : null,
+      //       ),
+      //     );
+      //   },
+      //   errorBuilder: (context, error, stackTrace) {
+      //     print('Error loading image: $error');
+      //     return Container(
+      //       height: 300,
+      //       width: widget.width,
+      //       alignment: Alignment.center,
+      //       color: Colors.grey.shade200,
+      //       child: Text(
+      //         'Failed to load image',
+      //         style: TextStyle(color: Colors.grey),
+      //       ),
+      //     );
+      //   },
+      // );
+    } else {
+      // Fallback when no image URL is available
+      return Container(
+        height: 300,
+        width: widget.width,
+        alignment: Alignment.center,
+        color: Colors.grey.shade200,
+        child: Text(
+          'No image available',
+          style: TextStyle(color: Colors.grey),
+        ),
+      );
+    }
   }
 
   Future<void> _reverseGeocode(LatLng location,
@@ -154,7 +194,6 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print(data);
 
         if (data['display_name'] != null) {
           setState(() {

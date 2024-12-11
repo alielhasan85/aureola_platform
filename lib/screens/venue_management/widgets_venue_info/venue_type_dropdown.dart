@@ -33,6 +33,19 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
 
   @override
   Widget build(BuildContext context) {
+    final venueTypeKeys = [
+      "Fine_Dining",
+      "Fast_Food",
+      "Fast_Casual",
+      "Drive_Thru",
+      "Coffe_Shop",
+      "Buffet",
+      "Hotel_Room_Service",
+      "Spa",
+      "Bar",
+      "Flower_Shop",
+      "Beauty_Salon",
+    ];
     return SizedBox(
       width: widget.width,
       child: Column(
@@ -60,7 +73,7 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 12.0, horizontal: 12),
                   child: Text(
-                    item,
+                    AppLocalizations.of(context)!.translate(item),
                     style: AppTheme.paragraph
                         .copyWith(fontStyle: FontStyle.italic),
                     textAlign: TextAlign.start,
@@ -68,19 +81,26 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
                 );
               },
             ),
-            items: (filter, infiniteScrollProps) => [
-              AppLocalizations.of(context)!.translate("Fine_Dining"),
-              AppLocalizations.of(context)!.translate("Fast_Food"),
-              AppLocalizations.of(context)!.translate("Fast_Casual"),
-              AppLocalizations.of(context)!.translate("Drive_Thru"),
-              AppLocalizations.of(context)!.translate("Coffe_Shop"),
-              AppLocalizations.of(context)!.translate("Buffet"),
-              AppLocalizations.of(context)!.translate("Hotel_Room_Service"),
-              AppLocalizations.of(context)!.translate("Spa"),
-              AppLocalizations.of(context)!.translate("Bar"),
-              AppLocalizations.of(context)!.translate("Flower_Shop"),
-              AppLocalizations.of(context)!.translate("Beauty_Salon"),
-            ],
+            items: (filter, infiniteScrollProps) => venueTypeKeys,
+            selectedItem: _selectedType, // store the key
+
+            dropdownBuilder: (context, selectedItem) {
+              return Text(
+                selectedItem == null
+                    ? AppLocalizations.of(context)!
+                        .translate("Select_Type_of_your_business")
+                    : AppLocalizations.of(context)!.translate(selectedItem),
+                style: AppTheme.paragraph,
+              );
+            },
+            onChanged: (String? newKey) {
+              setState(() {
+                _selectedType = newKey;
+              });
+              if (widget.onChanged != null && newKey != null) {
+                widget.onChanged!(newKey); // <-- This should pass the key
+              }
+            },
             decoratorProps: DropDownDecoratorProps(
               baseStyle: AppTheme.paragraph,
               decoration: AppTheme.textFieldinputDecoration(
@@ -88,15 +108,6 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
                     .translate("Select_Type_of_your_business"),
               ),
             ),
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedType = newValue;
-              });
-              if (widget.onChanged != null && newValue != null) {
-                widget.onChanged!(newValue);
-              }
-            },
-            selectedItem: _selectedType,
           ),
         ],
       ),
