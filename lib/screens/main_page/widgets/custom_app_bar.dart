@@ -3,10 +3,10 @@
 // lib/screens/main_page/widgets/custom_app_bar.dart
 
 import 'package:aureola_platform/screens/login/auth_page.dart';
-import 'package:aureola_platform/screens/user_management.dart/user_mainpage.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/billing.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/plan.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/cards.dart';
+import 'package:aureola_platform/screens/user_management/user_mainpage.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/billing.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/plan.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/cards.dart';
 
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/widgest/language_selector.dart';
@@ -51,14 +51,13 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
   final Widget? leading;
 
-  const CustomAppBar({Key? key, required this.title, this.leading})
-      : super(key: key);
+  const CustomAppBar({super.key, required this.title, this.leading});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Determine screen size
     double screenWidth = MediaQuery.of(context).size.width;
-    bool isMobile = screenWidth < 600;
+    bool isMobile = screenWidth < 700;
 
     return AppBar(
       bottom: const PreferredSize(
@@ -130,7 +129,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => const Scaffold(
-                          body: Center(child: Text('nitifications')),
+                          body: Center(child: Text('notifications')),
                         )),
               );
             },

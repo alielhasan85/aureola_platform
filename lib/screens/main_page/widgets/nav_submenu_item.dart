@@ -10,10 +10,13 @@ class SubMenuItem extends StatefulWidget {
   const SubMenuItem({
     super.key,
     required this.label,
-    required this.onTap,
+    this.onTap = _defaultCallback,
     required this.onSelect,
     this.isSelected = false,
   });
+
+// Default no-op callback function
+  static void _defaultCallback() {}
 
   @override
   _SubMenuItemState createState() => _SubMenuItemState();

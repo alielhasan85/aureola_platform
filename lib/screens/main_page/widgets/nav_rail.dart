@@ -112,7 +112,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                     AppLocalizations.of(context)!.translate('menu_management'),
                     closeDrawer: false),
               ),
-              if (selectedIndex >= 3 && selectedIndex <= 7) ...[
+              if (selectedIndex >= 3 && selectedIndex <= 8) ...[
                 const SizedBox(height: 8),
                 Container(
                   width: 180,
@@ -135,7 +135,6 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             3,
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
-                        onTap: () {},
                       ),
                       const Divider(color: AppTheme.divider, thickness: 0.5),
                       SubMenuItem(
@@ -146,7 +145,6 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             4,
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
-                        onTap: () {},
                       ),
                       const Divider(color: AppTheme.divider, thickness: 0.5),
                       SubMenuItem(
@@ -156,7 +154,6 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             5,
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
-                        onTap: () {},
                       ),
                       const Divider(color: AppTheme.divider, thickness: 0.5),
                       SubMenuItem(
@@ -167,7 +164,6 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             6,
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
-                        onTap: () {},
                       ),
                       const Divider(color: AppTheme.divider, thickness: 0.5),
                       SubMenuItem(
@@ -178,7 +174,16 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             7,
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
-                        onTap: () {},
+                      ),
+                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!
+                            .translate("Flush_Screen"),
+                        isSelected: selectedIndex == 8,
+                        onSelect: () => _updateIndex(
+                            8,
+                            AppLocalizations.of(context)!
+                                .translate('Flush_Screen')),
                       )
                     ],
                   ),
@@ -188,21 +193,21 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
               NavigationItem(
                 label: AppLocalizations.of(context)!.translate("Feedback"),
                 leadingIconPath: 'assets/icons/feedback.svg',
-                isSelected: selectedIndex == 8,
+                isSelected: selectedIndex == 9,
                 onTap: () => _updateIndex(
-                    8, AppLocalizations.of(context)!.translate("Feedback")),
+                    9, AppLocalizations.of(context)!.translate("Feedback")),
               ),
               const SizedBox(height: 8),
               NavigationItem(
                 label: AppLocalizations.of(context)!.translate("Settings"),
                 leadingIconPath: 'assets/icons/setting.svg',
                 trailingIconPath: 'assets/icons/arrow_down.svg',
-                isSelected: selectedIndex >= 9 && selectedIndex <= 11,
+                isSelected: selectedIndex >= 10 && selectedIndex <= 12,
                 onTap: () => _updateIndex(
-                    9, AppLocalizations.of(context)!.translate("venue_info"),
+                    10, AppLocalizations.of(context)!.translate("venue_info"),
                     closeDrawer: false),
               ),
-              if (selectedIndex >= 9 && selectedIndex <= 13) ...[
+              if (selectedIndex >= 10 && selectedIndex <= 13) ...[
                 const SizedBox(height: 8),
                 Container(
                   width: 180,
@@ -221,12 +226,11 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
                             .translate("venue_info"),
-                        isSelected: selectedIndex == 9,
+                        isSelected: selectedIndex == 10,
                         onSelect: () => _updateIndex(
-                            9,
+                            10,
                             AppLocalizations.of(context)!
                                 .translate("venue_info")),
-                        onTap: () {},
                       ),
                       const Divider(
                         color: AppTheme.divider,
@@ -235,12 +239,11 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
                             .translate("social_media"),
-                        isSelected: selectedIndex == 10,
+                        isSelected: selectedIndex == 11,
                         onSelect: () => _updateIndex(
-                            10,
+                            11,
                             AppLocalizations.of(context)!
                                 .translate("social_media")),
-                        onTap: () {},
                       ),
                       const Divider(
                         color: AppTheme.divider,
@@ -249,12 +252,11 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
                             .translate("prices_option"),
-                        isSelected: selectedIndex == 11,
+                        isSelected: selectedIndex == 12,
                         onSelect: () => _updateIndex(
-                            11,
+                            12,
                             AppLocalizations.of(context)!
                                 .translate("prices_option")),
-                        onTap: () {},
                       ),
                       const Divider(
                         color: AppTheme.divider,
@@ -263,12 +265,11 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
                             .translate("tables_management"),
-                        isSelected: selectedIndex == 12,
+                        isSelected: selectedIndex == 13,
                         onSelect: () => _updateIndex(
-                            12,
+                            13,
                             AppLocalizations.of(context)!
                                 .translate("tables_management")),
-                        onTap: () {},
                       ),
                       const Divider(
                         color: AppTheme.divider,
@@ -277,10 +278,9 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                       SubMenuItem(
                         label:
                             AppLocalizations.of(context)!.translate("QR_Code"),
-                        isSelected: selectedIndex == 13,
-                        onSelect: () => _updateIndex(13,
+                        isSelected: selectedIndex == 14,
+                        onSelect: () => _updateIndex(14,
                             AppLocalizations.of(context)!.translate("QR_Code")),
-                        onTap: () {},
                       ),
                     ],
                   ),

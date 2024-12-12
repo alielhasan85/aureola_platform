@@ -15,6 +15,7 @@ import 'package:aureola_platform/screens/venue_management/widgets_venue_info/pho
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/name_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/website_fields.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -96,15 +97,14 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
     // Determine container width based on breakpoints
     double containerWidth;
-    if (screenWidth >= Breakpoints.desktop) {
-      containerWidth = screenWidth * 0.5;
-    } else if (screenWidth >= Breakpoints.tablet) {
-      containerWidth = screenWidth * 0.7;
+
+    if (screenWidth >= 800) {
+      containerWidth = 800;
     } else {
-      containerWidth = double.infinity; // Full width on mobile
+      containerWidth = double.infinity;
     }
 
-    final isTabletOrDesktop = screenWidth >= Breakpoints.tablet;
+    final isTabletOrDesktop = screenWidth >= 900;
 
     return Column(
       children: [
@@ -115,23 +115,25 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
         Expanded(
           child: Padding(
             padding: isTabletOrDesktop
-                ? const EdgeInsets.symmetric(horizontal: 20)
-                : EdgeInsets.zero,
+                ? const EdgeInsets.symmetric(horizontal: 20, vertical: 20)
+                : const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Container(
               width: containerWidth,
-              margin: EdgeInsets.symmetric(
-                vertical: isTabletOrDesktop ? 30 : 12,
-              ),
-              decoration: isTabletOrDesktop ? AppTheme.cardDecoration : null,
+              // margin: EdgeInsets.symmetric(
+              //   vertical: isTabletOrDesktop ? 30 : 12,
+              // ),
+              decoration: isTabletOrDesktop
+                  ? AppTheme.cardDecoration
+                  : AppTheme.cardDecorationMob,
               child: SingleChildScrollView(
                 child: Padding(
                   padding: isTabletOrDesktop
                       ? const EdgeInsets.symmetric(horizontal: 30)
-                      : const EdgeInsets.symmetric(horizontal: 10),
+                      : const EdgeInsets.symmetric(horizontal: 15),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final containerWidth = constraints.maxWidth;
-
+                      //print('inisde container $containerWidth');
                       // Decide the number of columns
                       int columns = isTabletOrDesktop ? 2 : 1;
 
@@ -427,8 +429,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
     try {
       String? downloadUrl = venue.additionalInfo?['mapImageUrl'];
-      print('inside image save button');
-      print(downloadUrl);
+      // print('inside image save button');
+      // print(downloadUrl);
       // Prepare Firestore update data
       final updateData = {
         'venueName': _venueNameController.text.trim(),

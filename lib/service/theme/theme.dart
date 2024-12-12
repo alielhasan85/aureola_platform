@@ -57,8 +57,9 @@ class AppTheme {
   static const TextStyle appBarTitle = TextStyle(
     color: primary,
     fontSize: 20,
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w600,
+    fontFamily: 'Inter',
+
+    // fontWeight: FontWeight.,
   );
 
   static const TextStyle heading2 = TextStyle(
@@ -190,13 +191,21 @@ class AppTheme {
     );
   }
 
+  static ShapeDecoration get cardDecorationMob {
+    return ShapeDecoration(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    );
+  }
   // ===========================
   // Color Scheme
   // ===========================
 
-  static final ColorScheme colorScheme = ColorScheme(
+  static const ColorScheme colorScheme = ColorScheme(
     primary: primary,
-    primaryContainer: lightGreen, // You can adjust based on your palette
+    primaryContainer: accent, // You can adjust based on your palette
     secondary: secondary,
     secondaryContainer: lightPeach, // You can adjust based on your palette
     surface: white,

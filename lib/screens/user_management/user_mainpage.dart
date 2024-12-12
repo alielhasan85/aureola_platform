@@ -3,12 +3,12 @@
 import 'package:aureola_platform/providers/user_title.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
 
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/navigation_rail_user.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/billing.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/cards.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/notification.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/plan.dart';
-import 'package:aureola_platform/screens/user_management.dart/widgets_user/profile_tab.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/navigation_rail_user.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/billing.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/cards.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/notification.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/plan.dart';
+import 'package:aureola_platform/screens/user_management/widgets_user/profile_tab.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/widgest/language_selector.dart';
 import 'package:flutter/material.dart';

@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 
 import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_rail.dart';
-import 'package:aureola_platform/screens/venue_management/menu_branding.dart';
+import 'package:aureola_platform/screens/menu_management/branding_design/menu_branding.dart';
 import 'package:aureola_platform/screens/venue_management/venue_info.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -47,35 +47,54 @@ class _MainPageState extends ConsumerState<MainPage> {
     Widget _getContentForTab(int index) {
       switch (index) {
         case 1:
-          return const Center(child: Text('Dashboard'));
+          return const Center(
+              child: Text('Dashboard', style: AppTheme.appBarTitle));
         case 2:
-          return const Center(child: Text('Order Management'));
+          return const Center(
+              child: Text('Order Management', style: AppTheme.appBarTitle));
         case 3:
-          return const Center(child: Text('Menu Content'));
+          return const Center(
+              child: Text('Menu Content', style: AppTheme.appBarTitle));
         case 4:
-          return const Center(child: Text('Categories Content'));
+          return const Center(
+              child: Text('Categories Content', style: AppTheme.appBarTitle));
         case 5:
-          return const Center(child: Text('Items Content'));
+          return const Center(
+              child: Text('Items Content', style: AppTheme.appBarTitle));
         case 6:
-          return const Center(child: Text('Add-ons Content'));
+          return const Center(
+              child: Text('Add-ons Content', style: AppTheme.appBarTitle));
         case 7:
           return const MenuBranding();
         case 8:
-          return const Center(child: Text('Feedback'));
+          return const Center(
+              child: Text('flash screen', style: AppTheme.appBarTitle));
         case 9:
-          return const VenueInfo();
+          return const Center(
+              child: Text('Feedback', style: AppTheme.appBarTitle));
         case 10:
-          return const Center(child: Text('Tables'));
+          return const VenueInfo();
         case 11:
-          return const Center(child: Text('QR Code'));
+          return const Center(
+              child: Text('social_media', style: AppTheme.appBarTitle));
+        case 12:
+          return const Center(
+              child: Text('prices_option', style: AppTheme.appBarTitle));
+        case 13:
+          return const Center(
+              child: Text('tables_management', style: AppTheme.appBarTitle));
+        case 14:
+          return const Center(
+              child: Text('QR_code', style: AppTheme.appBarTitle));
         default:
-          return const Center(child: Text('Dashboard'));
+          return const Center(
+              child: Text('Dashboard', style: AppTheme.appBarTitle));
       }
     }
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth > 800) {
+        if (constraints.maxWidth > 700) {
           // Desktop/Tablet layout with navigation rail and app bar inside body
           return Scaffold(
             backgroundColor: AppTheme.background,
@@ -89,16 +108,11 @@ class _MainPageState extends ConsumerState<MainPage> {
                     crossAxisAlignment:
                         CrossAxisAlignment.stretch, // Ensure children stretch
                     children: [
-                      // Wrap CustomAppBar in SizedBox to provide fixed height
                       SizedBox(
                         height:
                             60.5, // Same as CustomAppBar's preferredSize.height
-                        child: CustomAppBar(
-                          title: appBarTitle,
-                          // Optionally, add leading if needed
-                        ),
+                        child: CustomAppBar(title: appBarTitle),
                       ),
-                      // Main content area
                       Expanded(child: _getContentForTab(selectedIndex)),
                     ],
                   ),
@@ -132,7 +146,7 @@ class _MainPageState extends ConsumerState<MainPage> {
 
   void _setOrientation() {
     // Use portrait for mobile, landscape for larger screens
-    if (MediaQuery.of(context).size.width < 600) {
+    if (MediaQuery.of(context).size.width < 700) {
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     } else {
       SystemChrome.setPreferredOrientations([
