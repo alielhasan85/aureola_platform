@@ -45,7 +45,7 @@ class _CropperDialogLocalState extends State<CropperDialogLocal> {
           presentStyle: WebPresentStyle.dialog,
           viewwMode: WebViewMode.mode_1,
           dragMode: WebDragMode.move,
-          background: true,
+          background: false,
           guides: true,
         )
       ],

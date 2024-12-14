@@ -173,5 +173,21 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
+// In VenueNotifier
+  Future<void> updateLogoAspectRatio(AspectRatioOption newRatio) async {
+    if (state == null) return;
+
+    final updatedDesign =
+        state!.designAndDisplay.copyWith(logoAspectRatio: newRatio);
+    final updatedVenue = state!.copyWith(designAndDisplay: updatedDesign);
+    state = updatedVenue;
+
+    // Immediately update Firestore
+    await FirestoreVenue().updateVenue(
+      state!.userId,
+      state!.venueId,
+      {'designAndDisplay': updatedDesign.toMap()},
+    );
+  }
   // Add more methods as needed for other fields
 }

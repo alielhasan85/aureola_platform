@@ -1,5 +1,4 @@
 import 'package:aureola_platform/images/aspect_ratio.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -73,6 +72,9 @@ class ImageUploadCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final venue = ref.watch(venueProvider);
+    final imageState = ref.watch(venueImageControllerProvider);
+    final isLoading = imageState is AsyncLoading<void>;
+
     final imageUrl = venue != null
         ? (imageKey == 'logoUrl'
             ? venue.designAndDisplay.logoUrl
@@ -94,37 +96,51 @@ class ImageUploadCard extends ConsumerWidget {
             ),
           );
 
-    return InkWell(
-      onTap: () => _onPickImage(context, ref),
-      child: Container(
-        width: width,
-        height: width *
-            (aspectRatioOption.heightRatio / aspectRatioOption.widthRatio),
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(8),
+    return Stack(
+      children: [
+        InkWell(
+          onTap: () => _onPickImage(context, ref),
+          child: Container(
+            width: width,
+            height: width *
+                (aspectRatioOption.heightRatio / aspectRatioOption.widthRatio),
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: imageWidget,
+                  ),
+                ),
+                if (imageUrl.isNotEmpty && !isLoading)
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.red),
+                      onPressed: () => _onDeleteImage(context, ref),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: imageWidget,
+        if (isLoading) ...[
+          Positioned.fill(
+            child: Container(
+              color: Colors.black26,
+              child: const Center(
+                child: CircularProgressIndicator(),
               ),
             ),
-            if (imageUrl.isNotEmpty)
-              Positioned(
-                top: 4,
-                right: 4,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.red),
-                  onPressed: () => _onDeleteImage(context, ref),
-                ),
-              ),
-          ],
-        ),
-      ),
+          ),
+        ],
+      ],
     );
   }
 }

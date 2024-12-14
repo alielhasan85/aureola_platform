@@ -1,20 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:aureola_platform/images/aspect_ratio.dart';
-import 'package:aureola_platform/images/image_picker.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
 import 'package:aureola_platform/images/image_card.dart';
-import 'package:aureola_platform/service/firebase/firebase_storage.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:aureola_platform/service/firebase/firestore_venue.dart';
-
-// lib/screens/menu_management/branding_design/design_settings_screen.dart
 
 import 'package:aureola_platform/models/venue/design_display.dart';
 
@@ -39,7 +32,6 @@ class MenuBranding extends ConsumerWidget {
     }
 
     final design = venue.designAndDisplay;
-
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < mobileBreakpoint;
 
@@ -75,8 +67,9 @@ class MenuBranding extends ConsumerWidget {
                       margin: const EdgeInsets.all(cardSpacing),
                       decoration: AppTheme.cardDecoration,
                       child: SingleChildScrollView(
-                          child:
-                              _buildFormFields(context, design.logoUrl, ref)),
+                        child:
+                            _buildFormFields(context, design, ref, 'isDesktop'),
+                      ),
                     ),
                     Container(
                       width: previewContainerWidth,
@@ -93,7 +86,7 @@ class MenuBranding extends ConsumerWidget {
                   ],
                 );
               } else if (isTablet) {
-                // Tablet scenario: One container + FAB for preview
+                // Tablet scenario: One container and a preview button (FAB)
                 final tabletFormWidth = (availableWidth - (2 * cardSpacing))
                     .clamp(minFormWidth, maxFormWidth);
 
@@ -105,8 +98,9 @@ class MenuBranding extends ConsumerWidget {
                         margin: const EdgeInsets.all(cardSpacing),
                         decoration: AppTheme.cardDecoration,
                         child: SingleChildScrollView(
-                            child:
-                                _buildFormFields(context, design.logoUrl, ref)),
+                          child: _buildFormFields(
+                              context, design, ref, 'isTablet'),
+                        ),
                       ),
                     ),
                     Positioned(
@@ -127,8 +121,9 @@ class MenuBranding extends ConsumerWidget {
                       width: double.infinity,
                       decoration: AppTheme.cardDecorationMob,
                       child: SingleChildScrollView(
-                          child:
-                              _buildFormFields(context, design.logoUrl, ref)),
+                        child:
+                            _buildFormFields(context, design, ref, 'isMobile'),
+                      ),
                     ),
                     Positioned(
                       bottom: 30,
@@ -152,7 +147,7 @@ class MenuBranding extends ConsumerWidget {
                     margin: const EdgeInsets.all(cardSpacing),
                     decoration: AppTheme.cardDecoration,
                     child: SingleChildScrollView(
-                      child: _buildFormFields(context, design.logoUrl, ref),
+                      child: _buildFormFields(context, design, ref, ''),
                     ),
                   ),
                 );
@@ -165,54 +160,30 @@ class MenuBranding extends ConsumerWidget {
     );
   }
 
-  Widget _buildFormFields(
-      BuildContext context, String? logoUrl, WidgetRef ref) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-                AppLocalizations.of(context)!
-                    .translate("Customize_your_brand_look"),
-                style: AppTheme.appBarTitle),
-            const SizedBox(height: 8),
-            Text(
-                AppLocalizations.of(context)!.translate(
-                    "Add_your_brand_s_colors to personalize your product. Choose text, background, and highlight colors to match your identity!"),
-                style: AppTheme.paragraph),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // Logo Upload Card
-                ImageUploadCard(
-                  width: 300,
-                  aspectRatioOption: AspectRatioOption.panoramic,
-                  imageKey: 'logoUrl',
-                  imageCategory: 'branding',
-                  imageType: 'logo',
-                ),
-                const SizedBox(width: 20),
-                // Placeholder for another ImageUploadCard or other content
-                Container(
-                  width: 250,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppTheme.grey2),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Additional Branding Element',
-                      style: TextStyle(color: Colors.grey[700]),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
+  Widget _buildFormFields(BuildContext context, DesignAndDisplay design,
+      WidgetRef ref, String layout) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Text(
+              AppLocalizations.of(context)!
+                  .translate("Customize_your_brand_look"),
+              style: AppTheme.appBarTitle),
+          const SizedBox(height: 8),
+          Text(
+              AppLocalizations.of(context)!.translate(
+                  "Add_your_brand_s_colors to personalize your product. Choose text, background, and highlight colors to match your identity!"),
+              style: AppTheme.paragraph),
+          const SizedBox(height: 16),
+          if (layout == 'isDesktop' || layout == 'isTablet')
+            _buildRowLayout(context, ref, design)
+          else if (layout == 'isMobile')
+            _buildColumnLayoutForMobile(context, ref, design)
+          else
+            // fallback
+            _buildRowLayout(context, ref, design),
+        ],
       ),
     );
   }
@@ -223,9 +194,7 @@ class MenuBranding extends ConsumerWidget {
       child: Column(
         children: [
           Text('Preview', style: AppTheme.paragraph),
-          // Preview content goes here
           SizedBox(height: 10),
-          // Example Preview
           Placeholder(fallbackHeight: 200, fallbackWidth: double.infinity),
         ],
       ),
@@ -245,6 +214,92 @@ class MenuBranding extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRowLayout(
+      BuildContext context, WidgetRef ref, DesignAndDisplay design) {
+    // Left: Title, "Select Aspect Ratio", Dropdown
+    // Right: ImageUploadCard
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Left Panel
+        Expanded(
+          flex: 1,
+          child: _buildLeftPanel(context, ref, design),
+        ),
+        const SizedBox(width: 20),
+        // Right Panel
+        Expanded(
+          flex: 1,
+          child: _buildRightPanel(context, design),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColumnLayoutForMobile(
+      BuildContext context, WidgetRef ref, DesignAndDisplay design) {
+    // For mobile, stack vertically
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildLeftPanel(context, ref, design),
+        const SizedBox(height: 20),
+        _buildRightPanel(context, design),
+      ],
+    );
+  }
+
+  Widget _buildLeftPanel(
+      BuildContext context, WidgetRef ref, DesignAndDisplay design) {
+    final venueNotifier = ref.read(venueProvider.notifier);
+    final currentRatio = design.logoAspectRatio;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.translate("Upload_Logo"),
+          style: AppTheme.appBarTitle,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          AppLocalizations.of(context)!.translate("Select_aspect_ratio"),
+          style: AppTheme.paragraph,
+        ),
+        const SizedBox(height: 8),
+        DropdownButton<AspectRatioOption>(
+          value: currentRatio,
+          items: AspectRatioOption.values
+              .map((ratio) => DropdownMenuItem<AspectRatioOption>(
+                    value: ratio,
+                    child: Text(ratio.label),
+                  ))
+              .toList(),
+          onChanged: (newRatio) async {
+            if (newRatio == null) return;
+            // Update aspect ratio immediately in VenueNotifier and Firestore
+            await venueNotifier.updateLogoAspectRatio(newRatio);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRightPanel(BuildContext context, DesignAndDisplay design) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ImageUploadCard(
+          width: 300,
+          aspectRatioOption: design.logoAspectRatio,
+          imageKey: 'logoUrl',
+          imageCategory: 'branding',
+          imageType: 'logo',
+        ),
+      ],
     );
   }
 }
