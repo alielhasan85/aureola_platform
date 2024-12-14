@@ -92,6 +92,7 @@ class _MapPickerDialogState extends ConsumerState<MapPickerDialog> {
         imageData: imageData,
         userId: userId,
         venueId: venueId,
+        imageCategory: 'map',
         imageType: imageType,
       );
 
@@ -101,14 +102,13 @@ class _MapPickerDialogState extends ConsumerState<MapPickerDialog> {
 
       return downloadUrl;
     } catch (e) {
-      print('Error in _fetchAndUploadStaticMapImage: $e');
       return null;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final venue = ref.read(venueProvider);
+//final venue = ref.read(venueProvider);
 
     return AlertDialog(
       title: Text(

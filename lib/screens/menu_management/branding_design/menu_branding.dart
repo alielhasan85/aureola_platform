@@ -1,17 +1,26 @@
+import 'dart:typed_data';
+
+import 'package:aureola_platform/images/aspect_ratio.dart';
+import 'package:aureola_platform/images/image_picker.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
+import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
+import 'package:aureola_platform/images/image_card.dart';
+import 'package:aureola_platform/service/firebase/firebase_storage.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MenuBranding extends ConsumerStatefulWidget {
-  const MenuBranding({super.key});
+import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 
-  @override
-  ConsumerState<MenuBranding> createState() => _MenuBrandingState();
-}
+// lib/screens/menu_management/branding_design/design_settings_screen.dart
 
-class _MenuBrandingState extends ConsumerState<MenuBranding> {
+import 'package:aureola_platform/models/venue/design_display.dart';
+
+class MenuBranding extends ConsumerWidget {
+  const MenuBranding({Key? key}) : super(key: key);
+
   static const double baseNavRailWidth = 230.0;
   static const double minFormWidth = 600.0;
   static const double maxFormWidth = 800.0;
@@ -20,8 +29,17 @@ class _MenuBrandingState extends ConsumerState<MenuBranding> {
   static const double mobileBreakpoint = 700.0;
 
   @override
-  Widget build(BuildContext context) {
-    final user = ref.read(userProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final venue = ref.watch(venueProvider);
+
+    if (venue == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final design = venue.designAndDisplay;
+
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < mobileBreakpoint;
 
@@ -31,7 +49,7 @@ class _MenuBrandingState extends ConsumerState<MenuBranding> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final availableWidth = constraints.maxWidth - baseNavRailWidth;
-              final minNeededForTwoCards = baseNavRailWidth +
+              const minNeededForTwoCards = baseNavRailWidth +
                   minFormWidth +
                   previewContainerWidth +
                   (3 * cardSpacing);
@@ -54,17 +72,19 @@ class _MenuBrandingState extends ConsumerState<MenuBranding> {
                   children: [
                     Container(
                       width: formContainerWidth,
-                      margin: EdgeInsets.all(cardSpacing),
+                      margin: const EdgeInsets.all(cardSpacing),
                       decoration: AppTheme.cardDecoration,
-                      child: SingleChildScrollView(child: _buildFormFields()),
+                      child: SingleChildScrollView(
+                          child:
+                              _buildFormFields(context, design.logoUrl, ref)),
                     ),
                     Container(
                       width: previewContainerWidth,
-                      margin: EdgeInsets.all(cardSpacing),
-                      decoration: ShapeDecoration(
+                      margin: const EdgeInsets.all(cardSpacing),
+                      decoration: const ShapeDecoration(
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
+                          borderRadius: BorderRadius.zero,
                         ),
                       ),
                       child: SingleChildScrollView(
@@ -82,14 +102,16 @@ class _MenuBrandingState extends ConsumerState<MenuBranding> {
                     Center(
                       child: Container(
                         width: tabletFormWidth,
-                        margin: EdgeInsets.all(cardSpacing),
+                        margin: const EdgeInsets.all(cardSpacing),
                         decoration: AppTheme.cardDecoration,
-                        child: SingleChildScrollView(child: _buildFormFields()),
+                        child: SingleChildScrollView(
+                            child:
+                                _buildFormFields(context, design.logoUrl, ref)),
                       ),
                     ),
                     Positioned(
-                      bottom: 20,
-                      right: 20,
+                      bottom: 30,
+                      right: 30,
                       child: FloatingActionButton(
                         onPressed: () => _showPreviewDialog(context),
                         child: const Icon(Icons.remove_red_eye),
@@ -104,11 +126,13 @@ class _MenuBrandingState extends ConsumerState<MenuBranding> {
                     Container(
                       width: double.infinity,
                       decoration: AppTheme.cardDecorationMob,
-                      child: SingleChildScrollView(child: _buildFormFields()),
+                      child: SingleChildScrollView(
+                          child:
+                              _buildFormFields(context, design.logoUrl, ref)),
                     ),
                     Positioned(
-                      bottom: 20,
-                      right: 20,
+                      bottom: 30,
+                      right: 30,
                       child: FloatingActionButton(
                         onPressed: () => _showPreviewDialog(context),
                         child: const Icon(Icons.remove_red_eye),
@@ -125,10 +149,10 @@ class _MenuBrandingState extends ConsumerState<MenuBranding> {
                 return Center(
                   child: Container(
                     width: fallbackWidth,
-                    margin: EdgeInsets.all(cardSpacing),
+                    margin: const EdgeInsets.all(cardSpacing),
                     decoration: AppTheme.cardDecoration,
                     child: SingleChildScrollView(
-                      child: _buildFormFields(),
+                      child: _buildFormFields(context, design.logoUrl, ref),
                     ),
                   ),
                 );
@@ -136,31 +160,73 @@ class _MenuBrandingState extends ConsumerState<MenuBranding> {
             },
           ),
         ),
-        if (MediaQuery.of(context).size.width >= mobileBreakpoint)
-          const AppFooter(),
+        if (screenWidth >= mobileBreakpoint) const AppFooter(),
       ],
     );
   }
 
-  Widget _buildFormFields() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Text('Brand Configuration', style: AppTheme.paragraph),
-          // Additional form fields for brand config go here
-        ],
+  Widget _buildFormFields(
+      BuildContext context, String? logoUrl, WidgetRef ref) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+                AppLocalizations.of(context)!
+                    .translate("Customize_your_brand_look"),
+                style: AppTheme.appBarTitle),
+            const SizedBox(height: 8),
+            Text(
+                AppLocalizations.of(context)!.translate(
+                    "Add_your_brand_s_colors to personalize your product. Choose text, background, and highlight colors to match your identity!"),
+                style: AppTheme.paragraph),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // Logo Upload Card
+                ImageUploadCard(
+                  width: 300,
+                  aspectRatioOption: AspectRatioOption.panoramic,
+                  imageKey: 'logoUrl',
+                  imageCategory: 'branding',
+                  imageType: 'logo',
+                ),
+                const SizedBox(width: 20),
+                // Placeholder for another ImageUploadCard or other content
+                Container(
+                  width: 250,
+                  height: 250,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppTheme.grey2),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Additional Branding Element',
+                      style: TextStyle(color: Colors.grey[700]),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildPreviewContainer() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return const Padding(
+      padding: EdgeInsets.all(16.0),
       child: Column(
         children: [
           Text('Preview', style: AppTheme.paragraph),
           // Preview content goes here
+          SizedBox(height: 10),
+          // Example Preview
+          Placeholder(fallbackHeight: 200, fallbackWidth: double.infinity),
         ],
       ),
     );

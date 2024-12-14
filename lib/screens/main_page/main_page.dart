@@ -25,6 +25,7 @@ class _MainPageState extends ConsumerState<MainPage> {
   @override
   void initState() {
     super.initState();
+
     // Initialize the appBar title when the page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(appBarTitleProvider.notifier).state =

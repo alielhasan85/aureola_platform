@@ -15,7 +15,6 @@ import 'package:aureola_platform/screens/venue_management/widgets_venue_info/pho
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/name_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/website_fields.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,7 +69,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
       _alcoholOption = venue.additionalInfo?['sellAlcohol'] ?? false;
       _selectedLocation = venue.address.location;
-      _mapImageUrl = venue.additionalInfo!['mapImageUrl'];
+      _mapImageUrl = venue.additionalInfo['mapImageUrl'];
     } else {
       _venueNameController = TextEditingController();
       _emailController = TextEditingController();
@@ -396,21 +395,22 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
   void _handleSave() async {
     // Validation checks...
-    if (_venueNameController.text.isEmpty ||
-        _selectedVenueType == null ||
-        _selectedDefaultLanguage == null ||
-        _addressController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!
-                .translate('please_fill_all_required_fields'),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+    // if (_venueNameController.text.isEmpty ||
+
+    //     _selectedVenueType == null ||
+    //     _selectedDefaultLanguage == null ||
+    //     _addressController.text.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(
+    //         AppLocalizations.of(context)!
+    //             .translate('please_fill_all_required_fields'),
+    //       ),
+    //       backgroundColor: Colors.red,
+    //     ),
+    //   );
+    //   return;
+    // }
     final user = ref.read(userProvider);
     final venue = ref.read(venueProvider);
 

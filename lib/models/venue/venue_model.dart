@@ -1,4 +1,4 @@
-// venue_model.dart
+// lib/models/venue/venue_model.dart
 
 import 'package:aureola_platform/models/common/address.dart';
 import 'package:aureola_platform/models/common/contact.dart';
@@ -16,14 +16,14 @@ class VenueModel {
   final Address address;
   final Contact contact;
   final List<String> languageOptions;
-  final SocialAccounts? socialAccounts; // Optional
-  final Operations? operations; // Optional
-  final List<QrCode>? qrCodes; // Optional
-  final DesignAndDisplay? designAndDisplay; // Optional
-  final PriceOptions? priceOptions; // Optional
-  final Subscription? subscription; // New Optional Field
-  final List<String> staff; // New Field
-  final Map<String, dynamic>? additionalInfo; // New Optional Map
+  final SocialAccounts? socialAccounts;
+  final Operations? operations;
+  final List<QrCode> qrCodes;
+  final DesignAndDisplay designAndDisplay;
+  final PriceOptions? priceOptions;
+  final Subscription? subscription;
+  final List<String> staff;
+  final Map<String, dynamic> additionalInfo;
 
   VenueModel({
     required this.venueId,
@@ -34,12 +34,12 @@ class VenueModel {
     this.languageOptions = const ['English'],
     this.socialAccounts,
     this.operations,
-    this.qrCodes,
-    this.designAndDisplay,
+    this.qrCodes = const [],
+    required this.designAndDisplay,
     this.priceOptions,
-    this.subscription, // Initialize as optional
-    this.staff = const [], // Initialize with an empty list
-    this.additionalInfo, // Initialize as optional
+    this.subscription,
+    this.staff = const [],
+    this.additionalInfo = const {},
   });
 
   VenueModel copyWith({
@@ -54,9 +54,9 @@ class VenueModel {
     List<QrCode>? qrCodes,
     DesignAndDisplay? designAndDisplay,
     PriceOptions? priceOptions,
-    Subscription? subscription, // Include in copyWith
-    List<String>? staff, // Include in copyWith
-    Map<String, dynamic>? additionalInfo, // Include in copyWith
+    Subscription? subscription,
+    List<String>? staff,
+    Map<String, dynamic>? additionalInfo,
   }) {
     return VenueModel(
       venueId: venueId ?? this.venueId,
@@ -87,26 +87,20 @@ class VenueModel {
       'staff': staff,
       if (socialAccounts != null) 'socialAccounts': socialAccounts!.toMap(),
       if (operations != null) 'operations': operations!.toMap(),
-      if (qrCodes != null) 'qrCodes': qrCodes!.map((q) => q.toMap()).toList(),
-      if (designAndDisplay != null)
-        'designAndDisplay': designAndDisplay!.toMap(),
+      if (qrCodes.isNotEmpty) 'qrCodes': qrCodes.map((q) => q.toMap()).toList(),
+      'designAndDisplay': designAndDisplay.toMap(),
       if (priceOptions != null) 'priceOptions': priceOptions!.toMap(),
       if (subscription != null) 'subscription': subscription!.toMap(),
-      if (additionalInfo != null)
-        'additionalInfo': additionalInfo!, // Include if not null
+      if (additionalInfo.isNotEmpty) 'additionalInfo': additionalInfo,
     };
   }
 
   factory VenueModel.fromMap(Map<String, dynamic> map, String venueId) {
-    final addressMap = map['address'] as Map<String, dynamic>?;
-
     return VenueModel(
       venueId: venueId,
       venueName: map['venueName'] ?? '',
       userId: map['userId'] ?? '',
-      address: addressMap != null
-          ? Address.fromMap(addressMap)
-          : Address(country: ''),
+      address: Address.fromMap(map['address'] ?? {}),
       contact: Contact.fromMap(map['contact'] ?? {}),
       languageOptions: List<String>.from(map['languageOptions'] ?? ['English']),
       staff: List<String>.from(map['staff'] ?? []),
@@ -122,7 +116,7 @@ class VenueModel {
           [],
       designAndDisplay: map['designAndDisplay'] != null
           ? DesignAndDisplay.fromMap(map['designAndDisplay'])
-          : null,
+          : DesignAndDisplay(),
       priceOptions: map['priceOptions'] != null
           ? PriceOptions.fromMap(map['priceOptions'])
           : null,
@@ -131,7 +125,12 @@ class VenueModel {
           : null,
       additionalInfo: map['additionalInfo'] != null
           ? Map<String, dynamic>.from(map['additionalInfo'])
-          : null,
+          : {},
     );
+  }
+
+  @override
+  String toString() {
+    return 'VenueModel(venueId: $venueId, venueName: $venueName, userId: $userId, address: $address, contact: $contact, languageOptions: $languageOptions, socialAccounts: $socialAccounts, operations: $operations, qrCodes: $qrCodes, designAndDisplay: $designAndDisplay, priceOptions: $priceOptions, subscription: $subscription, staff: $staff, additionalInfo: $additionalInfo)';
   }
 }

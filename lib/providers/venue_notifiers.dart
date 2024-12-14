@@ -1,3 +1,7 @@
+// lib/providers/venue_notifier.dart
+
+import 'package:aureola_platform/images/aspect_ratio.dart';
+import 'package:aureola_platform/models/venue/design_display.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +29,7 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-// Update venue type in additionalInfo
+  // Update sellAlcohol in additionalInfo
   void updateSellAlcohol(bool sellAlcohol) {
     if (state != null) {
       final updatedInfo = {
@@ -36,7 +40,7 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // Update venue type in additionalInfo
+  // Update venueType in additionalInfo
   void updateVenueType(String venueType) {
     if (state != null) {
       final updatedInfo = {
@@ -47,21 +51,22 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-// Update venue type in additionalInfo
+  // Update defaultLanguage in additionalInfo
   void updateDefaultLanguage(String defaultLanguage) {
     if (state != null) {
       final updatedInfo = {
-        ...?state!.additionalInfo,
+        ...state!.additionalInfo,
         'defaultLanguage': defaultLanguage,
       };
       state = state!.copyWith(additionalInfo: updatedInfo);
     }
   }
 
+  // Update mapImageUrl in additionalInfo
   void updateMapImageUrl(String mapImageUrl) {
     if (state != null) {
       final updatedInfo = {
-        ...?state!.additionalInfo,
+        ...state!.additionalInfo,
         'mapImageUrl': mapImageUrl,
       };
       state = state!.copyWith(additionalInfo: updatedInfo);
@@ -69,28 +74,37 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // void updateDesignAndDisplay(String key, String value) {
-  //   if (state != null) {
-  //     final updatedDesignAndDisplay = {...state!.designAndDisplay, key: value};
-  //     state = state!.copyWith(designAndDisplay: updatedDesignAndDisplay);
-  //   }
-  // }
+  // Update venueName
+  void updateVenueName(String venueName) {
+    if (state != null) {
+      state = state!.copyWith(venueName: venueName);
+    }
+  }
 
-  // // Method to update price options such as currency, price display, etc.
-  // void updatePriceOption(String key, dynamic value) {
-  //   if (state != null) {
-  //     final updatedPriceOptions = {...state!.priceOptions, key: value};
-  //     state = state!.copyWith(priceOptions: updatedPriceOptions);
-  //   }
-  // }
-
-  // void updateColor(String colorType, Color color) {
-  //   if (state != null) {
-  //     final updatedDesignAndDisplay = {...state!.designAndDisplay};
-  //     updatedDesignAndDisplay[colorType] = _colorToHex(color);
-  //     state = state!.copyWith(designAndDisplay: updatedDesignAndDisplay);
-  //   }
-  // }
+  // Update specific parts of the address
+  void updateAddress({
+    String? displayAddress,
+    String? street,
+    String? city,
+    String? state,
+    String? postalCode,
+    String? country,
+    LatLng? location,
+  }) {
+    if (state != null) {
+      this.state = this.state!.copyWith(
+            address: this.state!.address.copyWith(
+                  street: street,
+                  city: city,
+                  state: state,
+                  postalCode: postalCode,
+                  country: country,
+                  location: location,
+                  displayAddress: displayAddress,
+                ),
+          );
+    }
+  }
 
   // Contact update methods
   void updateContactPhoneNumber(String phoneNumber) {
@@ -125,57 +139,39 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // Update specific parts of the address
-  void updateAddress({
-    String? displayAddress,
-    String? street,
-    String? city,
-    String? state,
-    String? postalCode,
-    String? country,
-    LatLng? location,
+  /// Updates one or more fields within the DesignAndDisplay object.
+  void updateDesignAndDisplay({
+    String? logoUrl,
+    AspectRatioOption? logoAspectRatio,
+    AspectRatioOption? backgroundAspectRatio,
+    String? backgroundUrl,
+    String? backgroundColor,
+    String? cardBackground,
+    String? accentColor,
+    String? textColor,
   }) {
     if (state != null) {
-      this.state = this.state!.copyWith(
-            address: this.state!.address.copyWith(
-                  street: street,
-                  city: city,
-                  state: state,
-                  postalCode: postalCode,
-                  country: country,
-                  location: location,
-                  displayAddress: displayAddress,
-                ),
-          );
+      // Retrieve the current DesignAndDisplay, or initialize if null
+      DesignAndDisplay currentDesign =
+          state!.designAndDisplay ?? DesignAndDisplay();
+
+      // Create a new DesignAndDisplay with updated fields
+      final updatedDesign = currentDesign.copyWith(
+        logoUrl: logoUrl ?? currentDesign.logoUrl,
+        logoAspectRatio: logoAspectRatio ?? currentDesign.logoAspectRatio,
+        backgroundUrl: backgroundUrl ?? currentDesign.backgroundUrl,
+        backgroundAspectRatio:
+            backgroundAspectRatio ?? currentDesign.backgroundAspectRatio,
+        backgroundColor: backgroundColor ?? currentDesign.backgroundColor,
+        cardBackground: cardBackground ?? currentDesign.cardBackground,
+        accentColor: accentColor ?? currentDesign.accentColor,
+        textColor: textColor ?? currentDesign.textColor,
+      );
+
+      // Update the state with the new DesignAndDisplay
+      state = state!.copyWith(designAndDisplay: updatedDesign);
     }
   }
 
-  //
-
-  void updateVenueName(String venueName) {
-    if (state != null) {
-      state = state!.copyWith(venueName: venueName);
-    }
-
-    String _colorToHex(Color color) {
-      return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
-    }
-
-    // // Function to update venue data locally and in Firestore
-    // Future<void> updateVenueData(
-    //     String userId, String venueId, Map<String, dynamic> updatedData) async {
-    //   if (state != null) {
-    //     // Update Firestore with the new data
-    //     await FirestoreVenue().updateVenue(userId, venueId, updatedData);
-
-    //     // Update the state locally
-    //     state = state!.copyWith(
-    //       venueName: updatedData['venueName'] ?? state!.venueName,
-    //       address: updatedData['address'] ?? state!.address,
-    //       contact: updatedData['contact'] ?? state!.contact,
-    //       // Add other fields as needed
-    //     );
-    //   }
-    // }
-  }
+  // Add more methods as needed for other fields
 }

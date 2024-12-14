@@ -46,7 +46,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
     _selectedLatLng =
         venue?.address.location ?? const LatLng(25.286106, 51.534817);
 
-    mapImageUrl = venue?.additionalInfo!['mapImageUrl'];
+    mapImageUrl = venue?.additionalInfo['mapImageUrl'];
 
     // Delay reverse geocoding until after the first build to ensure context is available
     WidgetsBinding.instance.addPostFrameCallback((_) {

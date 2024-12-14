@@ -1,6 +1,7 @@
 // firestore_venue.dart
 
 import 'package:aureola_platform/models/user/user_model.dart';
+import 'package:aureola_platform/models/venue/design_display.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 
@@ -167,6 +168,127 @@ class FirestoreVenue {
         .map((doc) =>
             VenueModel.fromMap(doc.data() as Map<String, dynamic>, doc.id))
         .toList();
+  }
+
+  /// **New Method:** Updates the DesignAndDisplay field of a specific venue.
+
+  /// **New Method:** Retrieves the DesignAndDisplay field of a specific venue.
+  Future<DesignAndDisplay?> getDesignAndDisplay(
+      String userId, String venueId) async {
+    final venueDoc = await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('venues')
+        .doc(venueId)
+        .get();
+
+    if (venueDoc.exists) {
+      final data = venueDoc.data() as Map<String, dynamic>;
+      if (data['designAndDisplay'] != null) {
+        return DesignAndDisplay.fromMap(
+            data['designAndDisplay'] as Map<String, dynamic>);
+      }
+    }
+
+    return null;
+  }
+
+  // **Optional:** If you anticipate needing to update individual fields within DesignAndDisplay,
+  // consider adding helper methods or using FieldValue to perform partial updates.
+
+  /// Example: Update only the background color of a venue.
+  Future<void> updateBackgroundColor(
+      String userId, String venueId, String backgroundColor) async {
+    final venueDoc = _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('venues')
+        .doc(venueId);
+
+    await venueDoc.update({
+      'designAndDisplay.backgroundColor': backgroundColor,
+    });
+  }
+
+  /// Updates the DesignAndDisplay data for a specific venue.
+  Future<void> updateDesignAndDisplay({
+    required String userId,
+    required String venueId,
+    required DesignAndDisplay designAndDisplay,
+  }) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('venues')
+          .doc(venueId)
+          .update(designAndDisplay.toMap());
+    } catch (e) {
+      throw Exception('Error updating DesignAndDisplay: $e');
+    }
+  }
+
+  /// Deletes a specific field from DesignAndDisplay.
+  Future<void> deleteDesignAndDisplayField({
+    required String userId,
+    required String venueId,
+    required String fieldKey,
+  }) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('venues')
+          .doc(venueId)
+          .update({'designAndDisplay.$fieldKey': FieldValue.delete()});
+    } catch (e) {
+      throw Exception('Error deleting field from DesignAndDisplay: $e');
+    }
+  }
+
+  /// Updates a specific subcollection field (e.g., meals, offers).
+  Future<void> updateSubcollectionField({
+    required String userId,
+    required String venueId,
+    required String collectionName,
+    required String documentId,
+    required String fieldKey,
+    required String imageUrl,
+  }) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('venues')
+          .doc(venueId)
+          .collection(collectionName)
+          .doc(documentId)
+          .update({fieldKey: imageUrl});
+    } catch (e) {
+      throw Exception('Error updating subcollection field: $e');
+    }
+  }
+
+  /// Deletes a specific subcollection field.
+  Future<void> deleteSubcollectionField({
+    required String userId,
+    required String venueId,
+    required String collectionName,
+    required String documentId,
+    required String fieldKey,
+  }) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('venues')
+          .doc(venueId)
+          .collection(collectionName)
+          .doc(documentId)
+          .update({fieldKey: FieldValue.delete()});
+    } catch (e) {
+      throw Exception('Error deleting subcollection field: $e');
+    }
   }
 
   // Additional methods can be added as needed

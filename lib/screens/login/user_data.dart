@@ -1,6 +1,7 @@
 import 'package:aureola_platform/models/common/address.dart';
 import 'package:aureola_platform/models/common/contact.dart';
 import 'package:aureola_platform/models/user/user_model.dart';
+import 'package:aureola_platform/models/venue/design_display.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
@@ -125,17 +126,18 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
         // Create Address object for Venue with empty fields
         Address venueAddress = Address(
           country: countryName,
-          // Other fields are default ''
         );
+        DesignAndDisplay designAndDisplay = const DesignAndDisplay();
 
         // Create VenueModel
         VenueModel defaultVenue = VenueModel(
-          userId: user.userId,
-          venueId: '', // Firestore will generate the ID
-          venueName: user.businessName,
-          address: venueAddress,
-          contact: venueContact,
-        );
+            userId: user.userId,
+            venueId: '', // Firestore will generate the ID
+            venueName: user.businessName,
+            address: venueAddress,
+            contact: venueContact,
+            designAndDisplay: designAndDisplay,
+            additionalInfo: {'mapImageUrl': ''});
 
         // Add the venue to Firestore
         final venueId =
@@ -143,12 +145,12 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
 
         // Fetch the saved VenueModel with the generated venueId
         VenueModel savedVenue = VenueModel(
-          userId: user.userId,
-          venueId: venueId,
-          venueName: user.businessName,
-          address: venueAddress,
-          contact: venueContact,
-        );
+            userId: user.userId,
+            venueId: venueId,
+            venueName: user.businessName,
+            address: venueAddress,
+            contact: venueContact,
+            designAndDisplay: designAndDisplay);
 
         // Set the UserProvider with the new user data
         ref.read(userProvider.notifier).setUser(user);
