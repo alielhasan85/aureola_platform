@@ -1,6 +1,6 @@
 // location_picker_field.dart
 
-import 'package:aureola_platform/providers/lang_providers.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

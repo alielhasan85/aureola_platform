@@ -1,4 +1,4 @@
-import 'package:aureola_platform/providers/lang_providers.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';

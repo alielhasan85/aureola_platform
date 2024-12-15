@@ -37,14 +37,94 @@ class ImagePickerWidget {
       aspectRatio: aspectRatio,
       uiSettings: [
         WebUiSettings(
+          cropBoxResizable: true,
           presentStyle: WebPresentStyle.dialog,
           background: true,
           context: context,
           dragMode: WebDragMode.move,
           guides: true,
           viewwMode: WebViewMode.mode_1,
+          customDialogBuilder: (cropper, initCropper, crop, rotate, scale) {
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final dialogWidth =
+                    (constraints.maxWidth * 0.9).clamp(300.0, 800.0);
+                final dialogHeight =
+                    (constraints.maxHeight * 0.9).clamp(400.0, 600.0);
+
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  // Initialize the cropper after the UI is laid out
+                  initCropper();
+                });
+
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Container(
+                    width: dialogWidth,
+                    height: dialogHeight,
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Crop Image',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        // Use Expanded with AspectRatio directly
+                        Expanded(
+                          child: AspectRatio(
+                            aspectRatio:
+                                aspectRatio.ratioX / aspectRatio.ratioY,
+                            child: ClipRect(
+                              child: cropper,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.rotate_left),
+                              onPressed: () {
+                                rotate(RotationAngle.clockwise270);
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.rotate_right),
+                              onPressed: () {
+                                rotate(RotationAngle.clockwise90);
+                              },
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                final croppedFilePath = await crop();
+                                Navigator.of(context).pop(croppedFilePath);
+                              },
+                              child: const Text('Save'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
         ),
-        // Add other platform settings if needed (but on web only these apply)
       ],
     );
 

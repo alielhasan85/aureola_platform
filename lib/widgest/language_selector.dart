@@ -1,10 +1,10 @@
 // lib/screens/main_page/widgets/language_selector.dart
 
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
-import 'package:aureola_platform/providers/lang_providers.dart';
 
 class LanguageSelector extends ConsumerWidget {
   const LanguageSelector({Key? key}) : super(key: key);

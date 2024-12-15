@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:aureola_platform/images/aspect_ratio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,12 +8,16 @@ import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/images/image_picker.dart';
 import 'package:aureola_platform/images/venue_image_controller.dart';
 
+final draftLogoAspectRatioProvider =
+    StateProvider<AspectRatioOption?>((ref) => null);
+final draftLogoImageDataProvider = StateProvider<Uint8List?>((ref) => null);
+
 class ImageUploadCard extends ConsumerWidget {
   final double width;
-  final String imageKey; // e.g. 'logoUrl'
-  final String imageCategory; // e.g. 'branding'
-  final String imageType; // e.g. 'logo', 'background'
-  final AspectRatioOption aspectRatioOption; // Add this to specify ratio
+  final String imageKey; // 'logoUrl'
+  final String imageCategory; // 'branding'
+  final String imageType; // 'logo', 'background'
+  final AspectRatioOption aspectRatioOption;
 
   const ImageUploadCard({
     Key? key,
@@ -24,18 +30,11 @@ class ImageUploadCard extends ConsumerWidget {
 
   Future<void> _onPickImage(BuildContext context, WidgetRef ref) async {
     final aspectRatio = aspectRatioOption.toCropAspectRatio();
-    final imageData = await ImagePickerWidget.pickAndCropImage(
-      context,
-      aspectRatio: aspectRatio,
-    );
-
+    final imageData = await ImagePickerWidget.pickAndCropImage(context,
+        aspectRatio: aspectRatio);
     if (imageData != null) {
-      ref.read(venueImageControllerProvider.notifier).uploadImage(
-            imageData: imageData,
-            imageKey: imageKey,
-            imageCategory: imageCategory,
-            imageType: imageType,
-          );
+      // Store the picked image in the draft provider
+      ref.read(draftLogoImageDataProvider.notifier).state = imageData;
     }
   }
 
@@ -43,9 +42,8 @@ class ImageUploadCard extends ConsumerWidget {
     bool confirm = await _showDeleteConfirmationDialog(context);
     if (!confirm) return;
 
-    ref.read(venueImageControllerProvider.notifier).deleteImage(
-          imageKey: imageKey,
-        );
+    // Just remove from draft (if any) and reset to null
+    ref.read(draftLogoImageDataProvider.notifier).state = null;
   }
 
   Future<bool> _showDeleteConfirmationDialog(BuildContext context) async {
@@ -72,29 +70,36 @@ class ImageUploadCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final venue = ref.watch(venueProvider);
-    final imageState = ref.watch(venueImageControllerProvider);
-    final isLoading = imageState is AsyncLoading<void>;
+    final draftImageData = ref.watch(draftLogoImageDataProvider);
 
-    final imageUrl = venue != null
-        ? (imageKey == 'logoUrl'
-            ? venue.designAndDisplay.logoUrl
-            : venue.designAndDisplay.backgroundUrl)
-        : '';
+    // If draft image is picked, show that image; else show the current Firestore image.
+    Widget imageWidget;
+    if (draftImageData != null) {
+      imageWidget = Image.memory(draftImageData, fit: BoxFit.cover);
+    } else {
+      // No draft image, show the current image from venue
+      final imageUrl = venue != null && imageKey == 'logoUrl'
+          ? venue.designAndDisplay.logoUrl
+          : '';
 
-    Widget imageWidget = imageUrl.isNotEmpty
-        ? CachedNetworkImage(
-            imageUrl: imageUrl,
-            fit: BoxFit.cover,
-            placeholder: (context, url) =>
-                const Center(child: CircularProgressIndicator()),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-          )
-        : Center(
-            child: Text(
-              'Tap to upload image',
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-            ),
-          );
+      imageWidget = imageUrl.isNotEmpty
+          ? Padding(
+              padding: EdgeInsets.all(6),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.fitWidth,
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+            )
+          : Center(
+              child: Text(
+                'Tap to upload image',
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+            );
+    }
 
     return Stack(
       children: [
@@ -117,11 +122,15 @@ class ImageUploadCard extends ConsumerWidget {
                     child: imageWidget,
                   ),
                 ),
-                if (imageUrl.isNotEmpty && !isLoading)
+                if (draftImageData != null ||
+                    (venue != null &&
+                        venue.designAndDisplay.logoUrl.isNotEmpty))
                   Positioned(
                     top: 4,
                     right: 4,
                     child: IconButton(
+                      iconSize: 24,
+                      style: ButtonStyle(),
                       icon: const Icon(Icons.close, color: Colors.red),
                       onPressed: () => _onDeleteImage(context, ref),
                     ),
@@ -130,16 +139,6 @@ class ImageUploadCard extends ConsumerWidget {
             ),
           ),
         ),
-        if (isLoading) ...[
-          Positioned.fill(
-            child: Container(
-              color: Colors.black26,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          ),
-        ],
       ],
     );
   }

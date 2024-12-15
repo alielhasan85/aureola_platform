@@ -1,40 +1,37 @@
-import 'package:aureola_platform/providers/venue_provider.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/menu_management/branding_design/widgets/color_picker.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ColorPaletteWidget extends ConsumerWidget {
-  const ColorPaletteWidget({super.key});
+class ColorPaletteSection extends ConsumerWidget {
+  final String layout; // 'isDesktop', 'isTablet', 'isMobile', or fallback
+
+  const ColorPaletteSection({super.key, required this.layout});
 
   Widget _buildColorOption(
     BuildContext context,
     String label,
-    String
-        colorKey, // The colorKey corresponds to the 'backgroundColor', 'highlightColor', or 'textColor'
+    StateProvider<Color?> colorProvider,
     WidgetRef ref,
   ) {
-    final venue = ref.watch(venueProvider);
-    final designAndDisplay = venue?.designAndDisplay ?? {};
-
-    // // Get the current color from the provider
-    // Color color = designAndDisplay.containsKey(colorKey)
-    //     ? _hexToColor(designAndDisplay[colorKey])
-    //     : Colors.blue; // Default color if no value is found
+    final color = ref.watch(colorProvider) ?? AppTheme.accent;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
+        // If you want different layout on mobile vs desktop,
+        // you can use layout logic here. For simplicity, we keep it simple.
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 14)),
-          GestureDetector(
+          Text(label, style: AppTheme.paragraph),
+          InkWell(
             onTap: () => showDialog(
               context: context,
               builder: (BuildContext context) {
                 return CustomColorPickerDialog(
-                  // Pass the color key to the dialog instead of color and callback
-                  colorKey: colorKey,
+                  colorProvider: colorProvider,
+                  initialColor: color,
                 );
               },
             ),
@@ -42,8 +39,7 @@ class ColorPaletteWidget extends ConsumerWidget {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                // TODO: to change to be dynamic
-                color: AppTheme.accent,
+                color: color,
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(color: AppTheme.grey2),
               ),
@@ -56,10 +52,15 @@ class ColorPaletteWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Card(
-      surfaceTintColor: AppTheme.grey2,
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    return Container(
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1, color: AppTheme.grey2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+
+      //BoxDecoration(border: Border.all(color: AppTheme.grey2)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -70,66 +71,24 @@ class ColorPaletteWidget extends ConsumerWidget {
             _buildColorOption(
               context,
               'Background Color',
-              'backgroundColor', // Key for background color
+              draftBackgroundColorProvider,
               ref,
             ),
             _buildColorOption(
               context,
               'Highlight Color',
-              'highlightColor', // Key for highlight color
+              draftHighlightColorProvider,
               ref,
             ),
             _buildColorOption(
               context,
               'Text Color',
-              'textColor', // Key for text color
+              draftTextColorProvider,
               ref,
             ),
           ],
         ),
       ),
     );
-  }
-
-  // // Method to save colors to Firestore
-  // Future<void> _saveColorsToFirestore(
-  //     WidgetRef ref, BuildContext context) async {
-  //   try {
-  //     final venue = ref.read(venueProvider);
-  //     if (venue == null) return; // Handle null check
-
-  //     // Get colors from provider
-  //     final designAndDisplay = venue.designAndDisplay ?? {};
-  //     final userId = venue.userId;
-  //     final venueId = venue.venueId;
-
-  //     if (designAndDisplay.isNotEmpty) {
-  //       // Save colors to Firestore using FirestoreVenue service
-  //       final FirestoreVenue firestoreVenue = FirestoreVenue();
-  //       await firestoreVenue.updateDesignAndDisplay(
-  //           userId, venueId, designAndDisplay);
-
-  //       // Show success message
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //           const SnackBar(content: Text('Color theme saved successfully!')));
-  //     }
-  //   } catch (e) {
-  //     // Show error message
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Error saving color theme: $e')));
-  //   }
-  // }
-
-  // Utility method to convert a Color to a hex string
-  String _colorToHex(Color color) {
-    return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
-  }
-
-  // Utility method to convert a hex string to a Color object
-  Color _hexToColor(String hexString) {
-    final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-    buffer.write(hexString.replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
   }
 }

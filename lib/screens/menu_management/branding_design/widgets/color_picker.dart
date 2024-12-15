@@ -1,16 +1,16 @@
-import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import riverpod
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class CustomColorPickerDialog extends ConsumerStatefulWidget {
-  final String
-      colorKey; // The key in designAndDisplay ('backgroundColor', etc.)
+  final StateProvider<Color?> colorProvider;
+  final Color initialColor;
 
   const CustomColorPickerDialog({
-    required this.colorKey, // Pass the color key instead of just color
-    super.key,
-  });
+    required this.colorProvider,
+    required this.initialColor,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CustomColorPickerDialogState createState() =>
@@ -25,20 +25,9 @@ class _CustomColorPickerDialogState
   @override
   void initState() {
     super.initState();
-    // Access the current color from the provider
-    final venue = ref.read(venueProvider);
-    final designAndDisplay = venue?.designAndDisplay ?? {};
-
-    // Retrieve and set the initial color
-
-    // currentColor = designAndDisplay.containsKey(widget.colorKey)
-    //     ? _hexToColor(designAndDisplay[widget.colorKey])
-    //     : Colors.blue; // Default color
-
-    // Initialize the hex controller with the current color
+    currentColor = widget.initialColor;
     hexController = TextEditingController(
-      text:
-          '#${currentColor.value.toRadixString(16).substring(2).toUpperCase()}',
+      text: _colorToHex(currentColor),
     );
   }
 
@@ -54,16 +43,7 @@ class _CustomColorPickerDialogState
               onColorChanged: (Color newColor) {
                 setState(() {
                   currentColor = newColor;
-                  hexController.text =
-                      '#${newColor.value.toRadixString(16).substring(2).toUpperCase()}';
-
-                  // Auto-save the color to the venueProvider
-
-                  // ref.read(venueProvider.notifier).updateDesignAndDisplay(
-                  //       widget
-                  //           .colorKey, // Update the color key (backgroundColor, etc.)
-                  //       _colorToHex(newColor),
-                  //     );
+                  hexController.text = _colorToHex(newColor);
                 });
               },
               showLabel: true,
@@ -78,12 +58,9 @@ class _CustomColorPickerDialogState
               ),
               onSubmitted: (value) {
                 if (RegExp(r'^#([A-Fa-f0-9]{6})$').hasMatch(value)) {
+                  final newColor = _hexToColor(value);
                   setState(() {
-                    currentColor = Color(
-                        int.parse(value.substring(1), radix: 16) + 0xFF000000);
-
-                    // Auto-save the color to the venueProvider
-                    ref.read(venueProvider.notifier).updateDesignAndDisplay();
+                    currentColor = newColor;
                   });
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -99,20 +76,26 @@ class _CustomColorPickerDialogState
         ElevatedButton(
           child: const Text('Select'),
           onPressed: () {
-            Navigator.of(context)
-                .pop(); // Just close the dialog since colors auto-save
+            // Update the provider with the selected color
+            ref.read(widget.colorProvider.notifier).state = currentColor;
+            Navigator.of(context).pop();
+          },
+        ),
+        ElevatedButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            // Do not update the provider, just close the dialog
+            Navigator.of(context).pop();
           },
         ),
       ],
     );
   }
 
-  // Utility method to convert a Color to a hex string
   String _colorToHex(Color color) {
     return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
   }
 
-  // Utility method to convert a hex string to a Color object
   Color _hexToColor(String hexString) {
     final buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');

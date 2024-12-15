@@ -1,4 +1,4 @@
-import 'package:aureola_platform/providers/auth_provider.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/login/login_form.dart';
 import 'package:aureola_platform/screens/login/signup_form.dart';
 import 'package:aureola_platform/service/localization/localization.dart';

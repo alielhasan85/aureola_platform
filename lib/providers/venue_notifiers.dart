@@ -3,6 +3,7 @@
 import 'package:aureola_platform/images/aspect_ratio.dart';
 import 'package:aureola_platform/models/venue/design_display.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
+import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -189,5 +190,6 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
       {'designAndDisplay': updatedDesign.toMap()},
     );
   }
+
   // Add more methods as needed for other fields
 }
