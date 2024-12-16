@@ -1,19 +1,16 @@
 import 'package:aureola_platform/images/aspect_ratio.dart';
 import 'package:aureola_platform/images/image_card.dart';
 import 'package:aureola_platform/images/venue_image_controller.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/screens/login/auth_page.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
-import 'package:aureola_platform/screens/menu_management/branding_design/menu_branding_form_fields.dart';
-import 'package:aureola_platform/screens/menu_management/branding_design/menu_branding_preview.dart';
+import 'package:aureola_platform/screens/venue_management/branding_design/menu_branding_form_fields.dart';
+import 'package:aureola_platform/screens/venue_management/branding_design/menu_branding_preview.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
-import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:aureola_platform/models/venue/design_display.dart';
-
-// Import the new widgets
 
 class MenuBranding extends ConsumerWidget {
   const MenuBranding({Key? key}) : super(key: key);
@@ -21,13 +18,13 @@ class MenuBranding extends ConsumerWidget {
   static const double baseNavRailWidth = 230.0;
   static const double minFormWidth = 600.0;
   static const double maxFormWidth = 800.0;
-  static const double previewContainerWidth = 485.0;
+  static const double previewContainerWidth = 393.0;
   static const double cardSpacing = 20.0;
   static const double mobileBreakpoint = 700.0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final venue = ref.watch(venueProvider);
+    final venue = ref.read(venueProvider);
 
     if (venue == null) {
       return const LoginPage();
@@ -68,15 +65,16 @@ class MenuBranding extends ConsumerWidget {
                       margin: const EdgeInsets.all(cardSpacing),
                       decoration: AppTheme.cardDecoration,
                       child: SingleChildScrollView(
-                          child: Column(
-                        children: [
-                          MenuBrandingFormFields(
-                            design: design,
-                            layout: 'isDesktop',
-                          ),
-                          _saveCancel(ref),
-                        ],
-                      )),
+                        child: Column(
+                          children: [
+                            MenuBrandingFormFields(
+                              design: design,
+                              layout: 'isDesktop',
+                            ),
+                            _saveCancel(ref),
+                          ],
+                        ),
+                      ),
                     ),
                     Container(
                       width: previewContainerWidth,
@@ -87,8 +85,9 @@ class MenuBranding extends ConsumerWidget {
                           borderRadius: BorderRadius.zero,
                         ),
                       ),
-                      child: SingleChildScrollView(
-                          child: const MenuBrandingPreview()),
+                      child: const SingleChildScrollView(
+                        child: MenuBrandingPreview(),
+                      ),
                     ),
                   ],
                 );
@@ -104,15 +103,16 @@ class MenuBranding extends ConsumerWidget {
                         margin: const EdgeInsets.all(cardSpacing),
                         decoration: AppTheme.cardDecoration,
                         child: SingleChildScrollView(
-                            child: Column(
-                          children: [
-                            MenuBrandingFormFields(
-                              design: design,
-                              layout: 'isTablet',
-                            ),
-                            _saveCancel(ref),
-                          ],
-                        )),
+                          child: Column(
+                            children: [
+                              MenuBrandingFormFields(
+                                design: design,
+                                layout: 'isTablet',
+                              ),
+                              _saveCancel(ref),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     Positioned(
@@ -132,15 +132,16 @@ class MenuBranding extends ConsumerWidget {
                       width: double.infinity,
                       decoration: AppTheme.cardDecorationMob,
                       child: SingleChildScrollView(
-                          child: Column(
-                        children: [
-                          MenuBrandingFormFields(
-                            design: design,
-                            layout: 'isMobile',
-                          ),
-                          _saveCancel(ref),
-                        ],
-                      )),
+                        child: Column(
+                          children: [
+                            MenuBrandingFormFields(
+                              design: design,
+                              layout: 'isMobile',
+                            ),
+                            _saveCancel(ref),
+                          ],
+                        ),
+                      ),
                     ),
                     Positioned(
                       bottom: 30,
@@ -165,7 +166,8 @@ class MenuBranding extends ConsumerWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          MenuBrandingFormFields(design: design, layout: ''),
+                          MenuBrandingFormFields(
+                              design: design, layout: 'isMobile'),
                           _saveCancel(ref),
                         ],
                       ),
@@ -221,15 +223,25 @@ class MenuBranding extends ConsumerWidget {
     final draftRatio = ref.read(draftLogoAspectRatioProvider);
     final draftImageData = ref.read(draftLogoImageDataProvider);
 
-    // If aspect ratio changed, update it now
+    final newDisplayName = ref.read(displayNameProvider);
+    final newTagline = ref.read(taglineProvider);
+
+    if (newDisplayName != venue.venueName) {
+      //update provider venue
+      ref.read(venueProvider.notifier).updateVenueName(newDisplayName);
+      // update firestore
+    }
+
+    if (newTagline != venue.tagLine) {
+      ref.read(venueProvider.notifier).updateTagline(newTagline);
+    }
+
     if (draftRatio != null &&
         draftRatio != venue.designAndDisplay.logoAspectRatio) {
       await _updateLogoAspectRatioInFirestore(ref, draftRatio);
     }
 
-    // If a new image was selected or deleted, upload or delete now
     if (draftImageData != null) {
-      // Upload new image
       await ref.read(venueImageControllerProvider.notifier).uploadImage(
             imageData: draftImageData,
             imageKey: 'logoUrl',
@@ -237,7 +249,6 @@ class MenuBranding extends ConsumerWidget {
             imageType: 'logo',
           );
     } else {
-      // If user deleted image:
       if (venue.designAndDisplay.logoUrl.isNotEmpty) {
         await ref
             .read(venueImageControllerProvider.notifier)
@@ -267,7 +278,6 @@ class MenuBranding extends ConsumerWidget {
 
     ref.read(venueProvider.notifier).setVenue(updatedVenue);
 
-    // Immediately update Firestore
     await FirestoreVenue().updateVenue(
       venue.userId,
       venue.venueId,

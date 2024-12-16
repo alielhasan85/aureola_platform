@@ -63,7 +63,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           displaySmall: AppTheme.appBarTitle,
           headlineLarge: AppTheme.heading2,
           headlineMedium: AppTheme.navigationItemText,
-          headlineSmall: AppTheme.tabItemText,
+          headlineSmall: AppTheme.navigationItemText,
           bodyLarge: AppTheme.paragraph,
           bodyMedium: AppTheme.buttonText,
           // Add more mappings if necessary

@@ -1,13 +1,13 @@
 import 'package:aureola_platform/images/image_card.dart';
-import 'package:aureola_platform/screens/menu_management/branding_design/widgets/color_palette.dart';
-import 'package:aureola_platform/screens/menu_management/branding_design/widgets/display_name.dart';
-import 'package:aureola_platform/screens/menu_management/branding_design/widgets/logo_upload_section.dart';
-import 'package:aureola_platform/screens/menu_management/branding_design/widgets/tag_line.dart';
+import 'package:aureola_platform/screens/venue_management/branding_design/color_palette.dart';
+import 'package:aureola_platform/screens/venue_management/branding_design/display_name.dart';
+import 'package:aureola_platform/screens/venue_management/branding_design/logo_upload_section.dart';
+
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/tag_line.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/models/venue/design_display.dart';
-import 'package:aureola_platform/images/aspect_ratio.dart';
-import 'package:aureola_platform/providers/venue_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,20 +29,24 @@ class MenuBrandingFormFields extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            AppLocalizations.of(context)!
-                .translate("Customize_your_brand_look"),
-            style: AppTheme.appBarTitle,
+          Center(
+            child: Text(
+              AppLocalizations.of(context)!
+                  .translate("Branding_&_Viual_Design"),
+              style: AppTheme.headingCard,
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context)!.translate(
-              "Tailor_your_QR_menu_to_showcase your unique brand identity.",
+              "Upload_Your_Brand_Assets:_Logo",
             ),
             style: AppTheme.paragraph,
           ),
           const SizedBox(height: 16),
+
           _buildNameAndTaglineLayout(),
           const SizedBox(height: 16),
 
@@ -65,7 +69,10 @@ class MenuBrandingFormFields extends ConsumerWidget {
         children: [
           Expanded(child: DisplayName()),
           const SizedBox(width: 16),
-          Expanded(child: TaglineWidget()),
+          Expanded(
+              child: TaglineWidget(
+            width: 300,
+          )),
         ],
       );
     } else {
@@ -74,7 +81,9 @@ class MenuBrandingFormFields extends ConsumerWidget {
         children: [
           DisplayName(),
           const SizedBox(height: 16),
-          TaglineWidget(),
+          TaglineWidget(
+            width: 300,
+          ),
         ],
       );
     }

@@ -142,10 +142,11 @@
   "enter_email_to_reset_password": "Enter your email address to reset your password.",
   "password_reset_email_sent": "Password reset email sent!",
   "error_sending_email": "Error sending password reset email.", 
-  "changes_saved_successfully" : "Changes saved successfully"
+  "changes_saved_successfully" : "Changes saved successfully", 
     
 
-  
+  "Branding_&_Viual_Design": "Branding & Visual Design",
+  "Upload_Your_Brand_Assets:_Logo": "Upload Your Brand Assets: Logo, Background Image, Color Palette, and More"
 
 
 }

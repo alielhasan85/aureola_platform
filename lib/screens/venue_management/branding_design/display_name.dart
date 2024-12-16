@@ -1,11 +1,12 @@
-import 'package:aureola_platform/providers/providers.dart';
+import 'package:aureola_platform/providers/providers.dart'; // Make sure this file contains displayNameProvider
+import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 
 class DisplayName extends ConsumerStatefulWidget {
-  const DisplayName({Key? key}) : super(key: key);
+  const DisplayName({super.key});
 
   @override
   ConsumerState<DisplayName> createState() => _DisplayNameState();
@@ -13,22 +14,12 @@ class DisplayName extends ConsumerStatefulWidget {
 
 class _DisplayNameState extends ConsumerState<DisplayName> {
   late TextEditingController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    final currentValue = ref.read(displayNameProvider);
-    _controller = TextEditingController(text: currentValue);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final venue = ref.read(venueProvider);
+
+    _controller = TextEditingController(text: venue!.venueName);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,7 +37,6 @@ class _DisplayNameState extends ConsumerState<DisplayName> {
                 .translate("enter_venue_display_name"),
           ),
           onChanged: (val) {
-            // Update provider whenever text changes
             ref.read(displayNameProvider.notifier).state = val;
           },
         ),

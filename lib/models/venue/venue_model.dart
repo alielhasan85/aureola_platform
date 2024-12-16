@@ -24,6 +24,7 @@ class VenueModel {
   final Subscription? subscription;
   final List<String> staff;
   final Map<String, dynamic> additionalInfo;
+  final String tagLine;
 
   VenueModel({
     required this.venueId,
@@ -40,40 +41,41 @@ class VenueModel {
     this.subscription,
     this.staff = const [],
     this.additionalInfo = const {},
+    this.tagLine = '',
   });
 
-  VenueModel copyWith({
-    String? venueId,
-    String? venueName,
-    String? userId,
-    Address? address,
-    Contact? contact,
-    List<String>? languageOptions,
-    SocialAccounts? socialAccounts,
-    Operations? operations,
-    List<QrCode>? qrCodes,
-    DesignAndDisplay? designAndDisplay,
-    PriceOptions? priceOptions,
-    Subscription? subscription,
-    List<String>? staff,
-    Map<String, dynamic>? additionalInfo,
-  }) {
+  VenueModel copyWith(
+      {String? venueId,
+      String? venueName,
+      String? userId,
+      Address? address,
+      Contact? contact,
+      List<String>? languageOptions,
+      SocialAccounts? socialAccounts,
+      Operations? operations,
+      List<QrCode>? qrCodes,
+      DesignAndDisplay? designAndDisplay,
+      PriceOptions? priceOptions,
+      Subscription? subscription,
+      List<String>? staff,
+      Map<String, dynamic>? additionalInfo,
+      String? tagLine}) {
     return VenueModel(
-      venueId: venueId ?? this.venueId,
-      venueName: venueName ?? this.venueName,
-      userId: userId ?? this.userId,
-      address: address ?? this.address,
-      contact: contact ?? this.contact,
-      languageOptions: languageOptions ?? this.languageOptions,
-      socialAccounts: socialAccounts ?? this.socialAccounts,
-      operations: operations ?? this.operations,
-      qrCodes: qrCodes ?? this.qrCodes,
-      designAndDisplay: designAndDisplay ?? this.designAndDisplay,
-      priceOptions: priceOptions ?? this.priceOptions,
-      subscription: subscription ?? this.subscription,
-      staff: staff ?? this.staff,
-      additionalInfo: additionalInfo ?? this.additionalInfo,
-    );
+        venueId: venueId ?? this.venueId,
+        venueName: venueName ?? this.venueName,
+        userId: userId ?? this.userId,
+        address: address ?? this.address,
+        contact: contact ?? this.contact,
+        languageOptions: languageOptions ?? this.languageOptions,
+        socialAccounts: socialAccounts ?? this.socialAccounts,
+        operations: operations ?? this.operations,
+        qrCodes: qrCodes ?? this.qrCodes,
+        designAndDisplay: designAndDisplay ?? this.designAndDisplay,
+        priceOptions: priceOptions ?? this.priceOptions,
+        subscription: subscription ?? this.subscription,
+        staff: staff ?? this.staff,
+        additionalInfo: additionalInfo ?? this.additionalInfo,
+        tagLine: tagLine ?? this.tagLine);
   }
 
   Map<String, dynamic> toMap() {
@@ -92,45 +94,47 @@ class VenueModel {
       if (priceOptions != null) 'priceOptions': priceOptions!.toMap(),
       if (subscription != null) 'subscription': subscription!.toMap(),
       if (additionalInfo.isNotEmpty) 'additionalInfo': additionalInfo,
+      'tagLine': tagLine
     };
   }
 
   factory VenueModel.fromMap(Map<String, dynamic> map, String venueId) {
     return VenueModel(
-      venueId: venueId,
-      venueName: map['venueName'] ?? '',
-      userId: map['userId'] ?? '',
-      address: Address.fromMap(map['address'] ?? {}),
-      contact: Contact.fromMap(map['contact'] ?? {}),
-      languageOptions: List<String>.from(map['languageOptions'] ?? ['English']),
-      staff: List<String>.from(map['staff'] ?? []),
-      socialAccounts: map['socialAccounts'] != null
-          ? SocialAccounts.fromMap(map['socialAccounts'])
-          : null,
-      operations: map['operations'] != null
-          ? Operations.fromMap(map['operations'])
-          : null,
-      qrCodes: (map['qrCodes'] as List<dynamic>?)
-              ?.map((q) => QrCode.fromMap(q))
-              .toList() ??
-          [],
-      designAndDisplay: map['designAndDisplay'] != null
-          ? DesignAndDisplay.fromMap(map['designAndDisplay'])
-          : DesignAndDisplay(),
-      priceOptions: map['priceOptions'] != null
-          ? PriceOptions.fromMap(map['priceOptions'])
-          : null,
-      subscription: map['subscription'] != null
-          ? Subscription.fromMap(map['subscription'])
-          : null,
-      additionalInfo: map['additionalInfo'] != null
-          ? Map<String, dynamic>.from(map['additionalInfo'])
-          : {},
-    );
+        venueId: venueId,
+        venueName: map['venueName'] ?? '',
+        userId: map['userId'] ?? '',
+        address: Address.fromMap(map['address'] ?? {}),
+        contact: Contact.fromMap(map['contact'] ?? {}),
+        languageOptions:
+            List<String>.from(map['languageOptions'] ?? ['English']),
+        staff: List<String>.from(map['staff'] ?? []),
+        socialAccounts: map['socialAccounts'] != null
+            ? SocialAccounts.fromMap(map['socialAccounts'])
+            : null,
+        operations: map['operations'] != null
+            ? Operations.fromMap(map['operations'])
+            : null,
+        qrCodes: (map['qrCodes'] as List<dynamic>?)
+                ?.map((q) => QrCode.fromMap(q))
+                .toList() ??
+            [],
+        designAndDisplay: map['designAndDisplay'] != null
+            ? DesignAndDisplay.fromMap(map['designAndDisplay'])
+            : DesignAndDisplay(),
+        priceOptions: map['priceOptions'] != null
+            ? PriceOptions.fromMap(map['priceOptions'])
+            : null,
+        subscription: map['subscription'] != null
+            ? Subscription.fromMap(map['subscription'])
+            : null,
+        additionalInfo: map['additionalInfo'] != null
+            ? Map<String, dynamic>.from(map['additionalInfo'])
+            : {},
+        tagLine: map['tagLine'] ?? '');
   }
 
   @override
   String toString() {
-    return 'VenueModel(venueId: $venueId, venueName: $venueName, userId: $userId, address: $address, contact: $contact, languageOptions: $languageOptions, socialAccounts: $socialAccounts, operations: $operations, qrCodes: $qrCodes, designAndDisplay: $designAndDisplay, priceOptions: $priceOptions, subscription: $subscription, staff: $staff, additionalInfo: $additionalInfo)';
+    return 'VenueModel(venueId: $venueId, venueName: $venueName, userId: $userId, address: $address, contact: $contact, languageOptions: $languageOptions, socialAccounts: $socialAccounts, operations: $operations, qrCodes: $qrCodes, designAndDisplay: $designAndDisplay, priceOptions: $priceOptions, subscription: $subscription, staff: $staff, additionalInfo: $additionalInfo,tagLine: $tagLine )';
   }
 }

@@ -1,7 +1,14 @@
 // lib/providers/venue_notifier.dart
 
 import 'package:aureola_platform/images/aspect_ratio.dart';
+import 'package:aureola_platform/models/common/address.dart';
+import 'package:aureola_platform/models/common/contact.dart';
+import 'package:aureola_platform/models/common/subscription.dart';
 import 'package:aureola_platform/models/venue/design_display.dart';
+import 'package:aureola_platform/models/venue/operations.dart';
+import 'package:aureola_platform/models/venue/price_options.dart';
+import 'package:aureola_platform/models/venue/qr_code.dart';
+import 'package:aureola_platform/models/venue/social_accounts.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
@@ -79,6 +86,13 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
   void updateVenueName(String venueName) {
     if (state != null) {
       state = state!.copyWith(venueName: venueName);
+    }
+  }
+
+  // Update venueName
+  void updateTagline(String tagLine) {
+    if (state != null) {
+      state = state!.copyWith(tagLine: tagLine);
     }
   }
 
@@ -189,6 +203,58 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
       state!.venueId,
       {'designAndDisplay': updatedDesign.toMap()},
     );
+  }
+
+  /// Comprehensive method to update multiple fields of the VenueModel.
+  void updateVenue({
+    String? venueName,
+    String? tagLine,
+    Address? address,
+    Contact? contact,
+    List<String>? languageOptions,
+    SocialAccounts? socialAccounts,
+    Operations? operations,
+    List<QrCode>? qrCodes,
+    DesignAndDisplay? designAndDisplay,
+    PriceOptions? priceOptions,
+    Subscription? subscription,
+    List<String>? staff,
+    Map<String, dynamic>? additionalInfo,
+    // Add more fields as needed
+  }) {
+    if (state != null) {
+      // Update Address if provided
+      Address updatedAddress = address ?? state!.address;
+
+      // Update Contact if provided
+      Contact updatedContact = contact ?? state!.contact;
+
+      // Update AdditionalInfo if provided
+      Map<String, dynamic> updatedAdditionalInfo = additionalInfo != null
+          ? {...state!.additionalInfo, ...additionalInfo}
+          : state!.additionalInfo;
+
+      // Update DesignAndDisplay if provided
+      DesignAndDisplay updatedDesignAndDisplay =
+          designAndDisplay ?? state!.designAndDisplay;
+
+      // Create a new VenueModel with updated fields
+      state = state!.copyWith(
+        venueName: venueName,
+        tagLine: tagLine,
+        address: updatedAddress,
+        contact: updatedContact,
+        languageOptions: languageOptions ?? state!.languageOptions,
+        socialAccounts: socialAccounts ?? state!.socialAccounts,
+        operations: operations ?? state!.operations,
+        qrCodes: qrCodes ?? state!.qrCodes,
+        designAndDisplay: updatedDesignAndDisplay,
+        priceOptions: priceOptions ?? state!.priceOptions,
+        subscription: subscription ?? state!.subscription,
+        staff: staff ?? state!.staff,
+        additionalInfo: updatedAdditionalInfo,
+      );
+    }
   }
 
   // Add more methods as needed for other fields

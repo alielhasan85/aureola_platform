@@ -71,16 +71,16 @@ class AppTheme {
 
   static const TextStyle navigationItemText = TextStyle(
     color: secondary,
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'Inter',
     fontWeight: FontWeight.w500,
   );
 
-  static const TextStyle tabItemText = TextStyle(
-    color: secondary,
-    fontSize: 16,
-    fontFamily: 'Inter',
-    fontWeight: FontWeight.w400,
+  static const TextStyle headingCard = TextStyle(
+    color: primary,
+    fontSize: 22,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w600,
   );
 
   static const TextStyle tabBarItemText = TextStyle(

@@ -29,8 +29,8 @@ class VenueInfo extends ConsumerStatefulWidget {
 
 class _VenueInfoState extends ConsumerState<VenueInfo> {
   // 1 venue name
-  late TextEditingController _venueNameController;
-
+  late TextEditingController _nameController;
+  late TextEditingController _taglineController;
   late TextEditingController _emailController;
   late TextEditingController _websiteController;
   late TextEditingController _addressController;
@@ -48,14 +48,15 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
     final venue = ref.read(venueProvider);
     if (venue != null) {
-      _venueNameController = TextEditingController(text: venue.venueName);
+      _nameController = TextEditingController(text: venue.venueName);
+
       _emailController = TextEditingController(text: venue.contact.email);
       _websiteController = TextEditingController(text: venue.contact.website);
       _addressController =
           TextEditingController(text: venue.address.displayAddress);
 
       // Store venue type key
-      _selectedVenueType = venue.additionalInfo?['venueType'] ?? "Fine_Dining";
+      _selectedVenueType = venue.additionalInfo['venueType'] ?? "Fine_Dining";
 
       // Store default language as a key
       // If venue.languageOptions includes something like "English", you need to map it:
@@ -67,11 +68,11 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               .first // ensure this returns "english_" or similar key
           : "english_";
 
-      _alcoholOption = venue.additionalInfo?['sellAlcohol'] ?? false;
+      _alcoholOption = venue.additionalInfo['sellAlcohol'] ?? false;
       _selectedLocation = venue.address.location;
       _mapImageUrl = venue.additionalInfo['mapImageUrl'];
     } else {
-      _venueNameController = TextEditingController();
+      _nameController = TextEditingController();
       _emailController = TextEditingController();
       _websiteController = TextEditingController();
       _addressController = TextEditingController();
@@ -82,7 +83,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
   @override
   void dispose() {
-    _venueNameController.dispose();
+    _nameController.dispose();
     _emailController.dispose();
     _websiteController.dispose();
     _addressController.dispose();
@@ -205,7 +206,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          VenueNameField(width: fieldWidth, controller: _venueNameController),
+          VenueNameField(width: fieldWidth, controller: _nameController),
           const SizedBox(height: 16),
           VenueTypeDropdown(
             width: fieldWidth,
@@ -268,7 +269,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          VenueNameField(width: fieldWidth, controller: _venueNameController),
+          VenueNameField(width: fieldWidth, controller: _nameController),
           const SizedBox(height: 24),
           Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
           const SizedBox(height: 6),
@@ -378,7 +379,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           },
           child: Text(
             AppLocalizations.of(context)!.translate("pickup_location"),
-            style: AppTheme.tabItemText.copyWith(
+            style: AppTheme.paragraph.copyWith(
               color: AppTheme.blue,
               fontWeight: FontWeight.w600,
             ),
@@ -428,12 +429,12 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     }
 
     try {
-      String? downloadUrl = venue.additionalInfo?['mapImageUrl'];
+      String? downloadUrl = venue.additionalInfo['mapImageUrl'];
       // print('inside image save button');
       // print(downloadUrl);
       // Prepare Firestore update data
       final updateData = {
-        'venueName': _venueNameController.text.trim(),
+        'venueName': _nameController.text.trim(),
         'contact.email': _emailController.text.trim(),
         'contact.website': _websiteController.text.trim(),
         'address.street': venue.address.street,
@@ -459,6 +460,36 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
       await FirestoreVenue()
           .updateVenue(user.userId, venue.venueId, updateData);
+
+      // Update the provider with the new venue data
+      ref.read(venueProvider.notifier).updateVenue(
+        venueName: _nameController.text.trim(),
+        contact: venue.contact.copyWith(
+          email: _emailController.text.trim(),
+          website: _websiteController.text.trim(),
+        ),
+        address: venue.address.copyWith(
+          street: venue.address.street,
+          city: venue.address.city,
+          state: venue.address.state,
+          postalCode: venue.address.postalCode,
+          country: venue.address.country,
+          displayAddress: venue.address.displayAddress,
+          location: _selectedLocation ?? venue.address.location,
+        ),
+        languageOptions: [_selectedDefaultLanguage!],
+        additionalInfo: {
+          'venueType': _selectedVenueType,
+          'sellAlcohol': _alcoholOption,
+          'mapImageUrl': downloadUrl,
+          'location': _selectedLocation != null
+              ? {
+                  'latitude': _selectedLocation!.latitude,
+                  'longitude': _selectedLocation!.longitude,
+                }
+              : venue.additionalInfo['location'],
+        },
+      );
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

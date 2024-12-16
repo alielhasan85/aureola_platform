@@ -1,3 +1,4 @@
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/widgest/logo_icon.dart';
 import 'package:aureola_platform/providers/main_navigation_provider.dart';
 import 'package:aureola_platform/providers/main_title_provider.dart';
@@ -112,7 +113,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                     AppLocalizations.of(context)!.translate('menu_management'),
                     closeDrawer: false),
               ),
-              if (selectedIndex >= 3 && selectedIndex <= 8) ...[
+              if (selectedIndex >= 3 && selectedIndex <= 7) ...[
                 const SizedBox(height: 8),
                 Container(
                   width: 180,
@@ -168,20 +169,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                       const Divider(color: AppTheme.divider, thickness: 0.5),
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
-                            .translate("branding_design"),
+                            .translate("Flush_Screen"),
                         isSelected: selectedIndex == 7,
                         onSelect: () => _updateIndex(
                             7,
-                            AppLocalizations.of(context)!
-                                .translate('menu_management')),
-                      ),
-                      const Divider(color: AppTheme.divider, thickness: 0.5),
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!
-                            .translate("Flush_Screen"),
-                        isSelected: selectedIndex == 8,
-                        onSelect: () => _updateIndex(
-                            8,
                             AppLocalizations.of(context)!
                                 .translate('Flush_Screen')),
                       )
@@ -193,21 +184,21 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
               NavigationItem(
                 label: AppLocalizations.of(context)!.translate("Feedback"),
                 leadingIconPath: 'assets/icons/feedback.svg',
-                isSelected: selectedIndex == 9,
+                isSelected: selectedIndex == 8,
                 onTap: () => _updateIndex(
-                    9, AppLocalizations.of(context)!.translate("Feedback")),
+                    8, AppLocalizations.of(context)!.translate("Feedback")),
               ),
               const SizedBox(height: 8),
               NavigationItem(
                 label: AppLocalizations.of(context)!.translate("Settings"),
                 leadingIconPath: 'assets/icons/setting.svg',
                 trailingIconPath: 'assets/icons/arrow_down.svg',
-                isSelected: selectedIndex >= 10 && selectedIndex <= 12,
+                isSelected: selectedIndex >= 9 && selectedIndex <= 14,
                 onTap: () => _updateIndex(
-                    10, AppLocalizations.of(context)!.translate("venue_info"),
+                    9, AppLocalizations.of(context)!.translate("venue_info"),
                     closeDrawer: false),
               ),
-              if (selectedIndex >= 10 && selectedIndex <= 13) ...[
+              if (selectedIndex >= 9 && selectedIndex <= 14) ...[
                 const SizedBox(height: 8),
                 Container(
                   width: 180,
@@ -226,9 +217,9 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
                             .translate("venue_info"),
-                        isSelected: selectedIndex == 10,
+                        isSelected: selectedIndex == 9,
                         onSelect: () => _updateIndex(
-                            10,
+                            9,
                             AppLocalizations.of(context)!
                                 .translate("venue_info")),
                       ),
@@ -236,6 +227,16 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                         color: AppTheme.divider,
                         thickness: 0.5,
                       ),
+                      SubMenuItem(
+                        label: AppLocalizations.of(context)!
+                            .translate("branding_design"),
+                        isSelected: selectedIndex == 10,
+                        onSelect: () => _updateIndex(
+                            10,
+                            AppLocalizations.of(context)!
+                                .translate('menu_management')),
+                      ),
+                      const Divider(color: AppTheme.divider, thickness: 0.5),
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
                             .translate("social_media"),

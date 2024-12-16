@@ -1,5 +1,5 @@
 import 'package:aureola_platform/providers/providers.dart';
-import 'package:aureola_platform/screens/menu_management/branding_design/widgets/color_picker.dart';
+import 'package:aureola_platform/screens/venue_management/branding_design/color_picker.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

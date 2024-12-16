@@ -26,12 +26,12 @@ class HeaderContainer extends StatelessWidget {
 
             Text(
               'Welcome $userName',
-              style: AppTheme.tabItemText
+              style: AppTheme.navigationItemText
                   .copyWith(color: AppTheme.secondary, fontSize: 14),
             ),
             Text(
               currentDateTime,
-              style: AppTheme.tabItemText
+              style: AppTheme.navigationItemText
                   .copyWith(color: AppTheme.secondary, fontSize: 14),
             ),
           ],

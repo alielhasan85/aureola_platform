@@ -1,7 +1,9 @@
 // lib/screens/main_page/main_page.dart
 
 import 'package:aureola_platform/providers/main_navigation_provider.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
+import 'package:aureola_platform/screens/venue_management/branding_design/menu_branding.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +11,6 @@ import 'package:flutter/services.dart';
 
 import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_rail.dart';
-import 'package:aureola_platform/screens/menu_management/branding_design/menu_branding.dart';
 import 'package:aureola_platform/screens/venue_management/venue_info.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -66,15 +67,17 @@ class _MainPageState extends ConsumerState<MainPage> {
           return const Center(
               child: Text('Add-ons Content', style: AppTheme.appBarTitle));
         case 7:
-          return const MenuBranding();
+          return const Center(
+              child: Text('flush screen', style: AppTheme.appBarTitle));
         case 8:
           return const Center(
-              child: Text('flash screen', style: AppTheme.appBarTitle));
-        case 9:
-          return const Center(
               child: Text('Feedback', style: AppTheme.appBarTitle));
-        case 10:
+
+        case 9:
           return const VenueInfo();
+        case 10:
+          return const MenuBranding();
+
         case 11:
           return const Center(
               child: Text('social_media', style: AppTheme.appBarTitle));

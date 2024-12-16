@@ -123,7 +123,10 @@
   "password_reset_email_sent": "Password reset email sent!",
   "error_sending_email": "Error sending password reset email.",
 
-  "changes_saved_successfully" : "Changes saved successfully"
+  "changes_saved_successfully" : "Changes saved successfully", 
+  
+  "Branding_&_Visual_Design": "Markalaşma ve Görsel Tasarım",
+  "Upload_Your_Brand_Assets:_Logo": "Marka Varlıklarınızı Yükleyin: Logo, Arka Plan Resmi, Renk Paleti ve Daha Fazlası"
 
     
       

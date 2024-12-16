@@ -129,7 +129,11 @@
   "password_reset_email_sent": "Password reset email sent!",
   "error_sending_email": "Error sending password reset email.",
 
-  "changes_saved_successfully" : "Changes saved successfully"
+  "changes_saved_successfully" : "Changes saved successfully",
+
+  "Branding_&_Visual_Design": "Branding et Design Visuel",
+  "Upload_Your_Brand_Assets:_Logo": "Téléchargez vos éléments de marque : logo, image de fond, palette de couleurs, et plus encore"
+
 
   
       }

@@ -10,6 +10,8 @@ final authFormProvider = StateProvider<AuthForm>((ref) => AuthForm.login);
 
 final languageProvider =
     StateProvider<String>((ref) => 'en'); // Default to 'en'
+// This provider will store the index of the selected tab
+final selectedMenuIndexProvider = StateProvider<int>((ref) => 10);
 
 // draft provider - Branding and design
 final displayNameProvider = StateProvider<String>((ref) => '');
