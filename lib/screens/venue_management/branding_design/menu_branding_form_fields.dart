@@ -69,10 +69,6 @@ class MenuBrandingFormFields extends ConsumerWidget {
         children: [
           Expanded(child: DisplayName()),
           const SizedBox(width: 16),
-          Expanded(
-              child: TaglineWidget(
-            width: 300,
-          )),
         ],
       );
     } else {
@@ -81,9 +77,9 @@ class MenuBrandingFormFields extends ConsumerWidget {
         children: [
           DisplayName(),
           const SizedBox(height: 16),
-          TaglineWidget(
-            width: 300,
-          ),
+          // TaglineWidget(
+          //   width: 300,
+          // ),
         ],
       );
     }

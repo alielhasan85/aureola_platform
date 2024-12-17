@@ -5,11 +5,13 @@ import 'package:aureola_platform/service/theme/theme.dart';
 class EmailField extends StatelessWidget {
   final double width;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   const EmailField({
     super.key,
     required this.width,
     required this.controller,
+    this.validator,
   });
 
   @override
@@ -24,13 +26,15 @@ class EmailField extends StatelessWidget {
             style: AppTheme.paragraph,
           ),
           const SizedBox(height: 6),
-          TextField(
+          TextFormField(
             style: AppTheme.paragraph,
             cursorColor: AppTheme.accent,
             controller: controller,
             decoration: AppTheme.textFieldinputDecoration(
               hint: AppLocalizations.of(context)!.translate("enter_email"),
             ),
+            keyboardType: TextInputType.emailAddress,
+            validator: validator,
           ),
         ],
       ),

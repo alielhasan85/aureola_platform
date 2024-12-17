@@ -1,8 +1,10 @@
 {
-"English": "الإنجليزية",
+"English": "English",
   "Arabic": "العربية",
-  "French": "الفرنسية",
-  "Turkish": "التركية",
+  "French": "Français",
+  "Turkish": "Türkçe",
+
+
   "select_language": "اختر اللغة",
   "profile": "الملف الشخصي",
   "billing": "الفوترة",
@@ -111,7 +113,6 @@
     "enter_first_name": "أدخل اسمك الأول",
     "enter_last_name": "أدخل اسمك الأخير",
     "what_is_your_phone_number": "ما هو رقم هاتفك؟",
-    "enter_phone_number": "أدخل رقم هاتفك",
     "what_is_your_business_name": "ما هو اسم عملك؟",
     "enter_business_name": "أدخل اسم عملك",
     "what_is_your_country": "ما هي دولتك؟",
@@ -144,7 +145,33 @@
    "changes_saved_successfully" : "Changes saved successfully",
 
   "Branding_&_Visual_Design": "العلامة التجارية والتصميم البصري",
-  "Upload_Your_Brand_Assets:_Logo": "قم بتحميل عناصر علامتك التجارية: الشعار، صورة الخلفية، لوحة الألوان، والمزيد"
- 
+  "Upload_Your_Brand_Assets:_Logo": "قم بتحميل عناصر علامتك التجارية: الشعار، صورة الخلفية، لوحة الألوان، والمزيد",
+  
+  "Tagline": "الشعار",
+  "enter_venue_tagline": "أدخل شعار مكانك",
 
+  "website_required": "Website is required.",
+  "invalid_website": "Please enter a valid website URL.",
+  "invalid_website_scheme": "Website must start with http:// or https://.",
+  "invalid_website_tld": "Top-Level Domain should be at least two characters.",
+
+  
+  
+  "Select_Type_of_your_business": "Select Type of Your Business",
+  "venue_type_required": "Please select a venue type.",
+ 
+  "venue_name_required": "Venue name is required.",
+  "tagline_required": "Tagline is required.",
+  "tagline_too_short": "Tagline is too short.",
+  "tagline_too_long": "Tagline is too long.",
+  "email_required": "Email is required.",
+  "invalid_email": "Please enter a valid email address.",
+  "phone_number_required": "Phone number is required.",
+  "invalid_phone_number": "Please enter a valid phone number.",
+  
+  "save": "Save",
+ 
+  "unable_to_save": "Unable to save. Please try again.",
+  
+  "save_failed": "Save failed"
 }

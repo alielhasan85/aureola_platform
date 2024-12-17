@@ -23,7 +23,7 @@ class DefaultLanguageDropdown extends StatefulWidget {
 class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
   String? _selectedLanguage;
 
-  final languageKeys = ["english_", "arabic_", "french_"];
+  final languageKeys = ["English", "Arabic", "French", "Turkish"];
 
   @override
   void initState() {

@@ -45,8 +45,8 @@ class Address {
   Map<String, dynamic> toMap() {
     return {
       'location': {
-        'lat': location.latitude,
-        'lng': location.longitude,
+        'latitude': location.latitude,
+        'longitude': location.longitude,
       },
       'street': street,
       'city': city,
@@ -63,8 +63,8 @@ class Address {
     return Address(
       location: locationMap != null
           ? LatLng(
-              locationMap['lat']?.toDouble() ?? 25.286106,
-              locationMap['lng']?.toDouble() ?? 51.534817,
+              locationMap['latitude']?.toDouble(),
+              locationMap['longitude']?.toDouble(),
             )
           : const LatLng(25.286106, 51.534817),
       street: map['street'] ?? '',

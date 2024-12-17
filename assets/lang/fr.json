@@ -2,7 +2,7 @@
 "English": "Anglais",
   "Arabic": "Arabe",
   "French": "Français",
-  "Turkish": "Turc",
+  "Turkish": "Türkçe",
   "select_language": "Choisir la langue",
   "profile": "Profil",
   "billing": "Facturation",
@@ -132,11 +132,28 @@
   "changes_saved_successfully" : "Changes saved successfully",
 
   "Branding_&_Visual_Design": "Branding et Design Visuel",
-  "Upload_Your_Brand_Assets:_Logo": "Téléchargez vos éléments de marque : logo, image de fond, palette de couleurs, et plus encore"
-
+  "Upload_Your_Brand_Assets:_Logo": "Téléchargez vos éléments de marque : logo, image de fond, palette de couleurs, et plus encore",
+  "Tagline": "Slogan",
+  "enter_venue_tagline": "Entrez le slogan de votre établissement",
 
   
-      }
-      
-
+  
+  "Select_Type_of_your_business": "Select Type of Your Business",
+  "venue_type_required": "Please select a venue type.",
+ 
+  "venue_name_required": "Venue name is required.",
+  "tagline_required": "Tagline is required.",
+  "tagline_too_short": "Tagline is too short.",
+  "tagline_too_long": "Tagline is too long.",
+  "email_required": "Email is required.",
+  "invalid_email": "Please enter a valid email address.",
+  "phone_number_required": "Phone number is required.",
+  "invalid_phone_number": "Please enter a valid phone number.",
+  
+  "save": "Save",
+ 
+  "unable_to_save": "Unable to save. Please try again.",
+  
+  "save_failed": "Save failed"
+}
 

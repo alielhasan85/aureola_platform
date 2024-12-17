@@ -36,7 +36,6 @@ class Contact {
     String? phoneNumber,
     String? countryName,
     String? website,
-    String? whatsappNumber,
   }) {
     return Contact(
       email: email ?? this.email,

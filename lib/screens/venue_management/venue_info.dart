@@ -1,6 +1,7 @@
 import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/address_field.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/tag_line.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
@@ -10,7 +11,7 @@ import 'package:aureola_platform/screens/venue_management/widgets_venue_info/loc
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/map_picker_dialog.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_type_dropdown.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/alcohol_option_field.dart';
-import 'package:aureola_platform/screens/venue_management/widgets_venue_info/default_language_dropdown.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_language.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/phone_number_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/name_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/website_fields.dart';
@@ -19,6 +20,7 @@ import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl_phone_field/phone_number.dart';
 
 class VenueInfo extends ConsumerStatefulWidget {
   const VenueInfo({super.key});
@@ -28,6 +30,8 @@ class VenueInfo extends ConsumerStatefulWidget {
 }
 
 class _VenueInfoState extends ConsumerState<VenueInfo> {
+  final _formKey = GlobalKey<FormState>();
+
   // 1 venue name
   late TextEditingController _nameController;
   late TextEditingController _taglineController;
@@ -49,41 +53,26 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     final venue = ref.read(venueProvider);
     if (venue != null) {
       _nameController = TextEditingController(text: venue.venueName);
-
+      _taglineController = TextEditingController(text: venue.tagLine);
       _emailController = TextEditingController(text: venue.contact.email);
       _websiteController = TextEditingController(text: venue.contact.website);
       _addressController =
           TextEditingController(text: venue.address.displayAddress);
 
-      // Store venue type key
-      _selectedVenueType = venue.additionalInfo['venueType'] ?? "Fine_Dining";
+      _selectedVenueType = venue.additionalInfo['venueType'];
+      _selectedDefaultLanguage = venue.languageOptions.first;
 
-      // Store default language as a key
-      // If venue.languageOptions includes something like "English", you need to map it:
-      // If it's already a known key from languageKeys:
-      //   _selectedDefaultLanguage = venue.languageOptions.isNotEmpty ? venue.languageOptions.first : "english_";
-      // Otherwise, map "English" -> "english_", "Arabic" -> "arabic_", etc.
-      _selectedDefaultLanguage = (venue.languageOptions.isNotEmpty)
-          ? venue.languageOptions
-              .first // ensure this returns "english_" or similar key
-          : "english_";
-
-      _alcoholOption = venue.additionalInfo['sellAlcohol'] ?? false;
+      _alcoholOption = venue.additionalInfo['sellAlcohol'];
       _selectedLocation = venue.address.location;
       _mapImageUrl = venue.additionalInfo['mapImageUrl'];
-    } else {
-      _nameController = TextEditingController();
-      _emailController = TextEditingController();
-      _websiteController = TextEditingController();
-      _addressController = TextEditingController();
-      _selectedVenueType = "Fine_Dining";
-      _selectedDefaultLanguage = "english_";
     }
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _taglineController.dispose();
+
     _emailController.dispose();
     _websiteController.dispose();
     _addressController.dispose();
@@ -92,10 +81,12 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.read(userProvider);
+    final user = ref.watch(userProvider);
+
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Determine container width based on breakpoints
+    // Resposnivness is good
     double containerWidth;
 
     if (screenWidth >= 800) {
@@ -143,16 +134,20 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                           ? containerWidth
                           : (containerWidth - spacing) / 2;
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 20),
-                          _buildHeader(isTabletOrDesktop),
-                          const SizedBox(height: 16),
-                          _buildFormFields(
-                              columns, fieldWidth, spacing, containerWidth),
-                          const SizedBox(height: 16),
-                        ],
+                      return Form(
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 20),
+                            _buildHeader(isTabletOrDesktop),
+                            const SizedBox(height: 16),
+                            _buildFormFields(
+                                columns, fieldWidth, spacing, containerWidth),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -206,8 +201,36 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          VenueNameField(width: fieldWidth, controller: _nameController),
+          VenueNameField(
+            width: fieldWidth,
+            controller: _nameController,
+            validator: _validateVenueName,
+          ),
           const SizedBox(height: 16),
+          TaglineWidget(
+            width: fieldWidth,
+            controller: _taglineController,
+            validator: _validateTagline,
+          ),
+          const SizedBox(height: 12),
+          Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
+          const SizedBox(height: 12),
+          PhoneNumberField(width: fieldWidth),
+          const SizedBox(height: 16),
+          EmailField(
+            width: fieldWidth,
+            controller: _emailController,
+            validator: _validateEmail,
+          ),
+          const SizedBox(height: 16),
+          WebsiteFields(
+            width: fieldWidth,
+            websiteController: _websiteController,
+            validator: _validateWebsite, // Attach the validator
+          ),
+          const SizedBox(height: 12),
+          Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
+          const SizedBox(height: 12),
           VenueTypeDropdown(
             width: fieldWidth,
             initialValue: _selectedVenueType ??
@@ -242,13 +265,6 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             },
           ),
           const SizedBox(height: 16),
-          WebsiteFields(
-              width: fieldWidth, websiteController: _websiteController),
-          const SizedBox(height: 16),
-          EmailField(width: fieldWidth, controller: _emailController),
-          const SizedBox(height: 16),
-          PhoneNumberField(width: fieldWidth),
-          const SizedBox(height: 16),
           _buildPickupLocationSection(containerWidth),
           const SizedBox(height: 16),
           VenueAddressField(
@@ -269,7 +285,21 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          VenueNameField(width: fieldWidth, controller: _nameController),
+          Row(
+            children: [
+              VenueNameField(
+                width: fieldWidth,
+                controller: _nameController,
+                validator: _validateVenueName,
+              ),
+              SizedBox(width: spacing),
+              TaglineWidget(
+                width: fieldWidth,
+                controller: _taglineController,
+                validator: _validateTagline,
+              )
+            ],
+          ),
           const SizedBox(height: 24),
           Divider(color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
           const SizedBox(height: 6),
@@ -285,10 +315,14 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               EmailField(
                 width: fieldWidth,
                 controller: _emailController,
+                validator: _validateEmail,
               ),
               SizedBox(width: spacing),
               WebsiteFields(
-                  width: fieldWidth, websiteController: _websiteController)
+                width: fieldWidth,
+                websiteController: _websiteController,
+                validator: _validateWebsite, // Attach the validator
+              ),
             ],
           ),
           const SizedBox(height: 24),
@@ -381,7 +415,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             AppLocalizations.of(context)!.translate("pickup_location"),
             style: AppTheme.paragraph.copyWith(
               color: AppTheme.blue,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
+              decoration: TextDecoration.underline, // Add underline
+              decorationColor: AppTheme.blue,
             ),
           ),
         ),
@@ -394,117 +430,202 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     );
   }
 
-  void _handleSave() async {
-    // Validation checks...
-    // if (_venueNameController.text.isEmpty ||
-
-    //     _selectedVenueType == null ||
-    //     _selectedDefaultLanguage == null ||
-    //     _addressController.text.isEmpty) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text(
-    //         AppLocalizations.of(context)!
-    //             .translate('please_fill_all_required_fields'),
-    //       ),
-    //       backgroundColor: Colors.red,
-    //     ),
-    //   );
-    //   return;
-    // }
-    final user = ref.read(userProvider);
-    final venue = ref.read(venueProvider);
-
-    if (user == null || venue == null) {
-      // Handle errors...
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.translate('unable_to_save'),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
+// Validator for Website
+  String? _validateWebsite(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppLocalizations.of(context)!.translate("website_required");
     }
 
-    try {
-      String? downloadUrl = venue.additionalInfo['mapImageUrl'];
-      // print('inside image save button');
-      // print(downloadUrl);
-      // Prepare Firestore update data
-      final updateData = {
-        'venueName': _nameController.text.trim(),
-        'contact.email': _emailController.text.trim(),
-        'contact.website': _websiteController.text.trim(),
-        'address.street': venue.address.street,
-        'address.city': venue.address.city,
-        'address.state': venue.address.state,
-        'address.postalCode': venue.address.postalCode,
-        'address.country': venue.address.country,
-        'address.displayAddress': venue.address.displayAddress,
-        'address.location.latitude': venue.address.location.latitude,
-        'address.location.longitude': venue.address.location.longitude,
-        'additionalInfo.venueType': _selectedVenueType,
-        'additionalInfo.sellAlcohol': _alcoholOption,
-        'additionalInfo.mapImageUrl': downloadUrl,
-        'languageOptions': [_selectedDefaultLanguage!],
-      };
+    String url = value.trim();
 
-      if (_selectedLocation != null) {
-        updateData['additionalInfo.location'] = {
-          'latitude': _selectedLocation!.latitude,
-          'longitude': _selectedLocation!.longitude,
-        };
+    // If the user hasn't included the scheme, assume 'http://'
+    if (!url.startsWith(RegExp(r'^https?://'))) {
+      url = 'http://$url';
+    }
+
+    Uri? uri = Uri.tryParse(url);
+
+    if (uri == null || !uri.hasAuthority) {
+      return AppLocalizations.of(context)!.translate("invalid_website");
+    }
+
+    // Enforce specific schemes like http or https
+    if (uri.scheme != 'http' && uri.scheme != 'https') {
+      return AppLocalizations.of(context)!.translate("invalid_website_scheme");
+    }
+
+    // Additional Checks:
+
+    // 1. Host should not end with a dot
+    String host = uri.host;
+    if (host.endsWith('.')) {
+      return AppLocalizations.of(context)!.translate("invalid_website");
+    }
+
+    // 2. Host should contain at least one dot
+    if (!host.contains('.')) {
+      return AppLocalizations.of(context)!.translate("invalid_website");
+    }
+
+    // 3. TLD should be at least two characters
+    List<String> parts = host.split('.');
+    String tld = parts.last;
+    if (tld.length < 2) {
+      return AppLocalizations.of(context)!.translate("invalid_website_tld");
+    }
+
+    return null; // Validation passed
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppLocalizations.of(context)!.translate("email_required");
+    }
+    // Simple email regex
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(value.trim())) {
+      return AppLocalizations.of(context)!.translate("invalid_email");
+    }
+    return null;
+  }
+
+// Validator for Tagline
+  String? _validateTagline(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppLocalizations.of(context)!.translate("tagline_required");
+    }
+    if (value.trim().length < 5) {
+      return AppLocalizations.of(context)!.translate("tagline_too_short");
+    }
+    if (value.trim().length > 100) {
+      return AppLocalizations.of(context)!.translate("tagline_too_long");
+    }
+    return null; // Return null if validation passes
+  }
+
+  String? _validateVenueName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppLocalizations.of(context)!.translate("venue_name_required");
+    }
+    return null;
+  }
+
+  void _handleSave() async {
+    if (_formKey.currentState!.validate()) {
+      // All form fields are valid
+      final user = ref.read(userProvider);
+      final venue = ref.read(venueProvider);
+
+      if (user == null || venue == null) {
+        // User or Venue data is missing
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.translate('unable_to_save'),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
       }
 
-      await FirestoreVenue()
-          .updateVenue(user.userId, venue.venueId, updateData);
+      try {
+        //? downloadUrl = venue.additionalInfo['mapImageUrl'];
 
-      // Update the provider with the new venue data
-      ref.read(venueProvider.notifier).updateVenue(
-        venueName: _nameController.text.trim(),
-        contact: venue.contact.copyWith(
-          email: _emailController.text.trim(),
-          website: _websiteController.text.trim(),
-        ),
-        address: venue.address.copyWith(
-          street: venue.address.street,
-          city: venue.address.city,
-          state: venue.address.state,
-          postalCode: venue.address.postalCode,
-          country: venue.address.country,
-          displayAddress: venue.address.displayAddress,
-          location: _selectedLocation ?? venue.address.location,
-        ),
-        languageOptions: [_selectedDefaultLanguage!],
-        additionalInfo: {
-          'venueType': _selectedVenueType,
-          'sellAlcohol': _alcoholOption,
-          'mapImageUrl': downloadUrl,
-          'location': _selectedLocation != null
-              ? {
-                  'latitude': _selectedLocation!.latitude,
-                  'longitude': _selectedLocation!.longitude,
-                }
-              : venue.additionalInfo['location'],
-        },
-      );
+        // Prepare Firestore update data
+        final updateData = {
+          'venueName': _nameController.text.trim(),
+          'tagLine': _taglineController.text.trim(),
+          'contact.phoneNumber': venue.contact.phoneNumber.trim(),
+          'contact.countryDial': venue.contact.countryDial,
+          'contact.countryCode': venue.contact.countryCode,
+          'contact.countryName': venue.contact.countryName,
+          'contact.email': _emailController.text.trim(),
+          'contact.website': _websiteController.text.trim(),
+          'address.street': venue.address.street,
+          'address.city': venue.address.city,
+          'address.state': venue.address.state,
+          'address.postalCode': venue.address.postalCode,
+          'address.country': venue.address.country,
+          'address.displayAddress': venue.address.displayAddress,
+          // location - to be considered
+          'address.location.latitude': venue.address.location.latitude,
+          'address.location.longitude': venue.address.location.longitude,
+          'additionalInfo.venueType': _selectedVenueType,
+          'additionalInfo.sellAlcohol': _alcoholOption,
+          'additionalInfo.mapImageUrl': venue.additionalInfo['mapImageUrl'],
+          'languageOptions': [_selectedDefaultLanguage!],
+        };
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!
-                .translate('changes_saved_successfully'),
+        // if (_selectedLocation != null) {
+        //   updateData['additionalInfo.location'] = {
+        //     'latitude': _selectedLocation!.latitude,
+        //     'longitude': _selectedLocation!.longitude,
+        //   };
+        // }
+
+        // Update Firestore
+        await FirestoreVenue()
+            .updateVenue(user.userId, venue.venueId, updateData);
+
+        // Update the provider with the new venue data
+        ref.read(venueProvider.notifier).updateVenue(
+          venueName: _nameController.text.trim(),
+          tagLine: _taglineController.text.trim(),
+          contact: venue.contact.copyWith(
+            email: _emailController.text.trim(),
+            website: _websiteController.text.trim(),
           ),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (e) {
+          address: venue.address.copyWith(
+            street: venue.address.street,
+            city: venue.address.city,
+            state: venue.address.state,
+            postalCode: venue.address.postalCode,
+            country: venue.address.country,
+            displayAddress: venue.address.displayAddress,
+            location: _selectedLocation ?? venue.address.location,
+          ),
+          languageOptions: [_selectedDefaultLanguage!],
+          additionalInfo: {
+            'venueType': _selectedVenueType,
+            'sellAlcohol': _alcoholOption,
+            'mapImageUrl': venue.additionalInfo['mapImageUrl'],
+            'location': _selectedLocation != null
+                ? {
+                    'latitude': _selectedLocation!.latitude,
+                    'longitude': _selectedLocation!.longitude,
+                  }
+                : venue.additionalInfo['location'],
+          },
+        );
+
+        // Show success SnackBar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!
+                  .translate('changes_saved_successfully'),
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } catch (e) {
+        // Handle any errors during save
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '${AppLocalizations.of(context)!.translate('save_failed')}: $e',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      // Form is invalid, show error SnackBar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            '${AppLocalizations.of(context)!.translate('save_failed')}: $e',
+            AppLocalizations.of(context)!.translate('please_fix_errors'),
           ),
           backgroundColor: Colors.red,
         ),
@@ -512,12 +633,3 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     }
   }
 }
-//   bool _locationChanged() {
-//     final venue = ref.read(venueProvider);
-//     if (venue == null || _selectedLocation == null) return false;
-
-//     final oldLocation = venue.address.location;
-//     return oldLocation.latitude != _selectedLocation!.latitude ||
-//         oldLocation.longitude != _selectedLocation!.longitude;
-//   }
-// }

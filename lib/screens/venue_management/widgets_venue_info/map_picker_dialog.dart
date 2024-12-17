@@ -31,7 +31,8 @@ class _MapPickerDialogState extends ConsumerState<MapPickerDialog> {
   void initState() {
     super.initState();
     final venue = ref.read(venueProvider);
-
+    print('checking location inisde mapicker');
+    print(venue?.address.location);
     // Initialize with the venue's current location or a default location
     _pickedLocation =
         venue?.address.location ?? const LatLng(25.286106, 51.534817);
@@ -57,7 +58,7 @@ class _MapPickerDialogState extends ConsumerState<MapPickerDialog> {
         'key': apiKey,
       },
     ).toString();
-    print(staticMapUrl);
+
     return staticMapUrl;
   }
 
@@ -108,7 +109,7 @@ class _MapPickerDialogState extends ConsumerState<MapPickerDialog> {
 
   @override
   Widget build(BuildContext context) {
-//final venue = ref.read(venueProvider);
+    final venue = ref.read(venueProvider);
 
     return AlertDialog(
       title: Text(

@@ -3,7 +3,7 @@
 import 'package:aureola_platform/providers/main_navigation_provider.dart';
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
-import 'package:aureola_platform/screens/venue_management/branding_design/menu_branding.dart';
+import 'package:aureola_platform/screens/venue_management/menu_branding.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

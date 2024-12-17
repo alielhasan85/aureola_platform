@@ -52,7 +52,7 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
   void updateVenueType(String venueType) {
     if (state != null) {
       final updatedInfo = {
-        ...?state!.additionalInfo,
+        ...state!.additionalInfo,
         'venueType': venueType,
       };
       state = state!.copyWith(additionalInfo: updatedInfo);
@@ -167,8 +167,7 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
   }) {
     if (state != null) {
       // Retrieve the current DesignAndDisplay, or initialize if null
-      DesignAndDisplay currentDesign =
-          state!.designAndDisplay ?? DesignAndDisplay();
+      DesignAndDisplay currentDesign = state!.designAndDisplay;
 
       // Create a new DesignAndDisplay with updated fields
       final updatedDesign = currentDesign.copyWith(
@@ -203,6 +202,29 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
       state!.venueId,
       {'designAndDisplay': updatedDesign.toMap()},
     );
+  }
+
+  // Contact update methods
+  void updateContact({
+    String? email,
+    String? website,
+    String? phoneNumber,
+    String? countryDial,
+    String? countryCode,
+    String? countryName,
+  }) {
+    if (state != null) {
+      state = state!.copyWith(
+        contact: state!.contact.copyWith(
+          email: email ?? state!.contact.email,
+          website: website ?? state!.contact.website,
+          phoneNumber: phoneNumber ?? state!.contact.phoneNumber,
+          countryDial: countryDial ?? state!.contact.countryDial,
+          countryCode: countryCode ?? state!.contact.countryCode,
+          countryName: countryName ?? state!.contact.countryName,
+        ),
+      );
+    }
   }
 
   /// Comprehensive method to update multiple fields of the VenueModel.

@@ -117,11 +117,8 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
             email: user.contact.email,
             phoneNumber: user.contact.phoneNumber,
             countryDial: user.contact.countryDial,
-            countryName: countryName,
-            countryCode: countryCode
-
-            // Optional fields left as default ''
-            );
+            countryName: user.contact.countryName,
+            countryCode: user.contact.countryCode);
 
         // Create Address object for Venue with empty fields
         Address venueAddress = Address(
@@ -196,6 +193,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: to fix UI
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Setup'),
