@@ -19,16 +19,16 @@ class PasswordField extends StatelessWidget {
         children: [
           Text(
             AppLocalizations.of(context)!.translate('Password'),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           TextField(
-            style: AppTheme.paragraph,
-            cursorColor: AppTheme.accent,
+            style: AppThemeLocal.paragraph,
+            cursorColor: AppThemeLocal.accent,
             enabled: false,
             obscureText: true,
             controller: TextEditingController(text: '********'),
-            decoration: AppTheme.textFieldinputDecoration(
+            decoration: AppThemeLocal.textFieldinputDecoration(
               hint: '********',
             ),
           ),

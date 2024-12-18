@@ -36,7 +36,7 @@ class _UserPhoneNumberFieldState extends ConsumerState<UserPhoneNumberField> {
         children: [
           Text(
             AppLocalizations.of(context)!.translate("phone_number"),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           Directionality(
@@ -45,13 +45,13 @@ class _UserPhoneNumberFieldState extends ConsumerState<UserPhoneNumberField> {
               languageCode: languageCode,
               pickerDialogStyle: PickerDialogStyle(
                 width: widget.width,
-                countryNameStyle: AppTheme.paragraph,
+                countryNameStyle: AppThemeLocal.paragraph,
               ),
               // Use the fetched language code
               controller: widget.controller,
-              style: AppTheme.paragraph,
-              cursorColor: AppTheme.accent,
-              decoration: AppTheme.textFieldinputDecoration(
+              style: AppThemeLocal.paragraph,
+              cursorColor: AppThemeLocal.accent,
+              decoration: AppThemeLocal.textFieldinputDecoration(
                 hint: AppLocalizations.of(context)!
                     .translate("enter_phone_number"),
               ),
@@ -62,7 +62,7 @@ class _UserPhoneNumberFieldState extends ConsumerState<UserPhoneNumberField> {
                 });
                 // print(completeNumber); // Output example: +97474716942
               },
-              dropdownTextStyle: AppTheme.paragraph,
+              dropdownTextStyle: AppThemeLocal.paragraph,
               textAlign: TextAlign.start,
             ),
           ),

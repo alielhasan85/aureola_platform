@@ -25,14 +25,14 @@ class _DisplayNameState extends ConsumerState<DisplayName> {
       children: [
         Text(
           AppLocalizations.of(context)!.translate("Display_Name"),
-          style: AppTheme.paragraph,
+          style: AppThemeLocal.paragraph,
         ),
         const SizedBox(height: 6),
         TextField(
-          style: AppTheme.paragraph,
-          cursorColor: AppTheme.accent,
+          style: AppThemeLocal.paragraph,
+          cursorColor: AppThemeLocal.accent,
           controller: _controller,
-          decoration: AppTheme.textFieldinputDecoration(
+          decoration: AppThemeLocal.textFieldinputDecoration(
             hint: AppLocalizations.of(context)!
                 .translate("enter_venue_display_name"),
           ),

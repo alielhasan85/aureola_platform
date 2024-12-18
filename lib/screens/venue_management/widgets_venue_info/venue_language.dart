@@ -41,7 +41,7 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
         children: [
           Text(
             AppLocalizations.of(context)!.translate("default_language"),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           DropdownSearch<String>(
@@ -49,7 +49,7 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
             popupProps: PopupProps.menu(
               fit: FlexFit.loose,
               menuProps: const MenuProps(
-                backgroundColor: AppTheme.background,
+                backgroundColor: AppThemeLocal.background,
                 margin: EdgeInsets.only(top: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -67,8 +67,8 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
                   ),
                   child: Text(
                     AppLocalizations.of(context)!.translate(item),
-                    style:
-                        AppTheme.paragraph.copyWith(color: AppTheme.secondary),
+                    style: AppThemeLocal.paragraph
+                        .copyWith(color: AppThemeLocal.secondary),
                     textAlign: TextAlign.start,
                   ),
                 );
@@ -81,7 +81,7 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
                     ? AppLocalizations.of(context)!
                         .translate("Select_Default_Language")
                     : AppLocalizations.of(context)!.translate(selectedItem),
-                style: AppTheme.paragraph,
+                style: AppThemeLocal.paragraph,
               );
             },
             selectedItem: _selectedLanguage,
@@ -94,8 +94,8 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
               }
             },
             decoratorProps: DropDownDecoratorProps(
-              baseStyle: AppTheme.paragraph,
-              decoration: AppTheme.textFieldinputDecoration(
+              baseStyle: AppThemeLocal.paragraph,
+              decoration: AppThemeLocal.textFieldinputDecoration(
                 hint: AppLocalizations.of(context)!
                     .translate("Select_Default_Language"),
               ),

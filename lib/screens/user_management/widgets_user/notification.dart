@@ -9,7 +9,7 @@ class NotificationsSettingTab extends StatelessWidget {
     return Center(
       child: Text(
         'Notifications Settings',
-        style: AppTheme.paragraph,
+        style: AppThemeLocal.paragraph,
       ),
     );
   }

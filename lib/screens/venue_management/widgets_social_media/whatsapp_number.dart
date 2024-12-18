@@ -34,7 +34,7 @@ class _WhatsappNumberState extends ConsumerState<WhatsappNumber> {
         children: [
           Text(
             AppLocalizations.of(context)!.translate("whatsapp_number"),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           Directionality(
@@ -43,12 +43,12 @@ class _WhatsappNumberState extends ConsumerState<WhatsappNumber> {
               languageCode: languageCode,
               pickerDialogStyle: PickerDialogStyle(
                 width: widget.width,
-                countryNameStyle: AppTheme.paragraph,
+                countryNameStyle: AppThemeLocal.paragraph,
               ),
               controller: widget.controller,
-              style: AppTheme.paragraph,
-              cursorColor: AppTheme.accent,
-              decoration: AppTheme.textFieldinputDecoration(
+              style: AppThemeLocal.paragraph,
+              cursorColor: AppThemeLocal.accent,
+              decoration: AppThemeLocal.textFieldinputDecoration(
                 hint: AppLocalizations.of(context)!
                     .translate("enter_whatsapp_number"),
               ),
@@ -60,7 +60,7 @@ class _WhatsappNumberState extends ConsumerState<WhatsappNumber> {
                 //print(completeNumber); // Output example: +97474716942
               },
               dropdownTextStyle:
-                  AppTheme.paragraph.copyWith(fontStyle: FontStyle.italic),
+                  AppThemeLocal.paragraph.copyWith(fontStyle: FontStyle.italic),
               textAlign: TextAlign.start,
             ),
           ),

@@ -13,14 +13,14 @@ class AppLogo extends StatelessWidget {
       children: [
         Text(
           'Naya',
-          style: AppTheme.titleAureola,
+          style: AppThemeLocal.titleAureola,
         ),
         SizedBox(
           width: 8,
         ),
         Text(
           'Platform',
-          style: AppTheme.titlePlatform,
+          style: AppThemeLocal.titlePlatform,
         ),
       ],
     );

@@ -35,7 +35,7 @@ class MenuBrandingFormFields extends ConsumerWidget {
             child: Text(
               AppLocalizations.of(context)!
                   .translate("Branding_&_Viual_Design"),
-              style: AppTheme.headingCard,
+              style: AppThemeLocal.headingCard,
             ),
           ),
           const SizedBox(height: 12),
@@ -43,7 +43,7 @@ class MenuBrandingFormFields extends ConsumerWidget {
             AppLocalizations.of(context)!.translate(
               "Upload_Your_Brand_Assets:_Logo",
             ),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 16),
 

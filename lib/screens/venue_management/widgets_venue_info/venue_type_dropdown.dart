@@ -54,14 +54,14 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
         children: [
           Text(
             AppLocalizations.of(context)!.translate("venue_Business_type"),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           DropdownSearch<String>(
             popupProps: PopupProps.menu(
               fit: FlexFit.loose,
               menuProps: const MenuProps(
-                backgroundColor: AppTheme.background,
+                backgroundColor: AppThemeLocal.background,
                 margin: EdgeInsets.only(top: 12),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -75,7 +75,7 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
                       vertical: 12.0, horizontal: 12),
                   child: Text(
                     AppLocalizations.of(context)!.translate(item),
-                    style: AppTheme.paragraph,
+                    style: AppThemeLocal.paragraph,
                     textAlign: TextAlign.start,
                   ),
                 );
@@ -90,7 +90,7 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
                     ? AppLocalizations.of(context)!
                         .translate("Select_Type_of_your_business")
                     : AppLocalizations.of(context)!.translate(selectedItem),
-                style: AppTheme.paragraph,
+                style: AppThemeLocal.paragraph,
               );
             },
             onChanged: (String? newKey) {
@@ -102,8 +102,8 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
               }
             },
             decoratorProps: DropDownDecoratorProps(
-              baseStyle: AppTheme.paragraph,
-              decoration: AppTheme.textFieldinputDecoration(
+              baseStyle: AppThemeLocal.paragraph,
+              decoration: AppThemeLocal.textFieldinputDecoration(
                 hint: AppLocalizations.of(context)!
                     .translate("Select_Type_of_your_business"),
               ),

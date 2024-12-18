@@ -77,7 +77,8 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
             child: Container(
               width: containerWidth,
               margin: const EdgeInsets.all(16.0),
-              decoration: screenWidth >= 800 ? AppTheme.cardDecoration : null,
+              decoration:
+                  screenWidth >= 800 ? AppThemeLocal.cardDecoration : null,
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +86,7 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
                   Text(
                     AppLocalizations.of(context)!
                         .translate("Profile_Information"),
-                    style: AppTheme.tabBarItemText,
+                    style: AppThemeLocal.tabBarItemText,
                   ),
                   const SizedBox(height: 16),
 
@@ -102,14 +103,15 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
 
                   const SizedBox(height: 24),
                   Divider(
-                      color: AppTheme.accent.withOpacity(0.5), thickness: 0.5),
+                      color: AppThemeLocal.accent.withOpacity(0.5),
+                      thickness: 0.5),
                   const SizedBox(height: 24),
 
                   // Login Info Section
                   Text(
                     AppLocalizations.of(context)!
                         .translate('login_information'),
-                    style: AppTheme.tabBarItemText,
+                    style: AppThemeLocal.tabBarItemText,
                   ),
                   const SizedBox(height: 16),
                   UserEmailField(

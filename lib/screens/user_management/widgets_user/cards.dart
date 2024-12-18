@@ -9,7 +9,7 @@ class CardsTab extends StatelessWidget {
     return Center(
       child: Text(
         'Card Management',
-        style: AppTheme.paragraph,
+        style: AppThemeLocal.paragraph,
       ),
     );
   }

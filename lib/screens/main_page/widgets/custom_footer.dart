@@ -15,7 +15,7 @@ class AppFooter extends StatelessWidget {
             AppLocalizations.of(context)!.translate("copyright"),
             style: TextStyle(
               fontSize: 14,
-              color: AppTheme.secondary,
+              color: AppThemeLocal.secondary,
             ),
           ),
         ),
@@ -23,7 +23,7 @@ class AppFooter extends StatelessWidget {
         Container(
           width: double.infinity,
           height: 8,
-          color: AppTheme.background2,
+          color: AppThemeLocal.background2,
         ),
       ],
     );

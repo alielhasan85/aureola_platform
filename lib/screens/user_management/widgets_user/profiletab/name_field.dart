@@ -21,14 +21,14 @@ class NameField extends StatelessWidget {
         children: [
           Text(
             AppLocalizations.of(context)!.translate("Name"),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           TextField(
-            style: AppTheme.paragraph,
-            cursorColor: AppTheme.accent,
+            style: AppThemeLocal.paragraph,
+            cursorColor: AppThemeLocal.accent,
             controller: controller,
-            decoration: AppTheme.textFieldinputDecoration(
+            decoration: AppThemeLocal.textFieldinputDecoration(
               hint: AppLocalizations.of(context)!.translate("Name_"),
             ),
           ),

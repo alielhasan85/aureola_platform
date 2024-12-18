@@ -48,7 +48,7 @@ class UserProfilePage extends ConsumerWidget {
 
         if (isTabletOrDesktop) {
           return Scaffold(
-            backgroundColor: AppTheme.background,
+            backgroundColor: AppThemeLocal.background,
             resizeToAvoidBottomInset: false,
             body: Row(
               children: [
@@ -65,15 +65,15 @@ class UserProfilePage extends ConsumerWidget {
                             child: Divider(
                               height: 0,
                               thickness: 0.5,
-                              color: AppTheme.divider,
+                              color: AppThemeLocal.divider,
                             ),
                           ),
                           iconTheme:
-                              const IconThemeData(color: AppTheme.primary),
-                          backgroundColor: AppTheme.white,
+                              const IconThemeData(color: AppThemeLocal.primary),
+                          backgroundColor: AppThemeLocal.white,
                           title: Text(
                             appBarTitle,
-                            style: AppTheme.appBarTitle,
+                            style: AppThemeLocal.appBarTitle,
                           ),
                           actions: [
                             const LanguageSelector(),

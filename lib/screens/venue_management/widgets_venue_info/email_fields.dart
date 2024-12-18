@@ -23,14 +23,14 @@ class EmailField extends StatelessWidget {
         children: [
           Text(
             AppLocalizations.of(context)!.translate("email"),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           TextFormField(
-            style: AppTheme.paragraph,
-            cursorColor: AppTheme.accent,
+            style: AppThemeLocal.paragraph,
+            cursorColor: AppThemeLocal.accent,
             controller: controller,
-            decoration: AppTheme.textFieldinputDecoration(
+            decoration: AppThemeLocal.textFieldinputDecoration(
               hint: AppLocalizations.of(context)!.translate("enter_email"),
             ),
             keyboardType: TextInputType.emailAddress,

@@ -65,12 +65,12 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
         child: Divider(
           height: 0,
           thickness: 0.5,
-          color: AppTheme.divider,
+          color: AppThemeLocal.divider,
         ),
       ),
       leading: leading,
-      iconTheme: const IconThemeData(color: AppTheme.primary),
-      backgroundColor: AppTheme.white,
+      iconTheme: const IconThemeData(color: AppThemeLocal.primary),
+      backgroundColor: AppThemeLocal.white,
       toolbarHeight: 60,
       title: Row(
         children: [
@@ -79,7 +79,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           Expanded(
             child: Text(
               title,
-              style: AppTheme.appBarTitle,
+              style: AppThemeLocal.appBarTitle,
               overflow: TextOverflow.ellipsis, // Handle long titles gracefully
             ),
           ),
@@ -91,7 +91,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           PopupMenuButton<AppBarMenuOption>(
             icon: const Icon(
               Icons.more_vert,
-              color: AppTheme.primary,
+              color: AppThemeLocal.primary,
             ),
             onSelected: (AppBarMenuOption option) {
               _handleMenuSelection(context, option);
@@ -121,7 +121,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           IconButton(
             icon: const Icon(
               Icons.notifications,
-              color: AppTheme.primary,
+              color: AppThemeLocal.primary,
             ),
             onPressed: () {
               // Navigate to Notifications Page
@@ -141,7 +141,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           PopupMenuButton<AppBarMenuOption>(
             icon: const Icon(
               Icons.account_circle,
-              color: AppTheme.primary,
+              color: AppThemeLocal.primary,
             ),
             onSelected: (AppBarMenuOption option) {
               _handleMenuSelection(context, option);
@@ -157,7 +157,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: AppTheme.primary,
+                      color: AppThemeLocal.primary,
                     ),
                   ),
                 );

@@ -32,7 +32,7 @@ class MenuBrandingPreview extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          const Text('Preview', style: AppTheme.paragraph),
+          const Text('Preview', style: AppThemeLocal.paragraph),
           const SizedBox(height: 10),
           // Fixed-size container to mimic a phone screen
           SizedBox(

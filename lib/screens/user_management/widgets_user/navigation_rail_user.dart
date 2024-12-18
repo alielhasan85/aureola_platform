@@ -41,7 +41,7 @@ class _NavigationRailUserState extends ConsumerState<NavigationRailUser> {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.white,
+        color: AppThemeLocal.white,
         border: widget.isDrawer
             ? null
             : Border(
@@ -50,7 +50,7 @@ class _NavigationRailUserState extends ConsumerState<NavigationRailUser> {
                         width: 0.5, color: Color.fromARGB(255, 218, 207, 207))
                     : BorderSide.none,
                 right: !isRtl
-                    ? const BorderSide(width: 0.5, color: AppTheme.divider)
+                    ? const BorderSide(width: 0.5, color: AppThemeLocal.divider)
                     : BorderSide.none,
               ),
       ),

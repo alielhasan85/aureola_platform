@@ -50,28 +50,30 @@ class _MainPageState extends ConsumerState<MainPage> {
       switch (index) {
         case 1:
           return const Center(
-              child: Text('Dashboard', style: AppTheme.appBarTitle));
+              child: Text('Dashboard', style: AppThemeLocal.appBarTitle));
         case 2:
           return const Center(
-              child: Text('Order Management', style: AppTheme.appBarTitle));
+              child:
+                  Text('Order Management', style: AppThemeLocal.appBarTitle));
         case 3:
           return const Center(
-              child: Text('Menu Content', style: AppTheme.appBarTitle));
+              child: Text('Menu Content', style: AppThemeLocal.appBarTitle));
         case 4:
           return const Center(
-              child: Text('Categories Content', style: AppTheme.appBarTitle));
+              child:
+                  Text('Categories Content', style: AppThemeLocal.appBarTitle));
         case 5:
           return const Center(
-              child: Text('Items Content', style: AppTheme.appBarTitle));
+              child: Text('Items Content', style: AppThemeLocal.appBarTitle));
         case 6:
           return const Center(
-              child: Text('Add-ons Content', style: AppTheme.appBarTitle));
+              child: Text('Add-ons Content', style: AppThemeLocal.appBarTitle));
         case 7:
           return const Center(
-              child: Text('flush screen', style: AppTheme.appBarTitle));
+              child: Text('flush screen', style: AppThemeLocal.appBarTitle));
         case 8:
           return const Center(
-              child: Text('Feedback', style: AppTheme.appBarTitle));
+              child: Text('Feedback', style: AppThemeLocal.appBarTitle));
 
         case 9:
           return const VenueInfo();
@@ -80,19 +82,20 @@ class _MainPageState extends ConsumerState<MainPage> {
 
         case 11:
           return const Center(
-              child: Text('social_media', style: AppTheme.appBarTitle));
+              child: Text('social_media', style: AppThemeLocal.appBarTitle));
         case 12:
           return const Center(
-              child: Text('prices_option', style: AppTheme.appBarTitle));
+              child: Text('prices_option', style: AppThemeLocal.appBarTitle));
         case 13:
           return const Center(
-              child: Text('tables_management', style: AppTheme.appBarTitle));
+              child:
+                  Text('tables_management', style: AppThemeLocal.appBarTitle));
         case 14:
           return const Center(
-              child: Text('QR_code', style: AppTheme.appBarTitle));
+              child: Text('QR_code', style: AppThemeLocal.appBarTitle));
         default:
           return const Center(
-              child: Text('Dashboard', style: AppTheme.appBarTitle));
+              child: Text('Dashboard', style: AppThemeLocal.appBarTitle));
       }
     }
 
@@ -101,7 +104,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         if (constraints.maxWidth > 700) {
           // Desktop/Tablet layout with navigation rail and app bar inside body
           return Scaffold(
-            backgroundColor: AppTheme.background,
+            backgroundColor: AppThemeLocal.background,
             key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
             body: Row(

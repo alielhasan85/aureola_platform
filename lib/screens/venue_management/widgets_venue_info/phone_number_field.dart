@@ -58,19 +58,19 @@ class _PhoneNumberFieldState extends ConsumerState<PhoneNumberField> {
         children: [
           Text(
             AppLocalizations.of(context)!.translate("phone_number"),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           IntlPhoneField(
             languageCode: languageCode,
             pickerDialogStyle: PickerDialogStyle(
               width: widget.width,
-              countryNameStyle: AppTheme.paragraph,
+              countryNameStyle: AppThemeLocal.paragraph,
             ),
             controller: _phoneController,
-            style: AppTheme.paragraph,
-            cursorColor: AppTheme.accent,
-            decoration: AppTheme.textFieldinputDecoration(
+            style: AppThemeLocal.paragraph,
+            cursorColor: AppThemeLocal.accent,
+            decoration: AppThemeLocal.textFieldinputDecoration(
               hint:
                   AppLocalizations.of(context)!.translate("enter_phone_number"),
             ),
@@ -91,7 +91,7 @@ class _PhoneNumberFieldState extends ConsumerState<PhoneNumberField> {
                   .read(venueProvider.notifier)
                   .updateContactCountryCode(country.code);
             },
-            dropdownTextStyle: AppTheme.paragraph,
+            dropdownTextStyle: AppThemeLocal.paragraph,
             textAlign: TextAlign.start,
             validator: widget.validator, // Pass the generic validator here
             autovalidateMode: AutovalidateMode

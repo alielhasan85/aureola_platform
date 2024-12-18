@@ -63,7 +63,7 @@ class MenuBranding extends ConsumerWidget {
                     Container(
                       width: formContainerWidth,
                       margin: const EdgeInsets.all(cardSpacing),
-                      decoration: AppTheme.cardDecoration,
+                      decoration: AppThemeLocal.cardDecoration,
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
@@ -101,7 +101,7 @@ class MenuBranding extends ConsumerWidget {
                       child: Container(
                         width: tabletFormWidth,
                         margin: const EdgeInsets.all(cardSpacing),
-                        decoration: AppTheme.cardDecoration,
+                        decoration: AppThemeLocal.cardDecoration,
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -130,7 +130,7 @@ class MenuBranding extends ConsumerWidget {
                   children: [
                     Container(
                       width: double.infinity,
-                      decoration: AppTheme.cardDecorationMob,
+                      decoration: AppThemeLocal.cardDecorationMob,
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
@@ -162,7 +162,7 @@ class MenuBranding extends ConsumerWidget {
                   child: Container(
                     width: fallbackWidth,
                     margin: const EdgeInsets.all(cardSpacing),
-                    decoration: AppTheme.cardDecoration,
+                    decoration: AppThemeLocal.cardDecoration,
                     child: SingleChildScrollView(
                       child: Column(
                         children: [

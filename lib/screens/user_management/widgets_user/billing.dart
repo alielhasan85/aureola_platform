@@ -9,7 +9,7 @@ class BillingTab extends StatelessWidget {
     return Center(
       child: Text(
         'Billing Information',
-        style: AppTheme.paragraph,
+        style: AppThemeLocal.paragraph,
       ),
     );
   }

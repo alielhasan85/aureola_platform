@@ -41,7 +41,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final authForm = ref.watch(authFormProvider);
 
     return Material(
-      color: AppTheme.background,
+      color: AppThemeLocal.background,
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -54,7 +54,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Card(
-                  color: AppTheme.white,
+                  color: AppThemeLocal.white,
                   elevation: 8,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -109,7 +109,7 @@ class TopDecoration extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         decoration: const BoxDecoration(
-          color: AppTheme.lightPeach,
+          color: AppThemeLocal.lightPeach,
           borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(40),
             bottomLeft: Radius.circular(40),
@@ -131,7 +131,7 @@ class TopDecoration extends StatelessWidget {
               Text(
                 AppLocalizations.of(context)!.translate('login_page_title'),
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: AppTheme.primary,
+                      color: AppThemeLocal.primary,
                       fontWeight: FontWeight.w900,
                     ),
                 textAlign: TextAlign.center,
@@ -140,7 +140,7 @@ class TopDecoration extends StatelessWidget {
               Text(
                 AppLocalizations.of(context)!.translate('login_page_subtitle'),
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: AppTheme.white,
+                      color: AppThemeLocal.white,
                     ),
                 textAlign: TextAlign.center,
               ),

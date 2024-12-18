@@ -15,7 +15,7 @@ class ColorPaletteSection extends ConsumerWidget {
     StateProvider<Color?> colorProvider,
     WidgetRef ref,
   ) {
-    final color = ref.watch(colorProvider) ?? AppTheme.accent;
+    final color = ref.watch(colorProvider) ?? AppThemeLocal.accent;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -24,7 +24,7 @@ class ColorPaletteSection extends ConsumerWidget {
         // you can use layout logic here. For simplicity, we keep it simple.
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: AppTheme.paragraph),
+          Text(label, style: AppThemeLocal.paragraph),
           InkWell(
             onTap: () => showDialog(
               context: context,
@@ -41,7 +41,7 @@ class ColorPaletteSection extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: color,
                 borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: AppTheme.grey2),
+                border: Border.all(color: AppThemeLocal.grey2),
               ),
             ),
           ),
@@ -55,7 +55,7 @@ class ColorPaletteSection extends ConsumerWidget {
     return Container(
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1, color: AppTheme.grey2),
+          side: BorderSide(width: 1, color: AppThemeLocal.grey2),
           borderRadius: BorderRadius.circular(10),
         ),
       ),

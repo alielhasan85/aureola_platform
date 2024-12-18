@@ -39,20 +39,20 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   //TODO: to delete this method
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   if (kDebugMode) {
-  //     // Set test credentials
-  //     widget.emailController.text = 'elhasan.ali@gmail.com';
-  //     widget.passwordController.text = 'rotation';
+  @override
+  void initState() {
+    super.initState();
+    if (kDebugMode) {
+      // Set test credentials
+      widget.emailController.text = 'elhasan.ali@gmail.com';
+      widget.passwordController.text = 'rotation';
 
-  //     // Automatically trigger login after the first frame
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       _logIn();
-  //     });
-  //   }
-  // }
+      // Automatically trigger login after the first frame
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _logIn();
+      });
+    }
+  }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -196,12 +196,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
         children: <Widget>[
           Text(
             AppLocalizations.of(context)!.translate('log_in_to_your_account'),
-            style: AppTheme.appBarTitle.copyWith(fontSize: 24),
+            style: AppThemeLocal.appBarTitle.copyWith(fontSize: 24),
           ),
           const SizedBox(height: 15.0),
           Text(
             AppLocalizations.of(context)!.translate('welcome_back'),
-            style: AppTheme.paragraph.copyWith(fontSize: 14),
+            style: AppThemeLocal.paragraph.copyWith(fontSize: 14),
           ),
           const SizedBox(height: 20.0),
           SizedBox(
@@ -212,15 +212,15 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.translate('email_label'),
-                  style: AppTheme.paragraph,
+                  style: AppThemeLocal.paragraph,
                 ),
                 const SizedBox(height: 6),
                 TextFormField(
-                  style: AppTheme.paragraph,
-                  cursorColor: AppTheme.accent,
+                  style: AppThemeLocal.paragraph,
+                  cursorColor: AppThemeLocal.accent,
                   controller: widget.emailController,
                   validator: _validateEmail,
-                  decoration: AppTheme.textFieldinputDecoration(
+                  decoration: AppThemeLocal.textFieldinputDecoration(
                     hint: AppLocalizations.of(context)!.translate('email_hint'),
                   ),
                 ),
@@ -235,16 +235,16 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               children: [
                 Text(
                   AppLocalizations.of(context)!.translate('password_label'),
-                  style: AppTheme.paragraph,
+                  style: AppThemeLocal.paragraph,
                 ),
                 const SizedBox(height: 6),
                 TextFormField(
-                  style: AppTheme.paragraph,
-                  cursorColor: AppTheme.accent,
+                  style: AppThemeLocal.paragraph,
+                  cursorColor: AppThemeLocal.accent,
                   controller: widget.passwordController,
                   validator: _validatePassword,
                   obscureText: true,
-                  decoration: AppTheme.textFieldinputDecoration(
+                  decoration: AppThemeLocal.textFieldinputDecoration(
                     hint: AppLocalizations.of(context)!
                         .translate('password_hint'),
                   ),

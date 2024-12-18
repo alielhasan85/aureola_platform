@@ -54,18 +54,18 @@ class _MyAppState extends ConsumerState<MyApp> {
         //colorScheme: AppTheme.colorScheme,
 
         // Apply the ColorScheme from AppTheme
-        colorScheme: AppTheme.colorScheme,
+        colorScheme: AppThemeLocal.colorScheme,
 
         // Apply the TextTheme from AppTheme
         textTheme: const TextTheme(
-          displayLarge: AppTheme.titleAureola,
-          displayMedium: AppTheme.titlePlatform,
-          displaySmall: AppTheme.appBarTitle,
-          headlineLarge: AppTheme.heading2,
-          headlineMedium: AppTheme.navigationItemText,
-          headlineSmall: AppTheme.navigationItemText,
-          bodyLarge: AppTheme.paragraph,
-          bodyMedium: AppTheme.buttonText,
+          displayLarge: AppThemeLocal.titleAureola,
+          displayMedium: AppThemeLocal.titlePlatform,
+          displaySmall: AppThemeLocal.appBarTitle,
+          headlineLarge: AppThemeLocal.heading2,
+          headlineMedium: AppThemeLocal.navigationItemText,
+          headlineSmall: AppThemeLocal.navigationItemText,
+          bodyLarge: AppThemeLocal.paragraph,
+          bodyMedium: AppThemeLocal.buttonText,
           // Add more mappings if necessary
         ),
 
@@ -75,9 +75,9 @@ class _MyAppState extends ConsumerState<MyApp> {
         // ElevatedButton Theme
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppTheme.accent, // Background color
-            foregroundColor: AppTheme.buttonText.color, // Text color
-            textStyle: AppTheme.buttonText,
+            backgroundColor: AppThemeLocal.accent, // Background color
+            foregroundColor: AppThemeLocal.buttonText.color, // Text color
+            textStyle: AppThemeLocal.buttonText,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
@@ -86,52 +86,52 @@ class _MyAppState extends ConsumerState<MyApp> {
 
         // AppBar Theme
         appBarTheme: AppBarTheme(
-          backgroundColor: AppTheme.primary,
-          titleTextStyle: AppTheme.titleAureola.copyWith(
-            color: AppTheme.white,
+          backgroundColor: AppThemeLocal.primary,
+          titleTextStyle: AppThemeLocal.titleAureola.copyWith(
+            color: AppThemeLocal.white,
             fontSize: 20,
           ),
           iconTheme: const IconThemeData(
-            color: AppTheme.white,
+            color: AppThemeLocal.white,
           ),
         ),
 
         // Input Decoration Theme
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: AppTheme.greyButton,
+          fillColor: AppThemeLocal.greyButton,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.0),
             borderSide: const BorderSide(
-              color: AppTheme.grey2,
+              color: AppThemeLocal.grey2,
               width: 0.75,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.0),
             borderSide: const BorderSide(
-              color: AppTheme.grey2,
+              color: AppThemeLocal.grey2,
               width: 0.75,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.0),
             borderSide: const BorderSide(
-              color: AppTheme.accent,
+              color: AppThemeLocal.accent,
               width: 0.75,
             ),
           ),
-          labelStyle: AppTheme.paragraph.copyWith(fontSize: 20),
-          hintStyle: AppTheme.paragraph.copyWith(fontSize: 14),
+          labelStyle: AppThemeLocal.paragraph.copyWith(fontSize: 20),
+          hintStyle: AppThemeLocal.paragraph.copyWith(fontSize: 14),
         ),
 
         // BottomNavigationBar Theme
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: AppTheme.white,
-          selectedItemColor: AppTheme.primary,
-          unselectedItemColor: AppTheme.grey2,
-          selectedLabelStyle: AppTheme.navigationItemText,
-          unselectedLabelStyle: AppTheme.navigationItemText,
+          backgroundColor: AppThemeLocal.white,
+          selectedItemColor: AppThemeLocal.primary,
+          unselectedItemColor: AppThemeLocal.grey2,
+          selectedLabelStyle: AppThemeLocal.navigationItemText,
+          unselectedLabelStyle: AppThemeLocal.navigationItemText,
         ),
 
         // Additional theme customizations can be added here

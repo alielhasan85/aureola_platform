@@ -191,16 +191,16 @@ class _SignUpFormState extends State<SignUpForm> {
             children: [
               Text(
                 AppLocalizations.of(context)!.translate('email_label'),
-                style: AppTheme.paragraph,
+                style: AppThemeLocal.paragraph,
               ),
               const SizedBox(height: 6),
               TextFormField(
-                style: AppTheme.paragraph,
-                cursorColor: AppTheme.accent,
+                style: AppThemeLocal.paragraph,
+                cursorColor: AppThemeLocal.accent,
                 controller: widget.emailController,
                 onChanged: (value) => _checkFields(),
                 validator: _validateEmail,
-                decoration: AppTheme.textFieldinputDecoration(
+                decoration: AppThemeLocal.textFieldinputDecoration(
                   hint: AppLocalizations.of(context)!.translate('email_hint'),
                 ),
               ),
@@ -214,17 +214,17 @@ class _SignUpFormState extends State<SignUpForm> {
             children: [
               Text(
                 AppLocalizations.of(context)!.translate('password_label'),
-                style: AppTheme.paragraph,
+                style: AppThemeLocal.paragraph,
               ),
               const SizedBox(height: 6),
               TextFormField(
-                style: AppTheme.paragraph,
-                cursorColor: AppTheme.accent,
+                style: AppThemeLocal.paragraph,
+                cursorColor: AppThemeLocal.accent,
                 controller: widget.passwordController,
                 validator: _validatePassword,
                 onChanged: (value) => _checkFields(),
                 obscureText: true,
-                decoration: AppTheme.textFieldinputDecoration(
+                decoration: AppThemeLocal.textFieldinputDecoration(
                   hint:
                       AppLocalizations.of(context)!.translate('password_hint'),
                 ),
@@ -241,13 +241,13 @@ class _SignUpFormState extends State<SignUpForm> {
                 Text(
                   AppLocalizations.of(context)!
                       .translate('confirm_password_label'),
-                  style: AppTheme.paragraph,
+                  style: AppThemeLocal.paragraph,
                 ),
                 const SizedBox(height: 6),
                 TextFormField(
-                  style: AppTheme.paragraph,
+                  style: AppThemeLocal.paragraph,
                   obscureText: true,
-                  cursorColor: AppTheme.accent,
+                  cursorColor: AppThemeLocal.accent,
                   controller: widget.confirmPasswordController,
                   validator: (value) {
                     if (value != widget.passwordController.text) {
@@ -257,7 +257,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     return null;
                   },
                   onChanged: (value) => _checkFields(),
-                  decoration: AppTheme.textFieldinputDecoration(
+                  decoration: AppThemeLocal.textFieldinputDecoration(
                     hint: AppLocalizations.of(context)!
                         .translate('confirm_password_hint'),
                   ),

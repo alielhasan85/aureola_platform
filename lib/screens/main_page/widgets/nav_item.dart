@@ -31,12 +31,12 @@ class _NavigationItemState extends ConsumerState<NavigationItem> {
   Widget build(BuildContext context) {
     // Set background color based on hover and selection
     Color backgroundColor = widget.isSelected || _isHovered
-        ? AppTheme.grey2.withOpacity(0.5)
-        : AppTheme.white;
+        ? AppThemeLocal.grey2.withOpacity(0.5)
+        : AppThemeLocal.white;
 
     // Set icon and text color based on selection
     Color iconAndTextColor =
-        widget.isSelected ? AppTheme.accent : AppTheme.secondary;
+        widget.isSelected ? AppThemeLocal.accent : AppThemeLocal.secondary;
 
     return GestureDetector(
       onTap: widget.onTap,
@@ -86,7 +86,7 @@ class _NavigationItemState extends ConsumerState<NavigationItem> {
               Expanded(
                 child: AutoSizeText(
                   widget.label,
-                  style: AppTheme.navigationItemText.copyWith(
+                  style: AppThemeLocal.navigationItemText.copyWith(
                     color: iconAndTextColor,
                   ),
                   maxLines: 1,

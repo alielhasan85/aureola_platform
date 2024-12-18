@@ -33,7 +33,8 @@ class _SubMenuItemState extends State<SubMenuItem> {
         : Colors.transparent;
 
     // Text color changes based on selection
-    Color textColor = widget.isSelected ? AppTheme.accent : AppTheme.secondary;
+    Color textColor =
+        widget.isSelected ? AppThemeLocal.accent : AppThemeLocal.secondary;
 
     return GestureDetector(
       onTap: () {
@@ -62,7 +63,7 @@ class _SubMenuItemState extends State<SubMenuItem> {
           ),
           child: Text(
             widget.label,
-            style: AppTheme.navigationItemText.copyWith(
+            style: AppThemeLocal.navigationItemText.copyWith(
               color: textColor,
             ),
           ),

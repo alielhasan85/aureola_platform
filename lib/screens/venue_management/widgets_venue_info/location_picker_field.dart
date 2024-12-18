@@ -1,17 +1,14 @@
-// location_picker_field.dart
-
+import 'dart:async';
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/providers/venue_provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
-
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'location_service.dart';
 
 class LocationPickerField extends ConsumerStatefulWidget {
   final double width;
@@ -27,58 +24,52 @@ class LocationPickerField extends ConsumerStatefulWidget {
 }
 
 class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
-  final String apiKey =
-      'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA'; // Replace with your actual API key
-
-  LatLng? _selectedLatLng;
   String? _selectedAddress;
-  String? mapImageUrl;
-  // Flag to ensure ref.listen is only called once
-  bool _isListening = false;
+  final locationService =
+      LocationService(apiKey: 'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA');
+  Timer? _debounce;
 
   @override
   void initState() {
-    final venue = ref.read(venueProvider);
-
     super.initState();
-    //TODO : to check if we can get address from GPS
-    // Initialize with the selected location or default location (e.g., Doha, Qatar)
-    _selectedLatLng =
-        venue?.address.location ?? const LatLng(25.286106, 51.534817);
-
-    mapImageUrl = venue?.additionalInfo['mapImageUrl'];
-
-    // Delay reverse geocoding until after the first build to ensure context is available
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final currentLanguage = ref.read(languageProvider);
-      _reverseGeocode(_selectedLatLng!, language: currentLanguage);
-    });
+    _updateAddress(); // You can call this once here to set initial address if needed
   }
 
-  // @override
-  // void didUpdateWidget(covariant LocationPickerField oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   if (widget.selectedLocation != oldWidget.selectedLocation &&
-  //       widget.selectedLocation != null) {
-  //     _selectedLatLng = widget.selectedLocation;
-  //     final currentLanguage = ref.read(languageProvider);
-  //     _reverseGeocode(_selectedLatLng!, language: currentLanguage);
-  //   }
-  // }
-
   @override
-  Widget build(BuildContext context) {
-    // Watch the languageProvider to get the current language
-    final currentLanguage = ref.watch(languageProvider);
-    // Set up ref.listen only once
-    if (!_isListening) {
-      _isListening = true;
-      ref.listen<String>(languageProvider, (previous, next) {
-        if (_selectedLatLng != null) {
-          _reverseGeocode(_selectedLatLng!, language: next);
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _updateAddress() {
+    final venue = ref.read(venueProvider);
+    if (venue?.address.location != null) {
+      final loc = venue!.address.location;
+      final lang = ref.read(languageProvider);
+
+      _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 500), () async {
+        final address = await locationService.reverseGeocode(loc, lang);
+        if (mounted) {
+          setState(() {
+            _selectedAddress = address ?? '${loc.latitude}, ${loc.longitude}';
+          });
         }
       });
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final venue = ref.watch(venueProvider);
+    final mapImageUrl = venue?.additionalInfo?['mapImageUrl'];
+    final currentLanguage = ref.watch(languageProvider);
+
+    // Use ref.listen inside build
+    ref.listen<String>(languageProvider, (previous, next) {
+      // Language changed, update address
+      _updateAddress();
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +81,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
             children: [
               Text(
                 AppLocalizations.of(context)!.translate("selected_location:"),
-                style: AppTheme.paragraph,
+                style: AppThemeLocal.paragraph,
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -100,7 +91,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
                       : TextDirection.ltr,
                   child: Text(
                     _selectedAddress!,
-                    style: AppTheme.paragraph,
+                    style: AppThemeLocal.paragraph,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -109,19 +100,13 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
           ),
         ],
         const SizedBox(height: 16),
-        // Display Static Map Image
-        _buildStaticMapImage(),
+        _buildStaticMapImage(mapImageUrl),
       ],
     );
   }
 
-  Widget _buildStaticMapImage() {
-    final venue =
-        ref.watch(venueProvider); // Watch venueProvider for state changes
-    final mapImageUrl = venue?.additionalInfo?['mapImageUrl'];
-
+  Widget _buildStaticMapImage(String? mapImageUrl) {
     if (mapImageUrl != null && mapImageUrl.isNotEmpty) {
-      print('Inside location picker: $mapImageUrl');
       return CachedNetworkImage(
         imageUrl: mapImageUrl,
         height: 300,
@@ -129,97 +114,19 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
         fit: BoxFit.cover,
         placeholder: (context, url) =>
             const Center(child: CircularProgressIndicator()),
-        errorWidget: (context, url, error) {
-          print('Error loading image from URL: $url');
-          print('Error details: $error');
-          return const Icon(Icons.error);
-        },
+        errorWidget: (context, url, error) => const Icon(Icons.error),
       );
-
-      // Image.network(
-      //   mapImageUrl,
-      //   height: 300,
-      //   width: widget.width,
-      //   fit: BoxFit.cover,
-      //   loadingBuilder: (context, child, loadingProgress) {
-      //     if (loadingProgress == null) return child; // Image loaded
-      //     return Center(
-      //       child: CircularProgressIndicator(
-      //         value: loadingProgress.expectedTotalBytes != null
-      //             ? loadingProgress.cumulativeBytesLoaded /
-      //                 loadingProgress.expectedTotalBytes!
-      //             : null,
-      //       ),
-      //     );
-      //   },
-      //   errorBuilder: (context, error, stackTrace) {
-      //     print('Error loading image: $error');
-      //     return Container(
-      //       height: 300,
-      //       width: widget.width,
-      //       alignment: Alignment.center,
-      //       color: Colors.grey.shade200,
-      //       child: Text(
-      //         'Failed to load image',
-      //         style: TextStyle(color: Colors.grey),
-      //       ),
-      //     );
-      //   },
-      // );
     } else {
-      // Fallback when no image URL is available
       return Container(
         height: 300,
         width: widget.width,
         alignment: Alignment.center,
         color: Colors.grey.shade200,
-        child: Text(
+        child: const Text(
           'No image available',
           style: TextStyle(color: Colors.grey),
         ),
       );
-    }
-  }
-
-  Future<void> _reverseGeocode(LatLng location,
-      {required String language}) async {
-    try {
-      final url = Uri.parse(
-        'https://nominatim.openstreetmap.org/reverse?format=jsonv2'
-        '&lat=${location.latitude}'
-        '&lon=${location.longitude}'
-        '&accept-language=$language',
-      );
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-
-        if (data['display_name'] != null) {
-          setState(() {
-            _selectedAddress = data['display_name'];
-          });
-
-          ref.read(venueProvider.notifier).updateAddress(
-                location: location,
-                displayAddress: data['display_name'],
-                street: data['address']['road'] ?? '',
-                city: data['address']['city'] ?? '',
-                state: data['address']['state'] ?? '',
-                postalCode: data['address']['postcode'] ?? '',
-                country: data['address']['country'] ?? '',
-              );
-        } else {
-          setState(() {
-            _selectedAddress = '${location.latitude}, ${location.longitude}';
-          });
-        }
-      }
-    } catch (e) {
-      // print('Error in reverse geocoding: $e');
-      // setState(() {
-      //   _selectedAddress = '${location.latitude}, ${location.longitude}';
-      // });
     }
   }
 }

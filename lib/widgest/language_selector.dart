@@ -46,7 +46,7 @@ class LanguageSelector extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Text(
                   entry.value,
-                  style: AppTheme.tabBarItemText,
+                  style: AppThemeLocal.tabBarItemText,
                 ),
               ],
             ),
@@ -57,7 +57,7 @@ class LanguageSelector extends ConsumerWidget {
         children: [
           Icon(
             Icons.language,
-            color: AppTheme.primary,
+            color: AppThemeLocal.primary,
           ),
           // const SizedBox(width: 4),
           // Text(
@@ -70,7 +70,7 @@ class LanguageSelector extends ConsumerWidget {
           // ),
           const Icon(
             Icons.arrow_drop_down,
-            color: AppTheme.primary,
+            color: AppThemeLocal.primary,
           ),
         ],
       ),

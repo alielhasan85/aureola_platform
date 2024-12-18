@@ -197,7 +197,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Setup'),
-        backgroundColor: AppTheme.background,
+        backgroundColor: AppThemeLocal.background,
         elevation: 0,
       ),
       body: Center(
@@ -218,7 +218,8 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                   Text(
                     'Welcome to Our Platform!',
                     style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        color: AppTheme.primary, fontWeight: FontWeight.w700),
+                        color: AppThemeLocal.primary,
+                        fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 10.0),
                   Text(
@@ -226,7 +227,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
-                        .copyWith(color: AppTheme.accent),
+                        .copyWith(color: AppThemeLocal.accent),
                   ),
                   const SizedBox(height: 20.0),
                   Form(
@@ -319,7 +320,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _submitInfo,
                             style: ElevatedButton.styleFrom(
-                              foregroundColor: AppTheme.primary,
+                              foregroundColor: AppThemeLocal.primary,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 30, vertical: 15),
                               textStyle: const TextStyle(fontSize: 16),
@@ -341,7 +342,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
           ),
         ),
       ),
-      backgroundColor: AppTheme.background, // Consistent background color
+      backgroundColor: AppThemeLocal.background, // Consistent background color
     );
   }
 }

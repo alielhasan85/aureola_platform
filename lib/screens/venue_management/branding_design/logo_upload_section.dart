@@ -71,12 +71,12 @@ class LogoUploadSection extends ConsumerWidget {
       children: [
         Text(
           AppLocalizations.of(context)!.translate("Upload_Logo"),
-          style: AppTheme.appBarTitle,
+          style: AppThemeLocal.appBarTitle,
         ),
         const SizedBox(height: 8),
         Text(
           AppLocalizations.of(context)!.translate("Select_aspect_ratio"),
-          style: AppTheme.paragraph,
+          style: AppThemeLocal.paragraph,
         ),
         const SizedBox(height: 8),
         DropdownButton<AspectRatioOption>(

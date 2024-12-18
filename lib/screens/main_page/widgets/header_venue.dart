@@ -15,7 +15,7 @@ class HeaderContainer extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 40,
-      color: AppTheme.background,
+      color: AppThemeLocal.background,
       child: Padding(
         padding: const EdgeInsets.only(right: 18, left: 18),
         child: Row(
@@ -26,13 +26,13 @@ class HeaderContainer extends StatelessWidget {
 
             Text(
               'Welcome $userName',
-              style: AppTheme.navigationItemText
-                  .copyWith(color: AppTheme.secondary, fontSize: 14),
+              style: AppThemeLocal.navigationItemText
+                  .copyWith(color: AppThemeLocal.secondary, fontSize: 14),
             ),
             Text(
               currentDateTime,
-              style: AppTheme.navigationItemText
-                  .copyWith(color: AppTheme.secondary, fontSize: 14),
+              style: AppThemeLocal.navigationItemText
+                  .copyWith(color: AppThemeLocal.secondary, fontSize: 14),
             ),
           ],
         ),

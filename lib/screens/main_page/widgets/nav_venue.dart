@@ -46,7 +46,7 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
                   child: Text(
                     AppLocalizations.of(context)!
                         .translate('available_restaurant'),
-                    style: AppTheme.appBarTitle.copyWith(
+                    style: AppThemeLocal.appBarTitle.copyWith(
                       fontSize: 18,
                     ),
                   ),
@@ -54,7 +54,7 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
               ),
               const Divider(
                 thickness: 0.5,
-                color: AppTheme.divider,
+                color: AppThemeLocal.divider,
               ),
               ListTile(
                 leading: SvgPicture.asset(
@@ -113,7 +113,7 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
           });
         },
         child: Container(
-          color: _isHovered ? AppTheme.background2 : AppTheme.white,
+          color: _isHovered ? AppThemeLocal.background2 : AppThemeLocal.white,
           height: 71,
           width: 230,
           child: Center(
@@ -126,17 +126,17 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
                     child: AutoSizeText(
                       widget.label,
                       style: (_isHovered)
-                          ? AppTheme.heading2.copyWith(
+                          ? AppThemeLocal.heading2.copyWith(
                               fontSize: 24,
                               shadows: [
                                 const Shadow(
                                   offset: Offset(0, 8),
                                   blurRadius: 4,
-                                  color: AppTheme.white,
+                                  color: AppThemeLocal.white,
                                 ),
                               ],
                             )
-                          : AppTheme.heading2,
+                          : AppThemeLocal.heading2,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       minFontSize: 14,

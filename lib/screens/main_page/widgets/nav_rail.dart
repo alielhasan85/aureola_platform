@@ -43,15 +43,15 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.white,
+        color: AppThemeLocal.white,
         border: widget.isDrawer
             ? null
             : Border(
                 left: isRtl
-                    ? const BorderSide(width: 0.5, color: AppTheme.divider)
+                    ? const BorderSide(width: 0.5, color: AppThemeLocal.divider)
                     : BorderSide.none,
                 right: !isRtl
-                    ? const BorderSide(width: 0.5, color: AppTheme.divider)
+                    ? const BorderSide(width: 0.5, color: AppThemeLocal.divider)
                     : BorderSide.none,
               ),
       ),
@@ -123,7 +123,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                     right: isRtl ? 20 : 0,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.background.withOpacity(0.5),
+                    color: AppThemeLocal.background.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -137,7 +137,8 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
                       ),
-                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      const Divider(
+                          color: AppThemeLocal.divider, thickness: 0.5),
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
                             .translate('categories'),
@@ -147,7 +148,8 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
                       ),
-                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      const Divider(
+                          color: AppThemeLocal.divider, thickness: 0.5),
                       SubMenuItem(
                         label: AppLocalizations.of(context)!.translate("Items"),
                         isSelected: selectedIndex == 5,
@@ -156,7 +158,8 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
                       ),
-                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      const Divider(
+                          color: AppThemeLocal.divider, thickness: 0.5),
                       SubMenuItem(
                         label:
                             AppLocalizations.of(context)!.translate("Add-ons"),
@@ -166,7 +169,8 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
                       ),
-                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      const Divider(
+                          color: AppThemeLocal.divider, thickness: 0.5),
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
                             .translate("Flush_Screen"),
@@ -208,7 +212,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                     right: isRtl ? 20 : 0,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.background.withOpacity(0.5),
+                    color: AppThemeLocal.background.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -224,7 +228,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 .translate("venue_info")),
                       ),
                       const Divider(
-                        color: AppTheme.divider,
+                        color: AppThemeLocal.divider,
                         thickness: 0.5,
                       ),
                       SubMenuItem(
@@ -236,7 +240,8 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                             AppLocalizations.of(context)!
                                 .translate('menu_management')),
                       ),
-                      const Divider(color: AppTheme.divider, thickness: 0.5),
+                      const Divider(
+                          color: AppThemeLocal.divider, thickness: 0.5),
                       SubMenuItem(
                         label: AppLocalizations.of(context)!
                             .translate("social_media"),
@@ -247,7 +252,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 .translate("social_media")),
                       ),
                       const Divider(
-                        color: AppTheme.divider,
+                        color: AppThemeLocal.divider,
                         thickness: 0.5,
                       ),
                       SubMenuItem(
@@ -260,7 +265,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 .translate("prices_option")),
                       ),
                       const Divider(
-                        color: AppTheme.divider,
+                        color: AppThemeLocal.divider,
                         thickness: 0.5,
                       ),
                       SubMenuItem(
@@ -273,7 +278,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                                 .translate("tables_management")),
                       ),
                       const Divider(
-                        color: AppTheme.divider,
+                        color: AppThemeLocal.divider,
                         thickness: 0.5,
                       ),
                       SubMenuItem(

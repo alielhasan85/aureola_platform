@@ -7,8 +7,8 @@ class CustomProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(AppTheme.accent),
-        backgroundColor: AppTheme.lightPeach,
+        valueColor: AlwaysStoppedAnimation<Color>(AppThemeLocal.accent),
+        backgroundColor: AppThemeLocal.lightPeach,
       ),
     );
   }

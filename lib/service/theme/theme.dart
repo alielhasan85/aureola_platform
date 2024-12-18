@@ -6,7 +6,7 @@ class Breakpoints {
   static const double mobile = 480;
 }
 
-class AppTheme {
+class AppThemeLocal {
   // ===========================
   // Color Palette
   // ===========================
@@ -136,10 +136,10 @@ class AppTheme {
 
       // Apply styles conditionally
       labelStyle:
-          label != null ? AppTheme.paragraph.copyWith(fontSize: 20) : null,
+          label != null ? AppThemeLocal.paragraph.copyWith(fontSize: 20) : null,
 
       hintStyle:
-          hint != null ? AppTheme.paragraph.copyWith(fontSize: 14) : null,
+          hint != null ? AppThemeLocal.paragraph.copyWith(fontSize: 14) : null,
 
       // Define the default border
       border: const OutlineInputBorder(),
@@ -147,7 +147,7 @@ class AppTheme {
       // Define the enabled border
       enabledBorder: OutlineInputBorder(
         borderSide: const BorderSide(
-          color: AppTheme.grey2,
+          color: AppThemeLocal.grey2,
           width: 0.75,
         ),
         borderRadius: BorderRadius.circular(6.0),
@@ -156,7 +156,7 @@ class AppTheme {
       // Define the focused border
       focusedBorder: OutlineInputBorder(
         borderSide: const BorderSide(
-          color: AppTheme.accent,
+          color: AppThemeLocal.accent,
           width: 0.75, // Updated to match the revised decoration
         ),
         borderRadius: BorderRadius.circular(6.0),

@@ -9,7 +9,7 @@ class PlanTab extends StatelessWidget {
     return Center(
       child: Text(
         'Plan Details',
-        style: AppTheme.paragraph,
+        style: AppThemeLocal.paragraph,
       ),
     );
   }

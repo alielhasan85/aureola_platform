@@ -41,13 +41,13 @@ class _AlcoholOptionFieldState extends State<AlcoholOptionField> {
         children: [
           Text(
             AppLocalizations.of(context)!.translate("venue_sells_alcohol"),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 8),
           Row(
             children: [
               Radio<AlcoholOption>(
-                activeColor: AppTheme.accent,
+                activeColor: AppThemeLocal.accent,
                 value: AlcoholOption.yes,
                 groupValue: _alcoholOption,
                 onChanged: (AlcoholOption? value) {
@@ -61,11 +61,11 @@ class _AlcoholOptionFieldState extends State<AlcoholOptionField> {
               ),
               Text(
                 AppLocalizations.of(context)!.translate("yes"),
-                style: AppTheme.paragraph,
+                style: AppThemeLocal.paragraph,
               ),
               const SizedBox(width: 16),
               Radio<AlcoholOption>(
-                activeColor: AppTheme.accent,
+                activeColor: AppThemeLocal.accent,
                 value: AlcoholOption.no,
                 groupValue: _alcoholOption,
                 onChanged: (AlcoholOption? value) {
@@ -79,7 +79,7 @@ class _AlcoholOptionFieldState extends State<AlcoholOptionField> {
               ),
               Text(
                 AppLocalizations.of(context)!.translate("no"),
-                style: AppTheme.paragraph,
+                style: AppThemeLocal.paragraph,
               ),
             ],
           ),

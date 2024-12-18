@@ -28,14 +28,14 @@ class _WebsiteFieldsState extends State<WebsiteFields> {
         children: [
           Text(
             AppLocalizations.of(context)!.translate("web_site"),
-            style: AppTheme.paragraph,
+            style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           TextFormField(
             // Use TextFormField instead of TextField
-            cursorColor: AppTheme.accent,
+            cursorColor: AppThemeLocal.accent,
             controller: widget.websiteController,
-            decoration: AppTheme.textFieldinputDecoration().copyWith(
+            decoration: AppThemeLocal.textFieldinputDecoration().copyWith(
               hintText:
                   AppLocalizations.of(context)!.translate("enter_web_site"),
             ),
