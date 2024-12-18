@@ -10,9 +10,7 @@ import 'package:aureola_platform/models/venue/price_options.dart';
 import 'package:aureola_platform/models/venue/qr_code.dart';
 import 'package:aureola_platform/models/venue/social_accounts.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
-import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -41,7 +39,7 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
   void updateSellAlcohol(bool sellAlcohol) {
     if (state != null) {
       final updatedInfo = {
-        ...?state!.additionalInfo,
+        ...state!.additionalInfo,
         'sellAlcohol': sellAlcohol,
       };
       state = state!.copyWith(additionalInfo: updatedInfo);
@@ -134,6 +132,24 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     if (state != null) {
       state = state!.copyWith(
         contact: state!.contact.copyWith(countryDial: countryDial),
+      );
+    }
+  }
+
+  // Update email
+  void updateEmail(String email) {
+    if (state != null) {
+      state = state!.copyWith(
+        contact: state!.contact.copyWith(email: email),
+      );
+    }
+  }
+
+  // Update email
+  void updateWebsite(String website) {
+    if (state != null) {
+      state = state!.copyWith(
+        contact: state!.contact.copyWith(website: website),
       );
     }
   }

@@ -1,8 +1,10 @@
+import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WebsiteFields extends StatefulWidget {
+class WebsiteFields extends ConsumerWidget {
   final double width;
   final TextEditingController websiteController;
   final String? Function(String?)? validator; // Add validator parameter
@@ -15,14 +17,9 @@ class WebsiteFields extends StatefulWidget {
   });
 
   @override
-  State<WebsiteFields> createState() => _WebsiteFieldsState();
-}
-
-class _WebsiteFieldsState extends State<WebsiteFields> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-      width: widget.width,
+      width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,12 +31,16 @@ class _WebsiteFieldsState extends State<WebsiteFields> {
           TextFormField(
             // Use TextFormField instead of TextField
             cursorColor: AppThemeLocal.accent,
-            controller: widget.websiteController,
+            controller: websiteController,
+            onChanged: (val) {
+              // Correctly update the venue name in the provider
+              ref.read(venueProvider.notifier).updateWebsite(val);
+            },
             decoration: AppThemeLocal.textFieldinputDecoration().copyWith(
               hintText:
                   AppLocalizations.of(context)!.translate("enter_web_site"),
             ),
-            validator: widget.validator, // Attach the validator directly
+            validator: validator, // Attach the validator directly
             keyboardType: TextInputType.url, // Use appropriate keyboard
             autovalidateMode:
                 AutovalidateMode.onUserInteraction, // Real-time validation

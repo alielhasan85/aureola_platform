@@ -1,3 +1,5 @@
+// alcohol_option_field.dart
+
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
@@ -7,8 +9,6 @@ enum AlcoholOption { yes, no }
 class AlcoholOptionField extends StatefulWidget {
   final double width;
   final ValueChanged<bool>? onChanged;
-
-  // Add an optional parameter to accept the initial alcohol setting.
   final bool initialValue;
 
   const AlcoholOptionField({
@@ -30,6 +30,19 @@ class _AlcoholOptionFieldState extends State<AlcoholOptionField> {
     super.initState();
     // Initialize based on the passed initialValue
     _alcoholOption = widget.initialValue ? AlcoholOption.yes : AlcoholOption.no;
+  }
+
+  @override
+  void didUpdateWidget(covariant AlcoholOptionField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // If the initialValue changes in the parent (e.g., after cancel/reset),
+    // update the local state accordingly.
+    if (widget.initialValue != oldWidget.initialValue) {
+      setState(() {
+        _alcoholOption =
+            widget.initialValue ? AlcoholOption.yes : AlcoholOption.no;
+      });
+    }
   }
 
   @override

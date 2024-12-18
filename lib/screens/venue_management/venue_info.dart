@@ -44,6 +44,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
   late TextEditingController _emailController;
   late TextEditingController _websiteController;
   late TextEditingController _addressController;
+  String _currentPhoneNumber = '';
 
   String? _selectedVenueType;
   String? _selectedDefaultLanguage;
@@ -79,7 +80,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     _alcoholOption = venue?.additionalInfo['sellAlcohol'] ?? false;
     _selectedLocation =
         venue?.address.location ?? const LatLng(25.286106, 51.534817);
-
+    _currentPhoneNumber = venue?.contact.phoneNumber ?? '';
     _countryValue = venue?.address.country ?? '';
     _stateValue = venue?.address.state ?? '';
     _cityValue = venue?.address.city ?? '';
@@ -210,7 +211,12 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 12),
           Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
           const SizedBox(height: 12),
-          PhoneNumberField(width: fieldWidth),
+          PhoneNumberField(
+            width: fieldWidth,
+            //validator: _validatePhoneNumber,
+            // initialPhoneNumber:
+            //     _currentPhoneNumber, // This is the variable updated in _initializeFormFields
+          ),
           const SizedBox(height: 16),
           EmailField(
               width: fieldWidth,
@@ -226,14 +232,22 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 12),
           VenueTypeDropdown(
             width: fieldWidth,
-            initialValue: _selectedVenueType ??
-                AppLocalizations.of(context)!
-                    .translate("Select_Type_of_your_business"),
+            initialValue: _selectedVenueType ?? "Fine_Dining",
             onChanged: (val) {
               setState(() {
                 _selectedVenueType = val;
               });
               ref.read(venueProvider.notifier).updateVenueType(val);
+            },
+          ),
+
+          const SizedBox(height: 16),
+          DefaultLanguageDropdown(
+            width: fieldWidth,
+            initialLanguage: _selectedDefaultLanguage ?? "english_",
+            onChanged: (val) {
+              setState(() => _selectedDefaultLanguage = val);
+              ref.read(venueProvider.notifier).updateDefaultLanguage(val);
             },
           ),
           const SizedBox(height: 16),
@@ -243,15 +257,6 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             onChanged: (val) {
               setState(() => _alcoholOption = val);
               ref.read(venueProvider.notifier).updateSellAlcohol(val);
-            },
-          ),
-          const SizedBox(height: 16),
-          DefaultLanguageDropdown(
-            width: fieldWidth,
-            initialLanguage: _selectedDefaultLanguage ?? "english_",
-            onChanged: (val) {
-              setState(() => _selectedDefaultLanguage = val);
-              ref.read(venueProvider.notifier).updateDefaultLanguage(val);
             },
           ),
           const SizedBox(height: 12),
@@ -279,7 +284,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           VenueAddressField(
               width: fieldWidth * 1.25, addressController: _addressController),
           const SizedBox(height: 16),
-          _buildPickupLocationSection(containerWidth, _selectedLocation),
+          // _buildPickupLocationSection(containerWidth, _selectedLocation),
           const SizedBox(height: 16),
           Align(
             alignment: Alignment.centerRight,
@@ -348,7 +353,13 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 6),
           Row(
             children: [
-              PhoneNumberField(width: fieldWidth),
+              // In the parent's build method:
+              PhoneNumberField(
+                width: fieldWidth,
+                //validator: _validatePhoneNumber,
+                // initialPhoneNumber:
+                //     _currentPhoneNumber, // This is the variable updated in _initializeFormFields
+              ),
               SizedBox(width: spacing),
             ],
           ),
@@ -373,9 +384,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             children: [
               VenueTypeDropdown(
                 width: fieldWidth,
-                initialValue: _selectedVenueType ??
-                    AppLocalizations.of(context)!
-                        .translate("Select_Type_of_your_business"),
+                initialValue: _selectedVenueType ?? "Fine_Dining",
                 onChanged: (val) {
                   setState(() {
                     _selectedVenueType = val;
@@ -432,7 +441,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           VenueAddressField(
               width: fieldWidth * 1.25, addressController: _addressController),
           const SizedBox(height: 16),
-          _buildPickupLocationSection(containerWidth, _selectedLocation),
+          //  _buildPickupLocationSection(containerWidth, _selectedLocation),
           const SizedBox(height: 16),
           Align(
             alignment: Alignment.centerRight,

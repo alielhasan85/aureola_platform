@@ -1,8 +1,10 @@
+import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EmailField extends StatelessWidget {
+class EmailField extends ConsumerWidget {
   final double width;
   final TextEditingController controller;
   final String? Function(String?)? validator;
@@ -15,7 +17,7 @@ class EmailField extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       width: width,
       child: Column(
@@ -30,11 +32,16 @@ class EmailField extends StatelessWidget {
             style: AppThemeLocal.paragraph,
             cursorColor: AppThemeLocal.accent,
             controller: controller,
+            onChanged: (val) {
+              // Correctly update the venue name in the provider
+              ref.read(venueProvider.notifier).updateEmail(val);
+            },
             decoration: AppThemeLocal.textFieldinputDecoration(
               hint: AppLocalizations.of(context)!.translate("enter_email"),
             ),
             keyboardType: TextInputType.emailAddress,
             validator: validator,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
         ],
       ),

@@ -13,11 +13,11 @@ class VenueNameField extends ConsumerWidget {
   final String? Function(String?)? validator;
 
   const VenueNameField({
-    Key? key,
+    super.key,
     required this.width,
     required this.controller,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

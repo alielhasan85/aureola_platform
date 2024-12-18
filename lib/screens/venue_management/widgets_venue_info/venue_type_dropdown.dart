@@ -27,13 +27,22 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
   @override
   void initState() {
     super.initState();
-    // Initialize _selectedType with the passed initialValue
-    _selectedType = widget.initialValue;
+    _selectedType = widget.initialValue; // Set initial selected value
+  }
+
+  @override
+  void didUpdateWidget(covariant VenueTypeDropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // If parent updated initialValue, reflect that change
+    if (widget.initialValue != oldWidget.initialValue) {
+      setState(() {
+        _selectedType = widget.initialValue;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO:  analyze these types
     final venueTypeKeys = [
       "Fine_Dining",
       "Fast_Food",
@@ -47,6 +56,7 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
       "Flower_Shop",
       "Beauty_Salon",
     ];
+
     return SizedBox(
       width: widget.width,
       child: Column(
@@ -82,7 +92,7 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
               },
             ),
             items: (filter, infiniteScrollProps) => venueTypeKeys,
-            selectedItem: _selectedType, // store the key
+            selectedItem: _selectedType, // Reflect current selected item
 
             dropdownBuilder: (context, selectedItem) {
               return Text(
@@ -98,7 +108,7 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
                 _selectedType = newKey;
               });
               if (widget.onChanged != null && newKey != null) {
-                widget.onChanged!(newKey); // <-- This should pass the key
+                widget.onChanged!(newKey); // Pass the key up to parent
               }
             },
             decoratorProps: DropDownDecoratorProps(

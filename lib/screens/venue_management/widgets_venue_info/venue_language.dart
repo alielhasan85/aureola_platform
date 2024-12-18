@@ -1,3 +1,5 @@
+// default_language_dropdown.dart
+
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -28,8 +30,19 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
   @override
   void initState() {
     super.initState();
-    // Initialize with the provided key, not a translated string.
+    // Initialize with the provided initialLanguage
     _selectedLanguage = widget.initialLanguage;
+  }
+
+  @override
+  void didUpdateWidget(covariant DefaultLanguageDropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // If the parent updates initialLanguage, reflect that change here
+    if (widget.initialLanguage != oldWidget.initialLanguage) {
+      setState(() {
+        _selectedLanguage = widget.initialLanguage;
+      });
+    }
   }
 
   @override
@@ -58,7 +71,6 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
               constraints: BoxConstraints(
                 maxWidth: widget.width,
               ),
-              // Translate item keys in the popup menu
               itemBuilder: (context, item, isDisabled, isSelected) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -67,14 +79,14 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
                   ),
                   child: Text(
                     AppLocalizations.of(context)!.translate(item),
-                    style: AppThemeLocal.paragraph
-                        .copyWith(color: AppThemeLocal.secondary),
+                    style: AppThemeLocal.paragraph.copyWith(
+                      color: AppThemeLocal.secondary,
+                    ),
                     textAlign: TextAlign.start,
                   ),
                 );
               },
             ),
-            // Translate the selected key for the main field display
             dropdownBuilder: (context, selectedItem) {
               return Text(
                 selectedItem == null
