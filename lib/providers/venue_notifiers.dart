@@ -231,38 +231,45 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  /// Updates one or more fields within the DesignAndDisplay object.
-  void updateDesignAndDisplay({
-    String? logoUrl,
-    AspectRatioOption? logoAspectRatio,
-    AspectRatioOption? backgroundAspectRatio,
-    String? backgroundUrl,
-    String? backgroundColor,
-    String? cardBackground,
-    String? accentColor,
-    String? textColor,
-  }) {
+  // Method to update DesignAndDisplay
+  void updateDesignAndDisplay(DesignAndDisplay newDesign) {
     if (state != null) {
-      // Retrieve the current DesignAndDisplay, or initialize if null
-      DesignAndDisplay currentDesign = state!.designAndDisplay;
-
-      // Create a new DesignAndDisplay with updated fields
-      final updatedDesign = currentDesign.copyWith(
-        logoUrl: logoUrl ?? currentDesign.logoUrl,
-        logoAspectRatio: logoAspectRatio ?? currentDesign.logoAspectRatio,
-        backgroundUrl: backgroundUrl ?? currentDesign.backgroundUrl,
-        backgroundAspectRatio:
-            backgroundAspectRatio ?? currentDesign.backgroundAspectRatio,
-        backgroundColor: backgroundColor ?? currentDesign.backgroundColor,
-        cardBackground: cardBackground ?? currentDesign.cardBackground,
-        accentColor: accentColor ?? currentDesign.accentColor,
-        textColor: textColor ?? currentDesign.textColor,
-      );
-
-      // Update the state with the new DesignAndDisplay
-      state = state!.copyWith(designAndDisplay: updatedDesign);
+      state = state!.copyWith(designAndDisplay: newDesign);
     }
   }
+
+  // /// Updates one or more fields within the DesignAndDisplay object.
+  // void updateDesignAndDisplay({
+  //   String? logoUrl,
+  //   AspectRatioOption? logoAspectRatio,
+  //   AspectRatioOption? backgroundAspectRatio,
+  //   String? backgroundUrl,
+  //   String? backgroundColor,
+  //   String? cardBackground,
+  //   String? accentColor,
+  //   String? textColor,
+  // }) {
+  //   if (state != null) {
+  //     // Retrieve the current DesignAndDisplay, or initialize if null
+  //     DesignAndDisplay currentDesign = state!.designAndDisplay;
+
+  //     // Create a new DesignAndDisplay with updated fields
+  //     final updatedDesign = currentDesign.copyWith(
+  //       logoUrl: logoUrl ?? currentDesign.logoUrl,
+  //       logoAspectRatio: logoAspectRatio ?? currentDesign.logoAspectRatio,
+  //       backgroundUrl: backgroundUrl ?? currentDesign.backgroundUrl,
+  //       backgroundAspectRatio:
+  //           backgroundAspectRatio ?? currentDesign.backgroundAspectRatio,
+  //       backgroundColor: backgroundColor ?? currentDesign.backgroundColor,
+  //       cardBackground: cardBackground ?? currentDesign.cardBackground,
+  //       accentColor: accentColor ?? currentDesign.accentColor,
+  //       textColor: textColor ?? currentDesign.textColor,
+  //     );
+
+  //     // Update the state with the new DesignAndDisplay
+  //     state = state!.copyWith(designAndDisplay: updatedDesign);
+  //   }
+  // }
 
 // In VenueNotifier
   Future<void> updateLogoAspectRatio(AspectRatioOption newRatio) async {

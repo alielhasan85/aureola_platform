@@ -17,14 +17,13 @@ final languageProvider =
 // This provider will store the index of the selected tab
 final selectedMenuIndexProvider = StateProvider<int>((ref) => 10);
 
-// draft provider - Branding and design
-final displayNameProvider = StateProvider<String>((ref) => '');
-final taglineProvider = StateProvider<String>((ref) => '');
+// // draft provider - Branding and design
+// final displayNameProvider = StateProvider<String>((ref) => '');
+// final taglineProvider = StateProvider<String>((ref) => '');
 
-final draftBackgroundColorProvider = StateProvider<Color?>((ref) => null);
-final draftHighlightColorProvider = StateProvider<Color?>((ref) => null);
-final draftTextColorProvider = StateProvider<Color?>((ref) => null);
-// lib/providers/providers.dart
+// final draftBackgroundColorProvider = StateProvider<Color?>((ref) => null);
+// final draftHighlightColorProvider = StateProvider<Color?>((ref) => null);
+// final draftTextColorProvider = StateProvider<Color?>((ref) => null);
 
 // Provider for stable venue data from Firestore
 final venueProvider = StateNotifierProvider<VenueNotifier, VenueModel?>((ref) {

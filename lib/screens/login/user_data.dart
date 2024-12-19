@@ -153,7 +153,7 @@ class _SignUpUserDataState extends ConsumerState<SignUpUserData> {
 
         // Set the VenueProvider with the new venue data
         ref.read(venueProvider.notifier).setVenue(savedVenue);
-
+        ref.read(draftVenueProvider.notifier).setVenue(savedVenue);
         // Navigate to the MainPage or next step
         Navigator.pushReplacement(
           context,

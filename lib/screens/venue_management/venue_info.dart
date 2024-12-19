@@ -302,8 +302,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                     ),
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.translate('cancel') ??
-                        'Cancel',
+                    AppLocalizations.of(context)!.translate('cancel'),
                     style: AppThemeLocal.buttonText.copyWith(fontSize: 14),
                   ),
                 ),
@@ -319,7 +318,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                     ),
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.translate('save') ?? 'Save',
+                    AppLocalizations.of(context)!.translate('save'),
                     style: AppThemeLocal.buttonText.copyWith(fontSize: 14),
                   ),
                 ),
@@ -489,6 +488,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     }
   }
 
+//location widget
   Widget _buildPickupLocationSection(double containerWidth, LatLng location) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

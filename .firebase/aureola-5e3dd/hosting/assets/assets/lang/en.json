@@ -1,9 +1,11 @@
 {
 
   "English": "English",
-  "Arabic": "Arabic",
-  "French": "French",
-  "Turkish": "Turkish",
+  "Arabic": "العربية",
+  "French": "Français",
+  "Turkish": "Türkçe",
+
+
   "select_language": "Select Language",
   "profile": "Profile",
   "billing": "Billing",
@@ -46,9 +48,7 @@
 "yes": "Yes",
 "no": "No",
 "default_language": "Default Language",
-"english_": "English",
-"arabic_": "Arabic",
-"french_": "French",
+
 "Select_Default_Language": "Select Default Language",
 "email": "Email",
 "enter_email": "Enter your Email",
@@ -142,11 +142,36 @@
   "enter_email_to_reset_password": "Enter your email address to reset your password.",
   "password_reset_email_sent": "Password reset email sent!",
   "error_sending_email": "Error sending password reset email.", 
-  "changes_saved_successfully" : "Changes saved successfully"
+  "changes_saved_successfully" : "Changes saved successfully", 
     
 
+  "Branding_&_Viual_Design": "Branding & Visual Design",
+  "Upload_Your_Brand_Assets:_Logo": "Upload Your Brand Assets: Logo, Background Image, Color Palette, and More",
+
+ "Tagline": "Tagline",
+  "enter_venue_tagline": "Enter your venue's tagline",
+
+
   
-
-
+  "Select_Type_of_your_business": "Select Type of Your Business",
+  "venue_type_required": "Please select a venue type.",
+  "website_required": "Website is required.",
+  "invalid_website": "Please enter a valid website URL.",
+  "invalid_website_scheme": "Website must start with http:// or https://.",
+  "invalid_website_tld": "Top-Level Domain should be at least two characters.",
+  "venue_name_required": "Venue name is required.",
+  "tagline_required": "Tagline is required.",
+  "tagline_too_short": "Tagline is too short.",
+  "tagline_too_long": "Tagline is too long.",
+  "email_required": "Email is required.",
+  "invalid_email": "Please enter a valid email address.",
+  "phone_number_required": "Phone number is required.",
+  "invalid_phone_number": "Please enter a valid phone number.",
+  
+  "save": "Save",
+ 
+  "unable_to_save": "Unable to save. Please try again.",
+  
+  "save_failed": "Save failed"
 }
 

@@ -1,26 +1,27 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+// lib/widgets/custom_color_picker_dialog.dart
 
-class CustomColorPickerDialog extends ConsumerStatefulWidget {
-  final StateProvider<Color?> colorProvider;
+import 'package:aureola_platform/service/theme/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter/services.dart';
+
+class CustomColorPickerDialog extends StatefulWidget {
   final Color initialColor;
 
   const CustomColorPickerDialog({
-    required this.colorProvider,
     required this.initialColor,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _CustomColorPickerDialogState createState() =>
       _CustomColorPickerDialogState();
 }
 
-class _CustomColorPickerDialogState
-    extends ConsumerState<CustomColorPickerDialog> {
+class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
   late Color currentColor;
   late TextEditingController hexController;
+  final _colorRegex = RegExp(r'^#([A-Fa-f0-9]{6})$');
 
   @override
   void initState() {
@@ -29,6 +30,55 @@ class _CustomColorPickerDialogState
     hexController = TextEditingController(
       text: _colorToHex(currentColor),
     );
+  }
+
+  @override
+  void dispose() {
+    hexController.dispose();
+    super.dispose();
+  }
+
+  String _colorToHex(Color color) {
+    return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
+  }
+
+  Color _hexToColor(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  String? _validateHex(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Hex color code cannot be empty.';
+    }
+    if (!_colorRegex.hasMatch(value)) {
+      return 'Invalid hex color code.';
+    }
+    return null;
+  }
+
+  void _onHexChanged(String value) {
+    if (_validateHex(value) == null) {
+      final newColor = _hexToColor(value);
+      setState(() {
+        currentColor = newColor;
+      });
+    }
+  }
+
+  void _onHexSubmitted(String value) {
+    if (_validateHex(value) == null) {
+      final newColor = _hexToColor(value);
+      setState(() {
+        currentColor = newColor;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid hex color code.')),
+      );
+    }
   }
 
   @override
@@ -50,22 +100,30 @@ class _CustomColorPickerDialogState
               pickerAreaHeightPercent: 0.8,
             ),
             const SizedBox(height: 10),
-            TextField(
+            TextFormField(
               controller: hexController,
               decoration: const InputDecoration(
                 labelText: 'Hex Color',
                 border: OutlineInputBorder(),
               ),
-              onSubmitted: (value) {
-                if (RegExp(r'^#([A-Fa-f0-9]{6})$').hasMatch(value)) {
-                  final newColor = _hexToColor(value);
-                  setState(() {
-                    currentColor = newColor;
-                  });
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Invalid hex color code.')),
+              validator: _validateHex,
+              onFieldSubmitted: _onHexSubmitted,
+              onChanged: _onHexChanged,
+              keyboardType: TextInputType.text,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp(r'^#?([A-Fa-f0-9]{0,6})$')),
+                LengthLimitingTextInputFormatter(7), // '#' + 6 hex digits
+              ],
+              onEditingComplete: () {
+                // Automatically add '#' if missing
+                if (!hexController.text.startsWith('#') &&
+                    hexController.text.isNotEmpty) {
+                  hexController.text = '#${hexController.text}';
+                  hexController.selection = TextSelection.fromPosition(
+                    TextPosition(offset: hexController.text.length),
                   );
+                  _onHexChanged(hexController.text);
                 }
               },
             ),
@@ -76,30 +134,21 @@ class _CustomColorPickerDialogState
         ElevatedButton(
           child: const Text('Select'),
           onPressed: () {
-            // Update the provider with the selected color
-            ref.read(widget.colorProvider.notifier).state = currentColor;
-            Navigator.of(context).pop();
+            // Return the selected color to the caller
+            Navigator.of(context).pop(currentColor);
           },
         ),
         ElevatedButton(
           child: const Text('Cancel'),
           onPressed: () {
-            // Do not update the provider, just close the dialog
+            // Do not return a color, just close the dialog
             Navigator.of(context).pop();
           },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey,
+          ),
         ),
       ],
     );
-  }
-
-  String _colorToHex(Color color) {
-    return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
-  }
-
-  Color _hexToColor(String hexString) {
-    final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-    buffer.write(hexString.replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
   }
 }
