@@ -23,22 +23,22 @@ class Address {
   });
 
   Address copyWith({
-    LatLng? location,
     String? street,
     String? city,
     String? state,
     String? postalCode,
     String? country,
     String? displayAddress,
+    LatLng? location,
   }) {
     return Address(
-      location: location ?? this.location,
       street: street ?? this.street,
       city: city ?? this.city,
       state: state ?? this.state,
       postalCode: postalCode ?? this.postalCode,
       country: country ?? this.country,
       displayAddress: displayAddress ?? this.displayAddress,
+      location: location ?? this.location,
     );
   }
 

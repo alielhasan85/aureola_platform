@@ -1,11 +1,13 @@
+// venue_type_dropdown.dart
+
+import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aureola_platform/providers/providers.dart';
 
-// venue_type_dropdown.dart
-
-class VenueTypeDropdown extends StatefulWidget {
+class VenueTypeDropdown extends ConsumerStatefulWidget {
   final double width;
   final String initialValue;
   final ValueChanged<String>? onChanged;
@@ -13,27 +15,40 @@ class VenueTypeDropdown extends StatefulWidget {
   const VenueTypeDropdown({
     super.key,
     required this.width,
-    this.initialValue = '',
+    this.initialValue = 'Fine_Dining',
     this.onChanged,
   });
 
   @override
-  State<VenueTypeDropdown> createState() => _VenueTypeDropdownState();
+  ConsumerState<VenueTypeDropdown> createState() => _VenueTypeDropdownState();
 }
 
-class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
+class _VenueTypeDropdownState extends ConsumerState<VenueTypeDropdown> {
   String? _selectedType;
+
+  final venueTypeKeys = [
+    "Fine_Dining",
+    "Fast_Food",
+    "Fast_Casual",
+    "Drive_Thru",
+    "Coffe_Shop",
+    "Buffet",
+    "Hotel_Room_Service",
+    "Spa",
+    "Bar",
+    "Flower_Shop",
+    "Beauty_Salon",
+  ];
 
   @override
   void initState() {
     super.initState();
-    _selectedType = widget.initialValue; // Set initial selected value
+    _selectedType = widget.initialValue;
   }
 
   @override
   void didUpdateWidget(covariant VenueTypeDropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // If parent updated initialValue, reflect that change
     if (widget.initialValue != oldWidget.initialValue) {
       setState(() {
         _selectedType = widget.initialValue;
@@ -43,27 +58,14 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    final venueTypeKeys = [
-      "Fine_Dining",
-      "Fast_Food",
-      "Fast_Casual",
-      "Drive_Thru",
-      "Coffe_Shop",
-      "Buffet",
-      "Hotel_Room_Service",
-      "Spa",
-      "Bar",
-      "Flower_Shop",
-      "Beauty_Salon",
-    ];
-
     return SizedBox(
       width: widget.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.of(context)!.translate("venue_Business_type"),
+            AppLocalizations.of(context)!.translate("venue_Business_type") ??
+                'Venue Business Type',
             style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
@@ -84,7 +86,7 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 12.0, horizontal: 12),
                   child: Text(
-                    AppLocalizations.of(context)!.translate(item),
+                    AppLocalizations.of(context)!.translate(item) ?? item,
                     style: AppThemeLocal.paragraph,
                     textAlign: TextAlign.start,
                   ),
@@ -92,14 +94,15 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
               },
             ),
             items: (filter, infiniteScrollProps) => venueTypeKeys,
-            selectedItem: _selectedType, // Reflect current selected item
-
+            selectedItem: _selectedType,
             dropdownBuilder: (context, selectedItem) {
               return Text(
                 selectedItem == null
                     ? AppLocalizations.of(context)!
-                        .translate("Select_Type_of_your_business")
-                    : AppLocalizations.of(context)!.translate(selectedItem),
+                            .translate("Select_Type_of_your_business") ??
+                        'Select Type of Your Business'
+                    : AppLocalizations.of(context)!.translate(selectedItem) ??
+                        selectedItem,
                 style: AppThemeLocal.paragraph,
               );
             },
@@ -107,8 +110,12 @@ class _VenueTypeDropdownState extends State<VenueTypeDropdown> {
               setState(() {
                 _selectedType = newKey;
               });
-              if (widget.onChanged != null && newKey != null) {
-                widget.onChanged!(newKey); // Pass the key up to parent
+              if (newKey != null) {
+                // Update draftVenueProvider
+                ref.read(draftVenueProvider.notifier).updateVenueType(newKey);
+                if (widget.onChanged != null) {
+                  widget.onChanged!(newKey);
+                }
               }
             },
             decoratorProps: DropDownDecoratorProps(

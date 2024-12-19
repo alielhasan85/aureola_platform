@@ -94,28 +94,89 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // Update specific parts of the address
+  // // Update specific parts of the address
+  // void updateAddress({
+  //   String? displayAddress,
+  //   String? street,
+  //   String? city,
+  //   String? state,
+  //   String? postalCode,
+  //   String? country,
+  //   LatLng? location,
+  // }) {
+  //   if (state != null) {
+  //     this.state = this.state!.copyWith(
+  //           address: this.state!.address.copyWith(
+  //                 street: street,
+  //                 city: city,
+  //                 state: state,
+  //                 postalCode: postalCode,
+  //                 country: country,
+  //                 location: location,
+  //                 displayAddress: displayAddress,
+  //               ),
+  //         );
+  //   }
+  // }
+
+// lib/providers/venue_notifier.dart
+
+  // Refactored updateAddress method
   void updateAddress({
-    String? displayAddress,
-    String? street,
-    String? city,
-    String? state,
-    String? postalCode,
-    String? country,
-    LatLng? location,
+    String? newDisplayAddress,
+    String? newStreet,
+    String? newCity,
+    String? newState,
+    String? newPostalCode,
+    String? newCountry,
+    LatLng? newLocation,
   }) {
-    if (state != null) {
-      this.state = this.state!.copyWith(
-            address: this.state!.address.copyWith(
-                  street: street,
-                  city: city,
-                  state: state,
-                  postalCode: postalCode,
-                  country: country,
-                  location: location,
-                  displayAddress: displayAddress,
-                ),
-          );
+    if (newState != null ||
+        newCity != null ||
+        newCountry != null ||
+        newStreet != null ||
+        newPostalCode != null ||
+        newDisplayAddress != null ||
+        newLocation != null) {
+      if (state != null) {
+        Address currentAddress = state!.address;
+
+        // Create an updated address by selectively replacing fields
+        Address updatedAddress = currentAddress.copyWith(
+          displayAddress: newDisplayAddress ?? currentAddress.displayAddress,
+          street: newStreet ?? currentAddress.street,
+          city: newCity ?? currentAddress.city,
+          state: newState ?? currentAddress.state,
+          postalCode: newPostalCode ?? currentAddress.postalCode,
+          country: newCountry ?? currentAddress.country,
+          location: newLocation ?? currentAddress.location,
+        );
+
+        // Update the state with the new address
+        state = state!.copyWith(address: updatedAddress);
+      }
+    }
+  }
+
+  void updateCountryStateCity({
+    String? country,
+    String? state,
+    String? city,
+  }) {
+    if (country != null || state != null || city != null) {
+      if (this.state != null) {
+        Address currentAddress = this.state!.address;
+
+        // Update only the country, state, and city fields
+        Address updatedAddress = currentAddress.copyWith(
+          country: country ?? currentAddress.country,
+          state: state ?? currentAddress.state,
+          city: city ?? currentAddress.city,
+        );
+
+        // Update the state with the new address
+        this.state = this.state!.copyWith(address: updatedAddress);
+      }
     }
   }
 

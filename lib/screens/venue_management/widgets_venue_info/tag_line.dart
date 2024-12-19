@@ -1,4 +1,4 @@
-import 'package:aureola_platform/providers/venue_provider.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
@@ -33,7 +33,7 @@ class TaglineWidget extends ConsumerWidget {
             cursorColor: AppThemeLocal.accent,
             onChanged: (val) {
               // Correctly update the venue name in the provider
-              ref.read(venueProvider.notifier).updateTagline(val);
+              ref.read(draftVenueProvider.notifier).updateTagline(val);
             },
             controller: controller,
             decoration: AppThemeLocal.textFieldinputDecoration(

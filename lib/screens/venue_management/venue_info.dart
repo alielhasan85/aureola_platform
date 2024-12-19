@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:aureola_platform/models/venue/venue_model.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
-import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/address_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/country_city_picker.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/location_service.dart';
@@ -58,8 +58,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
   @override
   void initState() {
     super.initState();
-    // Initialize fields from the current venue provider data
-    final venue = ref.read(venueProvider);
+    // Initialize fields from the stable venue provider data
+    final venue = ref.read(draftVenueProvider);
     _initializeFormFields(venue);
   }
 
@@ -237,7 +237,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               setState(() {
                 _selectedVenueType = val;
               });
-              ref.read(venueProvider.notifier).updateVenueType(val);
+              ref.read(draftVenueProvider.notifier).updateVenueType(val);
             },
           ),
 
@@ -247,7 +247,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             initialLanguage: _selectedDefaultLanguage ?? "english_",
             onChanged: (val) {
               setState(() => _selectedDefaultLanguage = val);
-              ref.read(venueProvider.notifier).updateDefaultLanguage(val);
+              ref.read(draftVenueProvider.notifier).updateDefaultLanguage(val);
             },
           ),
           const SizedBox(height: 16),
@@ -256,7 +256,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             initialValue: _alcoholOption ?? false,
             onChanged: (val) {
               setState(() => _alcoholOption = val);
-              ref.read(venueProvider.notifier).updateSellAlcohol(val);
+              ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
             },
           ),
           const SizedBox(height: 12),
@@ -269,16 +269,16 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 8),
           CountryStateCityPicker(
             width: fieldWidth * 1.25,
-            initialCountry: _countryValue,
-            initialState: _stateValue,
-            initialCity: _cityValue,
-            onLocationChanged: (country, state, city) {
-              setState(() {
-                _countryValue = country;
-                _stateValue = state;
-                _cityValue = city;
-              });
-            },
+            // initialCountry: _countryValue,
+            // initialState: _stateValue,
+            // initialCity: _cityValue,
+            // onLocationChanged: (country, state, city) {
+            //   setState(() {
+            //     _countryValue = country;
+            //     _stateValue = state;
+            //     _cityValue = city;
+            //   });
+            // },
           ),
           const SizedBox(height: 16),
           VenueAddressField(
@@ -389,7 +389,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                   setState(() {
                     _selectedVenueType = val;
                   });
-                  ref.read(venueProvider.notifier).updateVenueType(val);
+                  ref.read(draftVenueProvider.notifier).updateVenueType(val);
                 },
               ),
               SizedBox(width: spacing),
@@ -398,7 +398,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                 initialLanguage: _selectedDefaultLanguage ?? "english_",
                 onChanged: (val) {
                   setState(() => _selectedDefaultLanguage = val);
-                  ref.read(venueProvider.notifier).updateDefaultLanguage(val);
+                  ref
+                      .read(draftVenueProvider.notifier)
+                      .updateDefaultLanguage(val);
                 },
               ),
             ],
@@ -409,7 +411,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             initialValue: _alcoholOption ?? false,
             onChanged: (val) {
               setState(() => _alcoholOption = val);
-              ref.read(venueProvider.notifier).updateSellAlcohol(val);
+              ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
             },
           ),
           const SizedBox(height: 12),
@@ -422,20 +424,20 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 8),
           CountryStateCityPicker(
             width: fieldWidth * 1.25,
-            initialCountry: _countryValue,
-            initialState: _stateValue,
-            initialCity: _cityValue,
-            onLocationChanged: (country, state, city) {
-              setState(() {
-                _countryValue = country;
-                _stateValue = state;
-                _cityValue = city;
-                ref.read(venueProvider.notifier).updateAddress(
-                    country: _countryValue,
-                    state: _stateValue,
-                    city: _cityValue);
-              });
-            },
+            // initialCountry: _countryValue,
+            // initialState: _stateValue,
+            // initialCity: _cityValue,
+            // onLocationChanged: (country, state, city) {
+            //   setState(() {
+            //     _countryValue = country;
+            //     _stateValue = state;
+            //     _cityValue = city;
+            //     ref.read(venueProvider.notifier).updateAddress(
+            //         country: _countryValue,
+            //         state: _stateValue,
+            //         city: _cityValue);
+            //   });
+            // },
           ),
           const SizedBox(height: 16),
           VenueAddressField(
@@ -459,8 +461,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                     ),
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.translate('cancel') ??
-                        'Cancel',
+                    AppLocalizations.of(context)!.translate('cancel'),
                     style: AppThemeLocal.buttonText.copyWith(fontSize: 14),
                   ),
                 ),
@@ -476,7 +477,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                     ),
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.translate('save') ?? 'Save',
+                    AppLocalizations.of(context)!.translate('save'),
                     style: AppThemeLocal.buttonText.copyWith(fontSize: 14),
                   ),
                 ),
@@ -548,8 +549,10 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
     // Update provider with map image URL and location if upload was successful
     if (downloadUrl != null) {
-      ref.read(venueProvider.notifier).updateMapImageUrl(downloadUrl);
-      ref.read(venueProvider.notifier).updateAddress(location: location);
+      ref.read(draftVenueProvider.notifier).updateMapImageUrl(downloadUrl);
+      ref
+          .read(draftVenueProvider.notifier)
+          .updateAddress(newLocation: location);
     }
   }
 
@@ -561,8 +564,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            AppLocalizations.of(context)!.translate('no_initial_data') ??
-                'No initial data available to reset.',
+            AppLocalizations.of(context)!.translate('no_initial_data'),
           ),
           backgroundColor: Colors.red,
         ),
@@ -571,44 +573,26 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     }
 
     try {
-      // Re-fetch venue from Firestore
-      final refreshedVenue =
-          await FirestoreVenue().getVenueById(user.userId, venue.venueId);
+      // Reset draftVenueProvider to match venueProvider
+      ref.read(draftVenueProvider.notifier).setVenue(venue);
 
-      if (refreshedVenue != null) {
-        // Update provider and form fields with fresh data from Firestore
-        ref.read(venueProvider.notifier).setVenue(refreshedVenue);
+      setState(() {
+        _initializeFormFields(venue);
+      });
 
-        setState(() {
-          _initializeFormFields(refreshedVenue);
-        });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!
-                      .translate('form_reset_successfully') ??
-                  'Form has been reset to initial values.',
-            ),
-            backgroundColor: Colors.blue,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.translate('form_reset_successfully'),
           ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.translate('venue_not_found') ??
-                  'Venue not found.',
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+          backgroundColor: Colors.blue,
+        ),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            '${AppLocalizations.of(context)!.translate('reset_failed') ?? 'Reset failed'}: $e',
+            '${AppLocalizations.of(context)!.translate('reset_failed')}: $e',
           ),
           backgroundColor: Colors.red,
         ),
@@ -616,12 +600,12 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     }
   }
 
-  void _handleSave() async {
+  Future<void> _handleSave() async {
     if (_formKey.currentState!.validate()) {
       final user = ref.read(userProvider);
-      final venue = ref.read(venueProvider);
+      final draft = ref.read(draftVenueProvider);
 
-      if (user == null || venue == null) {
+      if (user == null || draft == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content:
@@ -637,55 +621,33 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             _standardizeUrl(_websiteController.text.trim());
 
         final updateData = {
-          'venueName': _nameController.text.trim(),
-          'tagLine': _taglineController.text.trim(),
-          'contact.phoneNumber': venue.contact.phoneNumber.trim(),
-          'contact.countryDial': venue.contact.countryDial,
-          'contact.countryCode': venue.contact.countryCode,
-          'contact.countryName': venue.contact.countryName,
-          'contact.email': _emailController.text.trim(),
+          'venueName': draft.venueName.trim(),
+          'tagLine': draft.tagLine.trim(),
+          'contact.phoneNumber': draft.contact.phoneNumber.trim(),
+          'contact.countryDial': draft.contact.countryDial,
+          'contact.countryCode': draft.contact.countryCode,
+          'contact.countryName': draft.contact.countryName,
+          'contact.email': draft.contact.email.trim(),
           'contact.website': standardizedWebsite,
-          'address.street': venue.address.street,
-          'address.city': venue.address.city,
-          'address.state': venue.address.state,
-          'address.postalCode': venue.address.postalCode,
-          'address.country': venue.address.country,
-          'address.displayAddress': venue.address.displayAddress,
-          'address.location.latitude': venue.address.location.latitude,
-          'address.location.longitude': venue.address.location.longitude,
-          'additionalInfo.venueType': _selectedVenueType,
-          'additionalInfo.sellAlcohol': _alcoholOption,
-          'additionalInfo.mapImageUrl': venue.additionalInfo['mapImageUrl'],
-          'languageOptions': [_selectedDefaultLanguage!],
+          'address.street': draft.address.street,
+          'address.city': draft.address.city,
+          'address.state': draft.address.state,
+          'address.postalCode': draft.address.postalCode,
+          'address.country': draft.address.country,
+          'address.displayAddress': draft.address.displayAddress,
+          'address.location.latitude': draft.address.location.latitude,
+          'address.location.longitude': draft.address.location.longitude,
+          'additionalInfo.venueType': draft.additionalInfo['venueType'],
+          'additionalInfo.sellAlcohol': draft.additionalInfo['sellAlcohol'],
+          'additionalInfo.mapImageUrl': draft.additionalInfo['mapImageUrl'],
+          'languageOptions': draft.languageOptions,
         };
 
         await FirestoreVenue()
-            .updateVenue(user.userId, venue.venueId, updateData);
+            .updateVenue(user.userId, draft.venueId, updateData);
 
-        ref.read(venueProvider.notifier).updateVenue(
-          venueName: _nameController.text.trim(),
-          tagLine: _taglineController.text.trim(),
-          contact: venue.contact.copyWith(
-            email: _emailController.text.trim(),
-            website: standardizedWebsite,
-          ),
-          address: venue.address.copyWith(
-            location: _selectedLocation ?? venue.address.location,
-          ),
-          languageOptions: [_selectedDefaultLanguage!],
-          additionalInfo: {
-            'venueType': _selectedVenueType,
-            'sellAlcohol': _alcoholOption,
-            'mapImageUrl': venue.additionalInfo['mapImageUrl'],
-            'location': _selectedLocation != null
-                ? {
-                    'latitude': _selectedLocation!.latitude,
-                    'longitude': _selectedLocation!.longitude
-                  }
-                : venue.additionalInfo['location'],
-          },
-        );
-
+        // After successful save, update the stable provider
+        ref.read(venueProvider.notifier).setVenue(draft);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(

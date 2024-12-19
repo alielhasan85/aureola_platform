@@ -1,4 +1,4 @@
-import 'package:aureola_platform/providers/venue_provider.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
@@ -33,8 +33,7 @@ class EmailField extends ConsumerWidget {
             cursorColor: AppThemeLocal.accent,
             controller: controller,
             onChanged: (val) {
-              // Correctly update the venue name in the provider
-              ref.read(venueProvider.notifier).updateEmail(val);
+              ref.read(draftVenueProvider.notifier).updateEmail(val);
             },
             decoration: AppThemeLocal.textFieldinputDecoration(
               hint: AppLocalizations.of(context)!.translate("enter_email"),

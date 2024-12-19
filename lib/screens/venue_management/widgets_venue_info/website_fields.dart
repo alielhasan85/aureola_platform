@@ -1,4 +1,4 @@
-import 'package:aureola_platform/providers/venue_provider.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
@@ -34,7 +34,7 @@ class WebsiteFields extends ConsumerWidget {
             controller: websiteController,
             onChanged: (val) {
               // Correctly update the venue name in the provider
-              ref.read(venueProvider.notifier).updateWebsite(val);
+              ref.read(draftVenueProvider.notifier).updateWebsite(val);
             },
             decoration: AppThemeLocal.textFieldinputDecoration().copyWith(
               hintText:

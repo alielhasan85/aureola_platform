@@ -1,11 +1,13 @@
 // default_language_dropdown.dart
 
+import 'package:aureola_platform/providers/providers.dart';
+import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DefaultLanguageDropdown extends StatefulWidget {
+class DefaultLanguageDropdown extends ConsumerStatefulWidget {
   final double width;
   final String initialLanguage;
   final ValueChanged<String>? onChanged;
@@ -13,16 +15,17 @@ class DefaultLanguageDropdown extends StatefulWidget {
   const DefaultLanguageDropdown({
     super.key,
     required this.width,
-    this.initialLanguage = 'english_', // store a stable key here
+    this.initialLanguage = 'English',
     this.onChanged,
   });
 
   @override
-  State<DefaultLanguageDropdown> createState() =>
+  ConsumerState<DefaultLanguageDropdown> createState() =>
       _DefaultLanguageDropdownState();
 }
 
-class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
+class _DefaultLanguageDropdownState
+    extends ConsumerState<DefaultLanguageDropdown> {
   String? _selectedLanguage;
 
   final languageKeys = ["English", "Arabic", "French", "Turkish"];
@@ -30,14 +33,12 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
   @override
   void initState() {
     super.initState();
-    // Initialize with the provided initialLanguage
     _selectedLanguage = widget.initialLanguage;
   }
 
   @override
   void didUpdateWidget(covariant DefaultLanguageDropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // If the parent updates initialLanguage, reflect that change here
     if (widget.initialLanguage != oldWidget.initialLanguage) {
       setState(() {
         _selectedLanguage = widget.initialLanguage;
@@ -53,7 +54,8 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.of(context)!.translate("default_language"),
+            AppLocalizations.of(context)!.translate("default_language") ??
+                'Default Language',
             style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
@@ -78,7 +80,7 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
                     horizontal: 12,
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.translate(item),
+                    AppLocalizations.of(context)!.translate(item) ?? item,
                     style: AppThemeLocal.paragraph.copyWith(
                       color: AppThemeLocal.secondary,
                     ),
@@ -91,8 +93,10 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
               return Text(
                 selectedItem == null
                     ? AppLocalizations.of(context)!
-                        .translate("Select_Default_Language")
-                    : AppLocalizations.of(context)!.translate(selectedItem),
+                            .translate("Select_Default_Language") ??
+                        'Select Default Language'
+                    : AppLocalizations.of(context)!.translate(selectedItem) ??
+                        selectedItem,
                 style: AppThemeLocal.paragraph,
               );
             },
@@ -101,17 +105,21 @@ class _DefaultLanguageDropdownState extends State<DefaultLanguageDropdown> {
               setState(() {
                 _selectedLanguage = newKey;
               });
-              if (widget.onChanged != null && newKey != null) {
-                widget.onChanged!(newKey);
+              if (newKey != null) {
+                // Update draftVenueProvider
+                ref
+                    .read(draftVenueProvider.notifier)
+                    .updateDefaultLanguage(newKey);
+                if (widget.onChanged != null) {
+                  widget.onChanged!(newKey);
+                }
               }
             },
-            decoratorProps: DropDownDecoratorProps(
-              baseStyle: AppThemeLocal.paragraph,
-              decoration: AppThemeLocal.textFieldinputDecoration(
-                hint: AppLocalizations.of(context)!
-                    .translate("Select_Default_Language"),
-              ),
-            ),
+            // decoration: AppThemeLocal.textFieldinputDecoration(
+            //   hint: AppLocalizations.of(context)!
+            //           .translate("Select_Default_Language") ??
+            //       'Select Default Language',
+            // ),
           ),
         ],
       ),

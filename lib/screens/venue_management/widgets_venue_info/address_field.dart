@@ -1,4 +1,4 @@
-import 'package:aureola_platform/providers/venue_provider.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
@@ -21,7 +21,7 @@ class VenueAddressField extends ConsumerStatefulWidget {
 class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
   @override
   Widget build(BuildContext context) {
-    final venue = ref.read(venueProvider);
+    final venue = ref.read(draftVenueProvider);
     widget.addressController.text = venue?.address.displayAddress ?? '';
 
     return Column(
@@ -39,7 +39,9 @@ class _VenueAddressFieldState extends ConsumerState<VenueAddressField> {
               const SizedBox(height: 6),
               TextField(
                 onChanged: (text) {
-                  ref.read(venueProvider.notifier).updateAddress(street: text);
+                  ref
+                      .read(draftVenueProvider.notifier)
+                      .updateAddress(newDisplayAddress: text);
                 },
                 style: AppThemeLocal.paragraph,
                 cursorColor: AppThemeLocal.accent,

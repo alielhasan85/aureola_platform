@@ -1,11 +1,10 @@
-// lib/widgets/venue_name_field.dart
+// venue_name_field.dart
 
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:aureola_platform/providers/venue_provider.dart';
 
 class VenueNameField extends ConsumerWidget {
   final double width;
@@ -35,14 +34,15 @@ class VenueNameField extends ConsumerWidget {
             style: AppThemeLocal.paragraph,
             cursorColor: AppThemeLocal.accent,
             onChanged: (val) {
-              // Correctly update the venue name in the provider
-              ref.read(venueProvider.notifier).updateVenueName(val);
+              // Update the venue name in the draft provider
+              ref.read(draftVenueProvider.notifier).updateVenueName(val);
             },
             controller: controller,
             validator: validator,
             decoration: AppThemeLocal.textFieldinputDecoration(
-                hint: AppLocalizations.of(context)!
-                    .translate("enter_venue_display_name")),
+              hint: AppLocalizations.of(context)!
+                  .translate("enter_venue_display_name"),
+            ),
           ),
         ],
       ),

@@ -1,76 +1,49 @@
+// lib/widgets/country_state_city_picker.dart
+
+import 'package:aureola_platform/providers/providers.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CountryStateCityPicker extends StatefulWidget {
-  final void Function(String country, String state, String city)?
-      onLocationChanged;
-  final String initialCountry;
-  final String initialState;
-  final String initialCity;
+class CountryStateCityPicker extends ConsumerWidget {
   final double width;
 
   const CountryStateCityPicker({
     super.key,
-    this.onLocationChanged,
-    this.initialCountry = '',
-    this.initialState = '',
-    this.initialCity = '',
     required this.width,
   });
 
   @override
-  State<CountryStateCityPicker> createState() => _CountryStateCityPickerState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the draftVenueProvider for changes
+    final draft = ref.watch(draftVenueProvider);
 
-class _CountryStateCityPickerState extends State<CountryStateCityPicker> {
-  String countryValue = '';
-  String stateValue = '';
-  String cityValue = '';
-
-  @override
-  void initState() {
-    super.initState();
-    countryValue = widget.initialCountry;
-    stateValue = widget.initialState;
-    cityValue = widget.initialCity;
-  }
-
-  void _onCountryChanged(String value) {
-    setState(() {
-      countryValue = value;
-      stateValue = '';
-      cityValue = '';
-    });
-    _notifyParent();
-  }
-
-  void _onStateChanged(String? value) {
-    setState(() {
-      stateValue = value ?? '';
-      cityValue = '';
-    });
-    _notifyParent();
-  }
-
-  void _onCityChanged(String? value) {
-    setState(() {
-      cityValue = value ?? '';
-    });
-    _notifyParent();
-  }
-
-  void _notifyParent() {
-    if (widget.onLocationChanged != null) {
-      widget.onLocationChanged!(countryValue, stateValue, cityValue);
+    // Safeguard against null values
+    if (draft == null) {
+      return SizedBox(
+        width: width,
+        child: Text(
+          AppLocalizations.of(context)!.translate('no_data_available'),
+          style: AppThemeLocal.paragraph,
+        ),
+      );
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
+    // Extract current selections from the provider
+    final currentCountry =
+        draft.address.country.isNotEmpty ? draft.address.country : null;
+    final currentState =
+        draft.address.state.isNotEmpty ? draft.address.state : null;
+    final currentCity =
+        draft.address.city.isNotEmpty ? draft.address.city : null;
+
     return SizedBox(
-      width: widget.width,
+      width: width,
       child: CSCPicker(
+        key: ValueKey(
+            '${currentCountry ?? ''}_${currentState ?? ''}_${currentCity ?? ''}'),
         showStates: true,
         showCities: true,
         layout: Layout.vertical,
@@ -81,18 +54,34 @@ class _CountryStateCityPickerState extends State<CountryStateCityPicker> {
           border: Border.all(color: Colors.grey.shade300, width: 1),
         ),
         selectedItemStyle: AppThemeLocal.paragraph,
-        dropdownItemStyle: AppThemeLocal.paragraph.copyWith(
-          fontSize: 15,
-        ),
+        dropdownItemStyle: AppThemeLocal.paragraph.copyWith(fontSize: 15),
         countryDropdownLabel: "*Country",
         stateDropdownLabel: "*State",
         cityDropdownLabel: "*City",
-        onCountryChanged: _onCountryChanged,
-        onStateChanged: _onStateChanged,
-        onCityChanged: _onCityChanged,
-        currentCountry: countryValue.isEmpty ? null : countryValue,
-        currentState: stateValue.isEmpty ? null : stateValue,
-        currentCity: cityValue.isEmpty ? null : cityValue,
+        onCountryChanged: (value) {
+          if (value.isNotEmpty) {
+            ref
+                .read(draftVenueProvider.notifier)
+                .updateCountryStateCity(country: value);
+          }
+        },
+        onStateChanged: (value) {
+          if (value != null && value.isNotEmpty) {
+            ref
+                .read(draftVenueProvider.notifier)
+                .updateCountryStateCity(state: value);
+          }
+        },
+        onCityChanged: (value) {
+          if (value != null && value.isNotEmpty) {
+            ref
+                .read(draftVenueProvider.notifier)
+                .updateCountryStateCity(city: value);
+          }
+        },
+        currentCountry: currentCountry,
+        currentState: currentState,
+        currentCity: currentCity,
       ),
     );
   }

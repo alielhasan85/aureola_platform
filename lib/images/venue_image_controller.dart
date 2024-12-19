@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:aureola_platform/providers/venue_provider.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/service/firebase/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';

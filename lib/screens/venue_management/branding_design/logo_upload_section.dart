@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/images/aspect_ratio.dart';
 import 'package:aureola_platform/images/image_card.dart';
-import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 

@@ -2,7 +2,6 @@ import 'package:aureola_platform/images/aspect_ratio.dart';
 import 'package:aureola_platform/images/image_card.dart';
 import 'package:aureola_platform/images/venue_image_controller.dart';
 import 'package:aureola_platform/providers/providers.dart';
-import 'package:aureola_platform/providers/venue_provider.dart';
 import 'package:aureola_platform/screens/login/auth_page.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
 import 'package:aureola_platform/screens/venue_management/branding_design/menu_branding_form_fields.dart';
