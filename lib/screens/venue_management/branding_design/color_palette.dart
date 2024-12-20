@@ -1,4 +1,4 @@
-// lib/widgets/color_palette_section.dart
+// lib/screens/venue_management/branding_design/color_palette.dart
 
 import 'package:aureola_platform/models/venue/design_display.dart';
 import 'package:aureola_platform/providers/providers.dart';
@@ -7,19 +7,18 @@ import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
-// lib/widgets/color_palette_section.dart
 
 class ColorPaletteSection extends ConsumerStatefulWidget {
-  final String layout; // 'isDesktop', 'isTablet', 'isMobile', or fallback
   final String name;
-  final String colorField; // Specific field in DesignAndDisplay
+  final String colorField;
+  final Color initialColor;
 
   const ColorPaletteSection({
-    super.key,
-    required this.layout,
+    Key? key,
     required this.name,
     required this.colorField,
-  });
+    required this.initialColor,
+  }) : super(key: key);
 
   @override
   ConsumerState<ColorPaletteSection> createState() =>
@@ -33,8 +32,23 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
   @override
   void initState() {
     super.initState();
-    final initialColor = _getInitialColor();
-    _hexController = TextEditingController(text: _colorToHex(initialColor));
+    _hexController =
+        TextEditingController(text: _colorToHex(widget.initialColor));
+  }
+
+  @override
+  void didUpdateWidget(covariant ColorPaletteSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialColor != oldWidget.initialColor) {
+      final newHex = _colorToHex(widget.initialColor);
+      if (_hexController.text != newHex) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _hexController.text = newHex;
+          }
+        });
+      }
+    }
   }
 
   @override
@@ -43,9 +57,155 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
     super.dispose();
   }
 
-  Color _getInitialColor() {
-    final design = ref.read(draftVenueProvider)?.designAndDisplay;
-    if (design == null) return _hexToColor('#FFFFFF'); // Default color
+  @override
+  Widget build(BuildContext context) {
+    final design = ref.watch(draftVenueProvider)?.designAndDisplay;
+    final currentColor = _getCurrentColor(design);
+
+    return Container(
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(width: 1, color: AppThemeLocal.grey2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            width: 150,
+            child: Text(
+              widget.name,
+              style: AppThemeLocal.paragraph.copyWith(
+                color: AppThemeLocal.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          SizedBox(
+            width: 170,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Tooltip(
+                    message: 'Enter a hex color code (e.g., #FFFFFF)',
+                    child: SizedBox(
+                      height: 30,
+                      child: TextFormField(
+                        controller: _hexController,
+                        style: AppThemeLocal.paragraph.copyWith(fontSize: 14),
+                        decoration:
+                            AppThemeLocal.textFieldinputDecoration().copyWith(
+                          hintText: 'Enter hex color code',
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 4.0,
+                            vertical: 4.0,
+                          ),
+                        ),
+                        validator: _validateHex,
+                        onFieldSubmitted: _handleHexSubmit,
+                        onChanged: _handleHexChange,
+                        keyboardType: TextInputType.text,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^#?([A-Fa-f0-9]{0,6})$')),
+                          LengthLimitingTextInputFormatter(7),
+                        ],
+                        onEditingComplete: _autoPrefixHex,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                InkWell(
+                  onTap: () async {
+                    final selectedColor = await showDialog<Color>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomColorPickerDialog(
+                            initialColor: currentColor);
+                      },
+                    );
+
+                    if (selectedColor != null) {
+                      _updateColorInProvider(selectedColor);
+                    }
+                  },
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: currentColor,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: AppThemeLocal.grey2, width: 2),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Automatically prefixes the hex code with '#' if missing.
+  void _autoPrefixHex() {
+    if (!_hexController.text.startsWith('#') &&
+        _hexController.text.isNotEmpty) {
+      _hexController.text = '#${_hexController.text}';
+      _handleHexChange(_hexController.text);
+    }
+  }
+
+  /// Handles changes in the hex text field.
+  void _handleHexChange(String value) {
+    if (_validateHex(value) == null) {
+      final newColor = _hexToColor(value);
+      _updateColorInProvider(newColor);
+    }
+  }
+
+  /// Handles submission of the hex text field.
+  void _handleHexSubmit(String value) {
+    if (_validateHex(value) == null) {
+      final newColor = _hexToColor(value);
+      _updateColorInProvider(newColor);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid hex color code.')),
+      );
+    }
+  }
+
+  /// Updates the provider with the new color using VenueNotifier's methods.
+  void _updateColorInProvider(Color newColor) {
+    final newHex = _colorToHex(newColor);
+    switch (widget.colorField) {
+      case 'backgroundColor':
+        ref.read(draftVenueProvider.notifier).updateBackgroundColor(newHex);
+        break;
+      case 'cardBackground':
+        ref.read(draftVenueProvider.notifier).updateCardBackgroundColor(newHex);
+        break;
+      case 'accentColor':
+        ref.read(draftVenueProvider.notifier).updateAccentColor(newHex);
+        break;
+      case 'textColor':
+        ref.read(draftVenueProvider.notifier).updateTextColor(newHex);
+        break;
+      default:
+        // Handle unknown fields
+        break;
+    }
+  }
+
+  /// Retrieves the current color based on the provider's state.
+  Color _getCurrentColor(DesignAndDisplay? design) {
+    if (design == null) return _hexToColor('#FFFFFF');
     switch (widget.colorField) {
       case 'backgroundColor':
         return _hexToColor(design.backgroundColor);
@@ -60,17 +220,7 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
     }
   }
 
-  String _colorToHex(Color color) {
-    return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
-  }
-
-  Color _hexToColor(String hexString) {
-    final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-    buffer.write(hexString.replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
-  }
-
+  /// Validates the hex color code.
   String? _validateHex(String? value) {
     if (value == null || value.isEmpty) {
       return 'Hex color code cannot be empty.';
@@ -81,170 +231,16 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
     return null;
   }
 
-  void _onHexChanged(String value) {
-    if (_validateHex(value) == null) {
-      final newColor = _hexToColor(value);
-      _updateColor(newColor);
-    }
+  /// Converts a Color to its hex string representation.
+  String _colorToHex(Color color) {
+    return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
   }
 
-  void _onHexSubmitted(String value) {
-    if (_validateHex(value) == null) {
-      final newColor = _hexToColor(value);
-      _updateColor(newColor);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid hex color code.')),
-      );
-    }
-  }
-
-  void _updateColor(Color newColor) {
-    final updatedDesign = _updateDesignField(newColor);
-    ref.read(draftVenueProvider.notifier).updateDesignAndDisplay(updatedDesign);
-  }
-
-  DesignAndDisplay _updateDesignField(Color newColor) {
-    final currentDesign = ref.read(draftVenueProvider)?.designAndDisplay;
-    if (currentDesign == null) return DesignAndDisplay();
-    switch (widget.colorField) {
-      case 'backgroundColor':
-        return currentDesign.copyWith(backgroundColor: _colorToHex(newColor));
-      case 'cardBackground':
-        return currentDesign.copyWith(cardBackground: _colorToHex(newColor));
-      case 'accentColor':
-        return currentDesign.copyWith(accentColor: _colorToHex(newColor));
-      case 'textColor':
-        return currentDesign.copyWith(textColor: _colorToHex(newColor));
-      default:
-        return currentDesign;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final design = ref.watch(draftVenueProvider)?.designAndDisplay;
-    final draftColor = design != null
-        ? _hexToColor(
-            widget.colorField == 'backgroundColor'
-                ? design.backgroundColor
-                : widget.colorField == 'cardBackground'
-                    ? design.cardBackground
-                    : widget.colorField == 'accentColor'
-                        ? design.accentColor
-                        : design.textColor,
-          )
-        : _hexToColor('#FFFFFF');
-
-    return Container(
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(width: 1, color: AppThemeLocal.grey2),
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 150,
-              child: Text(
-                widget.name,
-                style: AppThemeLocal.paragraph.copyWith(
-                  color: AppThemeLocal.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            SizedBox(
-              width: 170,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Tooltip(
-                      message: 'Enter a hex color code (e.g., #FFFFFF)',
-                      child: SizedBox(
-                        height: 30,
-                        child: TextFormField(
-                          controller: _hexController,
-                          style: AppThemeLocal.paragraph.copyWith(fontSize: 14),
-                          decoration:
-                              AppThemeLocal.textFieldinputDecoration().copyWith(
-                            labelText: 'Hex Color',
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 4.0,
-                              vertical: 2.0, // Adjust as needed
-                            ),
-                          ),
-                          validator: _validateHex,
-                          onFieldSubmitted: _onHexSubmitted,
-                          onChanged: _onHexChanged,
-                          keyboardType: TextInputType.text,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'^#?([A-Fa-f0-9]{0,6})$')),
-                            LengthLimitingTextInputFormatter(
-                                7), // '#' + 6 hex digits
-                          ],
-                          onEditingComplete: () {
-                            // Automatically add '#' if missing
-                            if (!_hexController.text.startsWith('#') &&
-                                _hexController.text.isNotEmpty) {
-                              _hexController.text = '#${_hexController.text}';
-                              _hexController.selection =
-                                  TextSelection.fromPosition(
-                                TextPosition(
-                                    offset: _hexController.text.length),
-                              );
-                              _onHexChanged(_hexController.text);
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  InkWell(
-                    onTap: () async {
-                      // Open the color picker dialog and await the selected color
-                      final selectedColor = await showDialog<Color>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const CustomColorPickerDialog(
-                            initialColor:
-                                Colors.white, // Placeholder, will be overridden
-                          );
-                        },
-                      );
-
-                      if (selectedColor != null) {
-                        final hex = _colorToHex(selectedColor);
-                        setState(() {
-                          _hexController.text = hex;
-                        });
-                        _updateColor(selectedColor);
-                      }
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: draftColor,
-                        borderRadius: BorderRadius.circular(6),
-                        border:
-                            Border.all(color: AppThemeLocal.grey2, width: 2),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  /// Converts a hex string to a Color.
+  Color _hexToColor(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
   }
 }

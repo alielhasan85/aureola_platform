@@ -363,5 +363,36 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // Add more methods as needed for other fields
+  // Specific methods to update individual color fields
+  void updateBackgroundColor(String hex) {
+    if (state != null) {
+      final updatedDesign =
+          state!.designAndDisplay.copyWith(backgroundColor: hex);
+      state = state!.copyWith(designAndDisplay: updatedDesign);
+    }
+  }
+
+  void updateCardBackgroundColor(String hex) {
+    if (state != null) {
+      final updatedDesign =
+          state!.designAndDisplay.copyWith(cardBackground: hex);
+      state = state!.copyWith(designAndDisplay: updatedDesign);
+    }
+  }
+
+  void updateAccentColor(String hex) {
+    if (state != null) {
+      final updatedDesign = state!.designAndDisplay.copyWith(accentColor: hex);
+      state = state!.copyWith(designAndDisplay: updatedDesign);
+    }
+  }
+
+  void updateTextColor(String hex) {
+    if (state != null) {
+      final updatedDesign = state!.designAndDisplay.copyWith(textColor: hex);
+      state = state!.copyWith(designAndDisplay: updatedDesign);
+    }
+  }
 }
+  // Add more methods as needed for other fields
+

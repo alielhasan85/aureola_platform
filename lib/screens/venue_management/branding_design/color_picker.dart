@@ -1,6 +1,5 @@
-// lib/widgets/custom_color_picker_dialog.dart
+// lib/screens/venue_management/branding_design/custom_color_picker_dialog.dart
 
-import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +13,7 @@ class CustomColorPickerDialog extends StatefulWidget {
   });
 
   @override
-  _CustomColorPickerDialogState createState() =>
+  State<CustomColorPickerDialog> createState() =>
       _CustomColorPickerDialogState();
 }
 
@@ -27,9 +26,7 @@ class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
   void initState() {
     super.initState();
     currentColor = widget.initialColor;
-    hexController = TextEditingController(
-      text: _colorToHex(currentColor),
-    );
+    hexController = TextEditingController(text: _colorToHex(currentColor));
   }
 
   @override
@@ -61,18 +58,16 @@ class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
 
   void _onHexChanged(String value) {
     if (_validateHex(value) == null) {
-      final newColor = _hexToColor(value);
       setState(() {
-        currentColor = newColor;
+        currentColor = _hexToColor(value);
       });
     }
   }
 
   void _onHexSubmitted(String value) {
     if (_validateHex(value) == null) {
-      final newColor = _hexToColor(value);
       setState(() {
-        currentColor = newColor;
+        currentColor = _hexToColor(value);
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -113,10 +108,9 @@ class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
                     RegExp(r'^#?([A-Fa-f0-9]{0,6})$')),
-                LengthLimitingTextInputFormatter(7), // '#' + 6 hex digits
+                LengthLimitingTextInputFormatter(7),
               ],
               onEditingComplete: () {
-                // Automatically add '#' if missing
                 if (!hexController.text.startsWith('#') &&
                     hexController.text.isNotEmpty) {
                   hexController.text = '#${hexController.text}';
@@ -134,14 +128,12 @@ class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
         ElevatedButton(
           child: const Text('Select'),
           onPressed: () {
-            // Return the selected color to the caller
             Navigator.of(context).pop(currentColor);
           },
         ),
         ElevatedButton(
           child: const Text('Cancel'),
           onPressed: () {
-            // Do not return a color, just close the dialog
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(

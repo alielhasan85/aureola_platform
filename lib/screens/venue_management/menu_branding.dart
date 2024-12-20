@@ -5,8 +5,6 @@ import 'package:aureola_platform/screens/login/auth_page.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
 import 'package:aureola_platform/screens/venue_management/branding_design/form_fields.dart';
 import 'package:aureola_platform/screens/venue_management/branding_design/preview.dart';
-
-import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,13 +21,12 @@ class MenuBranding extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final venue = ref.watch(draftVenueProvider);
+    final venue = ref.read(draftVenueProvider);
 
     if (venue == null) {
       return const LoginPage();
     }
 
-    final design = venue.designAndDisplay;
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < mobileBreakpoint;
 
@@ -63,10 +60,8 @@ class MenuBranding extends ConsumerWidget {
                       width: formContainerWidth,
                       margin: const EdgeInsets.all(cardSpacing),
                       decoration: AppThemeLocal.cardDecoration,
-                      child: SingleChildScrollView(
-                        child: MenuBrandingFormFields(
-                          layout: 'isDesktop',
-                        ),
+                      child: const SingleChildScrollView(
+                        child: MenuBrandingFormFields(layout: 'isDesktop'),
                       ),
                     ),
                     Container(
@@ -95,10 +90,8 @@ class MenuBranding extends ConsumerWidget {
                         width: tabletFormWidth,
                         margin: const EdgeInsets.all(cardSpacing),
                         decoration: AppThemeLocal.cardDecoration,
-                        child: SingleChildScrollView(
-                          child: MenuBrandingFormFields(
-                            layout: 'isTablet',
-                          ),
+                        child: const SingleChildScrollView(
+                          child: MenuBrandingFormFields(layout: 'isTablet'),
                         ),
                       ),
                     ),
@@ -106,7 +99,12 @@ class MenuBranding extends ConsumerWidget {
                       bottom: 30,
                       right: 30,
                       child: FloatingActionButton(
-                        onPressed: () => _showPreviewDialog(context),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => const MenuBrandingPreview(),
+                          );
+                        },
                         child: const Icon(Icons.remove_red_eye),
                       ),
                     ),
@@ -118,17 +116,20 @@ class MenuBranding extends ConsumerWidget {
                     Container(
                       width: double.infinity,
                       decoration: AppThemeLocal.cardDecorationMob,
-                      child: SingleChildScrollView(
-                        child: MenuBrandingFormFields(
-                          layout: 'isMobile',
-                        ),
+                      child: const SingleChildScrollView(
+                        child: MenuBrandingFormFields(layout: 'isMobile'),
                       ),
                     ),
                     Positioned(
                       bottom: 30,
                       right: 30,
                       child: FloatingActionButton(
-                        onPressed: () => _showPreviewDialog(context),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => const MenuBrandingPreview(),
+                          );
+                        },
                         child: const Icon(Icons.remove_red_eye),
                       ),
                     ),
@@ -144,10 +145,8 @@ class MenuBranding extends ConsumerWidget {
                     width: fallbackWidth,
                     margin: const EdgeInsets.all(cardSpacing),
                     decoration: AppThemeLocal.cardDecoration,
-                    child: SingleChildScrollView(
-                      child: MenuBrandingFormFields(
-                        layout: 'isMobile',
-                      ),
+                    child: const SingleChildScrollView(
+                      child: MenuBrandingFormFields(layout: 'isMobile'),
                     ),
                   ),
                 );
@@ -159,20 +158,20 @@ class MenuBranding extends ConsumerWidget {
       ],
     );
   }
-
-  void _showPreviewDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => const AlertDialog(
-        title: Text('Preview'),
-        content: Text('This is where the preview will be shown.'),
-        actions: [
-          TextButton(
-            onPressed: null,
-            child: Text('CLOSE'),
-          ),
-        ],
-      ),
-    );
-  }
 }
+
+  // void _showPreviewDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => const AlertDialog(
+  //       title: Text('Preview'),
+  //       content: Text('This is where the preview will be shown.'),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: null,
+  //           child: Text('CLOSE'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
