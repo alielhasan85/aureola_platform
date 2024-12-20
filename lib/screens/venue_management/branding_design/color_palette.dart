@@ -1,6 +1,6 @@
 // lib/screens/venue_management/branding_design/color_palette.dart
 
-import 'package:aureola_platform/models/venue/design_display.dart';
+import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/venue_management/branding_design/color_picker.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
@@ -11,14 +11,14 @@ import 'package:flutter/services.dart';
 class ColorPaletteSection extends ConsumerStatefulWidget {
   final String name;
   final String colorField;
-  final Color initialColor;
+  final Color color;
 
   const ColorPaletteSection({
-    Key? key,
+    super.key,
     required this.name,
     required this.colorField,
-    required this.initialColor,
-  }) : super(key: key);
+    required this.color,
+  });
 
   @override
   ConsumerState<ColorPaletteSection> createState() =>
@@ -32,24 +32,24 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
   @override
   void initState() {
     super.initState();
-    _hexController =
-        TextEditingController(text: _colorToHex(widget.initialColor));
+    _hexController = TextEditingController(text: _colorToHex(widget.color));
   }
 
-  @override
-  void didUpdateWidget(covariant ColorPaletteSection oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.initialColor != oldWidget.initialColor) {
-      final newHex = _colorToHex(widget.initialColor);
-      if (_hexController.text != newHex) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            _hexController.text = newHex;
-          }
-        });
-      }
-    }
-  }
+  // @override
+  // void didUpdateWidget(covariant ColorPaletteSection oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (widget.color != oldWidget.color) {
+  //     final newHex = _colorToHex(widget.color);
+  //     if (_hexController.text != newHex) {
+  //       // Schedule the update after the current frame to avoid setState during build
+  //       WidgetsBinding.instance.addPostFrameCallback((_) {
+  //         if (mounted) {
+  //           _hexController.text = newHex;
+  //         }
+  //       });
+  //     }
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -59,14 +59,15 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
 
   @override
   Widget build(BuildContext context) {
-    final design = ref.watch(draftVenueProvider)?.designAndDisplay;
-    final currentColor = _getCurrentColor(design);
+    final venue = ref.read(draftVenueProvider);
+    Color currentColor = _getCurrentColor(venue);
+    _hexController = TextEditingController(text: _colorToHex(currentColor));
 
     return Container(
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
-          side: const BorderSide(width: 1, color: AppThemeLocal.grey2),
-          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(width: 0.5, color: AppThemeLocal.grey2),
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
       margin: const EdgeInsets.only(bottom: 12),
@@ -126,7 +127,8 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
                       context: context,
                       builder: (BuildContext context) {
                         return CustomColorPickerDialog(
-                            initialColor: currentColor);
+                          initialColor: widget.color,
+                        );
                       },
                     );
 
@@ -140,7 +142,7 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
                     decoration: BoxDecoration(
                       color: currentColor,
                       borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppThemeLocal.grey2, width: 2),
+                      border: Border.all(color: AppThemeLocal.grey2, width: 1),
                     ),
                   ),
                 ),
@@ -204,17 +206,17 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
   }
 
   /// Retrieves the current color based on the provider's state.
-  Color _getCurrentColor(DesignAndDisplay? design) {
-    if (design == null) return _hexToColor('#FFFFFF');
+  Color _getCurrentColor(VenueModel? venue) {
+    if (venue == null) return _hexToColor('#FFFFFF');
     switch (widget.colorField) {
       case 'backgroundColor':
-        return _hexToColor(design.backgroundColor);
+        return _hexToColor(venue.designAndDisplay.backgroundColor);
       case 'cardBackground':
-        return _hexToColor(design.cardBackground);
+        return _hexToColor(venue.designAndDisplay.cardBackground);
       case 'accentColor':
-        return _hexToColor(design.accentColor);
+        return _hexToColor(venue.designAndDisplay.accentColor);
       case 'textColor':
-        return _hexToColor(design.textColor);
+        return _hexToColor(venue.designAndDisplay.textColor);
       default:
         return _hexToColor('#FFFFFF');
     }

@@ -98,7 +98,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
+    final user = ref.read(userProvider);
 
     final screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth >= 800 ? 800 : double.infinity;

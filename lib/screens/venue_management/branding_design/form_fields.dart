@@ -1,5 +1,6 @@
 // lib/screens/venue_management/branding_design/form_fields.dart
 
+import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/screens/venue_management/branding_design/color_palette.dart';
@@ -26,23 +27,30 @@ class _MenuBrandingFormFieldsState
     extends ConsumerState<MenuBrandingFormFields> {
   final _formKey = GlobalKey<FormState>();
 
+  void _initializeFormFields(VenueModel? venue) {
+    if (venue != null) {
+      ref.read(draftVenueProvider.notifier).setVenue(venue);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final draftVenue = ref.watch(draftVenueProvider);
 
-    // Ensure draftVenue is not null
-    if (draftVenue == null) {
-      // Show loading or placeholder
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    final design = draftVenue.designAndDisplay;
-
     // Convert hex strings to Color objects
-    final backgroundColor = _hexToColor(design.backgroundColor);
-    final cardBackgroundColor = _hexToColor(design.cardBackground);
-    final accentColor = _hexToColor(design.accentColor);
-    final textColor = _hexToColor(design.textColor);
+
+    Color backgroundColor =
+        _hexToColor(draftVenue!.designAndDisplay.backgroundColor);
+    Color cardBackgroundColor =
+        _hexToColor(draftVenue.designAndDisplay.cardBackground);
+    Color accentColor = _hexToColor(draftVenue.designAndDisplay.accentColor);
+    Color textColor = _hexToColor(draftVenue.designAndDisplay.textColor);
+
+    // // Ensure draftVenue is not null
+    // if (draftVenue == null) {
+    //   // Show loading or placeholder
+    //   return const Center(child: CircularProgressIndicator());
+    // }
 
     return Form(
       key: _formKey,
@@ -69,32 +77,32 @@ class _MenuBrandingFormFieldsState
                 color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
             const SizedBox(height: 12),
 
-            // Each ColorPaletteSection handles one color
+            // Each ColorPaletteSection handles one color with unique colorField
             ColorPaletteSection(
               name: 'Background Color',
-              colorField: 'backgroundColor',
-              initialColor: backgroundColor,
+              colorField: 'backgroundColor', // Correct identifier
+              color: backgroundColor,
             ),
 
             const SizedBox(height: 12),
             ColorPaletteSection(
               name: 'Card Background',
-              colorField: 'cardBackground',
-              initialColor: cardBackgroundColor,
+              colorField: 'cardBackground', // Correct identifier
+              color: cardBackgroundColor,
             ),
 
             const SizedBox(height: 12),
             ColorPaletteSection(
               name: 'Accent Color',
-              colorField: 'accentColor',
-              initialColor: accentColor,
+              colorField: 'accentColor', // Correct identifier
+              color: accentColor,
             ),
 
             const SizedBox(height: 12),
             ColorPaletteSection(
               name: 'Text Color',
-              colorField: 'textColor',
-              initialColor: textColor,
+              colorField: 'textColor', // Correct identifier
+              color: textColor,
             ),
 
             const SizedBox(height: 12),
@@ -206,6 +214,8 @@ class _MenuBrandingFormFieldsState
     if (originalVenue != null) {
       ref.read(draftVenueProvider.notifier).setVenue(originalVenue);
       _formKey.currentState?.reset();
+
+      _initializeFormFields(originalVenue);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Changes have been discarded.')),
