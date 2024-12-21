@@ -152,8 +152,31 @@
   
   "save": "Save",
  
-  "unable_to_save": "Unable to save. Please try again.",
   
-  "save_failed": "Save failed"
+
+ "enter_hex_color_code_tooltip": "Entrez un code couleur hexadécimal (par exemple, #FFFFFF)",
+  "enter_hex_color_code_hint": "Entrez le code couleur hexadécimal",
+  "invalid_hex_color_code": "Code couleur hexadécimal invalide.",
+  "hex_color_cannot_be_empty": "Le code couleur hexadécimal ne peut pas être vide.",
+  "branding_visual_design_title": "Branding & Design Visuel",
+  "upload_brand_assets_logo": "Téléchargez vos actifs de marque : Logo",
+  "background_color": "Couleur d'arrière-plan",
+  "card_background": "Couleur d'arrière-plan de la carte",
+  "accent_color": "Couleur d'accentuation",
+  "text_color": "Couleur du texte",
+  "cancel_button": "Annuler",
+  "save_button": "Enregistrer",
+  "unable_to_save": "Impossible d'enregistrer les modifications.",
+  "save_failed": "Échec de l'enregistrement.",
+  "please_fix_errors": "Veuillez corriger les erreurs dans le formulaire.",
+  "changes_discarded": "Les modifications ont été abandonnées.",
+  "original_venue_data_not_found": "Données du lieu d'origine introuvables.",
+  "pick_a_color_dialog_title": "Choisissez une couleur",
+  "hex_color_label": "Couleur hexadécimale",
+  "select_button": "Sélectionner",
+
+  "Customize_Your_Color_Palette": "Personnalisez votre palette de couleurs",
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Sélectionnez et enregistrez vos couleurs préférées pour personnaliser votre menu QR."
+
 }
 

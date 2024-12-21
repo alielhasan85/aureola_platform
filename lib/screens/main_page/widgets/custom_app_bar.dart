@@ -150,16 +150,19 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
               return AppBarMenuOption.values.map((AppBarMenuOption option) {
                 return PopupMenuItem<AppBarMenuOption>(
                   value: option,
-                  child: Text(
-                    AppLocalizations.of(context)!.translate(
-                      option.label.toLowerCase().replaceAll(' ', '_'),
+                  child: Column(children: [
+                    Text(
+                      AppLocalizations.of(context)!.translate(
+                        option.label.toLowerCase().replaceAll(' ', '_'),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: AppThemeLocal.primary,
+                      ),
                     ),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppThemeLocal.primary,
-                    ),
-                  ),
+                    Divider(color: AppThemeLocal.divider, height: 0.5),
+                  ]),
                 );
               }).toList();
             },

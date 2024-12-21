@@ -12,101 +12,84 @@ import 'package:aureola_platform/models/venue/venue_model.dart';
 /// - Updates Firestore
 /// - Updates the venue provider state
 class VenueImageController extends StateNotifier<AsyncValue<void>> {
-  VenueImageController(this.ref) : super(const AsyncData(null));
+  VenueImageController(this.ref) : super(AsyncData(null));
 
   final Ref ref;
   final _storageService = FirebaseStorageService();
-  final _firestoreVenue = FirestoreVenue();
 
-  /// Upload a cropped image to Firebase Storage and update Firestore & venueProvider.
-  /// [imageKey] is either 'logoUrl' or 'backgroundUrl'.
-  Future<void> uploadImage({
+  /// Upload a cropped image to Firebase Storage only.
+  /// Returns the newly uploaded URL or null if error.
+  Future<String?> uploadImage({
     required Uint8List imageData,
-    required String imageKey,
-    required String imageCategory, // e.g., 'branding'
-    required String imageType, // e.g., 'logo' or 'background'
+    required String imageKey, // e.g. 'logoUrl'
+    required String imageCategory, // e.g. 'branding'
+    required String imageType, // e.g. 'logo' or 'background'
   }) async {
     state = const AsyncLoading();
 
-    final venue = ref.read(venueProvider);
+    final venue = ref.read(draftVenueProvider);
     if (venue == null) {
-      //state = AsyncError( 'No venue data available');
-      return;
+      // If no venue in draft, can't proceed
+      state = AsyncError('No venue data available', StackTrace.current);
+      return null;
     }
 
-    final userId = venue.userId;
-    final venueId = venue.venueId;
-
     try {
-      // If there's an old image, delete it first
-      String oldImageUrl = _getCurrentImageUrl(venue, imageKey);
+      // 1. Delete old image from Firebase Storage, if present
+      final oldImageUrl = _getCurrentImageUrl(venue, imageKey);
       if (oldImageUrl.isNotEmpty) {
         await _storageService.deleteImage(oldImageUrl);
       }
 
-      // Upload new image
+      // 2. Upload new image
       final imageUrl = await _storageService.uploadImage(
         imageData: imageData,
-        userId: userId,
-        venueId: venueId,
+        userId: venue.userId,
+        venueId: venue.venueId,
         imageCategory: imageCategory,
         imageType: imageType,
       );
-
       if (imageUrl == null) {
         throw Exception('Failed to upload image');
       }
 
-      // Update Firestore
-      await _updateVenueDesignAndDisplay(userId, venueId, imageKey, imageUrl);
-
-      // Update venue provider
-      _updateVenueProvider(imageKey, imageUrl);
+      // 3. Update the draft venue with the new URL (not Firestore)
+      _updateDraftVenue(imageKey, imageUrl);
 
       state = const AsyncData(null);
+      return imageUrl;
     } catch (e) {
-      // state = AsyncError(e);
+      state = AsyncError(e, StackTrace.current);
+      return null;
     }
   }
 
-  /// Delete an existing image from Storage and update Firestore & venueProvider.
-  Future<void> deleteImage({
-    required String imageKey,
-  }) async {
+  /// If you really want to let users delete *right now*, you can do so.
+  /// Otherwise, you could also handle "delete" in the parent widget.
+  Future<void> deleteImage({required String imageKey}) async {
     state = const AsyncLoading();
-
-    final venue = ref.read(venueProvider);
+    final venue = ref.read(draftVenueProvider);
     if (venue == null) {
-      // state = AsyncError('No venue data available');
+      state = AsyncError('No venue data available', StackTrace.current);
       return;
     }
 
-    final userId = venue.userId;
-    final venueId = venue.venueId;
     final imageUrl = _getCurrentImageUrl(venue, imageKey);
-
     if (imageUrl.isEmpty) {
-      state = AsyncData(null); // Nothing to delete
+      state = const AsyncData(null); // Nothing to delete
       return;
     }
 
     try {
-      // Delete from Storage
+      // Delete from Firebase Storage
       await _storageService.deleteImage(imageUrl);
 
-      // Delete from Firestore
-      await _firestoreVenue.deleteDesignAndDisplayField(
-        userId: userId,
-        venueId: venueId,
-        fieldKey: imageKey,
-      );
-
-      // Update provider
-      _updateVenueProvider(imageKey, '');
+      // Update the local draft with an empty URL
+      _updateDraftVenue(imageKey, '');
 
       state = const AsyncData(null);
     } catch (e) {
-      //  state = AsyncError(e);
+      state = AsyncError(e, StackTrace.current);
     }
   }
 
@@ -120,42 +103,16 @@ class VenueImageController extends StateNotifier<AsyncValue<void>> {
     return '';
   }
 
-  Future<void> _updateVenueDesignAndDisplay(
-    String userId,
-    String venueId,
-    String imageKey,
-    String imageUrl,
-  ) async {
-    final currentDesign = (await ref.read(venueProvider))?.designAndDisplay ??
-        const DesignAndDisplay();
-
-    DesignAndDisplay updatedDesign;
-    if (imageKey == 'logoUrl') {
-      updatedDesign = currentDesign.copyWith(logoUrl: imageUrl);
-    } else {
-      updatedDesign = currentDesign.copyWith(backgroundUrl: imageUrl);
-    }
-
-    await _firestoreVenue.updateVenue(
-      userId,
-      venueId,
-      {'designAndDisplay': updatedDesign.toMap()},
-    );
-  }
-
-  void _updateVenueProvider(String imageKey, String imageUrl) {
-    final venue = ref.read(venueProvider);
+  void _updateDraftVenue(String imageKey, String imageUrl) {
+    final venue = ref.read(draftVenueProvider);
     if (venue == null) return;
 
     final currentDesign = venue.designAndDisplay;
-    DesignAndDisplay updatedDesign;
-    if (imageKey == 'logoUrl') {
-      updatedDesign = currentDesign.copyWith(logoUrl: imageUrl);
-    } else {
-      updatedDesign = currentDesign.copyWith(backgroundUrl: imageUrl);
-    }
+    final updatedDesign = (imageKey == 'logoUrl')
+        ? currentDesign.copyWith(logoUrl: imageUrl)
+        : currentDesign.copyWith(backgroundUrl: imageUrl);
 
-    ref.read(venueProvider.notifier).setVenue(
+    ref.read(draftVenueProvider.notifier).setVenue(
           venue.copyWith(designAndDisplay: updatedDesign),
         );
   }

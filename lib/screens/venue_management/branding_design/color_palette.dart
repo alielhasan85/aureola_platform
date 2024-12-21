@@ -7,17 +7,18 @@ import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
+import 'package:aureola_platform/service/localization/localization.dart'; // Ensure this import exists
 
 class ColorPaletteSection extends ConsumerStatefulWidget {
   final String name;
   final String colorField;
-  final Color color;
+  final Color initialColor;
 
   const ColorPaletteSection({
     super.key,
     required this.name,
     required this.colorField,
-    required this.color,
+    required this.initialColor,
   });
 
   @override
@@ -32,24 +33,25 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
   @override
   void initState() {
     super.initState();
-    _hexController = TextEditingController(text: _colorToHex(widget.color));
+    _hexController =
+        TextEditingController(text: _colorToHex(widget.initialColor));
   }
 
-  // @override
-  // void didUpdateWidget(covariant ColorPaletteSection oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   if (widget.color != oldWidget.color) {
-  //     final newHex = _colorToHex(widget.color);
-  //     if (_hexController.text != newHex) {
-  //       // Schedule the update after the current frame to avoid setState during build
-  //       WidgetsBinding.instance.addPostFrameCallback((_) {
-  //         if (mounted) {
-  //           _hexController.text = newHex;
-  //         }
-  //       });
-  //     }
-  //   }
-  // }
+  @override
+  void didUpdateWidget(covariant ColorPaletteSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialColor != oldWidget.initialColor) {
+      final newHex = _colorToHex(widget.initialColor);
+      if (_hexController.text != newHex) {
+        // Schedule the update after the current frame to avoid setState during build
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _hexController.text = newHex;
+          }
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -59,9 +61,8 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
 
   @override
   Widget build(BuildContext context) {
-    final venue = ref.read(draftVenueProvider);
+    final venue = ref.watch(draftVenueProvider);
     Color currentColor = _getCurrentColor(venue);
-    _hexController = TextEditingController(text: _colorToHex(currentColor));
 
     return Container(
       decoration: ShapeDecoration(
@@ -70,13 +71,13 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
           borderRadius: BorderRadius.circular(8),
         ),
       ),
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+      // margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            width: 150,
+            width: 180,
             child: Text(
               widget.name,
               style: AppThemeLocal.paragraph.copyWith(
@@ -92,7 +93,8 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
               children: [
                 Expanded(
                   child: Tooltip(
-                    message: 'Enter a hex color code (e.g., #FFFFFF)',
+                    message: AppLocalizations.of(context)!
+                        .translate('enter_hex_color_code_tooltip'),
                     child: SizedBox(
                       height: 30,
                       child: TextFormField(
@@ -100,13 +102,14 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
                         style: AppThemeLocal.paragraph.copyWith(fontSize: 14),
                         decoration:
                             AppThemeLocal.textFieldinputDecoration().copyWith(
-                          hintText: 'Enter hex color code',
+                          hintText: AppLocalizations.of(context)!
+                              .translate('enter_hex_color_code_hint'),
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 4.0,
                             vertical: 4.0,
                           ),
                         ),
-                        validator: _validateHex,
+                        validator: (value) => _validateHex(context, value),
                         onFieldSubmitted: _handleHexSubmit,
                         onChanged: _handleHexChange,
                         keyboardType: TextInputType.text,
@@ -127,7 +130,7 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
                       context: context,
                       builder: (BuildContext context) {
                         return CustomColorPickerDialog(
-                          initialColor: widget.color,
+                          initialColor: currentColor,
                         );
                       },
                     );
@@ -165,7 +168,7 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
 
   /// Handles changes in the hex text field.
   void _handleHexChange(String value) {
-    if (_validateHex(value) == null) {
+    if (_validateHex(context, value) == null) {
       final newColor = _hexToColor(value);
       _updateColorInProvider(newColor);
     }
@@ -173,12 +176,15 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
 
   /// Handles submission of the hex text field.
   void _handleHexSubmit(String value) {
-    if (_validateHex(value) == null) {
+    if (_validateHex(context, value) == null) {
       final newColor = _hexToColor(value);
       _updateColorInProvider(newColor);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid hex color code.')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!
+              .translate('invalid_hex_color_code')),
+        ),
       );
     }
   }
@@ -223,12 +229,13 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
   }
 
   /// Validates the hex color code.
-  String? _validateHex(String? value) {
+  String? _validateHex(BuildContext context, String? value) {
     if (value == null || value.isEmpty) {
-      return 'Hex color code cannot be empty.';
+      return AppLocalizations.of(context)!
+          .translate('hex_color_cannot_be_empty');
     }
     if (!_colorRegex.hasMatch(value)) {
-      return 'Invalid hex color code.';
+      return AppLocalizations.of(context)!.translate('invalid_hex_color_code');
     }
     return null;
   }

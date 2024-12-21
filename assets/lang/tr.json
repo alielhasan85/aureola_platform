@@ -151,7 +151,28 @@
   
   "save": "Save",
  
-  "unable_to_save": "Unable to save. Please try again.",
   
-  "save_failed": "Save failed"
+  "enter_hex_color_code_tooltip": "Enter a hex color code (e.g., #FFFFFF)",
+  "enter_hex_color_code_hint": "Enter hex color code",
+  "invalid_hex_color_code": "Invalid hex color code.",
+  "hex_color_cannot_be_empty": "Hex color code cannot be empty.",
+  "branding_visual_design_title": "Branding & Visual Design",
+  "upload_brand_assets_logo": "Upload Your Brand Assets: Logo",
+  "background_color": "Background Color",
+  "card_background": "Card Background",
+  "accent_color": "Accent Color",
+  "text_color": "Text Color",
+  "cancel_button": "Cancel",
+  "save_button": "Save",
+  "unable_to_save": "Unable to save changes.",
+  "save_failed": "Save failed.",
+  "please_fix_errors": "Please fix the errors in the form.",
+  "changes_discarded": "Changes have been discarded.",
+  "original_venue_data_not_found": "Original venue data not found.",
+  "pick_a_color_dialog_title": "Pick a color",
+  "hex_color_label": "Hex Color",
+  "select_button": "Select",
+   "Customize_Your_Color_Palette": "Renk Paletinizi Özelleştirin",
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "QR menünüzü kişiselleştirmek için tercih ettiğiniz renkleri seçin ve kaydedin."
+
 }

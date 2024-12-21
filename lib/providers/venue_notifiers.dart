@@ -280,12 +280,12 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     final updatedVenue = state!.copyWith(designAndDisplay: updatedDesign);
     state = updatedVenue;
 
-    // Immediately update Firestore
-    await FirestoreVenue().updateVenue(
-      state!.userId,
-      state!.venueId,
-      {'designAndDisplay': updatedDesign.toMap()},
-    );
+    // // Immediately update Firestore
+    // await FirestoreVenue().updateVenue(
+    //   state!.userId,
+    //   state!.venueId,
+    //   {'designAndDisplay': updatedDesign.toMap()},
+    // );
   }
 
   // Contact update methods
@@ -390,6 +390,13 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
   void updateTextColor(String hex) {
     if (state != null) {
       final updatedDesign = state!.designAndDisplay.copyWith(textColor: hex);
+      state = state!.copyWith(designAndDisplay: updatedDesign);
+    }
+  }
+
+  void updateLogoUrl(String url) {
+    if (state != null) {
+      final updatedDesign = state!.designAndDisplay.copyWith(logoUrl: url);
       state = state!.copyWith(designAndDisplay: updatedDesign);
     }
   }

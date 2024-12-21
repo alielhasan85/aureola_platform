@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:aureola_platform/images/aspect_ratio.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/providers/venue_notifiers.dart';
@@ -14,16 +17,17 @@ final authFormProvider = StateProvider<AuthForm>((ref) => AuthForm.login);
 
 final languageProvider =
     StateProvider<String>((ref) => 'en'); // Default to 'en'
+
 // This provider will store the index of the selected tab
+// TODO: to be initialized to zero
 final selectedMenuIndexProvider = StateProvider<int>((ref) => 10);
 
-// // draft provider - Branding and design
-// final displayNameProvider = StateProvider<String>((ref) => '');
-// final taglineProvider = StateProvider<String>((ref) => '');
+// // Provider for logo aspect ratio
+// final draftLogoAspectRatioProvider =
+//     StateProvider<AspectRatioOption?>((ref) => AspectRatioOption.square);
 
-// final draftBackgroundColorProvider = StateProvider<Color?>((ref) => null);
-// final draftHighlightColorProvider = StateProvider<Color?>((ref) => null);
-// final draftTextColorProvider = StateProvider<Color?>((ref) => null);
+//logo for image data provider - to be used to transfer data from widgte to widget
+final draftLogoImageDataProvider = StateProvider<Uint8List?>((ref) => null);
 
 // Provider for stable venue data from Firestore
 final venueProvider = StateNotifierProvider<VenueNotifier, VenueModel?>((ref) {

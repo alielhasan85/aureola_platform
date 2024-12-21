@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter/services.dart';
+import 'package:aureola_platform/service/localization/localization.dart'; // Ensure this import exists
 
 class CustomColorPickerDialog extends StatefulWidget {
   final Color initialColor;
@@ -20,7 +21,8 @@ class CustomColorPickerDialog extends StatefulWidget {
 class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
   late Color currentColor;
   late TextEditingController hexController;
-  final _colorRegex = RegExp(r'^#([A-Fa-f0-9]{6})$');
+  final _colorRegex =
+      RegExp(r'^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$'); // Updated regex
 
   @override
   void initState() {
@@ -40,18 +42,25 @@ class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
   }
 
   Color _hexToColor(String hexString) {
+    String processedHex = hexString;
+    if (hexString.length == 3) {
+      // Expand shorthand hex (e.g., #FFF -> #FFFFFF)
+      processedHex = hexString.split('').map((c) => '$c$c').join('');
+    }
     final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-    buffer.write(hexString.replaceFirst('#', ''));
+    if (processedHex.length == 6 || processedHex.length == 7)
+      buffer.write('ff');
+    buffer.write(processedHex.replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 
   String? _validateHex(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Hex color code cannot be empty.';
+      return AppLocalizations.of(context)!
+          .translate('hex_color_cannot_be_empty');
     }
     if (!_colorRegex.hasMatch(value)) {
-      return 'Invalid hex color code.';
+      return AppLocalizations.of(context)!.translate('invalid_hex_color_code');
     }
     return null;
   }
@@ -71,7 +80,10 @@ class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid hex color code.')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!
+              .translate('invalid_hex_color_code')),
+        ),
       );
     }
   }
@@ -79,7 +91,8 @@ class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Pick a color'),
+      title: Text(
+          AppLocalizations.of(context)!.translate('pick_a_color_dialog_title')),
       content: SingleChildScrollView(
         child: Column(
           children: [
@@ -97,11 +110,12 @@ class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
             const SizedBox(height: 10),
             TextFormField(
               controller: hexController,
-              decoration: const InputDecoration(
-                labelText: 'Hex Color',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText:
+                    AppLocalizations.of(context)!.translate('hex_color_label'),
+                border: const OutlineInputBorder(),
               ),
-              validator: _validateHex,
+              validator: (value) => _validateHex(value),
               onFieldSubmitted: _onHexSubmitted,
               onChanged: _onHexChanged,
               keyboardType: TextInputType.text,
@@ -126,13 +140,13 @@ class _CustomColorPickerDialogState extends State<CustomColorPickerDialog> {
       ),
       actions: [
         ElevatedButton(
-          child: const Text('Select'),
+          child: Text(AppLocalizations.of(context)!.translate('select_button')),
           onPressed: () {
             Navigator.of(context).pop(currentColor);
           },
         ),
         ElevatedButton(
-          child: const Text('Cancel'),
+          child: Text(AppLocalizations.of(context)!.translate('cancel_button')),
           onPressed: () {
             Navigator.of(context).pop();
           },

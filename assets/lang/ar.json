@@ -171,7 +171,31 @@
   
   "save": "Save",
  
-  "unable_to_save": "Unable to save. Please try again.",
   
-  "save_failed": "Save failed"
+
+  "enter_hex_color_code_tooltip": "أدخل رمز لون سداسي عشري (مثل #FFFFFF)",
+  "enter_hex_color_code_hint": "أدخل رمز اللون السداسي العشري",
+  "invalid_hex_color_code": "رمز لون سداسي عشري غير صالح.",
+  "hex_color_cannot_be_empty": "لا يمكن أن يكون رمز اللون السداسي العشري فارغًا.",
+  "branding_visual_design_title": "العلامة التجارية والتصميم البصري",
+  "upload_brand_assets_logo": "حمّل أصول علامتك التجارية: الشعار",
+  "background_color": "لون الخلفية",
+  "card_background": "لون خلفية البطاقة",
+  "accent_color": "لون التمييز",
+  "text_color": "لون النص",
+  "cancel_button": "إلغاء",
+  "save_button": "حفظ",
+  "unable_to_save": "غير قادر على حفظ التغييرات.",
+ 
+  "save_failed": "فشل الحفظ.",
+  "please_fix_errors": "يرجى إصلاح الأخطاء في النموذج.",
+  "changes_discarded": "تم تجاهل التغييرات.",
+  "original_venue_data_not_found": "لم يتم العثور على بيانات المكان الأصلية.",
+  "pick_a_color_dialog_title": "اختر لونًا",
+  "hex_color_label": "لون سداسي عشري",
+  "select_button": "اختر",
+  "Customize_Your_Color_Palette": "تخصيص لوحة الألوان الخاصة بك",
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "حدد واحفظ الألوان المفضلة لديك لتخصيص قائمة QR الخاصة بك."
+
+
 }
