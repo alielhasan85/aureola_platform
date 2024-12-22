@@ -1,6 +1,5 @@
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/widgest/logo_icon.dart';
-import 'package:aureola_platform/providers/main_navigation_provider.dart';
 import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

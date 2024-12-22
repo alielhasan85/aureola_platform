@@ -10,7 +10,7 @@ class WhatsappNumber extends ConsumerStatefulWidget {
   final double width;
   final TextEditingController controller;
 
-  WhatsappNumber({
+  const WhatsappNumber({
     super.key,
     required this.width,
     required this.controller,

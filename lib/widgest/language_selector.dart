@@ -7,12 +7,12 @@ import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 
 class LanguageSelector extends ConsumerWidget {
-  const LanguageSelector({Key? key}) : super(key: key);
+  const LanguageSelector({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Fetch the current language code from the provider
-    final currentLanguageCode = ref.watch(languageProvider);
+    //final currentLanguageCode = ref.watch(languageProvider);
 
     // Map language codes to display labels (localized)
     final languageMap = {
@@ -23,7 +23,7 @@ class LanguageSelector extends ConsumerWidget {
     };
 
     // Get the current language label
-    final currentLanguageLabel = languageMap[currentLanguageCode] ?? 'English';
+    // final currentLanguageLabel = languageMap[currentLanguageCode] ?? 'English';
 
     return PopupMenuButton<String>(
       // Removed 'icon' to prevent the assertion error

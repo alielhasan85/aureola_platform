@@ -1,14 +1,11 @@
 import 'dart:typed_data';
 
-import 'package:aureola_platform/images/aspect_ratio.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/providers/venue_notifiers.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:flutter/material.dart';
 // App general provider
 
 enum AuthForm { login, signUp }
@@ -39,6 +36,9 @@ final draftVenueProvider =
     StateNotifierProvider<VenueNotifier, VenueModel?>((ref) {
   return VenueNotifier();
 });
+
+// Holds a boolean: does the user want to delete the old image from Firestore?
+final draftLogoDeleteProvider = StateProvider<bool>((ref) => false);
 
 final venueListProvider = FutureProvider<List<VenueModel>>((ref) async {
   final user = ref.read(userProvider);

@@ -1,6 +1,5 @@
 // firestore_venue.dart
 
-import 'package:aureola_platform/models/user/user_model.dart';
 import 'package:aureola_platform/models/venue/design_display.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';

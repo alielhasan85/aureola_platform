@@ -1,7 +1,5 @@
 // lib/screens/venue_management/branding_design/form_fields.dart
 
-import 'package:aureola_platform/images/aspect_ratio.dart';
-import 'package:aureola_platform/images/image_card.dart';
 import 'package:aureola_platform/images/venue_image_controller.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/providers.dart';
@@ -153,10 +151,10 @@ class _MenuBrandingFormFieldsState
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 
-  /// Converts a Color object to a hex string
-  String _colorToHex(Color color) {
-    return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
-  }
+  // /// Converts a Color object to a hex string
+  // String _colorToHex(Color color) {
+  //   return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
+  // }
 
   Widget _saveCancelButtons(BuildContext context, WidgetRef ref) {
     return Row(
@@ -164,99 +162,99 @@ class _MenuBrandingFormFieldsState
       children: [
         ElevatedButton(
           onPressed: () => _onCancel(context, ref),
-          child: Text(AppLocalizations.of(context)!.translate('cancel_button')),
           style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+          child: Text(AppLocalizations.of(context)!.translate('cancel_button')),
         ),
         const SizedBox(width: 20),
         ElevatedButton(
-          onPressed: () => _saveForm(context, ref),
+          onPressed: () => _onSaveForm(context, ref),
           child: Text(AppLocalizations.of(context)!.translate('save_button')),
         ),
       ],
     );
   }
 
-  Future<void> _saveForm(BuildContext context, WidgetRef ref) async {
+  Future<void> _onSaveForm(BuildContext context, WidgetRef ref) async {
     if (!_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.translate('please_fix_errors'),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+      // ...
       return;
     }
 
     final user = ref.read(userProvider);
     final draft = ref.read(draftVenueProvider);
     if (user == null || draft == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.translate('unable_to_save'),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
+      // ...
       return;
     }
 
     try {
-      // 1. Access the VenueImageController
       final imageController = ref.read(venueImageControllerProvider.notifier);
+      final newImageData = ref.read(draftLogoImageDataProvider);
+      final wantToDeleteOld = ref.read(draftLogoDeleteProvider);
 
-      // 2. Check if user picked a new logo image
-      final logoImageData = ref.read(draftLogoImageDataProvider);
-      if (logoImageData != null) {
-        // 2a. Upload that image to Firebase Storage
-        final imageUrl = await imageController.uploadImage(
-          imageData: logoImageData,
+      // 1) Possibly upload new image
+      String newLogoUrl = draft.designAndDisplay.logoUrl;
+      if (newImageData != null) {
+        final uploadedUrl = await imageController.uploadImage(
+          imageData: newImageData,
           imageKey: 'logoUrl',
           imageCategory: 'branding',
           imageType: 'logo',
         );
-
-        // 2b. If the upload succeeded, the draftVenue is already updated internally.
-        //     (But you can explicitly call updateLogoUrl if you want.)
-        if (imageUrl == null) {
+        if (uploadedUrl == null) {
           throw Exception('Image upload failed');
         }
+        newLogoUrl = uploadedUrl;
       }
 
-      // 3. Read the updated draft again (it now has the newly uploaded image URL)
+      // 2) Possibly delete old image (if user wants to delete & no new image is picked)
+      final oldImageUrl = draft.designAndDisplay.logoUrl;
+      final hasPickedANewImage = (newImageData != null);
+      if (wantToDeleteOld && !hasPickedANewImage && oldImageUrl.isNotEmpty) {
+        await imageController.deleteImage(imageKey: 'logoUrl');
+        newLogoUrl = '';
+      }
+
+      // 3) Build a final venue with the final logoUrl
       final updatedDraft = ref.read(draftVenueProvider);
       if (updatedDraft == null) {
-        throw Exception('Draft venue became null unexpectedly');
+        throw Exception('Draft unexpectedly null after uploading image');
       }
 
-      // 4. Build Firestore update data from the updated draft
-      final updateData = {
-        'designAndDisplay.backgroundColor':
-            updatedDraft.designAndDisplay.backgroundColor,
-        'designAndDisplay.cardBackground':
-            updatedDraft.designAndDisplay.cardBackground,
-        'designAndDisplay.accentColor':
-            updatedDraft.designAndDisplay.accentColor,
-        'designAndDisplay.textColor': updatedDraft.designAndDisplay.textColor,
-        'designAndDisplay.logoUrl': updatedDraft.designAndDisplay.logoUrl,
-        // 4a. Save aspect ratio if desired:
-        'designAndDisplay.logoAspectRatio':
-            updatedDraft.designAndDisplay.logoAspectRatio.name,
-      };
+      final finalLogoUrl =
+          (wantToDeleteOld && !hasPickedANewImage) ? '' : newLogoUrl;
 
-      // 5. Update Firestore once with all final changes
+      final finalDesign = updatedDraft.designAndDisplay.copyWith(
+        logoUrl: finalLogoUrl,
+      );
+      final finalVenue = updatedDraft.copyWith(designAndDisplay: finalDesign);
+
+      // 4) Update Firestore
+      final updateData = {
+        'designAndDisplay.logoUrl': finalLogoUrl,
+        'designAndDisplay.logoAspectRatio': finalDesign.logoAspectRatio.name,
+        'designAndDisplay.backgroundColor': finalDesign.backgroundColor,
+        'designAndDisplay.cardBackground': finalDesign.cardBackground,
+        'designAndDisplay.accentColor': finalDesign.accentColor,
+        'designAndDisplay.textColor': finalDesign.textColor,
+      };
       await FirestoreVenue().updateVenue(
         user.userId,
-        updatedDraft.venueId,
+        finalVenue.venueId,
         updateData,
       );
 
-      // 6. Update the stable venue provider
-      ref.read(venueProvider.notifier).setVenue(updatedDraft);
+      // 5) Update stable provider
+      ref.read(venueProvider.notifier).setVenue(finalVenue);
 
-      // 7. Show success message
+      // 6) ALSO update the draft provider so your UI sees the new URL
+      ref.read(draftVenueProvider.notifier).setVenue(finalVenue);
+
+      // 7) Clear temporary states
+      ref.read(draftLogoImageDataProvider.notifier).state = null;
+      ref.read(draftLogoDeleteProvider.notifier).state = false;
+
+      // 8) Show success
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -267,7 +265,7 @@ class _MenuBrandingFormFieldsState
         ),
       );
     } catch (e) {
-      // If anything fails, show an error
+      // Show error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -280,28 +278,24 @@ class _MenuBrandingFormFieldsState
   }
 
   void _onCancel(BuildContext context, WidgetRef ref) {
+    // Revert to original stable venue
     final originalVenue = ref.read(venueProvider);
-
     if (originalVenue != null) {
       ref.read(draftVenueProvider.notifier).setVenue(originalVenue);
-      _formKey.currentState?.reset();
-
-      // Removed setState as provider updates trigger rebuilds
-      _initializeFormFields(originalVenue);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              AppLocalizations.of(context)!.translate('changes_discarded')),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .translate('original_venue_data_not_found')),
-        ),
-      );
     }
+    // Clear the form
+    _formKey.currentState?.reset();
+    // Clear draft picks
+    ref.read(draftLogoImageDataProvider.notifier).state = null;
+    ref.read(draftLogoDeleteProvider.notifier).state = false;
+
+    // Show a toast
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.of(context)!.translate('changes_discarded'),
+        ),
+      ),
+    );
   }
 }

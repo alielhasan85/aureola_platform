@@ -39,20 +39,20 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   //TODO: to delete this method
 
-  @override
-  void initState() {
-    super.initState();
-    if (kDebugMode) {
-      // Set test credentials
-      widget.emailController.text = 'elhasan.ali@gmail.com';
-      widget.passwordController.text = 'rotation';
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   if (kDebugMode) {
+  //     // Set test credentials
+  //     widget.emailController.text = 'elhasan.ali@gmail.com';
+  //     widget.passwordController.text = 'rotation';
 
-      // Automatically trigger login after the first frame
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _logIn();
-      });
-    }
-  }
+  //     // Automatically trigger login after the first frame
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       _logIn();
+  //     });
+  //   }
+  // }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
