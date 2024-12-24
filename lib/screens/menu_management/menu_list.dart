@@ -13,21 +13,19 @@ import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MenuBrandingFormFields extends ConsumerStatefulWidget {
+class MenuList extends ConsumerStatefulWidget {
   final String layout; // 'isDesktop', 'isTablet', 'isMobile', or fallback
 
-  const MenuBrandingFormFields({
+  const MenuList({
     super.key,
     required this.layout,
   });
 
   @override
-  ConsumerState<MenuBrandingFormFields> createState() =>
-      _MenuBrandingFormFieldsState();
+  ConsumerState<MenuList> createState() => _MenuBrandingFormFieldsState();
 }
 
-class _MenuBrandingFormFieldsState
-    extends ConsumerState<MenuBrandingFormFields> {
+class _MenuBrandingFormFieldsState extends ConsumerState<MenuList> {
   final _formKey = GlobalKey<FormState>();
 
   void _initializeFormFields(VenueModel? venue) {
@@ -44,14 +42,6 @@ class _MenuBrandingFormFieldsState
     if (draftVenue == null) {
       return const Center(child: CircularProgressIndicator());
     }
-
-    // Convert hex strings to Color objects
-    Color backgroundColor =
-        _hexToColor(draftVenue.designAndDisplay.backgroundColor);
-    Color cardBackgroundColor =
-        _hexToColor(draftVenue.designAndDisplay.cardBackground);
-    Color accentColor = _hexToColor(draftVenue.designAndDisplay.accentColor);
-    Color textColor = _hexToColor(draftVenue.designAndDisplay.textColor);
 
     return Form(
       key: _formKey,
@@ -83,85 +73,12 @@ class _MenuBrandingFormFieldsState
             // const SizedBox(height: 8),
 
 // Title
-            Center(
-              child: Text(
-                AppLocalizations.of(context)!
-                    .translate("Customize_Your_Color_Palette"),
-                style: AppThemeLocal.headingCard.copyWith(
-                    fontSize: 16), // Assuming you have a heading style
-              ),
-            ),
-
-// Description
-            const SizedBox(height: 12),
-            Text(
-              AppLocalizations.of(context)!.translate(
-                  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu."),
-              style: AppThemeLocal.paragraph.copyWith(
-                  color: AppThemeLocal.secondary,
-                  fontSize: 14), // Assuming you have a paragraph style
-            ),
-            const SizedBox(height: 12),
-            // Each ColorPaletteSection handles one color with unique colorField
-            ColorPaletteSection(
-              name: AppLocalizations.of(context)!.translate('background_color'),
-              colorField: 'backgroundColor', // Correct identifier
-              initialColor: backgroundColor,
-              layout: widget.layout,
-            ),
-
-            const SizedBox(height: 16),
-            ColorPaletteSection(
-              name: AppLocalizations.of(context)!.translate('card_background'),
-              colorField: 'cardBackground', // Correct identifier
-              initialColor: cardBackgroundColor,
-              layout: widget.layout,
-            ),
-
-            const SizedBox(height: 16),
-            ColorPaletteSection(
-              name: AppLocalizations.of(context)!.translate('accent_color'),
-              colorField: 'accentColor', // Correct identifier
-              initialColor: accentColor,
-              layout: widget.layout,
-            ),
-
-            const SizedBox(height: 16),
-            ColorPaletteSection(
-              name: AppLocalizations.of(context)!.translate('text_color'),
-              colorField: 'textColor', // Correct identifier
-              initialColor: textColor,
-              layout: widget.layout,
-            ),
-            const SizedBox(height: 12),
-            Divider(
-                color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
-
-            const SizedBox(height: 12),
-            LogoUploadSection(
-              layout: widget.layout,
-              width: 150,
-            ),
-
-            const SizedBox(height: 12),
-            Divider(
-                color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
-
-            const SizedBox(height: 12),
 
             _saveCancelButtons(context, ref),
           ],
         ),
       ),
     );
-  }
-
-  /// Converts a hex string to a Color object
-  Color _hexToColor(String hexString) {
-    final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-    buffer.write(hexString.replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
   }
 
   Widget _saveCancelButtons(BuildContext context, WidgetRef ref) {

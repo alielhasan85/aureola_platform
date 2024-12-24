@@ -17,7 +17,7 @@ final languageProvider =
 
 // This provider will store the index of the selected tab
 // TODO: to be initialized to zero
-final selectedMenuIndexProvider = StateProvider<int>((ref) => 10);
+final selectedMenuIndexProvider = StateProvider<int>((ref) => 1);
 
 // // Provider for logo aspect ratio
 // final draftLogoAspectRatioProvider =

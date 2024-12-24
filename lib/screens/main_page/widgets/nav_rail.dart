@@ -236,8 +236,10 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                         isSelected: selectedIndex == 10,
                         onSelect: () => _updateIndex(
                             10,
-                            AppLocalizations.of(context)!
-                                .translate('menu_management')),
+                            AppLocalizations.of(context)!.translate(
+                                ref.read(appBarTitleProvider.notifier).state =
+                                    AppLocalizations.of(context)!.translate(
+                                        "branding_visual_design_title"))),
                       ),
                       const Divider(
                           color: AppThemeLocal.divider, thickness: 0.5),

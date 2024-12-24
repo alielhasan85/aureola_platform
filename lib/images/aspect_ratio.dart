@@ -12,23 +12,43 @@ enum AspectRatioOption {
   nearlySquare, // 5:4
 }
 
+// extension AspectRatioExtension on AspectRatioOption {
+//   String get label {
+//     switch (this) {
+//       case AspectRatioOption.square:
+//         return '1:1 (Square)';
+//       case AspectRatioOption.standard:
+//         return '4:3 (Standard)';
+//       case AspectRatioOption.classic:
+//         return '3:2 (Classic)';
+//       case AspectRatioOption.widescreen:
+//         return '16:9 (Widescreen)';
+//       case AspectRatioOption.vertical:
+//         return '9:16 (Vertical)';
+//       case AspectRatioOption.panoramic:
+//         return '2:1 (Panoramic)';
+//       case AspectRatioOption.nearlySquare:
+//         return '5:4 (Nearly Square)';
+//     }
+//   }
+
 extension AspectRatioExtension on AspectRatioOption {
   String get label {
     switch (this) {
       case AspectRatioOption.square:
-        return '1:1 (Square)';
+        return '1:1';
       case AspectRatioOption.standard:
-        return '4:3 (Standard)';
+        return '4:3';
       case AspectRatioOption.classic:
-        return '3:2 (Classic)';
+        return '3:2';
       case AspectRatioOption.widescreen:
-        return '16:9 (Widescreen)';
+        return '16:9';
       case AspectRatioOption.vertical:
-        return '9:16 (Vertical)';
+        return '9:16';
       case AspectRatioOption.panoramic:
-        return '2:1 (Panoramic)';
+        return '2:1';
       case AspectRatioOption.nearlySquare:
-        return '5:4 (Nearly Square)';
+        return '5:4';
     }
   }
 

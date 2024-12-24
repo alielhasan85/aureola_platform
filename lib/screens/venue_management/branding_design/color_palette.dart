@@ -13,12 +13,14 @@ class ColorPaletteSection extends ConsumerStatefulWidget {
   final String name;
   final String colorField;
   final Color initialColor;
+  final String layout;
 
   const ColorPaletteSection({
     super.key,
     required this.name,
     required this.colorField,
     required this.initialColor,
+    required this.layout,
   });
 
   @override
@@ -77,18 +79,17 @@ class _ColorPaletteSectionState extends ConsumerState<ColorPaletteSection> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            width: 180,
+            width: (widget.layout == 'isDesktop' || widget.layout == 'isTablet')
+                ? 180
+                : 150,
             child: Text(
               widget.name,
-              style: AppThemeLocal.paragraph.copyWith(
-                color: AppThemeLocal.primary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppThemeLocal.paragraph,
             ),
           ),
           const SizedBox(width: 8),
           SizedBox(
-            width: 170,
+            width: 130,
             child: Row(
               children: [
                 Expanded(

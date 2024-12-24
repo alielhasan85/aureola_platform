@@ -2,7 +2,8 @@
 
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_app_bar.dart';
-import 'package:aureola_platform/screens/venue_management/menu_branding.dart';
+import 'package:aureola_platform/screens/menu_management/menu.dart';
+import 'package:aureola_platform/screens/venue_management/branding.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,16 +23,16 @@ class MainPage extends ConsumerStatefulWidget {
 class _MainPageState extends ConsumerState<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    // Initialize the appBar title when the page loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(appBarTitleProvider.notifier).state =
-          "Dashboard"; // Set default title
-    });
-  }
+  //   // Initialize the appBar title when the page loads
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     ref.read(appBarTitleProvider.notifier).state =
+  //         "Dashboard"; // Set default title
+  //   });
+  // }
 
   @override
   void didChangeDependencies() {
@@ -55,8 +56,7 @@ class _MainPageState extends ConsumerState<MainPage> {
               child:
                   Text('Order Management', style: AppThemeLocal.appBarTitle));
         case 3:
-          return const Center(
-              child: Text('Menu Content', style: AppThemeLocal.appBarTitle));
+          return const Menu();
         case 4:
           return const Center(
               child:
