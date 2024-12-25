@@ -60,28 +60,33 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
         child: Padding(
           padding: widget.isDrawer
               ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
-              : const EdgeInsets.only(right: 16, left: 12, top: 16, bottom: 12),
+              : const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+
+          //const EdgeInsets.only(right: 12, left: 12, top: 16, bottom: 12),
           child: Column(
             crossAxisAlignment: widget.isDrawer
                 ? CrossAxisAlignment.start
                 : CrossAxisAlignment.end,
             children: [
               // Header (Logo, Title)
-              if (!widget.isDrawer) ...[const AppLogo()],
+              if (!widget.isDrawer) ...[
+                const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    child: AppLogo()),
+              ],
 
               // Navigation Items
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                child: VenueNavigation(
-                  label: 'Al bait El Shami restaurant',
-                  iconPath: 'assets/icons/arrow.svg',
-                  onCloseOverlay: () {
-                    _updateIndex(0, '', closeDrawer: false);
-                  },
-                  isSelected: selectedIndex == 0,
-                ),
+              VenueNavigation(
+                label: ref.watch(venueProvider)?.venueName ?? '',
+                iconPath: 'assets/icons/arrow.svg',
+                onCloseOverlay: () {
+                  _updateIndex(0, '', closeDrawer: false);
+                },
+                isSelected: selectedIndex == 0,
               ),
+
+              const SizedBox(height: 12),
+
               NavigationItem(
                 label: AppLocalizations.of(context)!.translate('dashboard'),
                 leadingIconPath: 'assets/icons/dashboard.svg',
@@ -114,72 +119,79 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
               ),
               if (selectedIndex >= 3 && selectedIndex <= 7) ...[
                 const SizedBox(height: 8),
-                Container(
-                  width: 180,
-                  padding: const EdgeInsets.all(10),
-                  margin: EdgeInsets.only(
-                    left: isRtl ? 0 : 20,
-                    right: isRtl ? 20 : 0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppThemeLocal.background.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!.translate('menu'),
-                        isSelected: selectedIndex == 3,
-                        onSelect: () => _updateIndex(
-                            3,
-                            AppLocalizations.of(context)!
-                                .translate('menu_management')),
-                      ),
-                      const Divider(
-                          color: AppThemeLocal.divider, thickness: 0.5),
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!
-                            .translate('categories'),
-                        isSelected: selectedIndex == 4,
-                        onSelect: () => _updateIndex(
-                            4,
-                            AppLocalizations.of(context)!
-                                .translate('menu_management')),
-                      ),
-                      const Divider(
-                          color: AppThemeLocal.divider, thickness: 0.5),
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!.translate("Items"),
-                        isSelected: selectedIndex == 5,
-                        onSelect: () => _updateIndex(
-                            5,
-                            AppLocalizations.of(context)!
-                                .translate('menu_management')),
-                      ),
-                      const Divider(
-                          color: AppThemeLocal.divider, thickness: 0.5),
-                      SubMenuItem(
-                        label:
-                            AppLocalizations.of(context)!.translate("Add-ons"),
-                        isSelected: selectedIndex == 6,
-                        onSelect: () => _updateIndex(
-                            6,
-                            AppLocalizations.of(context)!
-                                .translate('menu_management')),
-                      ),
-                      const Divider(
-                          color: AppThemeLocal.divider, thickness: 0.5),
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!
-                            .translate("Flush_Screen"),
-                        isSelected: selectedIndex == 7,
-                        onSelect: () => _updateIndex(
-                            7,
-                            AppLocalizations.of(context)!
-                                .translate('Flush_Screen')),
-                      )
-                    ],
+                Padding(
+                  padding: isRtl
+                      ? const EdgeInsets.only(left: 12)
+                      : const EdgeInsets.only(right: 12),
+                  child: Container(
+                    width: 180,
+                    padding: const EdgeInsets.all(10),
+                    margin: EdgeInsets.only(
+                      left: isRtl ? 0 : 20,
+                      right: isRtl ? 20 : 0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppThemeLocal.background.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SubMenuItem(
+                          label:
+                              AppLocalizations.of(context)!.translate('menu'),
+                          isSelected: selectedIndex == 3,
+                          onSelect: () => _updateIndex(
+                              3,
+                              AppLocalizations.of(context)!
+                                  .translate('menu_management')),
+                        ),
+                        const Divider(
+                            color: AppThemeLocal.divider, thickness: 0.5),
+                        SubMenuItem(
+                          label: AppLocalizations.of(context)!
+                              .translate('categories'),
+                          isSelected: selectedIndex == 4,
+                          onSelect: () => _updateIndex(
+                              4,
+                              AppLocalizations.of(context)!
+                                  .translate('menu_management')),
+                        ),
+                        const Divider(
+                            color: AppThemeLocal.divider, thickness: 0.5),
+                        SubMenuItem(
+                          label:
+                              AppLocalizations.of(context)!.translate("Items"),
+                          isSelected: selectedIndex == 5,
+                          onSelect: () => _updateIndex(
+                              5,
+                              AppLocalizations.of(context)!
+                                  .translate('menu_management')),
+                        ),
+                        const Divider(
+                            color: AppThemeLocal.divider, thickness: 0.5),
+                        SubMenuItem(
+                          label: AppLocalizations.of(context)!
+                              .translate("Add-ons"),
+                          isSelected: selectedIndex == 6,
+                          onSelect: () => _updateIndex(
+                              6,
+                              AppLocalizations.of(context)!
+                                  .translate('menu_management')),
+                        ),
+                        const Divider(
+                            color: AppThemeLocal.divider, thickness: 0.5),
+                        SubMenuItem(
+                          label: AppLocalizations.of(context)!
+                              .translate("Flush_Screen"),
+                          isSelected: selectedIndex == 7,
+                          onSelect: () => _updateIndex(
+                              7,
+                              AppLocalizations.of(context)!
+                                  .translate('Flush_Screen')),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -203,93 +215,100 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
               ),
               if (selectedIndex >= 9 && selectedIndex <= 14) ...[
                 const SizedBox(height: 8),
-                Container(
-                  width: 180,
-                  padding: const EdgeInsets.all(8),
-                  margin: EdgeInsets.only(
-                    left: isRtl ? 0 : 20,
-                    right: isRtl ? 20 : 0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppThemeLocal.background.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!
-                            .translate("venue_info"),
-                        isSelected: selectedIndex == 9,
-                        onSelect: () => _updateIndex(
-                            9,
-                            AppLocalizations.of(context)!
-                                .translate("venue_info")),
-                      ),
-                      const Divider(
-                        color: AppThemeLocal.divider,
-                        thickness: 0.5,
-                      ),
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!
-                            .translate("branding_design"),
-                        isSelected: selectedIndex == 10,
-                        onSelect: () => _updateIndex(
-                            10,
-                            AppLocalizations.of(context)!.translate(
-                                ref.read(appBarTitleProvider.notifier).state =
-                                    AppLocalizations.of(context)!.translate(
-                                        "branding_visual_design_title"))),
-                      ),
-                      const Divider(
-                          color: AppThemeLocal.divider, thickness: 0.5),
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!
-                            .translate("social_media"),
-                        isSelected: selectedIndex == 11,
-                        onSelect: () => _updateIndex(
-                            11,
-                            AppLocalizations.of(context)!
-                                .translate("social_media")),
-                      ),
-                      const Divider(
-                        color: AppThemeLocal.divider,
-                        thickness: 0.5,
-                      ),
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!
-                            .translate("prices_option"),
-                        isSelected: selectedIndex == 12,
-                        onSelect: () => _updateIndex(
-                            12,
-                            AppLocalizations.of(context)!
-                                .translate("prices_option")),
-                      ),
-                      const Divider(
-                        color: AppThemeLocal.divider,
-                        thickness: 0.5,
-                      ),
-                      SubMenuItem(
-                        label: AppLocalizations.of(context)!
-                            .translate("tables_management"),
-                        isSelected: selectedIndex == 13,
-                        onSelect: () => _updateIndex(
-                            13,
-                            AppLocalizations.of(context)!
-                                .translate("tables_management")),
-                      ),
-                      const Divider(
-                        color: AppThemeLocal.divider,
-                        thickness: 0.5,
-                      ),
-                      SubMenuItem(
-                        label:
-                            AppLocalizations.of(context)!.translate("QR_Code"),
-                        isSelected: selectedIndex == 14,
-                        onSelect: () => _updateIndex(14,
-                            AppLocalizations.of(context)!.translate("QR_Code")),
-                      ),
-                    ],
+                Padding(
+                  padding: isRtl
+                      ? const EdgeInsets.only(left: 12)
+                      : const EdgeInsets.only(right: 12),
+                  child: Container(
+                    width: 180,
+                    padding: const EdgeInsets.all(8),
+                    margin: EdgeInsets.only(
+                      left: isRtl ? 0 : 20,
+                      right: isRtl ? 20 : 0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppThemeLocal.background.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SubMenuItem(
+                          label: AppLocalizations.of(context)!
+                              .translate("venue_info"),
+                          isSelected: selectedIndex == 9,
+                          onSelect: () => _updateIndex(
+                              9,
+                              AppLocalizations.of(context)!
+                                  .translate("venue_info")),
+                        ),
+                        const Divider(
+                          color: AppThemeLocal.divider,
+                          thickness: 0.5,
+                        ),
+                        SubMenuItem(
+                          label: AppLocalizations.of(context)!
+                              .translate("branding_design"),
+                          isSelected: selectedIndex == 10,
+                          onSelect: () => _updateIndex(
+                              10,
+                              AppLocalizations.of(context)!.translate(
+                                  ref.read(appBarTitleProvider.notifier).state =
+                                      AppLocalizations.of(context)!.translate(
+                                          "branding_visual_design_title"))),
+                        ),
+                        const Divider(
+                            color: AppThemeLocal.divider, thickness: 0.5),
+                        SubMenuItem(
+                          label: AppLocalizations.of(context)!
+                              .translate("social_media"),
+                          isSelected: selectedIndex == 11,
+                          onSelect: () => _updateIndex(
+                              11,
+                              AppLocalizations.of(context)!
+                                  .translate("social_media")),
+                        ),
+                        const Divider(
+                          color: AppThemeLocal.divider,
+                          thickness: 0.5,
+                        ),
+                        SubMenuItem(
+                          label: AppLocalizations.of(context)!
+                              .translate("prices_option"),
+                          isSelected: selectedIndex == 12,
+                          onSelect: () => _updateIndex(
+                              12,
+                              AppLocalizations.of(context)!
+                                  .translate("prices_option")),
+                        ),
+                        const Divider(
+                          color: AppThemeLocal.divider,
+                          thickness: 0.5,
+                        ),
+                        SubMenuItem(
+                          label: AppLocalizations.of(context)!
+                              .translate("tables_management"),
+                          isSelected: selectedIndex == 13,
+                          onSelect: () => _updateIndex(
+                              13,
+                              AppLocalizations.of(context)!
+                                  .translate("tables_management")),
+                        ),
+                        const Divider(
+                          color: AppThemeLocal.divider,
+                          thickness: 0.5,
+                        ),
+                        SubMenuItem(
+                          label: AppLocalizations.of(context)!
+                              .translate("QR_Code"),
+                          isSelected: selectedIndex == 14,
+                          onSelect: () => _updateIndex(
+                              14,
+                              AppLocalizations.of(context)!
+                                  .translate("QR_Code")),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 // Add other navigation items similarly

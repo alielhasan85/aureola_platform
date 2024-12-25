@@ -47,7 +47,7 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
                     AppLocalizations.of(context)!
                         .translate('available_restaurant'),
                     style: AppThemeLocal.appBarTitle.copyWith(
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -113,53 +113,54 @@ class _VenueNavigationState extends ConsumerState<VenueNavigation> {
           });
         },
         child: Container(
-          color: _isHovered ? AppThemeLocal.background2 : AppThemeLocal.white,
+          width: double.infinity, // Fill the parent width
           height: 71,
-          width: 230,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: AutoSizeText(
-                      widget.label,
-                      style: (_isHovered)
-                          ? AppThemeLocal.heading2.copyWith(
-                              fontSize: 24,
-                              shadows: [
-                                const Shadow(
-                                  offset: Offset(0, 8),
-                                  blurRadius: 4,
-                                  color: AppThemeLocal.white,
-                                ),
-                              ],
-                            )
-                          : AppThemeLocal.heading2,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      minFontSize: 14,
-                      maxFontSize: 24,
-                    ),
+          decoration: BoxDecoration(
+              color:
+                  _isHovered ? AppThemeLocal.background2 : AppThemeLocal.white),
+
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: AutoSizeText(
+                    widget.label,
+                    style: _isHovered
+                        ? AppThemeLocal.heading2.copyWith(
+                            fontSize: 22,
+                            shadows: [
+                              const Shadow(
+                                offset: Offset(0, 8),
+                                blurRadius: 4,
+                                color: AppThemeLocal.white,
+                              ),
+                            ],
+                          )
+                        : AppThemeLocal.heading2,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    minFontSize: 14,
+                    maxFontSize: 24,
                   ),
                 ),
-                const SizedBox(width: 8),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Transform.rotate(
-                    angle: Directionality.of(context) == TextDirection.rtl
-                        ? -3.14159
-                        : 0, // -180 degrees in radians
-                    child: SvgPicture.asset(
-                      widget.iconPath,
-                      width: 16,
-                      height: 16,
-                    ),
+              ),
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Transform.rotate(
+                  angle: Directionality.of(context) == TextDirection.rtl
+                      ? -3.14159
+                      : 0, // -180 degrees in radians
+                  child: SvgPicture.asset(
+                    widget.iconPath,
+                    width: 16,
+                    height: 16,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

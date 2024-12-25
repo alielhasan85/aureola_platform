@@ -2,14 +2,10 @@
 
 import 'package:aureola_platform/images/venue_image_controller.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
-import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/providers/user_provider.dart';
-import 'package:aureola_platform/screens/venue_management/branding_design/color_palette.dart';
-import 'package:aureola_platform/screens/venue_management/branding_design/logo_upload.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,8 +22,6 @@ class MenuList extends ConsumerStatefulWidget {
 }
 
 class _MenuBrandingFormFieldsState extends ConsumerState<MenuList> {
-  final _formKey = GlobalKey<FormState>();
-
   void _initializeFormFields(VenueModel? venue) {
     if (venue != null) {
       ref.read(draftVenueProvider.notifier).setVenue(venue);
@@ -43,40 +37,37 @@ class _MenuBrandingFormFieldsState extends ConsumerState<MenuList> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Center(
-            //   child:
-            //       (widget.layout == 'isDesktop' || widget.layout == 'isTablet')
-            //           ? Text(
-            //               AppLocalizations.of(context)!
-            //                   .translate("branding_visual_design_title"),
-            //               style: AppThemeLocal.headingCard,
-            //             )
-            //           : null,
-            // ),
-            // const SizedBox(height: 8),
-            // Text(
-            //   AppLocalizations.of(context)!
-            //       .translate("upload_brand_assets_logo"),
-            //   style: AppThemeLocal.paragraph,
-            // ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Center(
+          //   child:
+          //       (widget.layout == 'isDesktop' || widget.layout == 'isTablet')
+          //           ? Text(
+          //               AppLocalizations.of(context)!
+          //                   .translate("branding_visual_design_title"),
+          //               style: AppThemeLocal.headingCard,
+          //             )
+          //           : null,
+          // ),
+          // const SizedBox(height: 8),
+          // Text(
+          //   AppLocalizations.of(context)!
+          //       .translate("upload_brand_assets_logo"),
+          //   style: AppThemeLocal.paragraph,
+          // ),
 
-            // const SizedBox(height: 12),
-            // Divider(
-            //     color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
-            // const SizedBox(height: 8),
+          // const SizedBox(height: 12),
+          // Divider(
+          //     color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          // const SizedBox(height: 8),
 
-// Title
+          // Title
 
-            _saveCancelButtons(context, ref),
-          ],
-        ),
+          _saveCancelButtons(context, ref),
+        ],
       ),
     );
   }
@@ -100,11 +91,6 @@ class _MenuBrandingFormFieldsState extends ConsumerState<MenuList> {
   }
 
   Future<void> _onSaveForm(BuildContext context, WidgetRef ref) async {
-    if (!_formKey.currentState!.validate()) {
-      // ...
-      return;
-    }
-
     final user = ref.read(userProvider);
     final draft = ref.read(draftVenueProvider);
     if (user == null || draft == null) {
@@ -206,7 +192,7 @@ class _MenuBrandingFormFieldsState extends ConsumerState<MenuList> {
     final originalVenue = ref.read(venueProvider);
     if (originalVenue != null) {
       ref.read(draftVenueProvider.notifier).setVenue(originalVenue);
-      _formKey.currentState?.reset();
+
       // Removed setState as provider updates trigger rebuilds
       _initializeFormFields(originalVenue);
       // Clear draft picks

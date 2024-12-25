@@ -38,80 +38,84 @@ class _NavigationItemState extends ConsumerState<NavigationItem> {
     Color iconAndTextColor =
         widget.isSelected ? AppThemeLocal.accent : AppThemeLocal.secondary;
 
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onEnter: (_) {
-          setState(() {
-            _isHovered = true;
-          });
-        },
-        onExit: (_) {
-          setState(() {
-            _isHovered = false;
-          });
-        },
-        child: Container(
-          width: 200,
-          height: 36,
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // Conditionally render the leading icon if provided
-              if (widget.leadingIconPath != null)
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: backgroundColor.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: SvgPicture.asset(
+    return Padding(
+      padding: const EdgeInsets.only(right: 12, left: 12),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (_) {
+            setState(() {
+              _isHovered = true;
+            });
+          },
+          onExit: (_) {
+            setState(() {
+              _isHovered = false;
+            });
+          },
+          child: Container(
+            width: 200,
+            height: 36,
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // Conditionally render the leading icon if provided
+                if (widget.leadingIconPath != null)
+                  Container(
                     width: 24,
                     height: 24,
-                    widget.leadingIconPath!,
-                    colorFilter: ColorFilter.mode(
-                      iconAndTextColor,
-                      BlendMode.srcIn,
+                    decoration: BoxDecoration(
+                      color: backgroundColor.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: SvgPicture.asset(
+                      width: 24,
+                      height: 24,
+                      widget.leadingIconPath!,
+                      colorFilter: ColorFilter.mode(
+                        iconAndTextColor,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
-                ),
-              if (widget.leadingIconPath != null) const SizedBox(width: 8),
-              Expanded(
-                child: AutoSizeText(
-                  widget.label,
-                  style: AppThemeLocal.navigationItemText.copyWith(
-                    color: iconAndTextColor,
+                if (widget.leadingIconPath != null) const SizedBox(width: 8),
+                Expanded(
+                  child: AutoSizeText(
+                    widget.label,
+                    style: AppThemeLocal.navigationItemText.copyWith(
+                      color: iconAndTextColor,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    minFontSize: 14,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  minFontSize: 14,
                 ),
-              ),
-              // Conditionally render the trailing icon if provided
-              if (widget.trailingIconPath != null)
-                Container(
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: backgroundColor.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: SvgPicture.asset(
-                    widget.trailingIconPath!,
-                    colorFilter: ColorFilter.mode(
-                      iconAndTextColor,
-                      BlendMode.srcIn,
+                if (widget.leadingIconPath != null) const SizedBox(width: 4),
+                // Conditionally render the trailing icon if provided
+                if (widget.trailingIconPath != null)
+                  Container(
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: backgroundColor.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: SvgPicture.asset(
+                      widget.trailingIconPath!,
+                      colorFilter: ColorFilter.mode(
+                        iconAndTextColor,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
