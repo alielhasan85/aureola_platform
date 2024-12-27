@@ -1,50 +1,27 @@
+import 'package:aureola_platform/models/menu/menu_availability.dart';
 import 'package:aureola_platform/models/section/section_model.dart';
-// import your MenuSection model, if it too needs multilingual fields, update similarly
 
 class MenuModel {
   final String menuId;
   final String venueId;
-
-  /// Store menuName as a multilingual map.
-  /// Example: { "en": "Breakfast Menu", "ar": "قائمة الإفطار" }
   final Map<String, String> menuName;
-
-  /// Store description as a multilingual map.
-  /// Example: { "en": "Morning delights", "ar": "وجبات صباحية لذيذة" }
   final Map<String, String> description;
-
-  /// Store notes or disclaimers as a multilingual map.
-  /// Example: { "en": "Allergen info ...", "ar": "تفاصيل مسببات الحساسية ..." }
   final Map<String, String> notes;
-
-  /// If you have a single primary image for this menu, you can store its URL.
-  /// Or, if you want multiple images, store them in a list of URLs.
   final String? imageUrl;
-
-  /// Additional or multiple images
   final List<String> additionalImages;
-
-  /// The menu sections (e.g., "Starters," "Main Courses," etc.)
   final List<MenuSection> sections;
-
-  /// Whether the menu is currently published/active
   final bool isActive;
-
-  /// Visibility toggles
   final bool isOnline;
   final bool visibleOnTablet;
   final bool visibleOnQr;
   final bool visibleOnPickup;
   final bool visibleOnDelivery;
 
-  /// You might have an `availability` object or map describing when this menu is available
-  final Map<String, dynamic>? availability;
+  /// Updated: store a `MenuAvailability` instead of a generic map
+  final MenuAvailability? availability;
 
-  /// Create/Update timestamps
   final DateTime createdAt;
   final DateTime updatedAt;
-
-  /// Arbitrary settings or metadata
   final Map<String, dynamic>? settings;
 
   MenuModel({
@@ -62,52 +39,39 @@ class MenuModel {
     this.visibleOnQr = true,
     this.visibleOnPickup = false,
     this.visibleOnDelivery = false,
-    this.availability,
+    this.availability, // now a MenuAvailability
     DateTime? createdAt,
     DateTime? updatedAt,
     this.settings,
   })  : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
 
-  // ---------------------------
-  //  toMap()
-  // ---------------------------
+  // Convert to Map
   Map<String, dynamic> toMap() {
     return {
       'menuId': menuId,
       'venueId': venueId,
-
-      // Store these maps directly
       'menuName': menuName,
       'description': description,
       'notes': notes,
-
       'imageUrl': imageUrl,
       'additionalImages': additionalImages,
-
-      // Convert each MenuSection to a Map
-      'sections': sections.map((section) => section.toMap()).toList(),
-
+      'sections': sections.map((s) => s.toMap()).toList(),
       'isActive': isActive,
       'isOnline': isOnline,
       'visibleOnTablet': visibleOnTablet,
       'visibleOnQr': visibleOnQr,
       'visibleOnPickup': visibleOnPickup,
       'visibleOnDelivery': visibleOnDelivery,
-
-      'availability': availability,
-
-      // Timestamps
+      // If availability != null, store availability.toMap()
+      'availability': availability?.toMap(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
-
       'settings': settings,
     };
   }
 
-  // ---------------------------
-  //  fromMap()
-  // ---------------------------
+  // Create from Map
   factory MenuModel.fromMap(Map<String, dynamic> map, String menuId) {
     return MenuModel(
       menuId: menuId,
@@ -128,8 +92,10 @@ class MenuModel {
       visibleOnQr: map['visibleOnQr'] ?? true,
       visibleOnPickup: map['visibleOnPickup'] ?? false,
       visibleOnDelivery: map['visibleOnDelivery'] ?? false,
+      // Convert to MenuAvailability if not null
       availability: map['availability'] != null
-          ? Map<String, dynamic>.from(map['availability'])
+          ? MenuAvailability.fromMap(
+              Map<String, dynamic>.from(map['availability']))
           : null,
       createdAt: map['createdAt'] != null
           ? DateTime.parse(map['createdAt'])
@@ -143,9 +109,6 @@ class MenuModel {
     );
   }
 
-  // ---------------------------
-  //  copyWith()
-  // ---------------------------
   MenuModel copyWith({
     String? menuId,
     String? venueId,
@@ -161,7 +124,7 @@ class MenuModel {
     bool? visibleOnQr,
     bool? visibleOnPickup,
     bool? visibleOnDelivery,
-    Map<String, dynamic>? availability,
+    MenuAvailability? availability,
     DateTime? createdAt,
     DateTime? updatedAt,
     Map<String, dynamic>? settings,
@@ -186,27 +149,5 @@ class MenuModel {
       updatedAt: updatedAt ?? this.updatedAt,
       settings: settings ?? this.settings,
     );
-  }
-
-  @override
-  String toString() {
-    return 'MenuModel(menuId: $menuId, '
-        'venueId: $venueId, '
-        'menuName: $menuName, '
-        'description: $description, '
-        'notes: $notes, '
-        'imageUrl: $imageUrl, '
-        'additionalImages: $additionalImages, '
-        'sections: $sections, '
-        'isActive: $isActive, '
-        'isOnline: $isOnline, '
-        'visibleOnTablet: $visibleOnTablet, '
-        'visibleOnQr: $visibleOnQr, '
-        'visibleOnPickup: $visibleOnPickup, '
-        'visibleOnDelivery: $visibleOnDelivery, '
-        'availability: $availability, '
-        'createdAt: $createdAt, '
-        'updatedAt: $updatedAt, '
-        'settings: $settings)';
   }
 }

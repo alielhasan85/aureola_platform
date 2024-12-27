@@ -1,7 +1,6 @@
 import 'package:aureola_platform/models/menu/mockup_menu.dart';
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/menu_management/menu_card.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class MenuList extends ConsumerWidget {
   final String layout;
 
-  const MenuList({Key? key, required this.layout}) : super(key: key);
+  const MenuList({super.key, required this.layout});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,6 +39,11 @@ class MenuList extends ConsumerWidget {
 
             // Mock usage of MenuCard
             MenuCard(menu: menu1),
+
+            // Spacing
+            const SizedBox(height: 16),
+// Mock usage of MenuCard
+            MenuCard(menu: menu2),
 
             // If you had multiple menus, you could build them in a ListView.builder
             // or just replicate more MenuCards here

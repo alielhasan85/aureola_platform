@@ -3,6 +3,7 @@ import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
@@ -22,14 +23,17 @@ class LocationPickerField extends ConsumerStatefulWidget {
 }
 
 class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
+// Inside your State class
   String? _selectedAddress;
-  final locationService =
-      LocationService(apiKey: 'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA');
+  LocationService? locationService;
   Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
+    // Initialize the LocationService with the API key from .env
+    final apiKey = dotenv.env['GOOGLE_API_KEY'] ?? '';
+    locationService = LocationService(apiKey: apiKey);
     _updateAddress(); // You can call this once here to set initial address if needed
   }
 
@@ -47,7 +51,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
 
       _debounce?.cancel();
       _debounce = Timer(const Duration(milliseconds: 500), () async {
-        final address = await locationService.reverseGeocode(loc, lang);
+        final address = await locationService?.reverseGeocode(loc, lang);
         if (mounted) {
           setState(() {
             _selectedAddress = address ?? '${loc.latitude}, ${loc.longitude}';
@@ -60,7 +64,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
   @override
   Widget build(BuildContext context) {
     final venue = ref.watch(venueProvider);
-    final mapImageUrl = venue?.additionalInfo?['mapImageUrl'];
+    final mapImageUrl = venue?.additionalInfo['mapImageUrl'];
     final currentLanguage = ref.watch(languageProvider);
 
     // Use ref.listen inside build

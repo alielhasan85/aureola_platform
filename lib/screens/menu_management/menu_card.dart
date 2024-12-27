@@ -1,14 +1,17 @@
+import 'package:aureola_platform/models/menu/menu_availability.dart';
+import 'package:aureola_platform/models/menu/mockup_menu.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:aureola_platform/models/menu/menu_model.dart';
+import 'package:intl/intl.dart';
 
-// A mock widget that displays your menu card
 class MenuCard extends StatelessWidget {
   final MenuModel menu;
 
   const MenuCard({
-    Key? key,
+    super.key,
     required this.menu,
-  }) : super(key: key);
+  });
 
   /// Example function to get the total number of items
   /// across all sections.
@@ -20,15 +23,57 @@ class MenuCard extends StatelessWidget {
     return total;
   }
 
-  /// Format your availability object into a user-friendly string
-  String getAvailabilityText() {
-    // This is just a placeholder for demonstration
-    // Adjust logic as you build out more advanced availability features
-    final days = menu.availability?['days'] ?? [];
-    final times = menu.availability?['times'] ?? {};
-    final start = times['start'] ?? '??';
-    final end = times['end'] ?? '??';
-    return '${days.join(', ')} • $start - $end';
+  /// Returns a user-friendly availability description based on the
+  /// `MenuAvailability` settings in `menu.availability`.
+  String getAvailabilityText(MenuModel menu) {
+    final availability = menu.availability;
+
+    // If there's no availability object at all, return something safe
+    if (availability == null) {
+      return 'No availability set';
+    }
+
+    switch (availability.type) {
+      case AvailabilityType.always:
+        return 'Always available';
+
+      case AvailabilityType.periodic:
+        // e.g., "Mon, Tue from 07:00 to 10:00"
+        final days = availability.daysOfWeek;
+        final start = availability.startTime ?? '??';
+        final end = availability.endTime ?? '??';
+
+        if (days.isEmpty) {
+          // If no days specified, just show the time range
+          return '$start - $end';
+        } else {
+          // Join the days with commas (e.g., "Mon, Tue, Wed")
+          final daysString = days.join(', ');
+          return '$daysString • $start - $end';
+        }
+
+      case AvailabilityType.specific:
+        // e.g., "From Dec 27 to Dec 31 • 10:00 - 15:00"
+        final startDate = availability.startDate;
+        final endDate = availability.endDate;
+        final startTime = availability.startTime;
+        final endTime = availability.endTime;
+
+        // Convert dates to a simple 'MMM d' format, or however you prefer
+        // (In real code, consider using intl package for localized formatting)
+        final startDateStr = startDate != null
+            ? '${startDate.month}/${startDate.day}' // e.g., "12/27"
+            : '??';
+        final endDateStr =
+            endDate != null ? '${endDate.month}/${endDate.day}' : '??';
+
+        // If time is set, show it; otherwise skip
+        final timeRange = (startTime != null && endTime != null)
+            ? ' • $startTime - $endTime'
+            : '';
+
+        return 'From $startDateStr to $endDateStr$timeRange';
+    }
   }
 
   /// A helper that returns a list of "chips" or small tags
@@ -64,12 +109,19 @@ class MenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateFormat formatter = DateFormat('MMM, dd, yyyy');
+    final String formattedDate = formatter.format(menu.updatedAt);
+
     final totalSections = menu.sections.length;
     final totalItems = getTotalItems();
 
-    return Card(
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(vertical: 8),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppThemeLocal.grey2),
+      ),
+      //margin: const EdgeInsets.symmetric(vertical: 8),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -101,7 +153,7 @@ class MenuCard extends StatelessWidget {
 
             // Row #2: Availability
             Text(
-              'Availability: ${getAvailabilityText()}',
+              'Availability: ${getAvailabilityText(menu1)}',
               style: const TextStyle(fontSize: 14),
             ),
 
@@ -116,10 +168,9 @@ class MenuCard extends StatelessWidget {
             const SizedBox(height: 8),
 
             // Row #4: Last updated
-            Text(
-              'Last updated: ${menu.updatedAt}',
-              style: const TextStyle(color: Colors.grey, fontSize: 12),
-            ),
+            Text('Last updated: $formattedDate',
+                style: AppThemeLocal.paragraph
+                    .copyWith(color: AppThemeLocal.secondary, fontSize: 12)),
 
             const SizedBox(height: 8),
 

@@ -66,3 +66,5 @@ macos/Flutter/ephemeral/
 # IDE and OS related
 .vscode/
 .idea/
+
+*.env

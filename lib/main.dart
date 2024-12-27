@@ -6,8 +6,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 // Entry point of the application
 void main() async {
+// Load environment variables from the .env file
+  await dotenv.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
 
   // Firebase initialization
@@ -17,7 +22,6 @@ void main() async {
 
   // Load any additional assets or localization data
   await loadLocalizationAssets();
-
   runApp(const ProviderScope(child: MyApp()));
 }
 
