@@ -1,6 +1,5 @@
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/widgest/logo_icon.dart';
-import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_item.dart';
@@ -250,12 +249,8 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
                           label: AppLocalizations.of(context)!
                               .translate("branding_design"),
                           isSelected: selectedIndex == 10,
-                          onSelect: () => _updateIndex(
-                              10,
-                              AppLocalizations.of(context)!.translate(
-                                  ref.read(appBarTitleProvider.notifier).state =
-                                      AppLocalizations.of(context)!.translate(
-                                          "branding_visual_design_title"))),
+                          onSelect: () =>
+                              _updateIndex(10, "branding_visual_design_title"),
                         ),
                         const Divider(
                             color: AppThemeLocal.divider, thickness: 0.5),

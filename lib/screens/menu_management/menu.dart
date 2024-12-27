@@ -3,7 +3,9 @@
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/login/auth_page.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
+import 'package:aureola_platform/screens/menu_management/items_list.dart';
 import 'package:aureola_platform/screens/menu_management/menu_list.dart';
+import 'package:aureola_platform/screens/menu_management/section_list.dart';
 import 'package:aureola_platform/screens/venue_management/branding_design/preview.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -11,16 +13,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+// appBarTitleProvider import
+import 'package:aureola_platform/providers/main_title_provider.dart';
+
+/// This widget shows either 3 side-by-side containers on desktop,
+/// or a horizontal carousel on tablet/mobile, for:
+///  - Menu
+///  - Section
+///  - Items
+///
+/// The actual container shown depends on selectedMenuIndexProvider:
+///  - 3 => "Menu"
+///  - 4 => "Section"
+///  - 5 => "Items"
 class Menu extends ConsumerStatefulWidget {
   const Menu({super.key});
 
   // Navigation rail width
   static const double baseNavRailWidth = 230.0;
 
-  // Minimum recommended width for a card
+  // Minimum recommended width for each container
   static const double minFormWidth = 393.0;
 
-  // Maximum recommended width for a card
+  // Maximum recommended width for each container
   static const double maxFormWidth = 600.0;
 
   // Spacing between cards
@@ -34,20 +49,42 @@ class Menu extends ConsumerStatefulWidget {
 }
 
 class _MenuState extends ConsumerState<Menu> {
-  // Use the correct CarouselController from the package
+  // Carousel controller for tablet/mobile
   final CarouselSliderController _carouselController =
       CarouselSliderController();
 
-  int _currentIndex = 0;
-  int? _selectedDesktopCardIndex; // Tracks the selected card on desktop
+  // Helper to set the appBarTitleProvider based on containerIndex (0,1,2)
+  void _updateSubTitle(int containerIndex) {
+    String subTitle;
+    switch (containerIndex) {
+      case 0:
+        subTitle = 'Menu';
+        break;
+      case 1:
+        subTitle = 'Section';
+        break;
+      default:
+        subTitle = 'Items';
+        break;
+    }
+    ref.read(appBarTitleProvider.notifier).state =
+        "Menu Management - $subTitle";
+  }
 
   @override
   Widget build(BuildContext context) {
     final venue = ref.read(draftVenueProvider);
-
     if (venue == null) {
       return const LoginPage();
     }
+
+    // Global selected index from the nav rail: 3 => Menu, 4 => Section, 5 => Items
+    final globalIndex = ref.watch(selectedMenuIndexProvider);
+
+    // Map globalIndex => containerIndex (0 => Menu, 1 => Section, 2 => Items)
+    int containerIndex = globalIndex - 3;
+    if (containerIndex < 0) containerIndex = 0;
+    if (containerIndex > 2) containerIndex = 2;
 
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < Menu.mobileBreakpoint;
@@ -57,38 +94,33 @@ class _MenuState extends ConsumerState<Menu> {
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
-              // The available width for the main content area
+              // Space available minus nav rail
               final availableWidth =
                   constraints.maxWidth - Menu.baseNavRailWidth;
 
-              // The total space needed to fit 3 cards side-by-side
-              //  - baseNavRailWidth + (3 * minFormWidth) + (4 * cardSpacing)
-              //    ^ because if you have 3 cards, you have (3+1)=4 gaps if you’re using "mainAxisAlignment: spaceEvenly" or explicit margins
+              // If the screen can fit 3 min-form-width containers side by side + spacing:
               const minNeededForThreeCards = Menu.baseNavRailWidth +
-                  Menu.minFormWidth * 3 +
+                  (Menu.minFormWidth * 3) +
                   (4 * Menu.cardSpacing);
 
-              // The total space needed to fit at least 2 cards side-by-side
+              // If the screen can fit at least 2 containers:
               const minNeededForTwoCards = Menu.baseNavRailWidth +
-                  Menu.minFormWidth * 2 +
+                  (Menu.minFormWidth * 2) +
                   (3 * Menu.cardSpacing);
 
-              // Decide if it's desktop, tablet, or mobile based on constraints
               final isDesktop =
                   !isMobile && constraints.maxWidth >= minNeededForThreeCards;
               final isTablet = !isMobile &&
                   !isDesktop &&
                   constraints.maxWidth > minNeededForTwoCards;
 
-              // -------------------------------------
-              // DESKTOP LAYOUT: 3 side-by-side if enough space
-              // -------------------------------------
+              // ==============================
+              // DESKTOP LAYOUT: 3 side-by-side
+              // ==============================
               if (isDesktop) {
-                // Calculate the maximum possible width for each card
+                // Each card's maximum possible width
                 final maxPossibleFormWidth =
                     (availableWidth - (4 * Menu.cardSpacing)) / 3;
-
-                // Clamp it between 393 and 600 (or any max you like)
                 final formContainerWidth = maxPossibleFormWidth.clamp(
                   Menu.minFormWidth,
                   Menu.maxFormWidth,
@@ -97,153 +129,148 @@ class _MenuState extends ConsumerState<Menu> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: List.generate(3, (index) {
-                    final isSelected = _selectedDesktopCardIndex == index;
+                    // isSelected if index == containerIndex
+                    final isSelected = (index == containerIndex);
+
+                    // Determine which child widget for 0 => Menu, 1 => Section, 2 => Items
+                    Widget childWidget;
+                    switch (index) {
+                      case 0:
+                        childWidget = const MenuList(layout: 'isDesktop');
+                        break;
+                      case 1:
+                        childWidget = const SectionList(layout: 'isDesktop');
+                        break;
+                      default:
+                        childWidget = const ItemsList(layout: 'isDesktop');
+                        break;
+                    }
+
                     return GestureDetector(
                       onTap: () {
-                        setState(() {
-                          // Toggle selection highlight
-                          _selectedDesktopCardIndex =
-                              (isSelected ? null : index);
-                        });
+                        // user picks container #index => set global index = 3 + index
+                        ref.read(selectedMenuIndexProvider.notifier).state =
+                            3 + index;
+                        _updateSubTitle(index);
                       },
                       child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 200),
                         width: formContainerWidth,
                         margin: const EdgeInsets.all(Menu.cardSpacing),
                         decoration: isSelected
                             ? BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  const BoxShadow(
+                                boxShadow: const [
+                                  BoxShadow(
                                     color: Color(0x4C000000),
                                     blurRadius: 2,
                                     offset: Offset(0, 1),
                                     spreadRadius: 0,
                                   ),
-                                  const BoxShadow(
+                                  BoxShadow(
                                     color: Color(0x26000000),
                                     blurRadius: 6,
                                     offset: Offset(0, 2),
                                     spreadRadius: 2,
                                   ),
                                   BoxShadow(
-                                    color: Colors.blueAccent.withOpacity(0.5),
+                                    color: AppThemeLocal.lightPeach,
                                     blurRadius: 10.0,
-                                    offset: const Offset(0, 5),
+                                    offset: Offset(0, 5),
                                   )
                                 ],
                                 border: Border.all(
-                                  color: Colors.blueAccent,
-                                  width: 3.0,
+                                  color: AppThemeLocal.lightPeach,
+                                  width: 2.0,
                                 ),
                               )
                             : AppThemeLocal.cardDecoration,
                         child: SingleChildScrollView(
-                          child: (index < 2)
-                              ? MenuList(layout: 'isDesktop')
-                              : const MenuBrandingPreview(),
+                          child: childWidget,
                         ),
                       ),
                     );
                   }),
                 );
               }
-              // -------------------------------------
-              // TABLET / MOBILE LAYOUT: Carousel
-              // -------------------------------------
+
+              // ==============================
+              // TABLET/MOBILE => Carousel
+              // ==============================
               else {
-                // We'll differentiate the layout type for inside content:
+                // layoutType used by the child widgets
                 final layoutType = isTablet ? 'isTablet' : 'isMobile';
 
-                // If you'd like each card to have a fixed width of, say, 550 for tablet,
-                // you could define that here. For demonstration, let's pick a "desired" width.
-                // Then the carousel's `viewportFraction` and horizontal margins can create partial overlap.
-
-                // Example: a fixed 550 on tablet, or 90% of constraints for mobile
-                // (Adjust as needed for your design)
-                double getCardWidth() {
-                  if (isTablet) {
-                    // Could either fix it or clamp it
-                    // return 550; // a fixed width
-                    // or clamp it:
-                    const desired = 550.0;
-                    return desired.clamp(Menu.minFormWidth, Menu.maxFormWidth);
+                Widget buildCarouselItem(Widget w) {
+                  if (isMobile) {
+                    // full width, no card shape
+                    return Container(
+                      width: constraints.maxWidth,
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      color: Colors.white,
+                      child: SingleChildScrollView(child: w),
+                    );
                   } else {
-                    return constraints.maxWidth * 0.9;
+                    // Tablet => partial width with some shape
+                    const desired = 550.0;
+                    final cardWidth = desired.clamp(
+                      Menu.minFormWidth,
+                      Menu.maxFormWidth,
+                    );
+                    return Container(
+                      width: cardWidth,
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 12,
+                      ),
+                      decoration: AppThemeLocal.cardDecoration,
+                      child: SingleChildScrollView(child: w),
+                    );
                   }
                 }
 
-                // You might also want partial peeking on tablet, so let's use a smaller viewportFraction
-                // so that not all the card is displayed, thus partially hidden side-cards.
-                final double fraction = isMobile ? 0.95 : 0.7;
+                // 1.0 for mobile (full screen), 0.8 or so for tablet
+                final double fraction = isMobile ? 1.0 : 0.8;
 
                 return Column(
                   children: [
                     Expanded(
                       child: CarouselSlider(
-                        // Correct usage: pass the controller via 'controller:', not 'carouselController:'
                         carouselController: _carouselController,
                         options: CarouselOptions(
+                          // Show the correct page based on globalIndex
+                          initialPage: containerIndex,
                           height: double.infinity,
                           enlargeCenterPage: false,
                           enableInfiniteScroll: false,
                           viewportFraction: fraction,
                           scrollPhysics: const BouncingScrollPhysics(),
-                          onPageChanged: (index, reason) {
-                            setState(() => _currentIndex = index);
+                          onPageChanged: (pageIndex, reason) {
+                            // user swiped => set global index to 3+pageIndex
+                            ref.read(selectedMenuIndexProvider.notifier).state =
+                                3 + pageIndex;
+                            _updateSubTitle(pageIndex);
                           },
                         ),
                         items: [
-                          // Card 1
-                          Container(
-                            width: getCardWidth(),
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 20,
-                            ),
-                            decoration: AppThemeLocal.cardDecoration,
-                            child: SingleChildScrollView(
-                              child: MenuList(layout: layoutType),
-                            ),
-                          ),
-                          // Card 2
-                          Container(
-                            width: getCardWidth(),
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 20,
-                            ),
-                            decoration: AppThemeLocal.cardDecoration,
-                            child: SingleChildScrollView(
-                              child: MenuList(layout: layoutType),
-                            ),
-                          ),
-                          // Card 3
-                          Container(
-                            width: getCardWidth(),
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 20,
-                            ),
-                            decoration: AppThemeLocal.cardDecoration,
-                            child: const SingleChildScrollView(
-                              child: MenuBrandingPreview(),
-                            ),
-                          ),
+                          buildCarouselItem(MenuList(layout: layoutType)),
+                          buildCarouselItem(SectionList(layout: layoutType)),
+                          buildCarouselItem(ItemsList(layout: layoutType)),
                         ],
                       ),
                     ),
                     const SizedBox(height: 16.0),
-                    // Page Indicators
+                    // Page indicators
                     AnimatedSmoothIndicator(
-                      activeIndex: _currentIndex,
+                      // activeIndex = containerIndex
+                      activeIndex: containerIndex,
                       count: 3,
                       effect: const ExpandingDotsEffect(
-                        activeDotColor: Colors.blue,
-                        dotHeight: 8.0,
-                        dotWidth: 8.0,
-                        expansionFactor: 4,
+                        activeDotColor: AppThemeLocal.accent,
+                        dotHeight: 10.0,
+                        dotWidth: 10.0,
+                        expansionFactor: 6,
                       ),
                     ),
                     const SizedBox(height: 16.0),

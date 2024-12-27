@@ -18,7 +18,7 @@ final languageProvider =
 // This provider will store the index of the selected tab
 // TODO: to be initialized to zero
 final selectedMenuIndexProvider = StateProvider<int>((ref) => 1);
-
+final appBarTitleProvider = StateProvider<String>((ref) => 'Dashboard');
 // // Provider for logo aspect ratio
 // final draftLogoAspectRatioProvider =
 //     StateProvider<AspectRatioOption?>((ref) => AspectRatioOption.square);

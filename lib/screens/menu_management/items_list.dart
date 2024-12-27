@@ -4,10 +4,10 @@ import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MenuList extends ConsumerWidget {
+class ItemsList extends ConsumerWidget {
   final String layout; // 'isDesktop', 'isTablet', 'isMobile', or fallback
 
-  const MenuList({
+  const ItemsList({
     super.key,
     required this.layout,
   });
@@ -29,7 +29,7 @@ class MenuList extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'menu list',
+            'section list',
             style: AppThemeLocal.paragraph,
           ),
         ],

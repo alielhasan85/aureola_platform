@@ -56,14 +56,9 @@ class _MainPageState extends ConsumerState<MainPage> {
               child:
                   Text('Order Management', style: AppThemeLocal.appBarTitle));
         case 3:
-          return const Menu();
         case 4:
-          return const Center(
-              child:
-                  Text('Categories Content', style: AppThemeLocal.appBarTitle));
         case 5:
-          return const Center(
-              child: Text('Items Content', style: AppThemeLocal.appBarTitle));
+          return const Menu(); // always load the Menu widget for subindices 3,4,5
         case 6:
           return const Center(
               child: Text('Add-ons Content', style: AppThemeLocal.appBarTitle));
@@ -100,7 +95,7 @@ class _MainPageState extends ConsumerState<MainPage> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth > 700) {
+        if (constraints.maxWidth > 730) {
           // Desktop/Tablet layout with navigation rail and app bar inside body
           return Scaffold(
             backgroundColor: AppThemeLocal.background,
