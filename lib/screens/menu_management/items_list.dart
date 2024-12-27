@@ -29,7 +29,7 @@ class ItemsList extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'section list',
+            'items list',
             style: AppThemeLocal.paragraph,
           ),
         ],

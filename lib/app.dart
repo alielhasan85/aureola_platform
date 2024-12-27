@@ -57,15 +57,15 @@ class _MyAppState extends ConsumerState<MyApp> {
         colorScheme: AppThemeLocal.colorScheme,
 
         // Apply the TextTheme from AppTheme
-        textTheme: const TextTheme(
+        textTheme: TextTheme(
           displayLarge: AppThemeLocal.titleAureola,
           displayMedium: AppThemeLocal.titlePlatform,
           displaySmall: AppThemeLocal.appBarTitle,
           headlineLarge: AppThemeLocal.heading2,
           headlineMedium: AppThemeLocal.navigationItemText,
           headlineSmall: AppThemeLocal.navigationItemText,
-          bodyLarge: AppThemeLocal.paragraph,
-          bodyMedium: AppThemeLocal.buttonText,
+          bodyLarge: AppThemeLocal.paragraph.copyWith(fontSize: 20),
+          bodyMedium: AppThemeLocal.paragraph,
           // Add more mappings if necessary
         ),
 

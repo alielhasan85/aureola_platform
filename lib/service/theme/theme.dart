@@ -209,12 +209,10 @@ class AppThemeLocal {
     secondary: secondary,
     secondaryContainer: lightPeach, // You can adjust based on your palette
     surface: white,
-    background: background,
     error: red,
-    onPrimary: white,
-    onSecondary: white,
+    onPrimary: primary,
+    onSecondary: primary,
     onSurface: primary,
-    onBackground: primary,
     onError: white,
     brightness: Brightness.light,
   );

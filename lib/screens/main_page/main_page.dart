@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 
-import 'package:aureola_platform/providers/main_title_provider.dart';
 import 'package:aureola_platform/screens/main_page/widgets/nav_rail.dart';
 import 'package:aureola_platform/screens/venue_management/venue_info.dart';
 

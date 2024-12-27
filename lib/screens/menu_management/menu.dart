@@ -6,42 +6,29 @@ import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
 import 'package:aureola_platform/screens/menu_management/items_list.dart';
 import 'package:aureola_platform/screens/menu_management/menu_list.dart';
 import 'package:aureola_platform/screens/menu_management/section_list.dart';
-import 'package:aureola_platform/screens/venue_management/branding_design/preview.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-// appBarTitleProvider import
-import 'package:aureola_platform/providers/main_title_provider.dart';
-
-/// This widget shows either 3 side-by-side containers on desktop,
-/// or a horizontal carousel on tablet/mobile, for:
-///  - Menu
-///  - Section
-///  - Items
+/// This widget shows either:
+///  - **Desktop**: 3 side-by-side containers (Menu, Section, Items)
+///  - **Tablet/Mobile**: A horizontal [CarouselSlider] of those 3 containers
 ///
-/// The actual container shown depends on selectedMenuIndexProvider:
-///  - 3 => "Menu"
-///  - 4 => "Section"
-///  - 5 => "Items"
+/// The container displayed is determined by the global [selectedMenuIndexProvider]:
+///  - index = 3 => "Menu"
+///  - index = 4 => "Section"
+///  - index = 5 => "Items"
+///
+/// We map them to container indices 0,1,2 internally.
 class Menu extends ConsumerStatefulWidget {
   const Menu({super.key});
 
-  // Navigation rail width
   static const double baseNavRailWidth = 230.0;
-
-  // Minimum recommended width for each container
-  static const double minFormWidth = 393.0;
-
-  // Maximum recommended width for each container
+  static const double minFormWidth = 450.0;
   static const double maxFormWidth = 600.0;
-
-  // Spacing between cards
   static const double cardSpacing = 16.0;
-
-  // Mobile breakpoint
   static const double mobileBreakpoint = 600.0;
 
   @override
@@ -49,12 +36,18 @@ class Menu extends ConsumerStatefulWidget {
 }
 
 class _MenuState extends ConsumerState<Menu> {
-  // Carousel controller for tablet/mobile
+  // Controls the carousel for tablet/mobile
   final CarouselSliderController _carouselController =
       CarouselSliderController();
 
-  // Helper to set the appBarTitleProvider based on containerIndex (0,1,2)
+  // We store whether we are currently in "desktop mode" to avoid animating
+  // the carousel unnecessarily. We'll set/update this in [build].
+  bool _isDesktop = false;
+
+  // Called whenever we switch to container index 0/1/2,
+  // sets the appBarTitle accordingly.
   void _updateSubTitle(int containerIndex) {
+    // 0 => "Menu", 1 => "Section", 2 => "Items"
     String subTitle;
     switch (containerIndex) {
       case 0:
@@ -72,16 +65,36 @@ class _MenuState extends ConsumerState<Menu> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // We listen for changes to the selectedMenuIndexProvider so that
+    // if the user changes it via the nav rail, we animate the carousel (on tablet/mobile).
+  }
+
+  @override
   Widget build(BuildContext context) {
     final venue = ref.read(draftVenueProvider);
     if (venue == null) {
       return const LoginPage();
     }
+    ref.listen<int>(selectedMenuIndexProvider, (previous, next) {
+      // Convert 3/4/5 => 0/1/2
+      int pageIndex = next - 3;
+      if (pageIndex < 0) pageIndex = 0;
+      if (pageIndex > 2) pageIndex = 2;
 
-    // Global selected index from the nav rail: 3 => Menu, 4 => Section, 5 => Items
+      // If NOT desktop, we animate the carousel to that page
+      // (which also updates the page indicator, etc.)
+      if (!_isDesktop) {
+        _carouselController.animateToPage(pageIndex);
+        _updateSubTitle(pageIndex);
+      }
+    });
+
+    // The global nav index: 3 => Menu, 4 => Section, 5 => Items
     final globalIndex = ref.watch(selectedMenuIndexProvider);
 
-    // Map globalIndex => containerIndex (0 => Menu, 1 => Section, 2 => Items)
+    // Convert to local container index (0 => Menu, 1 => Section, 2 => Items)
     int containerIndex = globalIndex - 3;
     if (containerIndex < 0) containerIndex = 0;
     if (containerIndex > 2) containerIndex = 2;
@@ -94,31 +107,28 @@ class _MenuState extends ConsumerState<Menu> {
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
-              // Space available minus nav rail
+              // Figure out if we're in desktop/tablet mode:
               final availableWidth =
                   constraints.maxWidth - Menu.baseNavRailWidth;
 
-              // If the screen can fit 3 min-form-width containers side by side + spacing:
               const minNeededForThreeCards = Menu.baseNavRailWidth +
                   (Menu.minFormWidth * 3) +
                   (4 * Menu.cardSpacing);
 
-              // If the screen can fit at least 2 containers:
               const minNeededForTwoCards = Menu.baseNavRailWidth +
                   (Menu.minFormWidth * 2) +
                   (3 * Menu.cardSpacing);
 
-              final isDesktop =
+              _isDesktop =
                   !isMobile && constraints.maxWidth >= minNeededForThreeCards;
               final isTablet = !isMobile &&
-                  !isDesktop &&
+                  !_isDesktop &&
                   constraints.maxWidth > minNeededForTwoCards;
 
-              // ==============================
-              // DESKTOP LAYOUT: 3 side-by-side
-              // ==============================
-              if (isDesktop) {
-                // Each card's maximum possible width
+              // ================
+              // DESKTOP LAYOUT
+              // ================
+              if (_isDesktop) {
                 final maxPossibleFormWidth =
                     (availableWidth - (4 * Menu.cardSpacing)) / 3;
                 final formContainerWidth = maxPossibleFormWidth.clamp(
@@ -126,13 +136,13 @@ class _MenuState extends ConsumerState<Menu> {
                   Menu.maxFormWidth,
                 );
 
+                // Build 3 side-by-side
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: List.generate(3, (index) {
-                    // isSelected if index == containerIndex
                     final isSelected = (index == containerIndex);
 
-                    // Determine which child widget for 0 => Menu, 1 => Section, 2 => Items
+                    // 0 => MenuList, 1 => SectionList, 2 => ItemsList
                     Widget childWidget;
                     switch (index) {
                       case 0:
@@ -148,9 +158,10 @@ class _MenuState extends ConsumerState<Menu> {
 
                     return GestureDetector(
                       onTap: () {
-                        // user picks container #index => set global index = 3 + index
+                        // user picks container #index => set global index => 3+index
                         ref.read(selectedMenuIndexProvider.notifier).state =
                             3 + index;
+                        // also set appbar sub-title
                         _updateSubTitle(index);
                       },
                       child: AnimatedContainer(
@@ -176,35 +187,33 @@ class _MenuState extends ConsumerState<Menu> {
                                   ),
                                   BoxShadow(
                                     color: AppThemeLocal.lightPeach,
-                                    blurRadius: 10.0,
-                                    offset: Offset(0, 5),
+                                    blurRadius: 6.0,
+                                    offset: Offset(0, 3),
                                   )
                                 ],
                                 border: Border.all(
-                                  color: AppThemeLocal.lightPeach,
-                                  width: 2.0,
+                                  color:
+                                      AppThemeLocal.lightPeach.withOpacity(0.5),
+                                  width: 0.5,
                                 ),
                               )
                             : AppThemeLocal.cardDecoration,
-                        child: SingleChildScrollView(
-                          child: childWidget,
-                        ),
+                        child: SingleChildScrollView(child: childWidget),
                       ),
                     );
                   }),
                 );
               }
-
-              // ==============================
-              // TABLET/MOBILE => Carousel
-              // ==============================
+              // ========================
+              // TABLET / MOBILE LAYOUT
+              // ========================
               else {
-                // layoutType used by the child widgets
                 final layoutType = isTablet ? 'isTablet' : 'isMobile';
 
+                // Helper to build each container item
                 Widget buildCarouselItem(Widget w) {
                   if (isMobile) {
-                    // full width, no card shape
+                    // full-width, no card shape
                     return Container(
                       width: constraints.maxWidth,
                       margin: const EdgeInsets.symmetric(vertical: 4),
@@ -212,7 +221,7 @@ class _MenuState extends ConsumerState<Menu> {
                       child: SingleChildScrollView(child: w),
                     );
                   } else {
-                    // Tablet => partial width with some shape
+                    // tablet => partial width with shape
                     const desired = 550.0;
                     final cardWidth = desired.clamp(
                       Menu.minFormWidth,
@@ -221,16 +230,13 @@ class _MenuState extends ConsumerState<Menu> {
                     return Container(
                       width: cardWidth,
                       margin: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 12,
-                      ),
+                          vertical: 16, horizontal: 12),
                       decoration: AppThemeLocal.cardDecoration,
                       child: SingleChildScrollView(child: w),
                     );
                   }
                 }
 
-                // 1.0 for mobile (full screen), 0.8 or so for tablet
                 final double fraction = isMobile ? 1.0 : 0.8;
 
                 return Column(
@@ -239,7 +245,7 @@ class _MenuState extends ConsumerState<Menu> {
                       child: CarouselSlider(
                         carouselController: _carouselController,
                         options: CarouselOptions(
-                          // Show the correct page based on globalIndex
+                          // Start on the containerIndex derived from selectedMenuIndex
                           initialPage: containerIndex,
                           height: double.infinity,
                           enlargeCenterPage: false,
@@ -261,9 +267,7 @@ class _MenuState extends ConsumerState<Menu> {
                       ),
                     ),
                     const SizedBox(height: 16.0),
-                    // Page indicators
                     AnimatedSmoothIndicator(
-                      // activeIndex = containerIndex
                       activeIndex: containerIndex,
                       count: 3,
                       effect: const ExpandingDotsEffect(
@@ -279,8 +283,7 @@ class _MenuState extends ConsumerState<Menu> {
               }
             },
           ),
-        ),
-        // Footer on bigger screens
+        ), // Footer on bigger screens
         if (screenWidth >= Menu.mobileBreakpoint) const AppFooter(),
       ],
     );

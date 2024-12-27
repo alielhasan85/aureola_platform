@@ -1,5 +1,4 @@
 import 'package:aureola_platform/models/section/section_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 // import your MenuSection model, if it too needs multilingual fields, update similarly
 
 class MenuModel {
