@@ -240,7 +240,6 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               ref.read(draftVenueProvider.notifier).updateVenueType(val);
             },
           ),
-
           const SizedBox(height: 16),
           DefaultLanguageDropdown(
             width: fieldWidth,
@@ -284,7 +283,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           VenueAddressField(
               width: fieldWidth * 1.25, addressController: _addressController),
           const SizedBox(height: 16),
-          // _buildPickupLocationSection(containerWidth, _selectedLocation),
+          _buildPickupLocationSection(containerWidth, _selectedLocation),
           const SizedBox(height: 16),
           Align(
             alignment: Alignment.centerRight,
@@ -442,7 +441,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           VenueAddressField(
               width: fieldWidth * 1.25, addressController: _addressController),
           const SizedBox(height: 16),
-          //  _buildPickupLocationSection(containerWidth, _selectedLocation),
+          _buildPickupLocationSection(containerWidth, _selectedLocation),
           const SizedBox(height: 16),
           Align(
             alignment: Alignment.centerRight,

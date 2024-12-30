@@ -6,13 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 // Entry point of the application
 void main() async {
-// Load environment variables from the .env file
-  await dotenv.load(fileName: ".env");
-
+  // Ensure Flutter is initializedfirebase
   WidgetsFlutterBinding.ensureInitialized();
 
   // Firebase initialization

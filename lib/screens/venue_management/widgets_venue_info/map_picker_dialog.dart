@@ -80,7 +80,7 @@ class _MapPickerDialogState extends State<MapPickerDialog> {
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
-            AppLocalizations.of(context)!.translate('cancel') ?? 'Cancel',
+            AppLocalizations.of(context)!.translate('cancel'),
           ),
         ),
         ElevatedButton(
@@ -90,7 +90,7 @@ class _MapPickerDialogState extends State<MapPickerDialog> {
             });
           },
           child: Text(
-            AppLocalizations.of(context)!.translate('save') ?? 'Save',
+            AppLocalizations.of(context)!.translate('save'),
           ),
         ),
       ],

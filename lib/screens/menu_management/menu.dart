@@ -3,9 +3,9 @@
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/login/auth_page.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
-import 'package:aureola_platform/screens/menu_management/items_list.dart';
-import 'package:aureola_platform/screens/menu_management/menu_list.dart';
-import 'package:aureola_platform/screens/menu_management/section_list.dart';
+import 'package:aureola_platform/screens/menu_management/items_edit/items_list.dart';
+import 'package:aureola_platform/screens/menu_management/menu_edit/menu_list.dart';
+import 'package:aureola_platform/screens/menu_management/section_edit/section_list.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';

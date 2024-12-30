@@ -20,12 +20,8 @@ final MenuModel menu1 = MenuModel(
     'ar': 'معلومات مسببات الحساسية متوفرة عند الطلب.',
   },
   imageUrl: 'https://picsum.photos/400/200', // Placeholder image
-  additionalImages: [
-    'https://picsum.photos/seed/breakfast1/400/200',
-    'https://picsum.photos/seed/breakfast2/400/200',
-  ],
+
   sections: sampleSections, // Use the mock sections
-  isActive: true,
   isOnline: true,
   visibleOnTablet: true,
   visibleOnQr: true,
@@ -41,7 +37,7 @@ final MenuModel menu1 = MenuModel(
 );
 
 final MenuModel menu2 = MenuModel(
-  menuId: 'menu1',
+  menuId: 'menu2',
   venueId: 'venue1',
   menuName: {
     'en': 'Breakfast Menu',
@@ -56,17 +52,13 @@ final MenuModel menu2 = MenuModel(
     'ar': 'معلومات مسببات الحساسية متوفرة عند الطلب.',
   },
   imageUrl: 'https://picsum.photos/400/200', // Placeholder image
-  additionalImages: [
-    'https://picsum.photos/seed/breakfast1/400/200',
-    'https://picsum.photos/seed/breakfast2/400/200',
-  ],
+
   sections: sampleSections, // Use the mock sections
-  isActive: true,
   isOnline: true,
   visibleOnTablet: true,
   visibleOnQr: true,
-  visibleOnPickup: false,
-  visibleOnDelivery: false,
+  visibleOnPickup: true,
+  visibleOnDelivery: true,
   availability: MenuAvailability(
     type: AvailabilityType.always,
   ),

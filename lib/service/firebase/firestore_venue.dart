@@ -59,6 +59,11 @@ class FirestoreVenue {
   // }
 
   // Update specific fields of a venue by its [venueId] for a specific user
+  /// Update specific fields of a venue by its [venueId] for a specific user.
+  ///
+  /// [userId] is the ID of the user who owns the venue.
+  /// [venueId] is the ID of the venue to be updated.
+  /// [updatedData] is a map containing the fields to be updated and their new values.
   Future<void> updateVenue(
       String userId, String venueId, Map<String, dynamic> updatedData) async {
     final venueDoc = _firestore

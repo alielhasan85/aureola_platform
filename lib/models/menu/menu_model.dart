@@ -8,9 +8,7 @@ class MenuModel {
   final Map<String, String> description;
   final Map<String, String> notes;
   final String? imageUrl;
-  final List<String> additionalImages;
   final List<MenuSection> sections;
-  final bool isActive;
   final bool isOnline;
   final bool visibleOnTablet;
   final bool visibleOnQr;
@@ -31,9 +29,7 @@ class MenuModel {
     required this.description,
     required this.notes,
     this.imageUrl,
-    this.additionalImages = const [],
     this.sections = const [],
-    this.isActive = true,
     this.isOnline = true,
     this.visibleOnTablet = true,
     this.visibleOnQr = true,
@@ -55,9 +51,7 @@ class MenuModel {
       'description': description,
       'notes': notes,
       'imageUrl': imageUrl,
-      'additionalImages': additionalImages,
       'sections': sections.map((s) => s.toMap()).toList(),
-      'isActive': isActive,
       'isOnline': isOnline,
       'visibleOnTablet': visibleOnTablet,
       'visibleOnQr': visibleOnQr,
@@ -80,13 +74,12 @@ class MenuModel {
       description: Map<String, String>.from(map['description'] ?? {}),
       notes: Map<String, String>.from(map['notes'] ?? {}),
       imageUrl: map['imageUrl'],
-      additionalImages: List<String>.from(map['additionalImages'] ?? const []),
       sections: (map['sections'] as List<dynamic>?)
               ?.map((sectionMap) =>
                   MenuSection.fromMap(Map<String, dynamic>.from(sectionMap)))
               .toList() ??
           [],
-      isActive: map['isActive'] ?? true,
+
       isOnline: map['isOnline'] ?? true,
       visibleOnTablet: map['visibleOnTablet'] ?? true,
       visibleOnQr: map['visibleOnQr'] ?? true,
@@ -136,9 +129,7 @@ class MenuModel {
       description: description ?? this.description,
       notes: notes ?? this.notes,
       imageUrl: imageUrl ?? this.imageUrl,
-      additionalImages: additionalImages ?? this.additionalImages,
       sections: sections ?? this.sections,
-      isActive: isActive ?? this.isActive,
       isOnline: isOnline ?? this.isOnline,
       visibleOnTablet: visibleOnTablet ?? this.visibleOnTablet,
       visibleOnQr: visibleOnQr ?? this.visibleOnQr,

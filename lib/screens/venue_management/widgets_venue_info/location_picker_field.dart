@@ -3,7 +3,6 @@ import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
@@ -32,8 +31,7 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
   void initState() {
     super.initState();
     // Initialize the LocationService with the API key from .env
-    final apiKey = dotenv.env['GOOGLE_API_KEY'] ?? '';
-    locationService = LocationService(apiKey: apiKey);
+
     _updateAddress(); // You can call this once here to set initial address if needed
   }
 
@@ -63,6 +61,8 @@ class _LocationPickerFieldState extends ConsumerState<LocationPickerField> {
 
   @override
   Widget build(BuildContext context) {
+    locationService =
+        LocationService(apiKey: 'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA');
     final venue = ref.watch(venueProvider);
     final mapImageUrl = venue?.additionalInfo['mapImageUrl'];
     final currentLanguage = ref.watch(languageProvider);
