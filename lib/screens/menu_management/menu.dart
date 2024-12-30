@@ -60,15 +60,13 @@ class _MenuState extends ConsumerState<Menu> {
         subTitle = 'Items';
         break;
     }
-    ref.read(appBarTitleProvider.notifier).state =
-        "Menu Management - $subTitle";
+    //TODO: title in app bar not good to study the code
+    ref.read(appBarTitleProvider.notifier).state = "$subTitle";
   }
 
   @override
   void initState() {
     super.initState();
-    // We listen for changes to the selectedMenuIndexProvider so that
-    // if the user changes it via the nav rail, we animate the carousel (on tablet/mobile).
   }
 
   @override
@@ -192,8 +190,7 @@ class _MenuState extends ConsumerState<Menu> {
                                   )
                                 ],
                                 border: Border.all(
-                                  color:
-                                      AppThemeLocal.lightPeach.withOpacity(0.5),
+                                  color: AppThemeLocal.lightPeach,
                                   width: 0.5,
                                 ),
                               )

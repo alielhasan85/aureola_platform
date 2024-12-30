@@ -12,7 +12,7 @@ import 'package:aureola_platform/models/menu/mockup_menu.dart';
 class MenuList extends ConsumerStatefulWidget {
   final String layout;
 
-  const MenuList({Key? key, required this.layout}) : super(key: key);
+  const MenuList({super.key, required this.layout});
 
   @override
   ConsumerState<MenuList> createState() => _MenuListState();
@@ -33,11 +33,6 @@ class _MenuListState extends ConsumerState<MenuList> {
     // Here, we demonstrate with the mock: menu1, menu2, etc.
     final menus = [menu1, menu2];
 
-    // Double-check each menu has a unique menuId (important for selection logic)
-    // e.g., menu1.menuId = 'menu1', menu2.menuId = 'menu2'
-    // If both are 'menu1', you'll see both selected simultaneously!
-    // print('menu1.menuId = ${menu1.menuId}, menu2.menuId = ${menu2.menuId}');
-
     // 1) If no menu is selected yet and we have at least one menu,
     //    default to the first menu in the list.
     if (_selectedMenuId == null && menus.isNotEmpty) {
@@ -49,10 +44,11 @@ class _MenuListState extends ConsumerState<MenuList> {
         Padding(
           padding: widget.layout != 'isMobile'
               ? const EdgeInsets.all(16)
-              : const EdgeInsets.all(0),
+              : const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 8),
               // Header row
               Row(
                 children: [
@@ -91,7 +87,9 @@ class _MenuListState extends ConsumerState<MenuList> {
             ],
           ),
         ),
-        Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+        Divider(
+            color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
+            thickness: 0.5),
         const SizedBox(height: 12),
         Center(
           child: ElevatedButton(

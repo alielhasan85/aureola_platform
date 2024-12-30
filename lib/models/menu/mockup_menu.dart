@@ -40,8 +40,8 @@ final MenuModel menu2 = MenuModel(
   menuId: 'menu2',
   venueId: 'venue1',
   menuName: {
-    'en': 'Breakfast Menu',
-    'ar': 'قائمة الإفطار',
+    'en': 'Main course',
+    'ar': 'قائمة',
   },
   description: {
     'en': 'Start your day with our delightful breakfast options.',

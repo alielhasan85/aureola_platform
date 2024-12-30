@@ -7,6 +7,7 @@ import 'package:aureola_platform/screens/venue_management/widgets_venue_info/add
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/country_city_picker.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/location_service.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/tag_line.dart';
+import 'package:aureola_platform/screens/venue_management/widgets_venue_info/venue_add_languages.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/screens/main_page/widgets/custom_footer.dart';
@@ -250,6 +251,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             },
           ),
           const SizedBox(height: 16),
+          VenueAddLanguages(width: fieldWidth),
+          const SizedBox(height: 16),
           AlcoholOptionField(
             width: fieldWidth,
             initialValue: _alcoholOption ?? false,
@@ -404,14 +407,17 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             ],
           ),
           const SizedBox(height: 12),
-          AlcoholOptionField(
-            width: fieldWidth,
-            initialValue: _alcoholOption ?? false,
-            onChanged: (val) {
-              setState(() => _alcoholOption = val);
-              ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
-            },
-          ),
+          Row(children: [
+            AlcoholOptionField(
+              width: fieldWidth,
+              initialValue: _alcoholOption ?? false,
+              onChanged: (val) {
+                setState(() => _alcoholOption = val);
+                ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
+              },
+            ),
+            VenueAddLanguages(width: fieldWidth),
+          ]),
           const SizedBox(height: 12),
           Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
           const SizedBox(height: 12),
