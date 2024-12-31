@@ -17,7 +17,7 @@ class MenuAvailabilityFields extends StatefulWidget {
       DateTime?, DateTime?) onChanged;
 
   const MenuAvailabilityFields({
-    Key? key,
+    super.key,
     required this.initialType,
     required this.initialDaysOfWeek,
     required this.initialStartTime,
@@ -25,7 +25,7 @@ class MenuAvailabilityFields extends StatefulWidget {
     required this.initialStartDate,
     required this.initialEndDate,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   _MenuAvailabilityFieldsState createState() => _MenuAvailabilityFieldsState();

@@ -1,6 +1,6 @@
 // lib/screens/menu_management/menu_edit/fields/menu_name_fields.dart
 
-import 'package:aureola_platform/screens/menu_management/menu_edit/fields/multilang_dialog.dart';
+import 'package:aureola_platform/widgest/multilang_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,11 +14,11 @@ class MenuNameFields extends ConsumerWidget {
   final String? Function(String?)? validator;
 
   const MenuNameFields({
-    Key? key,
+    super.key,
     required this.menuName,
     required this.onMenuNameChanged,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +29,7 @@ class MenuNameFields extends ConsumerWidget {
     final venue = ref.watch(draftVenueProvider);
 
     // 3) The text for the current UI language
-    final currentText = menuName[currentAppLang] ?? '';
+    final currentText = menuName['ar'] ?? '';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

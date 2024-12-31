@@ -16,10 +16,10 @@ class EditMenuDialog extends ConsumerStatefulWidget {
   final Function(MenuModel) onSave;
 
   const EditMenuDialog({
-    Key? key,
+    super.key,
     required this.menu,
     required this.onSave,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<EditMenuDialog> createState() => _EditMenuDialogState();
