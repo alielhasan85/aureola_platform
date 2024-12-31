@@ -34,6 +34,7 @@ class ImageUploadCard extends ConsumerWidget {
     if (draftVenue != null && imageKey == 'logoUrl') {
       existingImageUrl = draftVenue.designAndDisplay.logoUrl;
     }
+    print(draftVenue?.designAndDisplay.logoUrl);
 
     // Decide what to show
     Widget imageWidget;
@@ -43,12 +44,10 @@ class ImageUploadCard extends ConsumerWidget {
 
       // Priority #2: If the user hasn't "deleted" the old image, and we have an old image, show it
     } else if (!wantToDeleteOldImage && existingImageUrl.isNotEmpty) {
-      imageWidget = CachedNetworkImage(
-        imageUrl: existingImageUrl,
+      imageWidget = Image.network(
+        existingImageUrl,
         fit: BoxFit.cover,
-        placeholder: (context, url) =>
-            const Center(child: CircularProgressIndicator()),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
+        
       );
 
       // Otherwise, placeholder

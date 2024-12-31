@@ -1,9 +1,8 @@
 [
-    {
-      "origin": ["*"],
-      "method": ["GET"],
-      "maxAgeSeconds": 3600,
-      "responseHeader": ["Content-Type"]
-    }
-  ]
-  
+  {
+    "origin": ["*"],
+    "method": ["GET"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": ["Content-Type"]
+  }
+]
