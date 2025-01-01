@@ -3,7 +3,6 @@
 import 'package:aureola_platform/images/venue_image_controller.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/providers.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/screens/venue_management/branding_design/color_palette.dart';
 import 'package:aureola_platform/screens/venue_management/branding_design/logo_upload.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';

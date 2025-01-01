@@ -1,20 +1,13 @@
-// lib/screens/venue_management/widgets_venue_info/venue_add_languages.dart
-
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aureola_platform/widgest/language_config.dart';
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// A widget that displays the current venue languages and
-/// allows adding more languages to `venue.languageOptions`.
 class VenueAddLanguages extends ConsumerStatefulWidget {
-  final double width; // size constraint (optional)
-
-  const VenueAddLanguages({
-    Key? key,
-    required this.width,
-  }) : super(key: key);
+  final double width;
+  const VenueAddLanguages({Key? key, required this.width}) : super(key: key);
 
   @override
   ConsumerState<VenueAddLanguages> createState() => _VenueAddLanguagesState();
@@ -38,45 +31,32 @@ class _VenueAddLanguagesState extends ConsumerState<VenueAddLanguages> {
   @override
   Widget build(BuildContext context) {
     final venue = ref.watch(draftVenueProvider);
+    if (venue == null) return const SizedBox.shrink();
 
-    if (venue == null) {
-      return const SizedBox.shrink();
-    }
-
-    // The existing list of languages from the venue model, e.g. ["English","Arabic"]
-    final currentLanguages = venue.languageOptions;
+    final currentLangCodes = venue.languageOptions;
 
     return SizedBox(
       width: widget.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title
           Text(
-            AppLocalizations.of(context)!.translate('venue_languages') ??
-                'Venue Languages',
+            AppLocalizations.of(context)!.translate('venue_languages'),
             style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
-
-          // Show the existing languages
           Wrap(
             spacing: 8.0,
             runSpacing: 4.0,
-            children: currentLanguages.map((lang) {
+            children: currentLangCodes.map((code) {
+              final display = codeToName(code);
               return Chip(
-                label: Text(lang, style: AppThemeLocal.paragraph),
-                // OPTIONAL: If you want to remove a language on tap
-                onDeleted: () {
-                  _removeLanguage(lang);
-                },
+                label: Text(display, style: AppThemeLocal.paragraph),
+                onDeleted: () => _removeLanguage(code),
               );
             }).toList(),
           ),
-
           const SizedBox(height: 12),
-
-          // Input row for adding a new language
           Row(
             children: [
               Expanded(
@@ -108,14 +88,14 @@ class _VenueAddLanguagesState extends ConsumerState<VenueAddLanguages> {
   }
 
   void _addLanguage() {
-    final newLang = _languageController.text.trim();
-    if (newLang.isEmpty) return;
+    final input = _languageController.text.trim();
+    if (input.isEmpty) return;
 
+    final newCode = nameToCode(input);
     final venue = ref.read(draftVenueProvider);
     if (venue == null) return;
 
-    // Avoid duplicates
-    if (venue.languageOptions.contains(newLang)) {
+    if (venue.languageOptions.contains(newCode)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -129,26 +109,19 @@ class _VenueAddLanguagesState extends ConsumerState<VenueAddLanguages> {
       return;
     }
 
-    // Add to the list
-    final updatedList = [...venue.languageOptions, newLang];
-
-    // Update the draftVenue
+    final updated = [...venue.languageOptions, newCode];
     ref.read(draftVenueProvider.notifier).updateVenue(
-          languageOptions: updatedList,
+          languageOptions: updated,
         );
-
-    // Clear the text field
     _languageController.clear();
   }
 
-  void _removeLanguage(String lang) {
+  void _removeLanguage(String code) {
     final venue = ref.read(draftVenueProvider);
     if (venue == null) return;
-
-    // e.g. remove the chip
-    final updatedList = venue.languageOptions.where((l) => l != lang).toList();
+    final updated = venue.languageOptions.where((c) => c != code).toList();
     ref.read(draftVenueProvider.notifier).updateVenue(
-          languageOptions: updatedList,
+          languageOptions: updated,
         );
   }
 }

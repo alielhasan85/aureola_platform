@@ -32,7 +32,7 @@ class VenueModel {
     required this.userId,
     required this.address,
     required this.contact,
-    this.languageOptions = const ['English'],
+    this.languageOptions = const ['en'],
     this.socialAccounts,
     this.operations,
     this.qrCodes = const [],
@@ -105,8 +105,7 @@ class VenueModel {
         userId: map['userId'] ?? '',
         address: Address.fromMap(map['address'] ?? {}),
         contact: Contact.fromMap(map['contact'] ?? {}),
-        languageOptions:
-            List<String>.from(map['languageOptions'] ?? ['English']),
+        languageOptions: List<String>.from(map['languageOptions'] ?? ['en']),
         staff: List<String>.from(map['staff'] ?? []),
         socialAccounts: map['socialAccounts'] != null
             ? SocialAccounts.fromMap(map['socialAccounts'])

@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/providers.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/address_field.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/country_city_picker.dart';
 import 'package:aureola_platform/screens/venue_management/widgets_venue_info/location_service.dart';
@@ -76,7 +75,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     _selectedVenueType = venue?.additionalInfo['venueType'] ?? "Fine_Dining";
     _selectedDefaultLanguage = (venue?.languageOptions.isNotEmpty == true)
         ? venue!.languageOptions.first
-        : "english_";
+        : 'en';
 
     _alcoholOption = venue?.additionalInfo['sellAlcohol'] ?? false;
     _selectedLocation =
@@ -244,7 +243,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 16),
           DefaultLanguageDropdown(
             width: fieldWidth,
-            initialLanguage: _selectedDefaultLanguage ?? "english_",
+            initialLanguage: _selectedDefaultLanguage ?? 'en',
             onChanged: (val) {
               setState(() => _selectedDefaultLanguage = val);
               ref.read(draftVenueProvider.notifier).updateDefaultLanguage(val);
@@ -396,7 +395,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               SizedBox(width: spacing),
               DefaultLanguageDropdown(
                 width: fieldWidth,
-                initialLanguage: _selectedDefaultLanguage ?? "english_",
+                initialLanguage: _selectedDefaultLanguage ?? 'en',
                 onChanged: (val) {
                   setState(() => _selectedDefaultLanguage = val);
                   ref
@@ -646,6 +645,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           'additionalInfo.sellAlcohol': draft.additionalInfo['sellAlcohol'],
           'additionalInfo.mapImageUrl': draft.additionalInfo['mapImageUrl'],
           'languageOptions': draft.languageOptions,
+          'additionalInfo.defaultLanguage':
+              draft.additionalInfo['defaultLanguage'] ?? '',
         };
 
         await FirestoreVenue()

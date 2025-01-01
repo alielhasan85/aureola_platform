@@ -4,7 +4,6 @@ import 'package:aureola_platform/models/user/user_model.dart';
 import 'package:aureola_platform/models/venue/design_display.dart';
 import 'package:aureola_platform/models/venue/venue_model.dart';
 import 'package:aureola_platform/providers/providers.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';
 import 'package:aureola_platform/service/firebase/firestore_user.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';

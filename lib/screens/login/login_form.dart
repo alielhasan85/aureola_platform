@@ -1,5 +1,4 @@
 import 'package:aureola_platform/providers/providers.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/screens/login/email_verification.dart';
 import 'package:aureola_platform/screens/login/reset_password.dart';
 import 'package:aureola_platform/screens/main_page/main_page.dart';

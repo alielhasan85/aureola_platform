@@ -1,16 +1,20 @@
 import 'dart:typed_data';
 
 import 'package:aureola_platform/models/venue/venue_model.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
 import 'package:aureola_platform/providers/venue_notifiers.dart';
 import 'package:aureola_platform/service/firebase/firestore_venue.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:aureola_platform/models/user/user_model.dart';
+import 'package:aureola_platform/providers/user_notifier.dart';
 // App general provider
 
 enum AuthForm { login, signUp }
 
 final authFormProvider = StateProvider<AuthForm>((ref) => AuthForm.login);
+
+final userProvider = StateNotifierProvider<UserNotifier, UserModel?>((ref) {
+  return UserNotifier();
+});
 
 final languageProvider =
     StateProvider<String>((ref) => 'en'); // Default to 'en'

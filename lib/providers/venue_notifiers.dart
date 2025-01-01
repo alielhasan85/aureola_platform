@@ -57,17 +57,6 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // Update defaultLanguage in additionalInfo
-  void updateDefaultLanguage(String defaultLanguage) {
-    if (state != null) {
-      final updatedInfo = {
-        ...state!.additionalInfo,
-        'defaultLanguage': defaultLanguage,
-      };
-      state = state!.copyWith(additionalInfo: updatedInfo);
-    }
-  }
-
   // Update mapImageUrl in additionalInfo
   void updateMapImageUrl(String mapImageUrl) {
     if (state != null) {
@@ -238,39 +227,6 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // /// Updates one or more fields within the DesignAndDisplay object.
-  // void updateDesignAndDisplay({
-  //   String? logoUrl,
-  //   AspectRatioOption? logoAspectRatio,
-  //   AspectRatioOption? backgroundAspectRatio,
-  //   String? backgroundUrl,
-  //   String? backgroundColor,
-  //   String? cardBackground,
-  //   String? accentColor,
-  //   String? textColor,
-  // }) {
-  //   if (state != null) {
-  //     // Retrieve the current DesignAndDisplay, or initialize if null
-  //     DesignAndDisplay currentDesign = state!.designAndDisplay;
-
-  //     // Create a new DesignAndDisplay with updated fields
-  //     final updatedDesign = currentDesign.copyWith(
-  //       logoUrl: logoUrl ?? currentDesign.logoUrl,
-  //       logoAspectRatio: logoAspectRatio ?? currentDesign.logoAspectRatio,
-  //       backgroundUrl: backgroundUrl ?? currentDesign.backgroundUrl,
-  //       backgroundAspectRatio:
-  //           backgroundAspectRatio ?? currentDesign.backgroundAspectRatio,
-  //       backgroundColor: backgroundColor ?? currentDesign.backgroundColor,
-  //       cardBackground: cardBackground ?? currentDesign.cardBackground,
-  //       accentColor: accentColor ?? currentDesign.accentColor,
-  //       textColor: textColor ?? currentDesign.textColor,
-  //     );
-
-  //     // Update the state with the new DesignAndDisplay
-  //     state = state!.copyWith(designAndDisplay: updatedDesign);
-  //   }
-  // }
-
 // In VenueNotifier
   Future<void> updateLogoAspectRatio(AspectRatioOption newRatio) async {
     if (state == null) return;
@@ -361,6 +317,32 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
         additionalInfo: updatedAdditionalInfo,
       );
     }
+  }
+
+  void updateDefaultLanguage(String code) {
+    if (state == null) return;
+
+    // Make a copy of the current languageOptions
+    final currentLangs = [...state!.languageOptions];
+
+    // If the code isn't in the array, insert it
+    if (!currentLangs.contains(code)) {
+      currentLangs.insert(0, code);
+    } else {
+      // Optionally move it to the front
+      currentLangs.remove(code);
+      currentLangs.insert(0, code);
+    }
+
+    // Example: store the default in additionalInfo as well (optional),
+    // or just rely on the first item in languageOptions to be the default
+    final updatedInfo = {...state!.additionalInfo};
+    updatedInfo['defaultLanguage'] = code;
+
+    state = state!.copyWith(
+      languageOptions: currentLangs,
+      additionalInfo: updatedInfo,
+    );
   }
 
   // Specific methods to update individual color fields

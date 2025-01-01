@@ -1,35 +1,42 @@
-// lib/screens/menu_management/menu_edit/fields/menu_name_fields.dart
-
-import 'package:aureola_platform/widgest/multilang_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/widgest/multilang_dialog.dart';
 
+/// A widget for editing `menuName` (a Map<String, String>) in multiple languages.
+///
+/// [menuName] might look like:
+///   { 'en': 'Breakfast Menu', 'ar': 'قائمة الإفطار' }
+/// [onMenuNameChanged] is called whenever the map is updated.
 class MenuNameFields extends ConsumerWidget {
-  final Map<String, String> menuName; // e.g. {'en': 'Breakfast', 'ar': '...'}
+  final Map<String, String> menuName;
   final ValueChanged<Map<String, String>> onMenuNameChanged;
   final String? Function(String?)? validator;
 
   const MenuNameFields({
-    super.key,
+    Key? key,
     required this.menuName,
     required this.onMenuNameChanged,
     this.validator,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 1) The app's current UI language code
+    // 1) The app's current UI language code: e.g. 'en'
     final currentAppLang = ref.watch(languageProvider);
 
     // 2) The current venue to retrieve languageOptions
     final venue = ref.watch(draftVenueProvider);
 
-    // 3) The text for the current UI language
-    final currentText = menuName['ar'] ?? '';
+    // If venue is null or has no languageOptions, fallback to just [currentAppLang]
+    final availableLangs = venue?.languageOptions ?? [currentAppLang];
+
+    // 3) The text for the *current* language
+    //    If there's no entry for the current language, default to ''
+    final currentText = menuName[currentAppLang] ?? '';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +48,7 @@ class MenuNameFields extends ConsumerWidget {
         const SizedBox(height: 6),
         Row(
           children: [
-            // Expanded text field for the current language
+            // Expanded TextFormField for the *current* language
             Expanded(
               child: TextFormField(
                 initialValue: currentText,
@@ -66,10 +73,10 @@ class MenuNameFields extends ConsumerWidget {
               icon: const Icon(Icons.language, color: Colors.blue),
               tooltip: 'Edit in other languages',
               onPressed: () {
-                if (venue == null) return; // Just to be safe
-
-                // We assume venue.languageOptions is something like ['en','ar','fr']
-                final availableLangs = venue.languageOptions;
+                if (availableLangs.isEmpty) {
+                  // If we have no known language options, do nothing or show an alert
+                  return;
+                }
 
                 showDialog(
                   context: context,
@@ -78,6 +85,7 @@ class MenuNameFields extends ConsumerWidget {
                     availableLanguages: availableLangs,
                     title: 'Edit Menu Name',
                     onSave: (updatedNames) {
+                      // The user saved from the multi-lang dialog
                       onMenuNameChanged(updatedNames);
                     },
                   ),

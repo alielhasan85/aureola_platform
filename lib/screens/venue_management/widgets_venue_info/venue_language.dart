@@ -1,23 +1,26 @@
-// default_language_dropdown.dart
-
-import 'package:aureola_platform/providers/providers.dart';
+import 'package:aureola_platform/widgest/language_config.dart';
 import 'package:flutter/material.dart';
-import 'package:aureola_platform/service/localization/localization.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:aureola_platform/providers/providers.dart';
+import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
+
 class DefaultLanguageDropdown extends ConsumerStatefulWidget {
   final double width;
+
+  /// We store an ISO code, e.g. 'en', 'ar', 'fr', 'tr'.
   final String initialLanguage;
+
   final ValueChanged<String>? onChanged;
 
   const DefaultLanguageDropdown({
-    super.key,
+    Key? key,
     required this.width,
-    this.initialLanguage = 'English',
+    this.initialLanguage = 'en',
     this.onChanged,
-  });
+  }) : super(key: key);
 
   @override
   ConsumerState<DefaultLanguageDropdown> createState() =>
@@ -26,41 +29,33 @@ class DefaultLanguageDropdown extends ConsumerStatefulWidget {
 
 class _DefaultLanguageDropdownState
     extends ConsumerState<DefaultLanguageDropdown> {
-  String? _selectedLanguage;
-
-  final languageKeys = ["English", "Arabic", "French", "Turkish"];
+  late String _selectedCode;
 
   @override
   void initState() {
     super.initState();
-    _selectedLanguage = widget.initialLanguage;
-  }
-
-  @override
-  void didUpdateWidget(covariant DefaultLanguageDropdown oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.initialLanguage != oldWidget.initialLanguage) {
-      setState(() {
-        _selectedLanguage = widget.initialLanguage;
-      });
-    }
+    // If it’s already a code, this is no-op. If it’s "English" from older data,
+    // nameToCode will convert => "en"
+    _selectedCode = nameToCode(widget.initialLanguage);
   }
 
   @override
   Widget build(BuildContext context) {
+    // We show user-friendly names in the dropdown
+    final languageNames = kSupportedLanguageCodes.map(codeToName).toList();
+
     return SizedBox(
       width: widget.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.of(context)!.translate("default_language") ??
-                'Default Language',
+            AppLocalizations.of(context)!.translate("default_language"),
             style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
           DropdownSearch<String>(
-            items: (filter, infiniteScrollProps) => languageKeys,
+            items: (filter, _) => languageNames,
             popupProps: PopupProps.menu(
               fit: FlexFit.loose,
               menuProps: const MenuProps(
@@ -70,56 +65,44 @@ class _DefaultLanguageDropdownState
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
               ),
-              constraints: BoxConstraints(
-                maxWidth: widget.width,
-              ),
-              itemBuilder: (context, item, isDisabled, isSelected) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12.0,
-                    horizontal: 12,
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.translate(item) ?? item,
-                    style: AppThemeLocal.paragraph.copyWith(
-                      color: AppThemeLocal.secondary,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                );
-              },
+              constraints: BoxConstraints(maxWidth: widget.width),
             ),
+            // Show user-friendly name
             dropdownBuilder: (context, selectedItem) {
+              if (selectedItem == null) {
+                return Text(
+                  AppLocalizations.of(context)!
+                          .translate("Select_Default_Language") ??
+                      'Select Default Language',
+                  style: AppThemeLocal.paragraph,
+                );
+              }
               return Text(
-                selectedItem == null
-                    ? AppLocalizations.of(context)!
-                            .translate("Select_Default_Language") ??
-                        'Select Default Language'
-                    : AppLocalizations.of(context)!.translate(selectedItem) ??
-                        selectedItem,
+                AppLocalizations.of(context)!.translate(selectedItem),
                 style: AppThemeLocal.paragraph,
               );
             },
-            selectedItem: _selectedLanguage,
-            onChanged: (String? newKey) {
+            // Convert the stored code -> user-friendly name for the selected item
+            selectedItem: codeToName(_selectedCode),
+
+            onChanged: (String? newFriendlyName) {
+              if (newFriendlyName == null) return;
+              final newCode = nameToCode(newFriendlyName);
+
               setState(() {
-                _selectedLanguage = newKey;
+                _selectedCode = newCode;
               });
-              if (newKey != null) {
-                // Update draftVenueProvider
-                ref
-                    .read(draftVenueProvider.notifier)
-                    .updateDefaultLanguage(newKey);
-                if (widget.onChanged != null) {
-                  widget.onChanged!(newKey);
-                }
+
+              // Here we call updateDefaultLanguage in the draftVenue
+              ref
+                  .read(draftVenueProvider.notifier)
+                  .updateDefaultLanguage(newCode);
+
+              // Also call the parent callback
+              if (widget.onChanged != null) {
+                widget.onChanged!(newCode);
               }
             },
-            // decoration: AppThemeLocal.textFieldinputDecoration(
-            //   hint: AppLocalizations.of(context)!
-            //           .translate("Select_Default_Language") ??
-            //       'Select Default Language',
-            // ),
           ),
         ],
       ),

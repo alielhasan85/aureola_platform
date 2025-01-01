@@ -1,5 +1,5 @@
 import 'package:aureola_platform/models/user/user_model.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:aureola_platform/screens/user_management/widgets_user/profiletab/business_name.dart';
 import 'package:aureola_platform/screens/user_management/widgets_user/profiletab/job_title_field.dart';
 import 'package:aureola_platform/screens/user_management/widgets_user/profiletab/name_field.dart';

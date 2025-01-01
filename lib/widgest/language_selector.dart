@@ -1,6 +1,7 @@
 // lib/screens/main_page/widgets/language_selector.dart
 
 import 'package:aureola_platform/providers/providers.dart';
+import 'package:aureola_platform/widgest/language_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
@@ -11,37 +12,28 @@ class LanguageSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Fetch the current language code from the provider
-    //final currentLanguageCode = ref.watch(languageProvider);
-
-    // Map language codes to display labels (localized)
+    // The user-friendly name for each code
+    // We also localize them if needed:
+    // But typically "English","Arabic" can be in the JSON.
     final languageMap = {
-      'en': AppLocalizations.of(context)!.translate('English'),
-      'ar': AppLocalizations.of(context)!.translate('Arabic'),
-      'fr': AppLocalizations.of(context)!.translate('French'),
-      'tr': AppLocalizations.of(context)!.translate('Turkish'),
+      for (final code in kSupportedLanguageCodes)
+        code: AppLocalizations.of(context)!.translate(codeToName(code)),
     };
 
-    // Get the current language label
-    // final currentLanguageLabel = languageMap[currentLanguageCode] ?? 'English';
-
     return PopupMenuButton<String>(
-      // Removed 'icon' to prevent the assertion error
       tooltip: AppLocalizations.of(context)!.translate('select_language'),
       onSelected: (String languageCode) {
-        // Update the language provider state
+        // This updates the global language provider
         ref.read(languageProvider.notifier).state = languageCode;
-        // Optionally, trigger locale change in your localization setup
-        // This depends on how you've implemented localization
+        // Then your MaterialApp might respond by changing the Locale
       },
       itemBuilder: (BuildContext context) {
         return languageMap.entries.map((entry) {
           return PopupMenuItem<String>(
-            value: entry.key,
+            value: entry.key, // the code, e.g. "en"
             child: Row(
               children: [
-                // Optionally, include language flags/icons here
-                // Example:
+                // Optional: add flags by code
                 // Image.asset('assets/flags/${entry.key}.png', width: 24),
                 const SizedBox(width: 8),
                 Text(
@@ -53,22 +45,13 @@ class LanguageSelector extends ConsumerWidget {
           );
         }).toList();
       },
-      child: const Row(
-        children: [
+      child: Row(
+        children: const [
           Icon(
             Icons.language,
             color: AppThemeLocal.primary,
           ),
-          // const SizedBox(width: 4),
-          // Text(
-          //   currentLanguageLabel,
-          //   style: const TextStyle(
-          //     fontSize: 16,
-          //     fontWeight: FontWeight.w500,
-          //     color: AppTheme.primary,
-          //   ),
-          // ),
-          const Icon(
+          Icon(
             Icons.arrow_drop_down,
             color: AppThemeLocal.primary,
           ),

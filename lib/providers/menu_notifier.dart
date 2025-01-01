@@ -1,7 +1,7 @@
+import 'package:aureola_platform/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aureola_platform/models/menu/menu_model.dart';
 import 'package:aureola_platform/service/firebase/firestore_menu.dart';
-import 'package:aureola_platform/providers/user_provider.dart';
 
 class MenuNotifier extends StateNotifier<MenuModel?> {
   MenuNotifier(this.ref) : super(null);
