@@ -9,12 +9,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/models/menu/menu_model.dart';
 import 'package:aureola_platform/models/menu/menu_availability.dart';
-import 'package:aureola_platform/providers/providers.dart'; 
-  // Where menusListProvider is accessible
+import 'package:aureola_platform/providers/providers.dart';
+// Where menusListProvider is accessible
 
 class MenuCard extends ConsumerWidget {
   final MenuModel menu;
   final bool isSelected;
+  final bool isFirst;
+  final bool isLast;
 
   /// Callback when the user taps the white area of the card.
   final VoidCallback onTap;
@@ -23,6 +25,8 @@ class MenuCard extends ConsumerWidget {
     super.key,
     required this.menu,
     required this.isSelected,
+    required this.isFirst,
+    required this.isLast,
     required this.onTap,
   });
 
@@ -59,8 +63,9 @@ class MenuCard extends ConsumerWidget {
         final endDateStr =
             endDate != null ? DateFormat('MMM d').format(endDate) : '??';
 
-        final timeRange =
-            (startTime != null && endTime != null) ? ' • $startTime - $endTime' : '';
+        final timeRange = (startTime != null && endTime != null)
+            ? ' • $startTime - $endTime'
+            : '';
         return 'From $startDateStr to $endDateStr$timeRange';
     }
   }
@@ -151,7 +156,7 @@ class MenuCard extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
 
-                  // "Sections • Items" 
+                  // "Sections • Items"
                   // (In your final code, you might fetch sections subcollection and count them)
                   const Text(
                     '4 sections • 15 items',
@@ -207,29 +212,67 @@ class MenuCard extends ConsumerWidget {
                       size: 28.0,
                     ),
                     onSelected: (String value) async {
-                      if (value == 'settings') {
-                        // TODO: Possibly open a more advanced settings screen
-                      } else if (value == 'delete') {
-                        // 3) Delete the menu using MenusListNotifier
-                        final venue = ref.read(draftVenueProvider);
-                        if (venue != null) {
+                      final venue = ref.read(draftVenueProvider);
+                      if (venue == null) return;
+
+                      switch (value) {
+                        case 'settings':
+                          // ...
+                          break;
+                        case 'delete':
                           await ref
                               .read(menusListProvider(venue.venueId).notifier)
                               .deleteMenu(menu.menuId);
-                        }
+                          break;
+                        case 'move_up':
+                          await ref
+                              .read(menusListProvider(venue.venueId).notifier)
+                              .moveUp(menu.menuId);
+                          break;
+                        case 'move_down':
+                          await ref
+                              .read(menusListProvider(venue.venueId).notifier)
+                              .moveDown(menu.menuId);
+                          break;
                       }
                     },
                     itemBuilder: (BuildContext context) {
-                      return const [
-                        PopupMenuItem(
+                      final items = <PopupMenuEntry<String>>[];
+
+                      items.add(
+                        const PopupMenuItem(
                           value: 'settings',
                           child: Text('Settings'),
                         ),
-                        PopupMenuItem(
+                      );
+                      items.add(
+                        const PopupMenuItem(
                           value: 'delete',
                           child: Text('Delete'),
                         ),
-                      ];
+                      );
+
+                      // Add "Move Up" if not first
+                      if (!isFirst) {
+                        items.add(
+                          const PopupMenuItem(
+                            value: 'move_up',
+                            child: Text('Move Up'),
+                          ),
+                        );
+                      }
+
+                      // Add "Move Down" if not last
+                      if (!isLast) {
+                        items.add(
+                          const PopupMenuItem(
+                            value: 'move_down',
+                            child: Text('Move Down'),
+                          ),
+                        );
+                      }
+
+                      return items;
                     },
                   ),
 

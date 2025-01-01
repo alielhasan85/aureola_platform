@@ -87,13 +87,13 @@ class _MultilangFieldDialogState extends State<MultilangFieldDialog> {
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
-            AppLocalizations.of(context)!.translate('Cancel') ?? 'Cancel',
+            AppLocalizations.of(context)!.translate('_Cancel_'),
           ),
         ),
         ElevatedButton(
           onPressed: _handleSave,
           child: Text(
-            AppLocalizations.of(context)!.translate('Save') ?? 'Save',
+            AppLocalizations.of(context)!.translate('Save'),
           ),
         ),
       ],

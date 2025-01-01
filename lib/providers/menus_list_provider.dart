@@ -92,8 +92,7 @@ class MenusListNotifier extends StateNotifier<AsyncValue<List<MenuModel>>> {
         menu: menu,
       );
       // Re-fetch from server or update locally
-      final updatedMenu =
-          await FirestoreMenu().getMenuById(
+      final updatedMenu = await FirestoreMenu().getMenuById(
             userId: user.userId,
             venueId: venueId,
             menuId: newMenuId,
@@ -116,6 +115,62 @@ class MenusListNotifier extends StateNotifier<AsyncValue<List<MenuModel>>> {
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
+  }
+
+  /// Moves the menu up by swapping sortOrder with the previous item in the list.
+  Future<void> moveUp(String menuId) async {
+    final current = state.valueOrNull ?? [];
+    if (current.length < 2) return; // nothing to move if only 1 or 0 items
+
+    final idx = current.indexWhere((m) => m.menuId == menuId);
+    if (idx <= 0) return; // already at top or not found
+
+    // Swap the sortOrders of the current item and the previous item
+    final newList = [...current];
+    final prevIdx = idx - 1;
+
+    final thisMenu = newList[idx];
+    final prevMenu = newList[prevIdx];
+
+    // Swap sortOrders
+    final updatedThisMenu = thisMenu.copyWith(sortOrder: prevMenu.sortOrder);
+    final updatedPrevMenu = prevMenu.copyWith(sortOrder: thisMenu.sortOrder);
+
+    newList[idx] = updatedThisMenu;
+    newList[prevIdx] = updatedPrevMenu;
+
+    // Sort the list by sortOrder so they remain in ascending order
+    newList.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+
+    await reorderMenus(newList);
+    // reorderMenus calls FirestoreMenu().reorderMenus(...) with a batch update
+  }
+
+  /// Moves the menu down by swapping sortOrder with the next item in the list.
+  Future<void> moveDown(String menuId) async {
+    final current = state.valueOrNull ?? [];
+    if (current.length < 2) return;
+
+    final idx = current.indexWhere((m) => m.menuId == menuId);
+    if (idx == -1 || idx >= current.length - 1)
+      return; // already at bottom or not found
+
+    final newList = [...current];
+    final nextIdx = idx + 1;
+
+    final thisMenu = newList[idx];
+    final nextMenu = newList[nextIdx];
+
+    // Swap sortOrders
+    final updatedThisMenu = thisMenu.copyWith(sortOrder: nextMenu.sortOrder);
+    final updatedNextMenu = nextMenu.copyWith(sortOrder: thisMenu.sortOrder);
+
+    newList[idx] = updatedThisMenu;
+    newList[nextIdx] = updatedNextMenu;
+
+    newList.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+
+    await reorderMenus(newList);
   }
 }
 
