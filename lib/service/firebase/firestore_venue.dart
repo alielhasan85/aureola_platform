@@ -134,47 +134,39 @@ class FirestoreVenue {
 
     return querySnapshot.docs
         .map((doc) =>
-            VenueModel.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+            VenueModel.fromMap(doc.data(), doc.id))
         .toList();
   }
-  // // Retrieve all venues
-  // Future<List<VenueModel>> getAllVenues() async {
-  //   final querySnapshot = await _venuesCollection.get();
-  //   return querySnapshot.docs
+ 
+
+  // // Search for venues by name or type
+  // Future<List<VenueModel>> searchVenues(String query) async {
+  //   // Firestore doesn't support 'OR' queries directly, so perform multiple queries
+  //   final nameQuerySnapshot = await _venuesCollection
+  //       .where('venueName', isGreaterThanOrEqualTo: query)
+  //       .where('venueName', isLessThanOrEqualTo: query + '\uf8ff')
+  //       .get();
+
+  //   final typeQuerySnapshot =
+  //       await _venuesCollection.where('venueType', isEqualTo: query).get();
+
+  //   // Combine results without duplicates
+  //   final Map<String, DocumentSnapshot> venueMap = {};
+
+  //   for (var doc in nameQuerySnapshot.docs) {
+  //     venueMap[doc.id] = doc;
+  //   }
+
+  //   for (var doc in typeQuerySnapshot.docs) {
+  //     venueMap[doc.id] = doc;
+  //   }
+
+  //   return venueMap.values
   //       .map((doc) =>
   //           VenueModel.fromMap(doc.data() as Map<String, dynamic>, doc.id))
   //       .toList();
   // }
 
-  // Search for venues by name or type
-  Future<List<VenueModel>> searchVenues(String query) async {
-    // Firestore doesn't support 'OR' queries directly, so perform multiple queries
-    final nameQuerySnapshot = await _venuesCollection
-        .where('venueName', isGreaterThanOrEqualTo: query)
-        .where('venueName', isLessThanOrEqualTo: query + '\uf8ff')
-        .get();
-
-    final typeQuerySnapshot =
-        await _venuesCollection.where('venueType', isEqualTo: query).get();
-
-    // Combine results without duplicates
-    final Map<String, DocumentSnapshot> venueMap = {};
-
-    for (var doc in nameQuerySnapshot.docs) {
-      venueMap[doc.id] = doc;
-    }
-
-    for (var doc in typeQuerySnapshot.docs) {
-      venueMap[doc.id] = doc;
-    }
-
-    return venueMap.values
-        .map((doc) =>
-            VenueModel.fromMap(doc.data() as Map<String, dynamic>, doc.id))
-        .toList();
-  }
-
-  /// **New Method:** Updates the DesignAndDisplay field of a specific venue.
 
   /// **New Method:** Retrieves the DesignAndDisplay field of a specific venue.
   Future<DesignAndDisplay?> getDesignAndDisplay(

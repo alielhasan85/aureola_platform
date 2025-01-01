@@ -1,14 +1,18 @@
+import 'package:aureola_platform/providers/menus_list_provider.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/edit_menu.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/models/menu/menu_model.dart';
 import 'package:aureola_platform/models/menu/menu_availability.dart';
+import 'package:aureola_platform/providers/providers.dart'; 
+  // Where menusListProvider is accessible
 
-class MenuCard extends StatelessWidget {
+class MenuCard extends ConsumerWidget {
   final MenuModel menu;
   final bool isSelected;
 
@@ -21,15 +25,6 @@ class MenuCard extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
   });
-
-  /// Example function to get the total number of items across all sections.
-  int getTotalItems() {
-    int total = 0;
-    for (var section in menu.sections) {
-      total += section.items.length;
-    }
-    return total;
-  }
 
   /// Returns a user-friendly availability description.
   String getAvailabilityText() {
@@ -64,10 +59,8 @@ class MenuCard extends StatelessWidget {
         final endDateStr =
             endDate != null ? DateFormat('MMM d').format(endDate) : '??';
 
-        final timeRange = (startTime != null && endTime != null)
-            ? ' • $startTime - $endTime'
-            : '';
-
+        final timeRange =
+            (startTime != null && endTime != null) ? ' • $startTime - $endTime' : '';
         return 'From $startDateStr to $endDateStr$timeRange';
     }
   }
@@ -113,13 +106,10 @@ class MenuCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final DateFormat formatter = DateFormat('MMM dd, yyyy');
     final String formattedDate = formatter.format(menu.updatedAt);
-    final totalSections = menu.sections.length;
-    final totalItems = getTotalItems();
 
-    // White card container
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -129,9 +119,8 @@ class MenuCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Tap area for selection
+          // 1) Tappable area for selection highlight
           InkWell(
-            // 1) Tapping the card calls onTap
             onTap: onTap,
             borderRadius: BorderRadius.circular(8),
             child: Padding(
@@ -160,16 +149,15 @@ class MenuCard extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 8),
 
-                  // "Sections • Items"
-                  Text(
-                    '$totalSections sections • $totalItems items',
-                    style: const TextStyle(fontSize: 14),
+                  // "Sections • Items" 
+                  // (In your final code, you might fetch sections subcollection and count them)
+                  const Text(
+                    '4 sections • 15 items',
+                    style: TextStyle(fontSize: 14),
                   ),
 
-                  // Additional rows only if selected
                   if (isSelected) ...[
                     const SizedBox(height: 8),
                     Text(
@@ -197,16 +185,12 @@ class MenuCard extends StatelessWidget {
           ),
 
           if (isSelected) ...[
-            // A divider
             const Divider(height: 0.5, color: AppThemeLocal.grey2),
-
-            // Bottom action row (Edit, Visible, 3-dots)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               height: 48,
               decoration: BoxDecoration(
-                // 2) If selected, show a different background color
-                color: isSelected ? AppThemeLocal.background2 : Colors.white,
+                color: AppThemeLocal.background2,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(8),
                   bottomRight: Radius.circular(8),
@@ -215,28 +199,33 @@ class MenuCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // 3-dots
+                  // 2) 3-dots for Settings or Delete
                   PopupMenuButton<String>(
                     icon: const Icon(
                       Icons.more_vert,
                       color: AppThemeLocal.accent,
                       size: 28.0,
                     ),
-                    onSelected: (String value) {
-                      // TODO: Implement actions based on the selected value
+                    onSelected: (String value) async {
                       if (value == 'settings') {
-                        // Handle Settings action
+                        // TODO: Possibly open a more advanced settings screen
                       } else if (value == 'delete') {
-                        // Handle Delete action
+                        // 3) Delete the menu using MenusListNotifier
+                        final venue = ref.read(draftVenueProvider);
+                        if (venue != null) {
+                          await ref
+                              .read(menusListProvider(venue.venueId).notifier)
+                              .deleteMenu(menu.menuId);
+                        }
                       }
                     },
                     itemBuilder: (BuildContext context) {
-                      return [
-                        const PopupMenuItem(
+                      return const [
+                        PopupMenuItem(
                           value: 'settings',
                           child: Text('Settings'),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'delete',
                           child: Text('Delete'),
                         ),
@@ -244,7 +233,7 @@ class MenuCard extends StatelessWidget {
                     },
                   ),
 
-                  // Visible toggle
+                  // 4) Toggle isOnline
                   Row(
                     children: [
                       Text(
@@ -257,19 +246,25 @@ class MenuCard extends StatelessWidget {
                       ),
                       Checkbox(
                         value: menu.isOnline,
-                        onChanged: (val) {
-                          // TODO: Toggle isActive in Firestore or local state
+                        onChanged: (val) async {
+                          if (val == null) return;
+                          final newMenu = menu.copyWith(isOnline: val);
+                          final venue = ref.read(draftVenueProvider);
+                          if (venue != null) {
+                            // Partial update or upsert
+                            await ref
+                                .read(menusListProvider(venue.venueId).notifier)
+                                .upsertMenu(newMenu);
+                          }
                         },
                       ),
                     ],
                   ),
-                  // Edit
-                  // 1. Edit Menu Button with leading text
+
+                  // 5) Edit button
                   Row(
-                    mainAxisSize: MainAxisSize
-                        .min, // Ensures the Row takes up minimal space
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Non-interactive Text
                       Text(
                         AppLocalizations.of(context)!.translate('edit_menu'),
                         style: const TextStyle(
@@ -278,9 +273,7 @@ class MenuCard extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(width: 8), // Spacing between text and icon
-
-                      // Interactive IconButton
+                      const SizedBox(width: 8),
                       IconButton(
                         icon: SvgPicture.asset(
                           'assets/icons/edit.svg',
@@ -291,28 +284,35 @@ class MenuCard extends StatelessWidget {
                             BlendMode.srcIn,
                           ),
                         ),
+                        splashRadius: 20,
+                        tooltip: AppLocalizations.of(context)!
+                            .translate('edit_menu'),
                         onPressed: () {
-                          // Open the EditMenuDialog
+                          // Example: show dialog
                           showDialog(
                             context: context,
                             builder: (context) {
                               return EditMenuDialog(
                                 menu: menu,
-                                onSave: (updatedMenu) {
-                                  // Handle the updated menu
-                                  //onMenuUpdated(updatedMenu);
+                                onSave: (updatedMenu) async {
+                                  // Save via upsert
+                                  final venue = ref.read(draftVenueProvider);
+                                  if (venue != null) {
+                                    await ref
+                                        .read(
+                                          menusListProvider(venue.venueId)
+                                              .notifier,
+                                        )
+                                        .upsertMenu(updatedMenu);
+                                  }
                                 },
                               );
                             },
                           );
                         },
-                        splashRadius:
-                            20, // Adjusts the splash radius for better UX
-                        tooltip: AppLocalizations.of(context)!
-                            .translate('edit_menu'),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

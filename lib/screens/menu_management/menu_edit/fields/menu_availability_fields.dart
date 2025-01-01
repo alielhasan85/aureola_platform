@@ -28,6 +28,7 @@ class MenuAvailabilityFields extends StatefulWidget {
   });
 
   @override
+  
   _MenuAvailabilityFieldsState createState() => _MenuAvailabilityFieldsState();
 }
 

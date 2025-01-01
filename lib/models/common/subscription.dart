@@ -43,7 +43,7 @@ class Subscription {
       featuresEnabled: List<String>.from(map['featuresEnabled'] ?? []),
       startDate: (map['startDate'] as Timestamp?)?.toDate() ?? DateTime.now(),
       endDate: (map['endDate'] as Timestamp?)?.toDate() ??
-          DateTime.now().add(Duration(days: 30)),
+          DateTime.now().add(const Duration(days: 30)),
     );
   }
 }

@@ -21,7 +21,7 @@ final MenuModel menu1 = MenuModel(
   },
   imageUrl: 'https://picsum.photos/400/200', // Placeholder image
 
-  sections: sampleSections, // Use the mock sections
+  //sections: sampleSections, // Use the mock sections
   isOnline: true,
   visibleOnTablet: true,
   visibleOnQr: true,
@@ -53,7 +53,7 @@ final MenuModel menu2 = MenuModel(
   },
   imageUrl: 'https://picsum.photos/400/200', // Placeholder image
 
-  sections: sampleSections, // Use the mock sections
+ // sections: sampleSections, // Use the mock sections
   isOnline: true,
   visibleOnTablet: true,
   visibleOnQr: true,
