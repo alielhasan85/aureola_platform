@@ -15,12 +15,12 @@ class MultilangFieldDialog extends StatefulWidget {
   final ValueChanged<Map<String, String>> onSave;
 
   const MultilangFieldDialog({
-    Key? key,
+    super.key,
     required this.initialValues,
     required this.availableLanguages,
     required this.title,
     required this.onSave,
-  }) : super(key: key);
+  });
 
   @override
   _MultilangFieldDialogState createState() => _MultilangFieldDialogState();

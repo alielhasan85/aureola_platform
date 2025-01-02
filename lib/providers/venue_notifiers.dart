@@ -83,33 +83,6 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // // Update specific parts of the address
-  // void updateAddress({
-  //   String? displayAddress,
-  //   String? street,
-  //   String? city,
-  //   String? state,
-  //   String? postalCode,
-  //   String? country,
-  //   LatLng? location,
-  // }) {
-  //   if (state != null) {
-  //     this.state = this.state!.copyWith(
-  //           address: this.state!.address.copyWith(
-  //                 street: street,
-  //                 city: city,
-  //                 state: state,
-  //                 postalCode: postalCode,
-  //                 country: country,
-  //                 location: location,
-  //                 displayAddress: displayAddress,
-  //               ),
-  //         );
-  //   }
-  // }
-
-// lib/providers/venue_notifier.dart
-
   // Refactored updateAddress method
   void updateAddress({
     String? newDisplayAddress,
@@ -319,31 +292,26 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
+  
+
   void updateDefaultLanguage(String code) {
-    if (state == null) return;
+  if (state == null) return;
 
-    // Make a copy of the current languageOptions
-    final currentLangs = [...state!.languageOptions];
+  final updatedInfo = {...state!.additionalInfo};
+  updatedInfo['defaultLanguage'] = code;
 
-    // If the code isn't in the array, insert it
-    if (!currentLangs.contains(code)) {
-      currentLangs.insert(0, code);
-    } else {
-      // Optionally move it to the front
-      currentLangs.remove(code);
-      currentLangs.insert(0, code);
-    }
+  // Ensure it's in the languageOptions array at index 0
+  final current = [...state!.languageOptions];
+  // Remove it first if present
+  current.remove(code);
+  // Insert as first
+  current.insert(0, code);
 
-    // Example: store the default in additionalInfo as well (optional),
-    // or just rely on the first item in languageOptions to be the default
-    final updatedInfo = {...state!.additionalInfo};
-    updatedInfo['defaultLanguage'] = code;
-
-    state = state!.copyWith(
-      languageOptions: currentLangs,
-      additionalInfo: updatedInfo,
-    );
-  }
+  state = state!.copyWith(
+    languageOptions: current,
+    additionalInfo: updatedInfo,
+  );
+}
 
   // Specific methods to update individual color fields
   void updateBackgroundColor(String hex) {

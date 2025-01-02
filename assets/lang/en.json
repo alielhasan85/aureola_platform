@@ -169,6 +169,8 @@
   "invalid_email": "Please enter a valid email address.",
   "phone_number_required": "Phone number is required.",
   "invalid_phone_number": "Please enter a valid phone number.",
+  "Language_Options": "Language Options",
+  "other_languages":  "Other Languages",
   
   "save": "Save",
  

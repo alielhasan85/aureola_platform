@@ -29,14 +29,17 @@ class WebsiteFields extends ConsumerWidget {
           ),
           const SizedBox(height: 6),
           TextFormField(
-            // Use TextFormField instead of TextField
+            
+            style: AppThemeLocal.paragraph,
             cursorColor: AppThemeLocal.accent,
             controller: websiteController,
             onChanged: (val) {
               // Correctly update the venue name in the provider
               ref.read(draftVenueProvider.notifier).updateWebsite(val);
             },
-            decoration: AppThemeLocal.textFieldinputDecoration().copyWith(
+            decoration:
+            
+             AppThemeLocal.textFieldinputDecoration().copyWith(
               hintText:
                   AppLocalizations.of(context)!.translate("enter_web_site"),
             ),

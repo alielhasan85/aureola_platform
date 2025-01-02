@@ -64,8 +64,7 @@ class _VenueTypeDropdownState extends ConsumerState<VenueTypeDropdown> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.of(context)!.translate("venue_Business_type") ??
-                'Venue Business Type',
+            AppLocalizations.of(context)!.translate("venue_Business_type"),
             style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
@@ -86,7 +85,7 @@ class _VenueTypeDropdownState extends ConsumerState<VenueTypeDropdown> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 12.0, horizontal: 12),
                   child: Text(
-                    AppLocalizations.of(context)!.translate(item) ?? item,
+                    AppLocalizations.of(context)!.translate(item),
                     style: AppThemeLocal.paragraph,
                     textAlign: TextAlign.start,
                   ),
@@ -99,10 +98,8 @@ class _VenueTypeDropdownState extends ConsumerState<VenueTypeDropdown> {
               return Text(
                 selectedItem == null
                     ? AppLocalizations.of(context)!
-                            .translate("Select_Type_of_your_business") ??
-                        'Select Type of Your Business'
-                    : AppLocalizations.of(context)!.translate(selectedItem) ??
-                        selectedItem,
+                            .translate("Select_Type_of_your_business") 
+                    : AppLocalizations.of(context)!.translate(selectedItem) ,
                 style: AppThemeLocal.paragraph,
               );
             },

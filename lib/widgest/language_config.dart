@@ -41,3 +41,13 @@ String nameToCode(String name) {
       return name; // fallback if unknown
   }
 }
+
+class LanguageItem {
+  final String code;     // e.g. "en"
+  final String name;     // e.g. "English"
+
+  LanguageItem({required this.code, required this.name});
+
+  @override
+  String toString() => name;
+}

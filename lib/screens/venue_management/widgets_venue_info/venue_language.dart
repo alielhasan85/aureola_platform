@@ -16,11 +16,11 @@ class DefaultLanguageDropdown extends ConsumerStatefulWidget {
   final ValueChanged<String>? onChanged;
 
   const DefaultLanguageDropdown({
-    Key? key,
+    super.key,
     required this.width,
     this.initialLanguage = 'en',
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<DefaultLanguageDropdown> createState() =>
@@ -72,8 +72,7 @@ class _DefaultLanguageDropdownState
               if (selectedItem == null) {
                 return Text(
                   AppLocalizations.of(context)!
-                          .translate("Select_Default_Language") ??
-                      'Select Default Language',
+                          .translate("Select_Default_Language") ,
                   style: AppThemeLocal.paragraph,
                 );
               }

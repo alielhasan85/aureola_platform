@@ -241,6 +241,21 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             },
           ),
           const SizedBox(height: 16),
+          AlcoholOptionField(
+            width: fieldWidth,
+            initialValue: _alcoholOption ?? false,
+            onChanged: (val) {
+              setState(() => _alcoholOption = val);
+              ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
+            },
+          ),
+          const SizedBox(height: 12),
+          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          const SizedBox(height: 12),
+          Text(
+          AppLocalizations.of(context)!.translate("Language_Options"),
+          style: AppThemeLocal.paragraph,
+        ),
           DefaultLanguageDropdown(
             width: fieldWidth,
             initialLanguage: _selectedDefaultLanguage ?? 'en',
@@ -251,16 +266,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           ),
           const SizedBox(height: 16),
           VenueAddLanguages(width: fieldWidth),
-          const SizedBox(height: 16),
-          AlcoholOptionField(
-            width: fieldWidth,
-            initialValue: _alcoholOption ?? false,
-            onChanged: (val) {
-              setState(() => _alcoholOption = val);
-              ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
-            },
-          ),
           const SizedBox(height: 12),
+          
           Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
           const SizedBox(height: 12),
           Text(
@@ -333,6 +340,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          //venue name + tagline 
+          //TODO: to add multi language support
           Row(
             children: [
               VenueNameField(
@@ -348,21 +357,16 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               )
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
           Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              // In the parent's build method:
-              PhoneNumberField(
-                width: fieldWidth,
-                //validator: _validatePhoneNumber,
-                // initialPhoneNumber:
-                //     _currentPhoneNumber, // This is the variable updated in _initializeFormFields
-              ),
-              SizedBox(width: spacing),
-            ],
+          const SizedBox(height: 12),
+          PhoneNumberField(
+            width: fieldWidth,
+            //validator: _validatePhoneNumber,
+            // initialPhoneNumber:
+            //     _currentPhoneNumber, // This is the variable updated in _initializeFormFields
           ),
+          SizedBox(width: spacing),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -377,9 +381,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                   validator: _validateWebsite),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
           Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
-          const SizedBox(height: 6),
+          const SizedBox(height: 12),
           Row(
             children: [
               VenueTypeDropdown(
@@ -393,7 +397,29 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                 },
               ),
               SizedBox(width: spacing),
-              DefaultLanguageDropdown(
+              AlcoholOptionField(
+              width: fieldWidth,
+              initialValue: _alcoholOption ?? false,
+              onChanged: (val) {
+                setState(() => _alcoholOption = val);
+                ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
+              },
+            ),
+              
+            ],
+          ),
+         const SizedBox(height: 12),
+          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          const SizedBox(height: 12),
+ Text(
+          AppLocalizations.of(context)!.translate("Language_Options"),
+          style: AppThemeLocal.paragraph,
+        ),
+         const SizedBox(height: 6),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            DefaultLanguageDropdown(
                 width: fieldWidth,
                 initialLanguage: _selectedDefaultLanguage ?? 'en',
                 onChanged: (val) {
@@ -403,20 +429,11 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
                       .updateDefaultLanguage(val);
                 },
               ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(children: [
-            AlcoholOptionField(
-              width: fieldWidth,
-              initialValue: _alcoholOption ?? false,
-              onChanged: (val) {
-                setState(() => _alcoholOption = val);
-                ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
-              },
-            ),
+            SizedBox(width: spacing),
             VenueAddLanguages(width: fieldWidth),
           ]),
+
+         
           const SizedBox(height: 12),
           Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
           const SizedBox(height: 12),
