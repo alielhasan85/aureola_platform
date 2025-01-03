@@ -15,13 +15,15 @@ class MenuNameFields extends ConsumerWidget {
   final Map<String, String> menuName;
   final ValueChanged<Map<String, String>> onMenuNameChanged;
   final String? Function(String?)? validator;
+  final double dialogWidth;
 
   const MenuNameFields({
-    Key? key,
+    super.key,
     required this.menuName,
     required this.onMenuNameChanged,
     this.validator,
-  }) : super(key: key);
+    required this.dialogWidth,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,33 +66,46 @@ class MenuNameFields extends ConsumerWidget {
                 decoration: AppThemeLocal.textFieldinputDecoration(
                   hint: AppLocalizations.of(context)!
                       .translate("Menu_Name_($currentAppLang)"),
+                  suffixIcon: availableLangs.length > 1
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(
+                              height: 30, // Set the desired height
+                              child: VerticalDivider(
+                                color: AppThemeLocal.accent,
+                                thickness: 0.5,
+                                width: 4,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                size: 28,
+                                Icons.language,
+                                color: AppThemeLocal.accent,
+                              ),
+                              tooltip: 'Edit in other languages',
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => MultilangFieldDialog(
+                                    dialogWidth: dialogWidth,
+                                    initialValues: menuName,
+                                    availableLanguages: availableLangs,
+                                    title: 'Edit Menu Name',
+                                    onSave: (updatedNames) {
+                                      // The user saved from the multi-lang dialog
+                                      onMenuNameChanged(updatedNames);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        )
+                      : null,
                 ),
               ),
-            ),
-
-            // Icon to open the multi-lang dialog
-            IconButton(
-              icon: const Icon(Icons.language, color: Colors.blue),
-              tooltip: 'Edit in other languages',
-              onPressed: () {
-                if (availableLangs.isEmpty) {
-                  // If we have no known language options, do nothing or show an alert
-                  return;
-                }
-
-                showDialog(
-                  context: context,
-                  builder: (_) => MultilangFieldDialog(
-                    initialValues: menuName,
-                    availableLanguages: availableLangs,
-                    title: 'Edit Menu Name',
-                    onSave: (updatedNames) {
-                      // The user saved from the multi-lang dialog
-                      onMenuNameChanged(updatedNames);
-                    },
-                  ),
-                );
-              },
             ),
           ],
         ),

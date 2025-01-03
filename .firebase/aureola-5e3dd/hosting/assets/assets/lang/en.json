@@ -32,24 +32,24 @@
     "QR_Code": "QR Code",
     "Settings": "Settings",
     "available_restaurant": "Available Venues",
-"branding_design": "Branding & Design", 
+    "branding_design": "Branding & Design", 
 
 
-"copyright": "Copy Right Reserved Aureola Platform 2024",
+    "copyright": "Copy Right Reserved Aureola Platform 2024",
 
 
 
-"venue_info_title": "General Info",
-"Add_new_venue": "+ Add New Venue",
-"Contact_details": "Contact Details",
-"Default_options": "Default Options",
-"Address_": "Address",
-"Detailed_address": "Detailed Address",
-"enter_address": "Enter Detailed Address",
-"venue_sells_alcohol": "Does your Venue Sell Alcohol?",
-"yes": "Yes",
-"no": "No",
-"default_language": "Default Language",
+    "venue_info_title": "General Info",
+    "Add_new_venue": "+ Add New Venue",
+    "Contact_details": "Contact Details",
+    "Default_options": "Default Options",
+    "Address_": "Address",
+    "Detailed_address": "Detailed Address",
+    "enter_address": "Enter Detailed Address",
+    "venue_sells_alcohol": "Does your Venue Sell Alcohol?",
+    "yes": "Yes",
+    "no": "No",
+    "default_language": "Default Language",
 
 "Select_Default_Language": "Select Default Language",
 "email": "Email",
@@ -169,6 +169,8 @@
   "invalid_email": "Please enter a valid email address.",
   "phone_number_required": "Phone number is required.",
   "invalid_phone_number": "Please enter a valid phone number.",
+  "Language_Options": "Language Options",
+  "other_languages":  "Other Languages",
   
   "save": "Save",
  

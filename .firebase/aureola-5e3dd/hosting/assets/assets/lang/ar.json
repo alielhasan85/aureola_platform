@@ -135,7 +135,9 @@
       "waiting_for_email_verification": "Waiting for email verification...",
       "please_verify_email": "Please verify your email to continue.",
 
+"Language_Options": "Language Options",
 
+"other_languages":  "Other Languages",
       "forgot_password": "Forgot Password?",
   "reset_password": "Reset Password",
   "enter_email_to_reset_password": "Enter your email address to reset your password.",

@@ -1,5 +1,5 @@
-// lib/screens/menu_management/menu_edit/edit_menu_dialog.dart
-
+import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -61,10 +61,8 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
     super.initState();
 
     // Initialize from widget.menu
-    // 1) menuName is now a Map we can store
     _menuName = Map<String, String>.from(widget.menu.menuName);
 
-    // 2) Description, notes remain separate controllers
     _descriptionEnController =
         TextEditingController(text: widget.menu.description['en'] ?? '');
     _descriptionArController =
@@ -79,7 +77,6 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
     _additionalImage1Controller = TextEditingController();
     _additionalImage2Controller = TextEditingController();
 
-    // Availability
     if (widget.menu.availability != null) {
       final av = widget.menu.availability!;
       _availabilityType = av.type;
@@ -104,7 +101,6 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
 
   @override
   void dispose() {
-    // Dispose all controllers
     _descriptionEnController.dispose();
     _descriptionArController.dispose();
     _notesEnController.dispose();
@@ -136,7 +132,6 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
   void _onSave() {
     if (!_formKey.currentState!.validate()) return;
 
-    // Build new MenuAvailability
     final newAvailability = MenuAvailability(
       type: _availabilityType,
       daysOfWeek:
@@ -152,9 +147,8 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
       endDate: _availabilityType == AvailabilityType.specific ? _endDate : null,
     );
 
-    // Construct the updated MenuModel
     final updatedMenu = widget.menu.copyWith(
-      menuName: _menuName, // Our updated map
+      menuName: _menuName,
       description: {
         'en': _descriptionEnController.text,
         'ar': _descriptionArController.text,
@@ -179,123 +173,190 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Edit Menu'),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final bool isMobile = screenWidth < 500; // or your custom breakpoint
+    // We'll define a maxWidth for large screens
+    // const double maxDialogWidth = 600;
+
+    // Decide on a size
+    double dialogWidth = isMobile ? screenWidth : 500;
+    double? dialogHeight =
+        isMobile ? screenHeight : null; // if null => not forced
+
+    // so we can place our own row with an "X" button at top-right.
+    return Dialog(
+      insetPadding: isMobile
+          ? EdgeInsets.zero
+          : const EdgeInsets.symmetric(
+              vertical: 40.0), // if we want full screen on mobile
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(isMobile ? 0 : 12),
       ),
-      content: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              // 1) Menu Name
-              MenuNameFields(
-                menuName: _menuName,
-                onMenuNameChanged: (updatedMap) {
-                  setState(() {
-                    _menuName = updatedMap;
-                  });
-                },
-                // Simple validator for *current* language
-                validator: (val) {
-                  if (val == null || val.isEmpty) {
-                    return 'Please enter menu name in the current language';
-                  }
-                  return null;
-                },
+      child: SizedBox(
+        width: dialogWidth,
+        height: dialogHeight,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // --- Title row with an X button ---
+            Container(
+              padding: const EdgeInsets.only(
+                  top: 12.0, bottom: 0, left: 16, right: 16),
+              decoration: BoxDecoration(
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(8)),
+                border: Border(
+                  bottom: BorderSide(
+                    color: AppThemeLocal.accent2,
+                    width: 0.5,
+                  ),
+                ),
               ),
-              const SizedBox(height: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.translate("Edit_Menu"),
+                    style: AppThemeLocal.appBarTitle,
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.close,
+                      size: 28,
+                      color: AppThemeLocal.primary,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+            ),
 
-              // 2) Description Fields (still using your old approach)
-              MenuDescriptionFields(
-                descriptionEnController: _descriptionEnController,
-                descriptionArController: _descriptionArController,
-                validatorEn: (val) {
-                  if (val == null || val.isEmpty) {
-                    return 'Please enter description in English';
-                  }
-                  return null;
-                },
-                validatorAr: (val) {
-                  if (val == null || val.isEmpty) {
-                    return 'Please enter description in Arabic';
-                  }
-                  return null;
-                },
+            // --- Content (scrollable) ---
+            Flexible(
+              child: SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      MenuNameFields(
+                        dialogWidth: dialogWidth,
+                        menuName: _menuName,
+                        onMenuNameChanged: (updatedMap) {
+                          setState(() {
+                            _menuName = updatedMap;
+                          });
+                        },
+                        validator: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Please enter menu name in the current language';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      // Description
+                      MenuDescriptionFields(
+                        descriptionEnController: _descriptionEnController,
+                        descriptionArController: _descriptionArController,
+                        validatorEn: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Please enter description in English';
+                          }
+                          return null;
+                        },
+                        validatorAr: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Please enter description in Arabic';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      // Notes
+                      MenuNotesFields(
+                        notesEnController: _notesEnController,
+                        notesArController: _notesArController,
+                      ),
+                      const SizedBox(height: 16),
+                      // Images
+                      MenuImageFields(
+                        imageUrlController: _imageUrlController,
+                        additionalImage1Controller: _additionalImage1Controller,
+                        additionalImage2Controller: _additionalImage2Controller,
+                      ),
+                      const SizedBox(height: 16),
+                      // Availability
+                      MenuAvailabilityFields(
+                        initialType: _availabilityType,
+                        initialDaysOfWeek: _daysOfWeek,
+                        initialStartTime: _startTime,
+                        initialEndTime: _endTime,
+                        initialStartDate: _startDate,
+                        initialEndDate: _endDate,
+                        onChanged: _onAvailabilityChanged,
+                      ),
+                      const SizedBox(height: 16),
+                      // Switches
+                      SwitchListTile(
+                        title: const Text('Visible on Tablet'),
+                        value: _visibleOnTablet,
+                        onChanged: (val) => setState(() {
+                          _visibleOnTablet = val;
+                        }),
+                      ),
+                      SwitchListTile(
+                        title: const Text('Visible on QR'),
+                        value: _visibleOnQr,
+                        onChanged: (val) => setState(() {
+                          _visibleOnQr = val;
+                        }),
+                      ),
+                      SwitchListTile(
+                        title: const Text('Visible on Pickup'),
+                        value: _visibleOnPickup,
+                        onChanged: (val) => setState(() {
+                          _visibleOnPickup = val;
+                        }),
+                      ),
+                      SwitchListTile(
+                        title: const Text('Visible on Delivery'),
+                        value: _visibleOnDelivery,
+                        onChanged: (val) => setState(() {
+                          _visibleOnDelivery = val;
+                        }),
+                      ),
+                      // Add more fields as needed...
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(height: 16),
+            ),
 
-              // 3) Notes
-              MenuNotesFields(
-                notesEnController: _notesEnController,
-                notesArController: _notesArController,
+            // --- Actions row at the bottom ---
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Cancel'),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: _onSave,
+                    child: const Text('Save'),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-
-              // 4) Images
-              MenuImageFields(
-                imageUrlController: _imageUrlController,
-                additionalImage1Controller: _additionalImage1Controller,
-                additionalImage2Controller: _additionalImage2Controller,
-              ),
-              const SizedBox(height: 16),
-
-              // 5) Availability
-              MenuAvailabilityFields(
-                initialType: _availabilityType,
-                initialDaysOfWeek: _daysOfWeek,
-                initialStartTime: _startTime,
-                initialEndTime: _endTime,
-                initialStartDate: _startDate,
-                initialEndDate: _endDate,
-                onChanged: _onAvailabilityChanged,
-              ),
-              const SizedBox(height: 16),
-
-              // 6) Toggling Switches
-              SwitchListTile(
-                title: const Text('Visible on Tablet'),
-                value: _visibleOnTablet,
-                onChanged: (val) => setState(() {
-                  _visibleOnTablet = val;
-                }),
-              ),
-              SwitchListTile(
-                title: const Text('Visible on QR'),
-                value: _visibleOnQr,
-                onChanged: (val) => setState(() {
-                  _visibleOnQr = val;
-                }),
-              ),
-              SwitchListTile(
-                title: const Text('Visible on Pickup'),
-                value: _visibleOnPickup,
-                onChanged: (val) => setState(() {
-                  _visibleOnPickup = val;
-                }),
-              ),
-              SwitchListTile(
-                title: const Text('Visible on Delivery'),
-                value: _visibleOnDelivery,
-                onChanged: (val) => setState(() {
-                  _visibleOnDelivery = val;
-                }),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _onSave,
-          child: const Text('Save'),
-        ),
-      ],
     );
   }
 }

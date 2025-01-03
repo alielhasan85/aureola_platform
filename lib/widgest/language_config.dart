@@ -1,12 +1,7 @@
 /// language_config.dart
 
 /// The official list of supported language codes in our app.
-const List<String> kSupportedLanguageCodes = [
-  'en',
-  'ar',
-  'fr',
-  'tr',
-];
+const List<String> kSupportedLanguageCodes = ['en', 'ar', 'fr', 'tr', 'es'];
 
 /// Convert ISO code -> user-friendly English name
 String codeToName(String code) {
@@ -19,6 +14,8 @@ String codeToName(String code) {
       return 'French';
     case 'tr':
       return 'Turkish';
+    case 'es':
+      return 'Spanish';
     default:
       return code; // fallback if unknown
   }
@@ -37,14 +34,17 @@ String nameToCode(String name) {
       return 'fr';
     case 'turkish':
       return 'tr';
+
+    case 'spanish':
+      return 'es';
     default:
       return name; // fallback if unknown
   }
 }
 
 class LanguageItem {
-  final String code;     // e.g. "en"
-  final String name;     // e.g. "English"
+  final String code; // e.g. "en"
+  final String name; // e.g. "English"
 
   LanguageItem({required this.code, required this.name});
 

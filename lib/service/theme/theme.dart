@@ -15,6 +15,7 @@ class AppThemeLocal {
   static const Color primary = Color(0xFF2E4857);
   static const Color secondary = Color(0xFF4E6776);
   static const Color accent = Color(0xFFFF5E1E);
+  static Color accent2 = accent.withAlpha((0.5 * 255).toInt());
 
   // Neutral Colors
   static const Color white = Color(0xFFFFFFFF);

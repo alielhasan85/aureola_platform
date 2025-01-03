@@ -27,8 +27,6 @@ class DraftMenuNotifier extends StateNotifier<MenuModel?> {
     if (state == null) return;
     state = state!.copyWith(isOnline: !state!.isOnline);
   }
-
-  // or any other fields...
 }
 
 /// A provider for the draft

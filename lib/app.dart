@@ -36,6 +36,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         Locale('ar', ''),
         Locale('fr', ''),
         Locale('tr', ''),
+        Locale('es', ''),
       ],
       localizationsDelegates: const [
         AppLocalizations.delegate, // Your custom localization delegate

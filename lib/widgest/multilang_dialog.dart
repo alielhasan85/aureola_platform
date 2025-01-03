@@ -12,6 +12,7 @@ class MultilangFieldDialog extends StatefulWidget {
   final Map<String, String> initialValues;
   final List<String> availableLanguages;
   final String title;
+  final double dialogWidth;
   final ValueChanged<Map<String, String>> onSave;
 
   const MultilangFieldDialog({
@@ -20,10 +21,11 @@ class MultilangFieldDialog extends StatefulWidget {
     required this.availableLanguages,
     required this.title,
     required this.onSave,
+    required this.dialogWidth,
   });
 
   @override
-  _MultilangFieldDialogState createState() => _MultilangFieldDialogState();
+  State<MultilangFieldDialog> createState() => _MultilangFieldDialogState();
 }
 
 class _MultilangFieldDialogState extends State<MultilangFieldDialog> {
@@ -39,64 +41,75 @@ class _MultilangFieldDialogState extends State<MultilangFieldDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget.title),
-      content: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.availableLanguages.map((langCode) {
-              final existingText = _localValues[langCode] ?? '';
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 14.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Label for the language
-                    Text(
-                      'Language: $langCode',
-                      style: AppThemeLocal.paragraph.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
+    return Dialog(
+      insetPadding: const EdgeInsets.symmetric(
+          vertical: 40.0), // if we want full screen on mobile
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: SizedBox(
+        width: widget.dialogWidth,
+        child: Column(
+          children: [
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: widget.availableLanguages.map((langCode) {
+                  final existingText = _localValues[langCode] ?? '';
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 14.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Label for the language
+                        Text(
+                          'Language: $langCode',
+                          style: AppThemeLocal.paragraph.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
 
-                    // TextFormField for that language's text
-                    TextFormField(
-                      initialValue: existingText,
-                      onChanged: (val) {
-                        setState(() {
-                          _localValues[langCode] = val;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'Enter text for "$langCode"',
-                        border: const OutlineInputBorder(),
-                        suffixIcon: _buildTranslateIcon(langCode),
-                      ),
+                        // TextFormField for that language's text
+                        TextFormField(
+                          initialValue: existingText,
+                          onChanged: (val) {
+                            setState(() {
+                              _localValues[langCode] = val;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Enter text for "$langCode"',
+                            border: const OutlineInputBorder(),
+                            suffixIcon: _buildTranslateIcon(langCode),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  );
+                }).toList(),
+              ),
+            ),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    AppLocalizations.of(context)!.translate('_Cancel_'),
+                  ),
                 ),
-              );
-            }).toList(),
-          ),
+                ElevatedButton(
+                  onPressed: _handleSave,
+                  child: Text(
+                    AppLocalizations.of(context)!.translate('Save'),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(
-            AppLocalizations.of(context)!.translate('_Cancel_'),
-          ),
-        ),
-        ElevatedButton(
-          onPressed: _handleSave,
-          child: Text(
-            AppLocalizations.of(context)!.translate('Save'),
-          ),
-        ),
-      ],
     );
   }
 

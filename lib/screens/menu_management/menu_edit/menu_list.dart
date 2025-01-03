@@ -112,7 +112,7 @@ class _MenuListState extends ConsumerState<MenuList> {
 
               // Divider
               Divider(
-                color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
+                color: AppThemeLocal.accent2,
                 thickness: 0.5,
               ),
               const SizedBox(height: 12),
@@ -137,6 +137,7 @@ class _MenuListState extends ConsumerState<MenuList> {
                       description: {},
                       notes: {},
                       imageUrl: null,
+                      isOnline: false,
                       sortOrder: menus.length, // put it at the end
                     );
 

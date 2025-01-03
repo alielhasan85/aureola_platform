@@ -34,6 +34,7 @@ class VenueInfo extends ConsumerStatefulWidget {
 }
 
 class _VenueInfoState extends ConsumerState<VenueInfo> {
+  //TODO: to remove api key from codes
   final locationService =
       LocationService(apiKey: 'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA');
 
@@ -209,7 +210,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             validator: _validateTagline,
           ),
           const SizedBox(height: 12),
-          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          Divider(
+              color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
+              thickness: 0.5),
           const SizedBox(height: 12),
           PhoneNumberField(
             width: fieldWidth,
@@ -228,7 +231,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               websiteController: _websiteController,
               validator: _validateWebsite),
           const SizedBox(height: 12),
-          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          Divider(
+              color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
+              thickness: 0.5),
           const SizedBox(height: 12),
           VenueTypeDropdown(
             width: fieldWidth,
@@ -250,12 +255,14 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             },
           ),
           const SizedBox(height: 12),
-          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          Divider(
+              color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
+              thickness: 0.5),
           const SizedBox(height: 12),
           Text(
-          AppLocalizations.of(context)!.translate("Language_Options"),
-          style: AppThemeLocal.paragraph,
-        ),
+            AppLocalizations.of(context)!.translate("Language_Options"),
+            style: AppThemeLocal.paragraph,
+          ),
           DefaultLanguageDropdown(
             width: fieldWidth,
             initialLanguage: _selectedDefaultLanguage ?? 'en',
@@ -267,8 +274,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
           const SizedBox(height: 16),
           VenueAddLanguages(width: fieldWidth),
           const SizedBox(height: 12),
-          
-          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          Divider(
+              color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
+              thickness: 0.5),
           const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context)!.translate("Enter_venue_address"),
@@ -340,7 +348,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //venue name + tagline 
+          //venue name + tagline
           //TODO: to add multi language support
           Row(
             children: [
@@ -382,7 +390,9 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             ],
           ),
           const SizedBox(height: 12),
-          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          Divider(
+              color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
+              thickness: 0.5),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -398,44 +408,44 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               ),
               SizedBox(width: spacing),
               AlcoholOptionField(
-              width: fieldWidth,
-              initialValue: _alcoholOption ?? false,
-              onChanged: (val) {
-                setState(() => _alcoholOption = val);
-                ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
-              },
-            ),
-              
-            ],
-          ),
-         const SizedBox(height: 12),
-          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
-          const SizedBox(height: 12),
- Text(
-          AppLocalizations.of(context)!.translate("Language_Options"),
-          style: AppThemeLocal.paragraph,
-        ),
-         const SizedBox(height: 6),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            DefaultLanguageDropdown(
                 width: fieldWidth,
-                initialLanguage: _selectedDefaultLanguage ?? 'en',
+                initialValue: _alcoholOption ?? false,
                 onChanged: (val) {
-                  setState(() => _selectedDefaultLanguage = val);
-                  ref
-                      .read(draftVenueProvider.notifier)
-                      .updateDefaultLanguage(val);
+                  setState(() => _alcoholOption = val);
+                  ref.read(draftVenueProvider.notifier).updateSellAlcohol(val);
                 },
               ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Divider(
+              color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
+              thickness: 0.5),
+          const SizedBox(height: 12),
+          Text(
+            AppLocalizations.of(context)!.translate("Language_Options"),
+            style: AppThemeLocal.paragraph,
+          ),
+          const SizedBox(height: 6),
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            DefaultLanguageDropdown(
+              width: fieldWidth,
+              initialLanguage: _selectedDefaultLanguage ?? 'en',
+              onChanged: (val) {
+                setState(() => _selectedDefaultLanguage = val);
+                ref
+                    .read(draftVenueProvider.notifier)
+                    .updateDefaultLanguage(val);
+              },
+            ),
             SizedBox(width: spacing),
             VenueAddLanguages(width: fieldWidth),
           ]),
 
-         
           const SizedBox(height: 12),
-          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          Divider(
+              color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
+              thickness: 0.5),
           const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context)!.translate("Enter_venue_address"),
