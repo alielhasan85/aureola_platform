@@ -107,6 +107,80 @@ class AppThemeLocal {
   );
 
   // ===========================
+  // Base Button Style
+  // ===========================
+
+  /// Base button style that other styles can inherit from.
+  static ButtonStyle baseButtonStyle({
+    Color backgroundColor = AppThemeLocal.accent,
+    Color foregroundColor = AppThemeLocal.white,
+    EdgeInsetsGeometry padding =
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    double borderRadius = 8.0,
+    double elevation = 2.0,
+    BorderSide? side,
+  }) {
+    return ButtonStyle(
+      backgroundColor: WidgetStateProperty.all<Color>(backgroundColor),
+      foregroundColor: WidgetStateProperty.all<Color>(foregroundColor),
+      padding: WidgetStateProperty.all<EdgeInsetsGeometry>(padding),
+      elevation: WidgetStateProperty.all<double>(elevation),
+      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+          side: side ?? BorderSide.none,
+        ),
+      ),
+      // Optionally, you can add other properties like overlayColor, shadowColor, etc.
+    );
+  }
+
+  // ===========================
+  // Specific Button Styles
+  // ===========================
+
+  /// Preview Button Style
+  static final ButtonStyle previewButtonStyle = baseButtonStyle(
+    backgroundColor: AppThemeLocal.background2, // Very light background
+    foregroundColor: AppThemeLocal.primary, // Primary color text
+    elevation: 1.0, // Material Design elevation 1
+    borderRadius: 8.0, // Default border radius
+    side: const BorderSide(
+      color: AppThemeLocal.primary, // Primary color border
+      width: 1.0, // Border width
+    ),
+  );
+
+  /// Add New Translation Button Style
+  static final ButtonStyle addButtonStyle = baseButtonStyle(
+    backgroundColor: AppThemeLocal.red, // Light green background
+    foregroundColor: AppThemeLocal.white, // Primary color text
+    elevation: 4.0, // Material Design elevation 1
+    borderRadius: 100.0, // Circular border radius as per Figma design
+    side: BorderSide.none,
+    // (
+    //   color: Color, // Primary color border
+    //   width: 1.0, // Border width
+    // ),
+  );
+
+  /// Save Button Style
+  static final ButtonStyle saveButtonStyle = baseButtonStyle(
+    backgroundColor: AppThemeLocal.accent, // Orange color
+    foregroundColor: AppThemeLocal.white, // White text
+    elevation: 1.0, // Material Design elevation 1
+    borderRadius: 8.0, // Default border radius
+  );
+
+  /// Cancel Button Style
+  static final ButtonStyle cancelButtonStyle = baseButtonStyle(
+    backgroundColor: AppThemeLocal.greyButton, // Light grey background
+    foregroundColor: AppThemeLocal.primary, // Primary color text
+    elevation: 1.0, // Material Design elevation 1
+    borderRadius: 8.0, // Default border radius
+  );
+
+  // ===========================
   // Input Decoration
   // ===========================
 

@@ -242,7 +242,6 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                   child: Column(
                     children: [
                       MenuNameFields(
-                        dialogWidth: dialogWidth,
                         menuName: _menuName,
                         onMenuNameChanged: (updatedMap) {
                           setState(() {
@@ -255,6 +254,14 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                           }
                           return null;
                         },
+                        dialogWidth: dialogWidth - 8,
+                        popoverOffset: const Offset(
+                            4, 6), // place it just below the textfield
+                        popoverDecoration: BoxDecoration(
+                          color: AppThemeLocal.background2,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       // Description
@@ -336,17 +343,18 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
             ),
 
             // --- Actions row at the bottom ---
-            const Divider(height: 1),
+            Divider(color: AppThemeLocal.accent2, thickness: 0.5),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: const Text('Cancel'),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 24),
                   ElevatedButton(
                     onPressed: _onSave,
                     child: const Text('Save'),

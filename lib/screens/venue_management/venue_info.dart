@@ -366,7 +366,7 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             ],
           ),
           const SizedBox(height: 12),
-          Divider(color: AppThemeLocal.accent.withOpacity(0.5), thickness: 0.5),
+          Divider(color: AppThemeLocal.accent2, thickness: 0.5),
           const SizedBox(height: 12),
           PhoneNumberField(
             width: fieldWidth,
