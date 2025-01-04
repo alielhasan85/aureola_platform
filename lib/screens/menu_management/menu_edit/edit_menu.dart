@@ -1,3 +1,4 @@
+import 'package:aureola_platform/screens/menu_management/menu_edit/fields/live_switch.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_visibility.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
@@ -53,6 +54,9 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
   bool _visibleOnPickup = false;
   bool _visibleOnDelivery = false;
 
+  // Live Switch
+  bool _isLive = false;
+
   @override
   void initState() {
     super.initState();
@@ -65,8 +69,6 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
 
     _imageUrlController =
         TextEditingController(text: widget.menu.imageUrl ?? '');
-    _additionalImage1Controller = TextEditingController();
-    _additionalImage2Controller = TextEditingController();
 
     if (widget.menu.availability != null) {
       final av = widget.menu.availability!;
@@ -83,6 +85,8 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
     _visibleOnQr = widget.menu.visibleOnQr;
     _visibleOnPickup = widget.menu.visibleOnPickup;
     _visibleOnDelivery = widget.menu.visibleOnDelivery;
+    // Live Switch
+    _isLive = widget.menu.isOnline; // Ensure MenuModel has an isLive property
   }
 
   TimeOfDay _parseTime(String timeStr) {
@@ -142,6 +146,8 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
           _imageUrlController.text.isNotEmpty ? _imageUrlController.text : null,
       visibleOnTablet: _visibleOnTablet,
       visibleOnQr: _visibleOnQr,
+
+      isOnline: _isLive, // Update the isLive field
       visibleOnPickup: _visibleOnPickup,
       visibleOnDelivery: _visibleOnDelivery,
       availability: newAvailability,
@@ -295,73 +301,87 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                       // Images
 
                       //TODO: to study issue of images - and add here
-                      // Availability
+                      const SizedBox(height: 8),
+                      Divider(color: AppThemeLocal.accent2, thickness: 0.5),
+                      const SizedBox(height: 8),
+                      // Live Switch
+
+                      LiveSwitch(
+                        isLive: _isLive,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _isLive = value;
+                          });
+                        },
+                      ),
 
                       const SizedBox(height: 8),
                       Divider(color: AppThemeLocal.accent2, thickness: 0.5),
                       const SizedBox(height: 8),
-                      Text(
-                        AppLocalizations.of(context)!
-                            .translate("menu.visibility"),
-                        style: AppThemeLocal.headingCard.copyWith(
-                            fontSize: 20, fontStyle: FontStyle.italic),
-                      ),
-                      const SizedBox(height: 4),
-                      Align(
-                        alignment:
-                            Localizations.localeOf(context).languageCode == 'ar'
-                                ? Alignment.centerRight
-                                : Alignment.centerLeft,
-                        child: Text(
+                      if (_isLive) ...[
+                        Text(
                           AppLocalizations.of(context)!
-                              .translate("menu.VisibilityPrompt"),
-                          style: AppThemeLocal.paragraph,
+                              .translate("menu.visibility"),
+                          style: AppThemeLocal.headingCard.copyWith(
+                              fontSize: 20, fontStyle: FontStyle.italic),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      MenuVisibilityOption(
-                        titleKey: "menu.tabletMenu",
-                        subtitleKey: "menu.tabletSubtitle",
-                        iconPath: 'assets/icons/Tablet.svg',
-                        value: _visibleOnTablet,
-                        onChanged: (val) => setState(() {
-                          _visibleOnTablet = val ?? false;
-                        }),
-                      ),
-                      const SizedBox(height: 8),
-                      MenuVisibilityOption(
-                        titleKey: "menu.qrMenu",
-                        subtitleKey: "menu.qrSubtitle",
-                        iconPath: 'assets/icons/Dine-in.svg',
-                        value: _visibleOnQr,
-                        onChanged: (val) => setState(() {
-                          _visibleOnQr = val ?? false;
-                        }),
-                      ),
-                      const SizedBox(height: 8),
-                      MenuVisibilityOption(
-                        titleKey: "menu.pickupMenu",
-                        subtitleKey: "menu.pickupSubtitle",
-                        iconPath: 'assets/icons/Pickup.svg',
-                        value: _visibleOnPickup,
-                        onChanged: (val) => setState(() {
-                          _visibleOnPickup = val ?? false;
-                        }),
-                      ),
-                      const SizedBox(height: 8),
-                      MenuVisibilityOption(
-                        titleKey: "menu.deliveryMenu",
-                        subtitleKey: "menu.deliverySubtitle",
-                        iconPath: 'assets/icons/Delivery.svg',
-                        value: _visibleOnDelivery,
-                        onChanged: (val) => setState(() {
-                          _visibleOnDelivery = val ?? false;
-                        }),
-                      ),
-
-                      const SizedBox(height: 8),
-                      Divider(color: AppThemeLocal.accent2, thickness: 0.5),
-                      const SizedBox(height: 8),
+                        const SizedBox(height: 4),
+                        Align(
+                          alignment:
+                              Localizations.localeOf(context).languageCode ==
+                                      'ar'
+                                  ? Alignment.centerRight
+                                  : Alignment.centerLeft,
+                          child: Text(
+                            AppLocalizations.of(context)!
+                                .translate("menu.VisibilityPrompt"),
+                            style: AppThemeLocal.paragraph,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        MenuVisibilityOption(
+                          titleKey: "menu.tabletMenu",
+                          subtitleKey: "menu.tabletSubtitle",
+                          iconPath: 'assets/icons/Tablet.svg',
+                          value: _visibleOnTablet,
+                          onChanged: (val) => setState(() {
+                            _visibleOnTablet = val ?? false;
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                        MenuVisibilityOption(
+                          titleKey: "menu.qrMenu",
+                          subtitleKey: "menu.qrSubtitle",
+                          iconPath: 'assets/icons/Dine-in.svg',
+                          value: _visibleOnQr,
+                          onChanged: (val) => setState(() {
+                            _visibleOnQr = val ?? false;
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                        MenuVisibilityOption(
+                          titleKey: "menu.pickupMenu",
+                          subtitleKey: "menu.pickupSubtitle",
+                          iconPath: 'assets/icons/Pickup.svg',
+                          value: _visibleOnPickup,
+                          onChanged: (val) => setState(() {
+                            _visibleOnPickup = val ?? false;
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                        MenuVisibilityOption(
+                          titleKey: "menu.deliveryMenu",
+                          subtitleKey: "menu.deliverySubtitle",
+                          iconPath: 'assets/icons/Delivery.svg',
+                          value: _visibleOnDelivery,
+                          onChanged: (val) => setState(() {
+                            _visibleOnDelivery = val ?? false;
+                          }),
+                        ),
+                        const SizedBox(height: 8),
+                        Divider(color: AppThemeLocal.accent2, thickness: 0.5),
+                        const SizedBox(height: 8),
+                      ],
                       Text(
                         AppLocalizations.of(context)!
                             .translate("menu.Availability"),

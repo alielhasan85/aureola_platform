@@ -198,7 +198,9 @@
   "menu.deliveryMenu": "Menu de Livraison",
   "menu.deliverySubtitle": "Afficher le menu pour les commandes de livraison.",
 "menu.Availability": "Disponibilité",
-  "menu.AvailabilityPrompt": "Sélectionnez quand votre menu sera disponible."
+  "menu.AvailabilityPrompt": "Sélectionnez quand votre menu sera disponible.",
+   "menu.live": "Actif",
+    "menu.liveDescription": "Activer pour rendre votre menu visible en ligne."
       
    
   

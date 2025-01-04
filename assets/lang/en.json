@@ -219,7 +219,9 @@
     "menu.deliverySubtitle": "Display the menu for delivery orders.",
     
     "menu.Availability": "Availability",
-    "menu.AvailabilityPrompt": "Select when your menu will be available."
+    "menu.AvailabilityPrompt": "Select when your menu will be available.",
+     "menu.live": "Live",
+    "menu.liveDescription": "Enable to make your menu visible online."
    
   
 

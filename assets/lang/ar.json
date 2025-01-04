@@ -219,7 +219,9 @@
     "menu.deliveryMenu": "قائمة التوصيل",
     "menu.deliverySubtitle": "عرض القائمة لطلبات التوصيل.",
 "menu.Availability": "التوفر",
-    "menu.AvailabilityPrompt": "اختر متى ستكون قائمتك متاحة."
+    "menu.AvailabilityPrompt": "اختر متى ستكون قائمتك متاحة.",
+    "menu.live": "نشط",
+    "menu.liveDescription": "تمكين لجعل قائمتك مرئية عبر الإنترنت."
     
 
 

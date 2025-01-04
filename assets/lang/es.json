@@ -180,7 +180,9 @@
   "menu.deliveryMenu": "Menú de Entrega",
   "menu.deliverySubtitle": "Mostrar el menú para pedidos de entrega.",
  "menu.Availability": "Disponibilidad",
-  "menu.AvailabilityPrompt": "Seleccione cuándo estará disponible su menú."
+  "menu.AvailabilityPrompt": "Seleccione cuándo estará disponible su menú.",
+  "menu.live": "Activo",
+    "menu.liveDescription": "Habilitar para hacer que su menú sea visible en línea."
 
  
 }

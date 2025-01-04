@@ -157,7 +157,7 @@ class MenuCard extends ConsumerWidget {
                   const SizedBox(height: 8),
 
                   // "Sections • Items"
-                  // (In your final code, you might fetch sections subcollection and count them)
+                  // TODO: (In your final code, you might fetch sections subcollection and count them)
                   const Text(
                     '4 sections • 15 items',
                     style: TextStyle(fontSize: 14),
@@ -280,7 +280,7 @@ class MenuCard extends ConsumerWidget {
                   Row(
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.translate('_Visible_'),
+                        AppLocalizations.of(context)!.translate('Live'),
                         style: const TextStyle(
                           color: AppThemeLocal.primary,
                           fontSize: 14,

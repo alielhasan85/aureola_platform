@@ -196,7 +196,9 @@
     "menu.deliveryMenu": "Teslimat Menüsü",
     "menu.deliverySubtitle": "Teslimat siparişleri için menüyü görüntüleyin.",
 "menu.Availability": "Mevcudiyet",
-    "menu.AvailabilityPrompt": "Menünüzün ne zaman kullanılabilir olacağını seçin."
+    "menu.AvailabilityPrompt": "Menünüzün ne zaman kullanılabilir olacağını seçin.",
+    "menu.live": "Canlı",
+    "menu.liveDescription": "Menünüzün çevrimiçi görünür olması için etkinleştirin."
     
  
 
