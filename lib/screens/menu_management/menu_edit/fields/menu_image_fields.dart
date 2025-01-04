@@ -8,11 +8,11 @@ class MenuImageFields extends StatelessWidget {
   final TextEditingController additionalImage2Controller;
 
   const MenuImageFields({
-    Key? key,
+    super.key,
     required this.imageUrlController,
     required this.additionalImage1Controller,
     required this.additionalImage2Controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

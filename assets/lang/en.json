@@ -1,10 +1,10 @@
 {
-
-  "English": "English",
+"English": "English",
   "Arabic": "العربية",
   "French": "Français",
   "Turkish": "Türkçe",
 
+  
 
   "select_language": "Select Language",
   "profile": "Profile",
@@ -196,8 +196,29 @@
   "select_button": "Select",
 
    "Customize_Your_Color_Palette": "Customize Your Color Palette",
-  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Select and save your preferred colors to personalize your QR menu."
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Select and save your preferred colors to personalize your QR menu.",
 
+
+  
+    "menu.error": "Error: ",
+    "menu.availableMenusAt": "Available Menus at",
+    "menu.noMenusFound": "No menus found.",
+    "menu.addNewMenu": "Add New Menu",
+    "cancel": "Cancel",
+    "update": "Update",
+    "menu.VisibilityPrompt": "Select where your menu will be visible.",
+    "menu.tabletMenu": "Tablet Menu",
+    "menu.tabletSubtitle": "Display the menu on tablets.",
+    "menu.qrMenu": "QR Code Menu",
+    "menu.qrSubtitle": "Display the menu via QR codes.",
+
+    "menu.pickupMenu": "Pickup Menu",
+    "menu.pickupSubtitle": "Display the menu for pickup orders.",
+
+    "menu.deliveryMenu": "Delivery Menu",
+    "menu.deliverySubtitle": "Display the menu for delivery orders."
+   
+  
 
 }
 

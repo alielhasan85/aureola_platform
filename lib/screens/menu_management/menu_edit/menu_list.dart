@@ -1,3 +1,5 @@
+// lib/screens/menu_management/menu_edit/menu_list.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,7 +40,13 @@ class _MenuListState extends ConsumerState<MenuList> {
     // 3) Return UI based on AsyncValue state
     return menusAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text('Error: $err')),
+      error: (err, stack) => Center(
+        child: Text(
+          AppLocalizations.of(context)!
+              .translate('menuList.error')
+              .replaceFirst('{error}', err.toString()),
+        ),
+      ),
       data: (menus) {
         // If no menu is selected yet but we have menus, select the first one
         if (_selectedMenuId == null && menus.isNotEmpty) {
@@ -58,12 +66,22 @@ class _MenuListState extends ConsumerState<MenuList> {
                   children: [
                     const SizedBox(height: 8),
 
-                    // Row: "Available Menus at <VenueName>"
+                    // Row: "Available Menus at {VenueName}"
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: Text(
+                    //         AppLocalizations.of(context)!
+                    //             .translate('menuList.availableMenusAt')
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     Row(
                       children: [
                         Text(
                           AppLocalizations.of(context)!
-                              .translate('available_menus_at'),
+                              .translate('menu.availableMenusAt'),
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(width: 6),
@@ -83,7 +101,8 @@ class _MenuListState extends ConsumerState<MenuList> {
                       // If no menus exist
                       Center(
                         child: Text(
-                          'No menus found.',
+                          AppLocalizations.of(context)!
+                              .translate('menu.noMenusFound'),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
@@ -151,7 +170,7 @@ class _MenuListState extends ConsumerState<MenuList> {
                     // For simplicity, rely on the list refreshing itself
                   },
                   child: Text(
-                    AppLocalizations.of(context)!.translate('add_new_menu'),
+                    AppLocalizations.of(context)!.translate('menu.addNewMenu'),
                     style: AppThemeLocal.buttonText.copyWith(fontSize: 14),
                   ),
                 ),

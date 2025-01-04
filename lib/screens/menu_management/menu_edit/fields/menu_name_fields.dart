@@ -77,7 +77,7 @@ class _MenuNameFieldsState extends ConsumerState<MenuNameFields> {
     _removeOverlay();
 
     final overlay = Overlay.of(context);
-    if (overlay == null) return;
+    // if (overlay == null) return;
 
     // Obtain the RenderBox of the TextFormField using the GlobalKey
     final RenderBox? renderBox =

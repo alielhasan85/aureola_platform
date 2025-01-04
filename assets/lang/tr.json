@@ -174,6 +174,27 @@
   "hex_color_label": "Hex Color",
   "select_button": "Select",
    "Customize_Your_Color_Palette": "Renk Paletinizi Özelleştirin",
-  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "QR menünüzü kişiselleştirmek için tercih ettiğiniz renkleri seçin ve kaydedin."
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "QR menünüzü kişiselleştirmek için tercih ettiğiniz renkleri seçin ve kaydedin.",
+ 
+    "menu.error": "Hata: {error}",
+    "menu.availableMenusAt": "için mevcut menüler",
+    "menu.noMenusFound": "Menü bulunamadı.",
+    "menu.addNewMenu": "Yeni Menü Ekle", "cancel": "İptal",
+  "update": "Güncelle",
+  "menu.VisibilityPrompt": "Menünüzün nerelerde görüneceğini seçin.",
+  "menu.tabletMenu": "Tablet Menüsü",
+  "menu.tabletSubtitle": "Menüyü tabletlerde görüntüleyin.",
+  
+
+    "menu.qrMenu": "QR Kod Menüsü",
+    "menu.qrSubtitle": "Menüyü QR kodları aracılığıyla görüntüleyin.",
+
+    "menu.pickupMenu": "Alışveriş Menüsü",
+    "menu.pickupSubtitle": "Alışveriş siparişleri için menüyü görüntüleyin.",
+
+    "menu.deliveryMenu": "Teslimat Menüsü",
+    "menu.deliverySubtitle": "Teslimat siparişleri için menüyü görüntüleyin."
+    
+ 
 
 }

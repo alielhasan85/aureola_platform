@@ -158,5 +158,27 @@
   "hex_color_label": "Color Hexadecimal",
   "select_button": "Seleccionar",
   "Customize_Your_Color_Palette": "Personaliza tu paleta de colores",
-  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Selecciona y guarda tus colores preferidos para personalizar tu menú QR."
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Selecciona y guarda tus colores preferidos para personalizar tu menú QR.",
+  
+    "menu.error": "Error: {error}",
+    "menu.availableMenusAt": "Menús disponibles en",
+    "menu.noMenusFound": "No se encontraron menús.",
+    "cancel": "Cancel",
+    "update": "Update",
+    "menu.addNewMenu": "Agregar Nuevo Menú",
+    "menu.VisibilityPrompt": "Seleccione dónde será visible su menú.",
+    "menu.tabletMenu": "Menú de Tableta",
+  "menu.tabletSubtitle": "Mostrar el menú en tabletas.",
+  
+
+  "menu.qrMenu": "Menú de Código QR",
+  "menu.qrSubtitle": "Mostrar el menú a través de códigos QR.",
+
+  "menu.pickupMenu": "Menú de Recogida",
+  "menu.pickupSubtitle": "Mostrar el menú para pedidos de recogida.",
+
+  "menu.deliveryMenu": "Menú de Entrega",
+  "menu.deliverySubtitle": "Mostrar el menú para pedidos de entrega."
+
+ 
 }

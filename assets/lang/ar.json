@@ -197,7 +197,28 @@
   "hex_color_label": "لون سداسي عشري",
   "select_button": "اختر",
   "Customize_Your_Color_Palette": "تخصيص لوحة الألوان الخاصة بك",
-  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "حدد واحفظ الألوان المفضلة لديك لتخصيص قائمة QR الخاصة بك."
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "حدد واحفظ الألوان المفضلة لديك لتخصيص قائمة QR الخاصة بك.",
+ 
+    "menu.error": "خطأ: ",
+    "menu.availableMenusAt": "القوائم المتاحة في",
+    "menu.noMenusFound": "لم يتم العثور على قوائم.",
+    "menu.addNewMenu": "إضافة قائمة جديدة",
+    "cancel": "إلغاء",
+  "update": "تحديث",
+
+   "menu.VisibilityPrompt": "اختر الأماكن التي سيظهر فيها قائمتك.",
+    "menu.tabletMenu": "قائمة الأجهزة اللوحية",
+  "menu.tabletSubtitle": "عرض القائمة على الأجهزة اللوحية.",
+  "menu.qrMenu": "قائمة رمز الاستجابة السريعة (QR)",
+    "menu.qrSubtitle": "عرض القائمة عبر رموز QR.",
+
+    "menu.pickupMenu": "قائمة الاستلام",
+    "menu.pickupSubtitle": "عرض القائمة لطلبات الاستلام.",
+
+    "menu.deliveryMenu": "قائمة التوصيل",
+    "menu.deliverySubtitle": "عرض القائمة لطلبات التوصيل."
+    
+
 
 
 }

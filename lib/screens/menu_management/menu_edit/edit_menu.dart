@@ -1,3 +1,4 @@
+import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_visibility.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,9 @@ import 'package:aureola_platform/models/menu/menu_availability.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_name_fields.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_description_fields.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_notes_fields.dart';
-import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_image_fields.dart';
+//import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_image_fields.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_availability_fields.dart';
+import 'package:flutter_svg/svg.dart';
 
 class EditMenuDialog extends ConsumerStatefulWidget {
   final MenuModel menu;
@@ -30,12 +32,8 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
 
   // We'll store a local copy of menuName as a Map
   late Map<String, String> _menuName;
-
-  // Others remain the same
-  late TextEditingController _descriptionEnController;
-  late TextEditingController _descriptionArController;
-  late TextEditingController _notesEnController;
-  late TextEditingController _notesArController;
+  late Map<String, String> _descriptionMap;
+  late Map<String, String> _notesMap;
 
   // Image fields
   late TextEditingController _imageUrlController;
@@ -63,14 +61,8 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
     // Initialize from widget.menu
     _menuName = Map<String, String>.from(widget.menu.menuName);
 
-    _descriptionEnController =
-        TextEditingController(text: widget.menu.description['en'] ?? '');
-    _descriptionArController =
-        TextEditingController(text: widget.menu.description['ar'] ?? '');
-    _notesEnController =
-        TextEditingController(text: widget.menu.notes['en'] ?? '');
-    _notesArController =
-        TextEditingController(text: widget.menu.notes['ar'] ?? '');
+    _descriptionMap = Map.from(widget.menu.description);
+    _notesMap = Map.from(widget.menu.notes);
 
     _imageUrlController =
         TextEditingController(text: widget.menu.imageUrl ?? '');
@@ -101,10 +93,6 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
 
   @override
   void dispose() {
-    _descriptionEnController.dispose();
-    _descriptionArController.dispose();
-    _notesEnController.dispose();
-    _notesArController.dispose();
     _imageUrlController.dispose();
     _additionalImage1Controller.dispose();
     _additionalImage2Controller.dispose();
@@ -149,14 +137,8 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
 
     final updatedMenu = widget.menu.copyWith(
       menuName: _menuName,
-      description: {
-        'en': _descriptionEnController.text,
-        'ar': _descriptionArController.text,
-      },
-      notes: {
-        'en': _notesEnController.text,
-        'ar': _notesArController.text,
-      },
+      description: _descriptionMap,
+      notes: _notesMap,
       imageUrl:
           _imageUrlController.text.isNotEmpty ? _imageUrlController.text : null,
       visibleOnTablet: _visibleOnTablet,
@@ -265,36 +247,61 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                       ),
                       const SizedBox(height: 16),
                       // Description
+
                       MenuDescriptionFields(
-                        descriptionEnController: _descriptionEnController,
-                        descriptionArController: _descriptionArController,
-                        validatorEn: (val) {
+                        descriptionMap: _descriptionMap,
+                        onDescriptionChanged: (updatedMap) {
+                          setState(() {
+                            _descriptionMap = updatedMap;
+                          });
+                        },
+                        validator: (val) {
                           if (val == null || val.isEmpty) {
-                            return 'Please enter description in English';
+                            return 'Please enter a short description.';
+                          }
+                          if (val.length > 120) {
+                            return 'Keep under 120 chars.';
                           }
                           return null;
                         },
-                        validatorAr: (val) {
-                          if (val == null || val.isEmpty) {
-                            return 'Please enter description in Arabic';
-                          }
-                          return null;
-                        },
+                        dialogWidth: dialogWidth - 8,
+                        popoverOffset: const Offset(4, 6),
+                        popoverDecoration: BoxDecoration(
+                          color: AppThemeLocal.background2,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       // Notes
                       MenuNotesFields(
-                        notesEnController: _notesEnController,
-                        notesArController: _notesArController,
+                        notesMap: _notesMap,
+                        onNotesChanged: (updatedMap) {
+                          setState(() {
+                            _notesMap = updatedMap;
+                          });
+                        },
+                        validator: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Please add some short notes';
+                          }
+                          if (val.length > 200) {
+                            return 'Keep notes under 200 chars';
+                          }
+                          return null;
+                        },
+                        dialogWidth: dialogWidth - 8,
+                        popoverOffset: const Offset(4, 6),
+                        popoverDecoration: BoxDecoration(
+                          color: AppThemeLocal.background2,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       // Images
-                      MenuImageFields(
-                        imageUrlController: _imageUrlController,
-                        additionalImage1Controller: _additionalImage1Controller,
-                        additionalImage2Controller: _additionalImage2Controller,
-                      ),
-                      const SizedBox(height: 16),
+
+                      //TODO: to study issue of images - and add here
                       // Availability
                       MenuAvailabilityFields(
                         initialType: _availabilityType,
@@ -306,36 +313,85 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                         onChanged: _onAvailabilityChanged,
                       ),
                       const SizedBox(height: 16),
+
                       // Switches
-                      SwitchListTile(
-                        title: const Text('Visible on Tablet'),
+                      Text(
+                        AppLocalizations.of(context)!
+                            .translate("menu.VisibilityPrompt"),
+                        style: AppThemeLocal.paragraph,
+                      ),
+                      // CheckboxListTile(
+                      //   title: Text(
+                      //     AppLocalizations.of(context)!
+                      //         .translate("menu.tabletMenu"),
+                      //     style: AppThemeLocal.paragraph,
+                      //   ),
+                      //   subtitle: Text(
+                      //     AppLocalizations.of(context)!
+                      //         .translate("menu.tabletSubtitle"),
+                      //     style: AppThemeLocal.paragraph.copyWith(
+                      //         fontSize: 12, color: AppThemeLocal.secondary),
+                      //   ),
+
+                      //   secondary: SvgPicture.asset(
+                      //     'assets/icons/Tablet.svg',
+                      //     width: 24,
+                      //     height: 24,
+                      //     colorFilter: const ColorFilter.mode(
+                      //         AppThemeLocal.primary, BlendMode.srcIn),
+                      //   ),
+                      //   value: _visibleOnTablet,
+
+                      //   side: BorderSide(
+                      //     color: AppThemeLocal.accent2,
+                      //     width: 1,
+                      //   ),
+                      //   activeColor:
+                      //       AppThemeLocal.grey2, // Set the accent color
+                      //   checkColor: AppThemeLocal.accent,
+                      //   onChanged: (val) => setState(() {
+                      //     _visibleOnTablet = val ?? false;
+                      //   }),
+                      // ),
+                      MenuVisibilityOption(
+                        titleKey: "menu.tabletMenu",
+                        subtitleKey: "menu.tabletSubtitle",
+                        iconPath: 'assets/icons/Tablet.svg',
                         value: _visibleOnTablet,
                         onChanged: (val) => setState(() {
-                          _visibleOnTablet = val;
+                          _visibleOnTablet = val ?? false;
                         }),
                       ),
-                      SwitchListTile(
-                        title: const Text('Visible on QR'),
+                      const SizedBox(height: 8),
+                      MenuVisibilityOption(
+                        titleKey: "menu.qrMenu",
+                        subtitleKey: "menu.qrSubtitle",
+                        iconPath: 'assets/icons/Dine-in.svg',
                         value: _visibleOnQr,
                         onChanged: (val) => setState(() {
-                          _visibleOnQr = val;
+                          _visibleOnQr = val ?? false;
                         }),
                       ),
-                      SwitchListTile(
-                        title: const Text('Visible on Pickup'),
+                      const SizedBox(height: 8),
+                      MenuVisibilityOption(
+                        titleKey: "menu.pickupMenu",
+                        subtitleKey: "menu.pickupSubtitle",
+                        iconPath: 'assets/icons/Pickup.svg',
                         value: _visibleOnPickup,
                         onChanged: (val) => setState(() {
-                          _visibleOnPickup = val;
+                          _visibleOnPickup = val ?? false;
                         }),
                       ),
-                      SwitchListTile(
-                        title: const Text('Visible on Delivery'),
+                      const SizedBox(height: 8),
+                      MenuVisibilityOption(
+                        titleKey: "menu.deliveryMenu",
+                        subtitleKey: "menu.deliverySubtitle",
+                        iconPath: 'assets/icons/Delivery.svg',
                         value: _visibleOnDelivery,
                         onChanged: (val) => setState(() {
-                          _visibleOnDelivery = val;
+                          _visibleOnDelivery = val ?? false;
                         }),
                       ),
-                      // Add more fields as needed...
                     ],
                   ),
                 ),
@@ -351,14 +407,19 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
+                    // style: AppThemeLocal.saveButtonStyle,
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
+                    child: Text(
+                      AppLocalizations.of(context)!.translate('cancel'),
+                    ),
                   ),
                   const SizedBox(width: 24),
                   ElevatedButton(
-                    onPressed: _onSave,
-                    child: const Text('Save'),
-                  ),
+                      style: AppThemeLocal.saveButtonStyle,
+                      onPressed: _onSave,
+                      child: Text(
+                        AppLocalizations.of(context)!.translate("update"),
+                      )),
                 ],
               ),
             ),

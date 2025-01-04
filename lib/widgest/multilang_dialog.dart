@@ -24,12 +24,12 @@ class MultilangFieldDialogContent extends ConsumerStatefulWidget {
   final VoidCallback onCancel;
 
   const MultilangFieldDialogContent({
-    Key? key,
+    super.key,
     required this.initialValues,
     required this.availableLanguages,
     required this.onSave,
     required this.onCancel,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<MultilangFieldDialogContent> createState() =>
@@ -79,7 +79,7 @@ class _MultilangFieldDialogContentState
     // Reorder so that defaultLang is first, if present
     final reorderedLangs =
         _reorderLanguages(widget.availableLanguages, defaultLang);
-
+//TODO: to fix the issue of overflex whgen running on mobile app
     return Form(
       key: _formKey,
       child: Column(
@@ -97,8 +97,13 @@ class _MultilangFieldDialogContentState
               ElevatedButton.icon(
                 style: AppThemeLocal.addButtonStyle,
                 onPressed: _autoTranslateFields,
-                icon: const Icon(Icons.translate),
-                label: const Text('Translate'),
+                icon: Icon(Icons.translate,
+                    color: AppThemeLocal.addButtonStyle.foregroundColor
+                        ?.resolve({})),
+                label: Text(
+                  AppLocalizations.of(context)!.translate("Translate_"),
+                  style: AppThemeLocal.appBarTitle,
+                ),
               ),
             ],
           ),
@@ -135,8 +140,8 @@ class _MultilangFieldDialogContentState
 
           // Show a simple spinner if translating
           if (isTranslating) ...[
-            Row(
-              children: const [
+            const Row(
+              children: [
                 SizedBox(
                   width: 16,
                   height: 16,
