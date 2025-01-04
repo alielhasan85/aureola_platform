@@ -199,6 +199,7 @@
   "Customize_Your_Color_Palette": "تخصيص لوحة الألوان الخاصة بك",
   "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "حدد واحفظ الألوان المفضلة لديك لتخصيص قائمة QR الخاصة بك.",
  
+  "menu.visibility": "الرؤية",
     "menu.error": "خطأ: ",
     "menu.availableMenusAt": "القوائم المتاحة في",
     "menu.noMenusFound": "لم يتم العثور على قوائم.",
@@ -216,7 +217,9 @@
     "menu.pickupSubtitle": "عرض القائمة لطلبات الاستلام.",
 
     "menu.deliveryMenu": "قائمة التوصيل",
-    "menu.deliverySubtitle": "عرض القائمة لطلبات التوصيل."
+    "menu.deliverySubtitle": "عرض القائمة لطلبات التوصيل.",
+"menu.Availability": "التوفر",
+    "menu.AvailabilityPrompt": "اختر متى ستكون قائمتك متاحة."
     
 
 

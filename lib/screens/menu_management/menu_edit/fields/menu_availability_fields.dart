@@ -1,5 +1,4 @@
-// lib/screens/menu_management/menu_edit/fields/menu_availability_fields.dart
-
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -28,8 +27,7 @@ class MenuAvailabilityFields extends StatefulWidget {
   });
 
   @override
-  
-  _MenuAvailabilityFieldsState createState() => _MenuAvailabilityFieldsState();
+  State<MenuAvailabilityFields> createState() => _MenuAvailabilityFieldsState();
 }
 
 class _MenuAvailabilityFieldsState extends State<MenuAvailabilityFields> {
@@ -109,23 +107,46 @@ class _MenuAvailabilityFieldsState extends State<MenuAvailabilityFields> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DropdownButtonFormField<AvailabilityType>(
-          value: _type,
-          decoration: const InputDecoration(labelText: 'Availability'),
-          items: AvailabilityType.values.map((type) {
-            return DropdownMenuItem(
-              value: type,
-              child: Text(type.toString().split('.').last),
+        // Replacing DropdownButtonFormField with a Row of Radio Buttons
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: AvailabilityType.values.map((type) {
+            return Expanded(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _type = type;
+                  });
+                  _notifyParent();
+                },
+                child: Column(
+                  children: [
+                    Text(
+                      type.toString().split('.').last.capitalize(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight:
+                            _type == type ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                    Radio<AvailabilityType>(
+                      activeColor: AppThemeLocal.accent,
+                      value: type,
+                      groupValue: _type,
+                      onChanged: (AvailabilityType? value) {
+                        if (value != null) {
+                          setState(() {
+                            _type = value;
+                          });
+                          _notifyParent();
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
             );
           }).toList(),
-          onChanged: (type) {
-            if (type != null) {
-              setState(() {
-                _type = type;
-              });
-              _notifyParent();
-            }
-          },
         ),
         const SizedBox(height: 16),
         if (_type == AvailabilityType.periodic) ...[
@@ -229,10 +250,10 @@ class MultiSelectChip extends StatefulWidget {
 
   const MultiSelectChip(
     this.options, {
-    Key? key,
+    super.key,
     required this.selectedChoices,
     required this.onSelectionChanged,
-  }) : super(key: key);
+  });
 
   @override
   _MultiSelectChipState createState() => _MultiSelectChipState();

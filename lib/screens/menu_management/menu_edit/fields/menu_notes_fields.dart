@@ -163,7 +163,7 @@ class _MenuNotesFieldsState extends ConsumerState<MenuNotesFields> {
             key: _fieldKey,
             child: TextFormField(
               controller: _controller,
-              maxLines: 2,
+              maxLines: null,
               style: AppThemeLocal.paragraph,
               cursorColor: AppThemeLocal.accent,
               validator: widget.validator,

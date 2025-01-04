@@ -159,7 +159,7 @@
   "select_button": "Seleccionar",
   "Customize_Your_Color_Palette": "Personaliza tu paleta de colores",
   "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Selecciona y guarda tus colores preferidos para personalizar tu menú QR.",
-  
+  "menu.visibility": "Visibilidad",
     "menu.error": "Error: {error}",
     "menu.availableMenusAt": "Menús disponibles en",
     "menu.noMenusFound": "No se encontraron menús.",
@@ -178,7 +178,9 @@
   "menu.pickupSubtitle": "Mostrar el menú para pedidos de recogida.",
 
   "menu.deliveryMenu": "Menú de Entrega",
-  "menu.deliverySubtitle": "Mostrar el menú para pedidos de entrega."
+  "menu.deliverySubtitle": "Mostrar el menú para pedidos de entrega.",
+ "menu.Availability": "Disponibilidad",
+  "menu.AvailabilityPrompt": "Seleccione cuándo estará disponible su menú."
 
  
 }

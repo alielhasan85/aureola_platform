@@ -198,7 +198,7 @@
    "Customize_Your_Color_Palette": "Customize Your Color Palette",
   "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Select and save your preferred colors to personalize your QR menu.",
 
-
+"menu.visibility": "Visibility",
   
     "menu.error": "Error: ",
     "menu.availableMenusAt": "Available Menus at",
@@ -216,7 +216,10 @@
     "menu.pickupSubtitle": "Display the menu for pickup orders.",
 
     "menu.deliveryMenu": "Delivery Menu",
-    "menu.deliverySubtitle": "Display the menu for delivery orders."
+    "menu.deliverySubtitle": "Display the menu for delivery orders.",
+    
+    "menu.Availability": "Availability",
+    "menu.AvailabilityPrompt": "Select when your menu will be available."
    
   
 

@@ -179,6 +179,7 @@
   "Customize_Your_Color_Palette": "Personnalisez votre palette de couleurs",
   "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Sélectionnez et enregistrez vos couleurs préférées pour personnaliser votre menu QR.",
   
+  "menu.visibility": "Visibilité",
     
       "menu.error": "Erreur : {error}",
       "menu.availableMenusAt": "Menus disponibles à",
@@ -195,7 +196,9 @@
   "menu.pickupSubtitle": "Afficher le menu pour les commandes à emporter.",
 
   "menu.deliveryMenu": "Menu de Livraison",
-  "menu.deliverySubtitle": "Afficher le menu pour les commandes de livraison."
+  "menu.deliverySubtitle": "Afficher le menu pour les commandes de livraison.",
+"menu.Availability": "Disponibilité",
+  "menu.AvailabilityPrompt": "Sélectionnez quand votre menu sera disponible."
       
    
   

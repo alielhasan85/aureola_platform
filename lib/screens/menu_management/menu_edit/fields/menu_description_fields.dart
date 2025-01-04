@@ -16,7 +16,7 @@ class MenuDescriptionFields extends ConsumerStatefulWidget {
   final BoxDecoration popoverDecoration;
 
   const MenuDescriptionFields({
-    Key? key,
+    super.key,
     required this.descriptionMap,
     required this.onDescriptionChanged,
     this.validator,
@@ -33,7 +33,7 @@ class MenuDescriptionFields extends ConsumerStatefulWidget {
         ),
       ],
     ),
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<MenuDescriptionFields> createState() =>
@@ -159,7 +159,7 @@ class _MenuDescriptionFieldsState extends ConsumerState<MenuDescriptionFields> {
             key: _fieldKey,
             child: TextFormField(
               controller: _controller,
-              maxLines: 2, // you mentioned multi-line
+              maxLines: null, // Allow the field to expand as needed
               style: AppThemeLocal.paragraph,
               cursorColor: AppThemeLocal.accent,
               validator: widget.validator,

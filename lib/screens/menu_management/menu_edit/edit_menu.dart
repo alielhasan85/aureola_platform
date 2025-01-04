@@ -11,7 +11,6 @@ import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_d
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_notes_fields.dart';
 //import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_image_fields.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_availability_fields.dart';
-import 'package:flutter_svg/svg.dart';
 
 class EditMenuDialog extends ConsumerStatefulWidget {
   final MenuModel menu;
@@ -256,10 +255,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                           });
                         },
                         validator: (val) {
-                          if (val == null || val.isEmpty) {
-                            return 'Please enter a short description.';
-                          }
-                          if (val.length > 120) {
+                          if (val!.length > 120) {
                             return 'Keep under 120 chars.';
                           }
                           return null;
@@ -282,10 +278,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                           });
                         },
                         validator: (val) {
-                          if (val == null || val.isEmpty) {
-                            return 'Please add some short notes';
-                          }
-                          if (val.length > 200) {
+                          if (val!.length > 200) {
                             return 'Keep notes under 200 chars';
                           }
                           return null;
@@ -303,56 +296,29 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
 
                       //TODO: to study issue of images - and add here
                       // Availability
-                      MenuAvailabilityFields(
-                        initialType: _availabilityType,
-                        initialDaysOfWeek: _daysOfWeek,
-                        initialStartTime: _startTime,
-                        initialEndTime: _endTime,
-                        initialStartDate: _startDate,
-                        initialEndDate: _endDate,
-                        onChanged: _onAvailabilityChanged,
-                      ),
-                      const SizedBox(height: 16),
 
-                      // Switches
+                      const SizedBox(height: 8),
+                      Divider(color: AppThemeLocal.accent2, thickness: 0.5),
+                      const SizedBox(height: 8),
                       Text(
                         AppLocalizations.of(context)!
-                            .translate("menu.VisibilityPrompt"),
-                        style: AppThemeLocal.paragraph,
+                            .translate("menu.visibility"),
+                        style: AppThemeLocal.headingCard.copyWith(
+                            fontSize: 20, fontStyle: FontStyle.italic),
                       ),
-                      // CheckboxListTile(
-                      //   title: Text(
-                      //     AppLocalizations.of(context)!
-                      //         .translate("menu.tabletMenu"),
-                      //     style: AppThemeLocal.paragraph,
-                      //   ),
-                      //   subtitle: Text(
-                      //     AppLocalizations.of(context)!
-                      //         .translate("menu.tabletSubtitle"),
-                      //     style: AppThemeLocal.paragraph.copyWith(
-                      //         fontSize: 12, color: AppThemeLocal.secondary),
-                      //   ),
-
-                      //   secondary: SvgPicture.asset(
-                      //     'assets/icons/Tablet.svg',
-                      //     width: 24,
-                      //     height: 24,
-                      //     colorFilter: const ColorFilter.mode(
-                      //         AppThemeLocal.primary, BlendMode.srcIn),
-                      //   ),
-                      //   value: _visibleOnTablet,
-
-                      //   side: BorderSide(
-                      //     color: AppThemeLocal.accent2,
-                      //     width: 1,
-                      //   ),
-                      //   activeColor:
-                      //       AppThemeLocal.grey2, // Set the accent color
-                      //   checkColor: AppThemeLocal.accent,
-                      //   onChanged: (val) => setState(() {
-                      //     _visibleOnTablet = val ?? false;
-                      //   }),
-                      // ),
+                      const SizedBox(height: 4),
+                      Align(
+                        alignment:
+                            Localizations.localeOf(context).languageCode == 'ar'
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .translate("menu.VisibilityPrompt"),
+                          style: AppThemeLocal.paragraph,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
                       MenuVisibilityOption(
                         titleKey: "menu.tabletMenu",
                         subtitleKey: "menu.tabletSubtitle",
@@ -392,6 +358,39 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                           _visibleOnDelivery = val ?? false;
                         }),
                       ),
+
+                      const SizedBox(height: 8),
+                      Divider(color: AppThemeLocal.accent2, thickness: 0.5),
+                      const SizedBox(height: 8),
+                      Text(
+                        AppLocalizations.of(context)!
+                            .translate("menu.Availability"),
+                        style: AppThemeLocal.headingCard.copyWith(
+                            fontSize: 20, fontStyle: FontStyle.italic),
+                      ),
+                      const SizedBox(height: 4),
+                      Align(
+                        alignment:
+                            Localizations.localeOf(context).languageCode == 'ar'
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .translate("menu.AvailabilityPrompt"),
+                          style: AppThemeLocal.paragraph,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      MenuAvailabilityFields(
+                        initialType: _availabilityType,
+                        initialDaysOfWeek: _daysOfWeek,
+                        initialStartTime: _startTime,
+                        initialEndTime: _endTime,
+                        initialStartDate: _startDate,
+                        initialEndDate: _endDate,
+                        onChanged: _onAvailabilityChanged,
+                      ),
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
