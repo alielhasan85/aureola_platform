@@ -174,6 +174,48 @@
   "hex_color_label": "Hex Color",
   "select_button": "Select",
    "Customize_Your_Color_Palette": "Renk Paletinizi Özelleştirin",
-  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "QR menünüzü kişiselleştirmek için tercih ettiğiniz renkleri seçin ve kaydedin."
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "QR menünüzü kişiselleştirmek için tercih ettiğiniz renkleri seçin ve kaydedin.",
+ 
+  "menu.visibility": "Görünürlük",
+    "menu.error": "Hata: {error}",
+    "menu.availableMenusAt": "için mevcut menüler",
+    "menu.noMenusFound": "Menü bulunamadı.",
+    "menu.addNewMenu": "Yeni Menü Ekle", "cancel": "İptal",
+  "update": "Güncelle",
+  "menu.VisibilityPrompt": "Menünüzün nerelerde görüneceğini seçin.",
+  "menu.tabletMenu": "Tablet Menüsü",
+  "menu.tabletSubtitle": "Menüyü tabletlerde görüntüleyin.",
+  
+
+    "menu.qrMenu": "QR Kod Menüsü",
+    "menu.qrSubtitle": "Menüyü QR kodları aracılığıyla görüntüleyin.",
+
+    "menu.pickupMenu": "Alışveriş Menüsü",
+    "menu.pickupSubtitle": "Alışveriş siparişleri için menüyü görüntüleyin.",
+
+    "menu.deliveryMenu": "Teslimat Menüsü",
+    "menu.deliverySubtitle": "Teslimat siparişleri için menüyü görüntüleyin.",
+"menu.Availability": "Mevcudiyet",
+    "menu.AvailabilityPrompt": "Menünüzün ne zaman kullanılabilir olacağını seçin.",
+    "menu.live": "Canlı",
+    "menu.liveDescription": "Menünüzün çevrimiçi görünür olması için etkinleştirin.",
+    "menu.edit_menu": "Menüyü Düzenle", 
+    "menu.no_availability": "Uygunluk ayarlanmadı",
+  "menu.always_available": "Her zaman uygun",
+  "menu.from_to": "{startDate} tarihinden {endDate}{timeRange} tarihine",
+  "menu.dine_in": "Yerinde Yemek",
+  "menu.pickup": "Alış",
+  "menu.delivery": "Teslimat",
+  "menu.tablet": "Tablet",
+  "menu.sections_items": "{sections} bölüm • {items} öğe",
+  "menu.untitled": "Adsız Menü",
+  "menu.availability": "Uygunluk: {availability}",
+  "menu.last_updated": "Son güncelleme: {date}",
+  "menu.settings": "Ayarlar",
+  "menu.delete": "Sil",
+  "menu.move_up": "Yukarı Taşı",
+  "menu.move_down": "Aşağı Taşı"
+    
+ 
 
 }

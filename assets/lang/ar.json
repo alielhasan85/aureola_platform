@@ -221,7 +221,24 @@
 "menu.Availability": "التوفر",
     "menu.AvailabilityPrompt": "اختر متى ستكون قائمتك متاحة.",
     "menu.live": "نشط",
-    "menu.liveDescription": "تمكين لجعل قائمتك مرئية عبر الإنترنت."
+    "menu.liveDescription": "تمكين لجعل قائمتك مرئية عبر الإنترنت.",
+    "menu.edit_menu": "تحرير القائمة",
+   
+  "menu.no_availability": "لم يتم تعيين التوفر",
+  "menu.always_available": "متاح دائماً",
+  "menu.from_to": "من {startDate} إلى {endDate}{timeRange}",
+  "menu.dine_in": "تناول الطعام في المكان",
+  "menu.pickup": "الاستلام",
+  "menu.delivery": "توصيل",
+  "menu.tablet": "جهاز لوحي",
+  "menu.sections_items": "{sections} أقسام • {items} عناصر",
+  "menu.untitled": "قائمة غير مسماة",
+  "menu.availability": "التوفر: {availability}",
+  "menu.last_updated": "آخر تحديث: {date}",
+  "menu.settings": "الإعدادات",
+  "menu.delete": "حذف",
+  "menu.move_up": "نقل للأعلى",
+  "menu.move_down": "نقل للأسفل"
     
 
 

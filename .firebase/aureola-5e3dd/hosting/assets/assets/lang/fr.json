@@ -177,7 +177,51 @@
   "select_button": "Sélectionner",
 
   "Customize_Your_Color_Palette": "Personnalisez votre palette de couleurs",
-  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Sélectionnez et enregistrez vos couleurs préférées pour personnaliser votre menu QR."
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Sélectionnez et enregistrez vos couleurs préférées pour personnaliser votre menu QR.",
+  
+  "menu.visibility": "Visibilité",
+    
+      "menu.error": "Erreur : {error}",
+      "menu.availableMenusAt": "Menus disponibles à",
+      "menu.noMenusFound": "Aucun menu trouvé.",
+      "menu.addNewMenu": "Ajouter un nouveau menu", "cancel": "Annuler",
+  "update": "Mettre à jour",
+   "menu.VisibilityPrompt": "Sélectionnez où votre menu sera visible.",
+   "menu.tabletMenu": "Menu Tablette",
+  "menu.tabletSubtitle": "Afficher le menu sur les tablettes.",
+  "menu.qrMenu": "Menu Code QR",
+  "menu.qrSubtitle": "Afficher le menu via des codes QR.",
+
+  "menu.pickupMenu": "Menu de Ramassage",
+  "menu.pickupSubtitle": "Afficher le menu pour les commandes à emporter.",
+
+  "menu.deliveryMenu": "Menu de Livraison",
+  "menu.deliverySubtitle": "Afficher le menu pour les commandes de livraison.",
+"menu.Availability": "Disponibilité",
+  "menu.AvailabilityPrompt": "Sélectionnez quand votre menu sera disponible.",
+   "menu.live": "Actif",
+    "menu.liveDescription": "Activer pour rendre votre menu visible en ligne.",
+    "menu.edit_menu": "Modifier le menu", 
+    
+  "menu.no_availability": "Aucune disponibilité définie",
+  "menu.always_available": "Toujours disponible",
+  "menu.from_to": "Du {startDate} au {endDate}{timeRange}",
+  "menu.dine_in": "Sur place",
+  "menu.pickup": "À emporter",
+  "menu.delivery": "Livraison",
+  "menu.tablet": "Tablette",
+  "menu.sections_items": "{sections} sections • {items} articles",
+  "menu.untitled": "Menu sans titre",
+  "menu.availability": "Disponibilité : {availability}",
+  "menu.last_updated": "Dernière mise à jour : {date}",
+  "menu.settings": "Paramètres",
+  "menu.delete": "Supprimer",
+  "menu.move_up": "Déplacer vers le haut",
+  "menu.move_down": "Déplacer vers le bas"
+      
+   
+  
+  
 
 }
 

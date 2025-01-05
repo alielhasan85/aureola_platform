@@ -29,17 +29,18 @@ class MenuCard extends ConsumerWidget {
     required this.isLast,
     required this.onTap,
   });
-
+//TODO: handle date and availability in case of multi language
   /// Returns a user-friendly availability description.
-  String getAvailabilityText() {
+  String getAvailabilityText(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final availability = menu.availability;
     if (availability == null) {
-      return 'No availability set';
+      return localization.translate('menu.no_availability');
     }
 
     switch (availability.type) {
       case AvailabilityType.always:
-        return 'Always available';
+        return localization.translate('menu.always_available');
 
       case AvailabilityType.periodic:
         final days = availability.daysOfWeek;
@@ -66,29 +67,30 @@ class MenuCard extends ConsumerWidget {
         final timeRange = (startTime != null && endTime != null)
             ? ' • $startTime - $endTime'
             : '';
-        return 'From $startDateStr to $endDateStr$timeRange';
+        return localization.translate('menu.from_to').replaceAll('{startDate}', startDateStr).replaceAll('{endDate}', endDateStr).replaceAll('{timeRange}', timeRange);
     }
   }
 
   /// Builds a list of "chips" to show where the menu is live.
-  List<Widget> buildLiveChips() {
+  List<Widget> buildLiveChips(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final chips = <Widget>[];
     if (menu.isOnline) {
-      chips.add(_buildTagChip('Dine-in'));
+      chips.add(_buildTagChip(localization.translate('menu.dine_in'), context));
     }
     if (menu.visibleOnPickup) {
-      chips.add(_buildTagChip('Pickup'));
+      chips.add(_buildTagChip(localization.translate('menu.pickup'), context));
     }
     if (menu.visibleOnDelivery) {
-      chips.add(_buildTagChip('Delivery'));
+      chips.add(_buildTagChip(localization.translate('menu.delivery'), context));
     }
     if (menu.visibleOnTablet) {
-      chips.add(_buildTagChip('Tablet'));
+      chips.add(_buildTagChip(localization.translate('menu.tablet'), context));
     }
     return chips;
   }
 
-  Widget _buildTagChip(String label) {
+  Widget _buildTagChip(String label, BuildContext context) {
     return Chip(
       padding: EdgeInsets.zero,
       label: Row(
@@ -112,6 +114,7 @@ class MenuCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final localization = AppLocalizations.of(context)!;
     final DateFormat formatter = DateFormat('MMM dd, yyyy');
     final String formattedDate = formatter.format(menu.updatedAt);
 
@@ -158,20 +161,20 @@ class MenuCard extends ConsumerWidget {
 
                   // "Sections • Items"
                   // TODO: (In your final code, you might fetch sections subcollection and count them)
-                  const Text(
-                    '4 sections • 15 items',
-                    style: TextStyle(fontSize: 14),
+                  Text(
+                    localization.translate('menu.sections_items').replaceAll('{sections}', '4').replaceAll('{items}', '15'),
+                    style: const TextStyle(fontSize: 14),
                   ),
 
                   if (isSelected) ...[
                     const SizedBox(height: 8),
                     Text(
-                      'Availability: ${getAvailabilityText()}',
+                      localization.translate('menu.availability').replaceAll('{availability}', getAvailabilityText(context)),
                       style: const TextStyle(fontSize: 14),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Last updated: $formattedDate',
+                      localization.translate('menu.last_updated').replaceAll('{date}', formattedDate),
                       style: AppThemeLocal.paragraph.copyWith(
                         color: AppThemeLocal.secondary,
                         fontSize: 12,
@@ -181,7 +184,7 @@ class MenuCard extends ConsumerWidget {
                     Wrap(
                       spacing: 8,
                       runSpacing: 4,
-                      children: buildLiveChips(),
+                      children: buildLiveChips(context),
                     ),
                   ],
                 ],
@@ -194,9 +197,9 @@ class MenuCard extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               height: 48,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppThemeLocal.background2,
-                borderRadius: const BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8),
                   bottomRight: Radius.circular(8),
                 ),
@@ -217,7 +220,7 @@ class MenuCard extends ConsumerWidget {
 
                       switch (value) {
                         case 'settings':
-                          // ...
+                          // Handle settings action
                           break;
                         case 'delete':
                           await ref
@@ -240,24 +243,24 @@ class MenuCard extends ConsumerWidget {
                       final items = <PopupMenuEntry<String>>[];
 
                       items.add(
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'settings',
-                          child: Text('Settings'),
+                          child: Text(localization.translate('menu.settings')),
                         ),
                       );
                       items.add(
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'delete',
-                          child: Text('Delete'),
+                          child: Text(localization.translate('menu.delete')),
                         ),
                       );
 
                       // Add "Move Up" if not first
                       if (!isFirst) {
                         items.add(
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: 'move_up',
-                            child: Text('Move Up'),
+                            child: Text(localization.translate('menu.move_up')),
                           ),
                         );
                       }
@@ -265,9 +268,9 @@ class MenuCard extends ConsumerWidget {
                       // Add "Move Down" if not last
                       if (!isLast) {
                         items.add(
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: 'move_down',
-                            child: Text('Move Down'),
+                            child: Text(localization.translate('menu.move_down')),
                           ),
                         );
                       }
@@ -280,7 +283,7 @@ class MenuCard extends ConsumerWidget {
                   Row(
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.translate('Live'),
+                        localization.translate('menu.live'),
                         style: const TextStyle(
                           color: AppThemeLocal.primary,
                           fontSize: 14,
@@ -309,7 +312,7 @@ class MenuCard extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.translate('edit_menu'),
+                        localization.translate('menu.edit_menu'),
                         style: const TextStyle(
                           color: AppThemeLocal.primary,
                           fontSize: 14,
@@ -328,8 +331,7 @@ class MenuCard extends ConsumerWidget {
                           ),
                         ),
                         splashRadius: 20,
-                        tooltip: AppLocalizations.of(context)!
-                            .translate('edit_menu'),
+                       // tooltip: localization.translate('menu.edit_menu'),
                         onPressed: () {
                           // Example: show dialog
                           showDialog(

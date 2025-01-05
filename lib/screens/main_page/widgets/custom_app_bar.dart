@@ -72,7 +72,10 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
       iconTheme: const IconThemeData(color: AppThemeLocal.primary),
       backgroundColor: AppThemeLocal.white,
       toolbarHeight: 60,
-      title: Row(
+      title: 
+      isMobile 
+    ? null 
+    : Row(
         children: [
           // Include AppLogo if desired
           const SizedBox(width: 8), // Optional spacing

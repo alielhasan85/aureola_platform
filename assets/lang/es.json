@@ -182,7 +182,24 @@
  "menu.Availability": "Disponibilidad",
   "menu.AvailabilityPrompt": "Seleccione cuándo estará disponible su menú.",
   "menu.live": "Activo",
-    "menu.liveDescription": "Habilitar para hacer que su menú sea visible en línea."
+    "menu.liveDescription": "Habilitar para hacer que su menú sea visible en línea.",
+    "menu.edit_menu": "Editar menú",
+    
+  "menu.no_availability": "No se ha establecido disponibilidad",
+  "menu.always_available": "Siempre disponible",
+  "menu.from_to": "Desde {startDate} hasta {endDate}{timeRange}",
+  "menu.dine_in": "Para comer en el lugar",
+  "menu.pickup": "Recoger",
+  "menu.delivery": "Entrega",
+  "menu.tablet": "Tableta",
+  "menu.sections_items": "{sections} secciones • {items} artículos",
+  "menu.untitled": "Menú sin título",
+  "menu.availability": "Disponibilidad: {availability}",
+  "menu.last_updated": "Última actualización: {date}",
+  "menu.settings": "Configuraciones",
+  "menu.delete": "Eliminar",
+  "menu.move_up": "Mover hacia arriba",
+  "menu.move_down": "Mover hacia abajo"
 
  
 }

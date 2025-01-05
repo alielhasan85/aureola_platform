@@ -198,7 +198,23 @@
 "menu.Availability": "Mevcudiyet",
     "menu.AvailabilityPrompt": "Menünüzün ne zaman kullanılabilir olacağını seçin.",
     "menu.live": "Canlı",
-    "menu.liveDescription": "Menünüzün çevrimiçi görünür olması için etkinleştirin."
+    "menu.liveDescription": "Menünüzün çevrimiçi görünür olması için etkinleştirin.",
+    "menu.edit_menu": "Menüyü Düzenle", 
+    "menu.no_availability": "Uygunluk ayarlanmadı",
+  "menu.always_available": "Her zaman uygun",
+  "menu.from_to": "{startDate} tarihinden {endDate}{timeRange} tarihine",
+  "menu.dine_in": "Yerinde Yemek",
+  "menu.pickup": "Alış",
+  "menu.delivery": "Teslimat",
+  "menu.tablet": "Tablet",
+  "menu.sections_items": "{sections} bölüm • {items} öğe",
+  "menu.untitled": "Adsız Menü",
+  "menu.availability": "Uygunluk: {availability}",
+  "menu.last_updated": "Son güncelleme: {date}",
+  "menu.settings": "Ayarlar",
+  "menu.delete": "Sil",
+  "menu.move_up": "Yukarı Taşı",
+  "menu.move_down": "Aşağı Taşı"
     
  
 

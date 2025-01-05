@@ -220,8 +220,26 @@
     
     "menu.Availability": "Availability",
     "menu.AvailabilityPrompt": "Select when your menu will be available.",
-     "menu.live": "Live",
-    "menu.liveDescription": "Enable to make your menu visible online."
+    
+    "menu.live": "Live",
+    "menu.liveDescription": "Enable to make your menu visible online.", 
+    "menu.edit_menu": "Edit menu",
+    "menu.no_availability": "No availability set",
+    "menu.always_available": "Always available",
+    "menu.from_to": "From {startDate} to {endDate}{timeRange}",
+    "menu.dine_in": "Dine-in",
+    "menu.pickup": "Pickup",
+    "menu.delivery": "Delivery",
+    "menu.tablet": "Tablet",
+    "menu.sections_items": "{sections} sections • {items} items",
+    "menu.untitled": "Untitled Menu",
+    "menu.availability": "Availability: {availability}",
+    "menu.last_updated": "Last updated: {date}",
+    "menu.settings": "Settings",
+    "menu.delete": "Delete",
+    "menu.move_up": "Move Up",
+    "menu.move_down": "Move Down"
+   
    
   
 

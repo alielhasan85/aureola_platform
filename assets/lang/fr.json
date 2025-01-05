@@ -200,7 +200,24 @@
 "menu.Availability": "Disponibilité",
   "menu.AvailabilityPrompt": "Sélectionnez quand votre menu sera disponible.",
    "menu.live": "Actif",
-    "menu.liveDescription": "Activer pour rendre votre menu visible en ligne."
+    "menu.liveDescription": "Activer pour rendre votre menu visible en ligne.",
+    "menu.edit_menu": "Modifier le menu", 
+    
+  "menu.no_availability": "Aucune disponibilité définie",
+  "menu.always_available": "Toujours disponible",
+  "menu.from_to": "Du {startDate} au {endDate}{timeRange}",
+  "menu.dine_in": "Sur place",
+  "menu.pickup": "À emporter",
+  "menu.delivery": "Livraison",
+  "menu.tablet": "Tablette",
+  "menu.sections_items": "{sections} sections • {items} articles",
+  "menu.untitled": "Menu sans titre",
+  "menu.availability": "Disponibilité : {availability}",
+  "menu.last_updated": "Dernière mise à jour : {date}",
+  "menu.settings": "Paramètres",
+  "menu.delete": "Supprimer",
+  "menu.move_up": "Déplacer vers le haut",
+  "menu.move_down": "Déplacer vers le bas"
       
    
   

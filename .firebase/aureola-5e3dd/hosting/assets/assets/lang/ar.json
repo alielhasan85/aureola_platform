@@ -197,7 +197,50 @@
   "hex_color_label": "لون سداسي عشري",
   "select_button": "اختر",
   "Customize_Your_Color_Palette": "تخصيص لوحة الألوان الخاصة بك",
-  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "حدد واحفظ الألوان المفضلة لديك لتخصيص قائمة QR الخاصة بك."
+  "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "حدد واحفظ الألوان المفضلة لديك لتخصيص قائمة QR الخاصة بك.",
+ 
+  "menu.visibility": "الرؤية",
+    "menu.error": "خطأ: ",
+    "menu.availableMenusAt": "القوائم المتاحة في",
+    "menu.noMenusFound": "لم يتم العثور على قوائم.",
+    "menu.addNewMenu": "إضافة قائمة جديدة",
+    "cancel": "إلغاء",
+  "update": "تحديث",
+
+   "menu.VisibilityPrompt": "اختر الأماكن التي سيظهر فيها قائمتك.",
+    "menu.tabletMenu": "قائمة الأجهزة اللوحية",
+  "menu.tabletSubtitle": "عرض القائمة على الأجهزة اللوحية.",
+  "menu.qrMenu": "قائمة رمز الاستجابة السريعة (QR)",
+    "menu.qrSubtitle": "عرض القائمة عبر رموز QR.",
+
+    "menu.pickupMenu": "قائمة الاستلام",
+    "menu.pickupSubtitle": "عرض القائمة لطلبات الاستلام.",
+
+    "menu.deliveryMenu": "قائمة التوصيل",
+    "menu.deliverySubtitle": "عرض القائمة لطلبات التوصيل.",
+"menu.Availability": "التوفر",
+    "menu.AvailabilityPrompt": "اختر متى ستكون قائمتك متاحة.",
+    "menu.live": "نشط",
+    "menu.liveDescription": "تمكين لجعل قائمتك مرئية عبر الإنترنت.",
+    "menu.edit_menu": "تحرير القائمة",
+   
+  "menu.no_availability": "لم يتم تعيين التوفر",
+  "menu.always_available": "متاح دائماً",
+  "menu.from_to": "من {startDate} إلى {endDate}{timeRange}",
+  "menu.dine_in": "تناول الطعام في المكان",
+  "menu.pickup": "الاستلام",
+  "menu.delivery": "توصيل",
+  "menu.tablet": "جهاز لوحي",
+  "menu.sections_items": "{sections} أقسام • {items} عناصر",
+  "menu.untitled": "قائمة غير مسماة",
+  "menu.availability": "التوفر: {availability}",
+  "menu.last_updated": "آخر تحديث: {date}",
+  "menu.settings": "الإعدادات",
+  "menu.delete": "حذف",
+  "menu.move_up": "نقل للأعلى",
+  "menu.move_down": "نقل للأسفل"
+    
+
 
 
 }
