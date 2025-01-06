@@ -189,7 +189,7 @@ class _MenuNotesFieldsState extends ConsumerState<MenuNotesFields> {
                           ),
                           IconButton(
                             icon: const Icon(
-                              Icons.language,
+                              Icons.translate,
                               color: AppThemeLocal.accent,
                             ),
                             tooltip: AppLocalizations.of(context)!

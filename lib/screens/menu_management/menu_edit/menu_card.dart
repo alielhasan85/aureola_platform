@@ -114,7 +114,36 @@ class MenuCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final localization = AppLocalizations.of(context)!;
+  final localization = AppLocalizations.of(context)!;
+
+
+  // 1) Watch the current language code
+  final currentLang = ref.watch(languageProvider);
+
+  // 2) Find the menu name in the chosen language
+  //    If it doesn't exist, fallback to any available name or a default
+  final menuNameMap = menu.menuName;
+  // Attempt to get it in the user's language
+  String? localizedName = menuNameMap[currentLang];
+  // If that is null, fallback to 'en' or the first key or "Untitled"
+  if (localizedName == null || localizedName.isEmpty) {
+    // Fallback strategy 1: check English
+    localizedName = menuNameMap['en'];
+  }
+  if (localizedName == null || localizedName.isEmpty) {
+    // Fallback strategy 2: pick the first language in the map
+    if (menuNameMap.isNotEmpty) {
+      localizedName = menuNameMap.values.first;
+    }
+  }
+  final nameToShow = localizedName?.trim().isNotEmpty == true
+      ? localizedName!
+      : 'Untitled Menu';
+
+
+
+
+
     final DateFormat formatter = DateFormat('MMM dd, yyyy');
     final String formattedDate = formatter.format(menu.updatedAt);
 
@@ -141,7 +170,7 @@ class MenuCard extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        menu.menuName['en'] ?? 'Untitled Menu',
+                        nameToShow,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,

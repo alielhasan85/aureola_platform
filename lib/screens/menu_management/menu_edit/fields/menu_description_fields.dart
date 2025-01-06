@@ -185,7 +185,7 @@ class _MenuDescriptionFieldsState extends ConsumerState<MenuDescriptionFields> {
                           ),
                           IconButton(
                             icon: const Icon(
-                              Icons.language,
+                              Icons.translate,
                               color: AppThemeLocal.accent,
                             ),
                             tooltip: AppLocalizations.of(context)!
