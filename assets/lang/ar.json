@@ -223,7 +223,7 @@
     "menu.live": "نشط",
     "menu.liveDescription": "تمكين لجعل قائمتك مرئية عبر الإنترنت.",
     "menu.edit_menu": "تحرير القائمة",
-   
+   "menu.availability": "التوفر: {availability}",
   "menu.no_availability": "لم يتم تعيين التوفر",
   "menu.always_available": "متاح دائماً",
   "menu.from_to": "من {startDate} إلى {endDate}{timeRange}",
@@ -233,8 +233,6 @@
   "menu.tablet": "جهاز لوحي",
   "menu.sections_items": "{sections} أقسام • {items} عناصر",
   "menu.untitled": "قائمة غير مسماة",
-  "menu.availability": "التوفر: ",
-  "menu.last_updated": "آخر تحديث: ",
   "menu.settings": "الإعدادات",
   "menu.delete": "حذف",
   "menu.move_up": "نقل للأعلى",
@@ -244,7 +242,7 @@
   "edit.menuNameDescritpion": "أدخل اسم القائمة",
 
   "edit.editInOtherLanguages": "تعديل الاسم بلغات أخرى",
-  
+  "menu.last_updated": "آخر تحديث: {date}",
      "edit.menuDescription": "الوصف",
   "edit.MenuDescriptionHint": "أدخل وصف قائمتك", 
   "edit.Note": "ملاحظة",

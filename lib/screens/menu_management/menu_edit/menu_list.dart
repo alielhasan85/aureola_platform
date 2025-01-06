@@ -39,7 +39,12 @@ class _MenuListState extends ConsumerState<MenuList> {
 
     // 3) Return UI based on AsyncValue state
     return menusAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const SizedBox(
+          height: 700,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text('Loading Available menus'),
+            Center(child: CircularProgressIndicator())
+          ])),
       error: (err, stack) => Center(
         child: Text(
           AppLocalizations.of(context)!

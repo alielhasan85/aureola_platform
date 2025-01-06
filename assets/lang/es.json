@@ -184,7 +184,6 @@
   "menu.live": "Activo",
     "menu.liveDescription": "Habilitar para hacer que su menú sea visible en línea.",
     "menu.edit_menu": "Editar menú",
-    
   "menu.no_availability": "No se ha establecido disponibilidad",
   "menu.always_available": "Siempre disponible",
   "menu.from_to": "Desde {startDate} hasta {endDate}{timeRange}",
