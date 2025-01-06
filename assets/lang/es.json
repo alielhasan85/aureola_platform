@@ -199,7 +199,14 @@
   "menu.settings": "Configuraciones",
   "menu.delete": "Eliminar",
   "menu.move_up": "Mover hacia arriba",
-  "menu.move_down": "Mover hacia abajo"
+  "menu.move_down": "Mover hacia abajo",
+  "edit.menuName": "Nombre del menú",
+  "edit.menuNameDescription": "Ingrese el nombre del menú",
+  "edit.editInOtherLanguages": "Editar el nombre en otros idiomas", 
+  "edit.menuDescription": "Descripción",
+  "edit.MenuDescriptionHint": "Ingrese la descripción de su menú.", 
+   "edit.Note": "Nota",
+  "edit.NotesDescription": "Agregar una nota adicional"
 
  
 }

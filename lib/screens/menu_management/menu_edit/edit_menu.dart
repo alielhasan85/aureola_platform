@@ -322,8 +322,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                         Text(
                           AppLocalizations.of(context)!
                               .translate("menu.visibility"),
-                          style: AppThemeLocal.headingCard.copyWith(
-                              fontSize: 20, fontStyle: FontStyle.italic),
+                          style: AppThemeLocal.headingCard,
                         ),
                         const SizedBox(height: 4),
                         Align(

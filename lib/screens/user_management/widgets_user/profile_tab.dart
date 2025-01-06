@@ -86,7 +86,7 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
                   Text(
                     AppLocalizations.of(context)!
                         .translate("Profile_Information"),
-                    style: AppThemeLocal.tabBarItemText,
+                    style: AppThemeLocal.dropdownItemText,
                   ),
                   const SizedBox(height: 16),
 
@@ -111,7 +111,7 @@ class _ProfileTabState extends ConsumerState<ProfileTab> {
                   Text(
                     AppLocalizations.of(context)!
                         .translate('login_information'),
-                    style: AppThemeLocal.tabBarItemText,
+                    style: AppThemeLocal.dropdownItemText,
                   ),
                   const SizedBox(height: 16),
                   UserEmailField(

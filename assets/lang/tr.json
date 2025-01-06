@@ -214,7 +214,14 @@
   "menu.settings": "Ayarlar",
   "menu.delete": "Sil",
   "menu.move_up": "Yukarı Taşı",
-  "menu.move_down": "Aşağı Taşı"
+  "menu.move_down": "Aşağı Taşı", 
+  "edit.menuName": "Menü Adı",
+  "edit.menuNameDescription": "Menü adını girin",
+  "edit.editInOtherLanguages": "Adı diğer dillerde düzenle", 
+  "edit.menuDescription": "Açıklama",
+  "edit.MenuDescriptionHint": "Menünüzün açıklamasını girin.",
+   "edit.Note": "Not",
+  "edit.NotesDescription": "Ek not ekle"
     
  
 

@@ -233,12 +233,22 @@
   "menu.tablet": "جهاز لوحي",
   "menu.sections_items": "{sections} أقسام • {items} عناصر",
   "menu.untitled": "قائمة غير مسماة",
-  "menu.availability": "التوفر: {availability}",
-  "menu.last_updated": "آخر تحديث: {date}",
+  "menu.availability": "التوفر: ",
+  "menu.last_updated": "آخر تحديث: ",
   "menu.settings": "الإعدادات",
   "menu.delete": "حذف",
   "menu.move_up": "نقل للأعلى",
-  "menu.move_down": "نقل للأسفل"
+  "menu.move_down": "نقل للأسفل",
+
+  "edit.menuName": "اسم القائمة",
+  "edit.menuNameDescritpion": "أدخل اسم القائمة",
+
+  "edit.editInOtherLanguages": "تعديل الاسم بلغات أخرى",
+  
+     "edit.menuDescription": "الوصف",
+  "edit.MenuDescriptionHint": "أدخل وصف قائمتك", 
+  "edit.Note": "ملاحظة",
+  "edit.NotesDescription": "أضف ملاحظة إضافية"
     
 
 

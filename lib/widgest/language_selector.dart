@@ -38,7 +38,7 @@ class LanguageSelector extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Text(
                   entry.value,
-                  style: AppThemeLocal.tabBarItemText,
+                  style: AppThemeLocal.dropdownItemText,
                 ),
               ],
             ),

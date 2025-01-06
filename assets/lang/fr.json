@@ -217,7 +217,14 @@
   "menu.settings": "Paramètres",
   "menu.delete": "Supprimer",
   "menu.move_up": "Déplacer vers le haut",
-  "menu.move_down": "Déplacer vers le bas"
+  "menu.move_down": "Déplacer vers le bas",
+  "edit.menuName": "Nom du menu",
+  "edit.menuNameDescription": "Entrez le nom du menu",
+  "edit.editInOtherLanguages": "Modifier le nom dans d'autres langues", 
+   "edit.menuDescription": "Description",
+  "edit.MenuDescriptionHint": "Entrez la description de votre menu.",
+   "edit.Note": "Note",
+  "edit.NotesDescription": "Ajouter une note supplémentaire"
       
    
   

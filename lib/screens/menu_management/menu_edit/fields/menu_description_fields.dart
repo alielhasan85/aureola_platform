@@ -149,7 +149,7 @@ class _MenuDescriptionFieldsState extends ConsumerState<MenuDescriptionFields> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalizations.of(context)!.translate("description_"),
+          AppLocalizations.of(context)!.translate("edit.menuDescription"),
           style: AppThemeLocal.paragraph,
         ),
         const SizedBox(height: 6),
@@ -170,7 +170,7 @@ class _MenuDescriptionFieldsState extends ConsumerState<MenuDescriptionFields> {
               },
               decoration: AppThemeLocal.textFieldinputDecoration(
                 hint: AppLocalizations.of(context)!
-                    .translate("Description_($currentLang)"),
+                    .translate("edit.MenuDescriptionHint"),
                 suffixIcon: availableLangs.length > 1
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
@@ -188,7 +188,9 @@ class _MenuDescriptionFieldsState extends ConsumerState<MenuDescriptionFields> {
                               Icons.language,
                               color: AppThemeLocal.accent,
                             ),
-                            tooltip: 'Edit in other languages',
+                            tooltip: AppLocalizations.of(context)!
+                    .translate("edit.editInOtherLanguages")
+                            ,
                             onPressed: _showMultilangDialog,
                           ),
                         ],

@@ -238,7 +238,14 @@
     "menu.settings": "Settings",
     "menu.delete": "Delete",
     "menu.move_up": "Move Up",
-    "menu.move_down": "Move Down"
+    "menu.move_down": "Move Down", 
+    "edit.menuName": "Menu Name",
+    "edit.menuNameDescritpion": "Enter Menu Name.",
+    "edit.editInOtherLanguages": "Edit Name In Other Languages", 
+    "edit.menuDescription": "Description",
+    "edit.MenuDescriptionHint": "Enter Description of your menu.", 
+    "edit.Note": "Note", 
+    "edit.NotesDescription": "Add Addtional Note"
    
    
   

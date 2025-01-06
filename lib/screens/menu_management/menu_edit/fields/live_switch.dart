@@ -20,7 +20,7 @@ class LiveSwitch extends StatelessWidget {
       //contentPadding: EdgeInsets.zero, // Removes default padding
       title: Text(
         AppLocalizations.of(context)!.translate('menu.live'),
-        style: AppThemeLocal.paragraph,
+        style: AppThemeLocal.paragraph.copyWith(fontSize: 18),
       ),
       subtitle: Text(
         AppLocalizations.of(context)!.translate('menu.liveDescription'),
@@ -34,14 +34,24 @@ class LiveSwitch extends StatelessWidget {
         height: 22,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isLive ? Colors.green : Colors.grey,
+          color: isLive ? AppThemeLocal.green : Colors.grey,
         ),
       ),
       value: isLive,
       onChanged: onChanged,
       activeColor: AppThemeLocal.accent,
-      activeTrackColor: AppThemeLocal.accent.withAlpha(60),
-      inactiveThumbColor: AppThemeLocal.secondary,
+      activeTrackColor: AppThemeLocal.accent.withAlpha(40),
+      trackOutlineColor: WidgetStateProperty.resolveWith<Color?>(
+  (Set<WidgetState> states) {
+    if (states.contains(WidgetState.selected)) {
+      // When the switch is active (selected)
+      return null; // Define this color in your theme
+    }
+    // When the switch is inactive
+    return AppThemeLocal.grey; // Your desired inactive border color
+  },
+), 
+      inactiveThumbColor: AppThemeLocal.grey,
       inactiveTrackColor: AppThemeLocal.grey2,
     );
   }

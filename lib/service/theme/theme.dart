@@ -24,6 +24,7 @@ class AppThemeLocal {
   // Neutral Colors
   static const Color white = Color(0xFFFFFFFF);
   static const Color divider = Color(0xFFDAD5CF);
+  static const Color grey = Color(0xFF9E9E9E);
   static const Color grey2 = Color(0xFFE0E0E0);
   static const Color greyButton = Color(0xFFF0F2F5);
   static const Color background = Color(0xFFF0F2F5);
@@ -63,9 +64,19 @@ class AppThemeLocal {
     color: primary,
     fontSize: 20,
     fontFamily: 'Inter',
+    fontWeight: FontWeight.w600,
+
 
     // fontWeight: FontWeight.,
   );
+
+static const TextStyle headingCard = TextStyle(
+    color: primary,
+    fontSize: 18,
+    fontFamily: 'Inter',
+    fontWeight: FontWeight.w600,
+  );
+
 
   static const TextStyle heading2 = TextStyle(
     color: red,
@@ -75,22 +86,17 @@ class AppThemeLocal {
   );
 
   static const TextStyle navigationItemText = TextStyle(
-    color: secondary,
+    color: primary,
     fontSize: 16,
     fontFamily: 'Inter',
     fontWeight: FontWeight.w500,
   );
 
-  static const TextStyle headingCard = TextStyle(
-    color: primary,
-    fontSize: 22,
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w600,
-  );
+  
 
-  static const TextStyle tabBarItemText = TextStyle(
+  static const TextStyle dropdownItemText = TextStyle(
     color: primary,
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'DM Sans',
     fontWeight: FontWeight.w500,
   );
@@ -107,7 +113,7 @@ class AppThemeLocal {
     color: primary,
     fontSize: 16,
     fontFamily: 'Inter',
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.normal,
   );
 
   // ===========================
@@ -215,10 +221,10 @@ class AppThemeLocal {
 
       // Apply styles conditionally
       labelStyle:
-          label != null ? AppThemeLocal.paragraph.copyWith(fontSize: 20) : null,
+          label != null ? AppThemeLocal.paragraph.copyWith(fontSize: 16, color: primary) : null,
 
       hintStyle:
-          hint != null ? AppThemeLocal.paragraph.copyWith(fontSize: 14) : null,
+          hint != null ? AppThemeLocal.paragraph.copyWith(fontSize: 12, color: secondary) : null,
 
       // Define the default border
       border: const OutlineInputBorder(),

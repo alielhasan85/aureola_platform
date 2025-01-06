@@ -23,7 +23,7 @@ class MenuNotesFields extends ConsumerStatefulWidget {
   final BoxDecoration popoverDecoration;
 
   const MenuNotesFields({
-    Key? key,
+    super.key,
     required this.notesMap,
     required this.onNotesChanged,
     this.validator,
@@ -40,7 +40,7 @@ class MenuNotesFields extends ConsumerStatefulWidget {
         ),
       ],
     ),
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<MenuNotesFields> createState() => _MenuNotesFieldsState();
@@ -153,7 +153,7 @@ class _MenuNotesFieldsState extends ConsumerState<MenuNotesFields> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalizations.of(context)!.translate("notes_"),
+          AppLocalizations.of(context)!.translate("edit.Note"),
           style: AppThemeLocal.paragraph,
         ),
         const SizedBox(height: 6),
@@ -174,7 +174,7 @@ class _MenuNotesFieldsState extends ConsumerState<MenuNotesFields> {
               },
               decoration: AppThemeLocal.textFieldinputDecoration(
                 hint: AppLocalizations.of(context)!
-                    .translate("Notes_($currentLang)"),
+                    .translate("edit.NotesDescription"),
                 suffixIcon: availableLangs.length > 1
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
@@ -192,7 +192,9 @@ class _MenuNotesFieldsState extends ConsumerState<MenuNotesFields> {
                               Icons.language,
                               color: AppThemeLocal.accent,
                             ),
-                            tooltip: 'Edit in other languages',
+                            tooltip: AppLocalizations.of(context)!
+                    .translate("edit.editInOtherLanguages")
+                            ,
                             onPressed: _showMultilangDialog,
                           ),
                         ],
