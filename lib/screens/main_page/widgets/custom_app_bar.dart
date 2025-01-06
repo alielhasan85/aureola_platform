@@ -164,7 +164,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
                         color: AppThemeLocal.primary,
                       ),
                     ),
-                    Divider(color: AppThemeLocal.divider, height: 0.5),
+                   const Divider(color: AppThemeLocal.divider, height: 0.5),
                   ]),
                 );
               }).toList();
@@ -231,9 +231,9 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
       case AppBarMenuOption.logout:
         _handleLogout(context);
         break;
-      default:
-        // Handle default case
-        break;
+      // default:
+      //   // Handle default case
+      //   break;
     }
   }
 

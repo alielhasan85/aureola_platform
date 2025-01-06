@@ -248,7 +248,28 @@
      "edit.menuDescription": "الوصف",
   "edit.MenuDescriptionHint": "أدخل وصف قائمتك", 
   "edit.Note": "ملاحظة",
-  "edit.NotesDescription": "أضف ملاحظة إضافية"
+  "edit.NotesDescription": "أضف ملاحظة إضافية",
+  "label_always": "دائمًا",
+  "label_periodic": "دوري",
+  "label_specific": "تاريخ محدد",
+
+  "label_days_of_week": "أيام الأسبوع:",
+  "label_start_time": "وقت البدء",
+  "label_end_time": "وقت الانتهاء",
+  "label_pick": "اختر",
+  "label_start_date": "تاريخ البدء",
+  "label_end_date": "تاريخ الانتهاء",
+
+  "day_monday": "الاثنين",
+  "day_tuesday": "الثلاثاء",
+  "day_wednesday": "الأربعاء",
+  "day_thursday": "الخميس",
+  "day_friday": "الجمعة",
+  "day_saturday": "السبت",
+  "day_sunday": "الأحد",
+  "edit.PleaseEnterMenuName": "يرجى إدخال اسم القائمة",
+  "edit.KeepUnder120Chars": "حافظ على وصف القائمة قصيرًا",
+  "edit.KeepNotes120Chars": "حافظ على الملاحظات قصيرة"
     
 
 

@@ -249,6 +249,29 @@ static const TextStyle headingCard = TextStyle(
     );
   }
 
+
+/// Define a global InputDecorationTheme for consistency
+  static final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
+    labelStyle: paragraph.copyWith(fontSize: 16, color: primary),
+    hintStyle: paragraph.copyWith(fontSize: 12, color: secondary),
+    border: const OutlineInputBorder(),
+    enabledBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        color: grey2,
+        width: 0.75,
+      ),
+      borderRadius: BorderRadius.circular(6.0),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        color: accent,
+        width: 0.75,
+      ),
+      borderRadius: BorderRadius.circular(6.0),
+    ),
+  );
+
+
   // ===========================
   // Card Decoration
   // ===========================
@@ -290,13 +313,15 @@ static const TextStyle headingCard = TextStyle(
 
   static const ColorScheme colorScheme = ColorScheme(
     primary: primary,
-    primaryContainer: accent, // You can adjust based on your palette
-    secondary: secondary,
-    secondaryContainer: lightPeach, // You can adjust based on your palette
+    onPrimary: background,
+    primaryContainer: accent,
+    onPrimaryContainer: white, 
+    
+    secondary: background,
+    onSecondary: secondary,
+    secondaryContainer: lightPeach, 
     surface: white,
     error: red,
-    onPrimary: primary,
-    onSecondary: primary,
     onSurface: primary,
     onError: white,
     brightness: Brightness.light,

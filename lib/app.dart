@@ -57,6 +57,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         // Apply the ColorScheme from AppTheme
         colorScheme: AppThemeLocal.colorScheme,
 
+        inputDecorationTheme: AppThemeLocal.inputDecorationTheme,
+
         // Apply the TextTheme from AppTheme
         textTheme: TextTheme(
           displayLarge: AppThemeLocal.titleAureola,
@@ -97,34 +99,34 @@ class _MyAppState extends ConsumerState<MyApp> {
           ),
         ),
 
-        // Input Decoration Theme
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: AppThemeLocal.greyButton,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6.0),
-            borderSide: const BorderSide(
-              color: AppThemeLocal.grey2,
-              width: 0.75,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6.0),
-            borderSide: const BorderSide(
-              color: AppThemeLocal.grey2,
-              width: 0.75,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6.0),
-            borderSide: const BorderSide(
-              color: AppThemeLocal.accent,
-              width: 0.75,
-            ),
-          ),
-          labelStyle: AppThemeLocal.paragraph.copyWith(fontSize: 20),
-          hintStyle: AppThemeLocal.paragraph.copyWith(fontSize: 14),
-        ),
+        // // Input Decoration Theme
+        // inputDecorationTheme: InputDecorationTheme(
+        //   filled: true,
+        //   fillColor: AppThemeLocal.greyButton,
+        //   border: OutlineInputBorder(
+        //     borderRadius: BorderRadius.circular(6.0),
+        //     borderSide: const BorderSide(
+        //       color: AppThemeLocal.grey2,
+        //       width: 0.75,
+        //     ),
+        //   ),
+        //   enabledBorder: OutlineInputBorder(
+        //     borderRadius: BorderRadius.circular(6.0),
+        //     borderSide: const BorderSide(
+        //       color: AppThemeLocal.grey2,
+        //       width: 0.75,
+        //     ),
+        //   ),
+        //   focusedBorder: OutlineInputBorder(
+        //     borderRadius: BorderRadius.circular(6.0),
+        //     borderSide: const BorderSide(
+        //       color: AppThemeLocal.accent,
+        //       width: 0.75,
+        //     ),
+        //   ),
+        //   labelStyle: AppThemeLocal.paragraph.copyWith(fontSize: 20),
+        //   hintStyle: AppThemeLocal.paragraph.copyWith(fontSize: 14),
+        // ),
 
         // BottomNavigationBar Theme
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(

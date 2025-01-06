@@ -10,7 +10,6 @@ import 'package:aureola_platform/models/menu/menu_availability.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_name_fields.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_description_fields.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_notes_fields.dart';
-//import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_image_fields.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/fields/menu_availability_fields.dart';
 
 class EditMenuDialog extends ConsumerStatefulWidget {
@@ -35,10 +34,10 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
   late Map<String, String> _descriptionMap;
   late Map<String, String> _notesMap;
 
-  // Image fields
-  late TextEditingController _imageUrlController;
-  late TextEditingController _additionalImage1Controller;
-  late TextEditingController _additionalImage2Controller;
+  // // Image fields
+  // late TextEditingController _imageUrlController;
+  // late TextEditingController _additionalImage1Controller;
+  // late TextEditingController _additionalImage2Controller;
 
   // Availability
   AvailabilityType _availabilityType = AvailabilityType.always;
@@ -67,8 +66,8 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
     _descriptionMap = Map.from(widget.menu.description);
     _notesMap = Map.from(widget.menu.notes);
 
-    _imageUrlController =
-        TextEditingController(text: widget.menu.imageUrl ?? '');
+    // _imageUrlController =
+    //     TextEditingController(text: widget.menu.imageUrl ?? '');
 
     if (widget.menu.availability != null) {
       final av = widget.menu.availability!;
@@ -96,9 +95,9 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
 
   @override
   void dispose() {
-    _imageUrlController.dispose();
-    _additionalImage1Controller.dispose();
-    _additionalImage2Controller.dispose();
+    // _imageUrlController.dispose();
+    // _additionalImage1Controller.dispose();
+    // _additionalImage2Controller.dispose();
     super.dispose();
   }
 
@@ -142,8 +141,8 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
       menuName: _menuName,
       description: _descriptionMap,
       notes: _notesMap,
-      imageUrl:
-          _imageUrlController.text.isNotEmpty ? _imageUrlController.text : null,
+      // imageUrl:
+      //     _imageUrlController.text.isNotEmpty ? _imageUrlController.text : null,
       visibleOnTablet: _visibleOnTablet,
       visibleOnQr: _visibleOnQr,
 
@@ -160,6 +159,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context)!;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final bool isMobile = screenWidth < 500; // or your custom breakpoint
@@ -204,7 +204,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppLocalizations.of(context)!.translate("Edit_Menu"),
+                    localization.translate("Edit_Menu"),
                     style: AppThemeLocal.appBarTitle,
                   ),
                   IconButton(
@@ -237,7 +237,9 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                         },
                         validator: (val) {
                           if (val == null || val.isEmpty) {
-                            return 'Please enter menu name in the current language';
+                            return 
+                            localization.translate("edit.PleaseEnterMenuName")
+                            ;
                           }
                           return null;
                         },
@@ -262,7 +264,9 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                         },
                         validator: (val) {
                           if (val!.length > 120) {
-                            return 'Keep under 120 chars.';
+                            return 
+                            localization.translate("edit.KeepUnder120Chars")
+                            ;
                           }
                           return null;
                         },
@@ -285,7 +289,9 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                         },
                         validator: (val) {
                           if (val!.length > 200) {
-                            return 'Keep notes under 200 chars';
+                            return 
+                            localization.translate("edit.KeepNotes120Chars")
+                            ;
                           }
                           return null;
                         },
@@ -324,7 +330,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                               .translate("menu.visibility"),
                           style: AppThemeLocal.headingCard,
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 6),
                         Align(
                           alignment:
                               Localizations.localeOf(context).languageCode ==
@@ -384,10 +390,9 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                       Text(
                         AppLocalizations.of(context)!
                             .translate("menu.Availability"),
-                        style: AppThemeLocal.headingCard.copyWith(
-                            fontSize: 20, fontStyle: FontStyle.italic),
+                        style: AppThemeLocal.headingCard,
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Align(
                         alignment:
                             Localizations.localeOf(context).languageCode == 'ar'

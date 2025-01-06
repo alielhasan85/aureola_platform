@@ -221,7 +221,29 @@
   "edit.menuDescription": "Açıklama",
   "edit.MenuDescriptionHint": "Menünüzün açıklamasını girin.",
    "edit.Note": "Not",
-  "edit.NotesDescription": "Ek not ekle"
+  "edit.NotesDescription": "Ek not ekle",
+
+  "label_always": "Her Zaman",
+  "label_periodic": "Periyodik",
+  "label_specific": "Özel",
+
+  "label_days_of_week": "Haftanın Günleri:",
+  "label_start_time": "Başlangıç Saati",
+  "label_end_time": "Bitiş Saati",
+  "label_pick": "Seç",
+  "label_start_date": "Başlangıç Tarihi",
+  "label_end_date": "Bitiş Tarihi",
+
+  "day_monday": "Pazartesi",
+  "day_tuesday": "Salı",
+  "day_wednesday": "Çarşamba",
+  "day_thursday": "Perşembe",
+  "day_friday": "Cuma",
+  "day_saturday": "Cumartesi",
+  "day_sunday": "Pazar",
+  "edit.PleaseEnterMenuName": "Lütfen Menü Adını Girin",
+  "edit.KeepUnder120Chars": "Menü açıklamasını kısa tutun",
+  "edit.KeepNotes120Chars": "Notları kısa tutun"
     
  
 

@@ -13,13 +13,13 @@ class MenuVisibilityOption extends StatelessWidget {
   final ValueChanged<bool?> onChanged;
 
   const MenuVisibilityOption({
-    Key? key,
+    super.key,
     required this.titleKey,
     required this.subtitleKey,
     required this.iconPath,
     required this.value,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

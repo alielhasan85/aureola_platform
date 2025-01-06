@@ -45,16 +45,16 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
   late TextEditingController _emailController;
   late TextEditingController _websiteController;
   late TextEditingController _addressController;
-  String _currentPhoneNumber = '';
+  //String _currentPhoneNumber = '';
 
   String? _selectedVenueType;
   String? _selectedDefaultLanguage;
   bool? _alcoholOption;
   LatLng _selectedLocation = const LatLng(25.286106, 51.534817);
 
-  String _countryValue = '';
-  String _stateValue = '';
-  String _cityValue = '';
+  // String _countryValue = '';
+  // String _stateValue = '';
+  // String _cityValue = '';
 
   @override
   void initState() {
@@ -81,10 +81,10 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
     _alcoholOption = venue?.additionalInfo['sellAlcohol'] ?? false;
     _selectedLocation =
         venue?.address.location ?? const LatLng(25.286106, 51.534817);
-    _currentPhoneNumber = venue?.contact.phoneNumber ?? '';
-    _countryValue = venue?.address.country ?? '';
-    _stateValue = venue?.address.state ?? '';
-    _cityValue = venue?.address.city ?? '';
+    // _currentPhoneNumber = venue?.contact.phoneNumber ?? '';
+    // _countryValue = venue?.address.country ?? '';
+    // _stateValue = venue?.address.state ?? '';
+    // _cityValue = venue?.address.city ?? '';
   }
 
   @override

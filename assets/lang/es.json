@@ -206,7 +206,29 @@
   "edit.menuDescription": "Descripción",
   "edit.MenuDescriptionHint": "Ingrese la descripción de su menú.", 
    "edit.Note": "Nota",
-  "edit.NotesDescription": "Agregar una nota adicional"
+  "edit.NotesDescription": "Agregar una nota adicional",
+
+  "label_always": "Siempre",
+  "label_periodic": "Periódico",
+  "label_specific": "Específico",
+
+  "label_days_of_week": "Días de la semana:",
+  "label_start_time": "Hora de inicio",
+  "label_end_time": "Hora de fin",
+  "label_pick": "Elegir",
+  "label_start_date": "Fecha de inicio",
+  "label_end_date": "Fecha de fin",
+
+  "day_monday": "Lunes",
+  "day_tuesday": "Martes",
+  "day_wednesday": "Miércoles",
+  "day_thursday": "Jueves",
+  "day_friday": "Viernes",
+  "day_saturday": "Sábado",
+  "day_sunday": "Domingo",
+  "edit.PleaseEnterMenuName": "Por favor, ingrese el nombre del menú",
+  "edit.KeepUnder120Chars": "Mantenga la descripción del menú breve",
+  "edit.KeepNotes120Chars": "Mantenga las notas breves"
 
  
 }

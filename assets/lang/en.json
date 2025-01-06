@@ -245,7 +245,29 @@
     "edit.menuDescription": "Description",
     "edit.MenuDescriptionHint": "Enter Description of your menu.", 
     "edit.Note": "Note", 
-    "edit.NotesDescription": "Add Addtional Note"
+    "edit.NotesDescription": "Add Addtional Note",
+
+    "label_always": "Always",
+  "label_periodic": "Periodic",
+  "label_specific": "Specific",
+
+  "label_days_of_week": "Days of the Week:",
+  "label_start_time": "Start Time",
+  "label_end_time": "End Time",
+  "label_pick": "Pick",
+  "label_start_date": "Start Date",
+  "label_end_date": "End Date",
+
+  "day_monday": "Monday",
+  "day_tuesday": "Tuesday",
+  "day_wednesday": "Wednesday",
+  "day_thursday": "Thursday",
+  "day_friday": "Friday",
+  "day_saturday": "Saturday",
+  "day_sunday": "Sunday",
+  "edit.PleaseEnterMenuName":"Please Menu Name", 
+  "edit.KeepUnder120Chars": "Keep Menu Description short", 
+  "edit.KeepNotes120Chars": "Keep Notes Short"
    
    
   
