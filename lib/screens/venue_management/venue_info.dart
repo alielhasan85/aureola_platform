@@ -65,8 +65,12 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
   }
 
   void _initializeFormFields(VenueModel? venue) {
-    _nameController = TextEditingController(text: venue?.venueName ?? '');
-    _taglineController = TextEditingController(text: venue?.tagLine ?? '');
+    final currentLang = ref.read(languageProvider);
+
+    final nameInCurrentLang = venue?.venueName[currentLang] ?? '';
+    final tagInCurrentLang = venue?.tagLine[currentLang] ?? '';
+    _nameController = TextEditingController(text: nameInCurrentLang);
+    _taglineController = TextEditingController(text: tagInCurrentLang);
     _emailController = TextEditingController(text: venue?.contact.email ?? '');
     _websiteController =
         TextEditingController(text: venue?.contact.website ?? '');
@@ -652,8 +656,8 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
             _standardizeUrl(_websiteController.text.trim());
 
         final updateData = {
-          'venueName': draft.venueName.trim(),
-          'tagLine': draft.tagLine.trim(),
+          'venueName': draft.venueName,
+          'tagLine': draft.tagLine,
           'contact.phoneNumber': draft.contact.phoneNumber.trim(),
           'contact.countryDial': draft.contact.countryDial,
           'contact.countryCode': draft.contact.countryCode,

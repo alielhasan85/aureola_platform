@@ -17,17 +17,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class VenueNotifier extends StateNotifier<VenueModel?> {
   VenueNotifier() : super(null);
 
-  // Function to set the venue data
-  void setVenue(VenueModel venue) {
-    state = venue;
-  }
+  // 1) Set or clear the entire venue
+  void setVenue(VenueModel venue) => state = venue;
+  void clearVenue() => state = null;
 
-  // Function to clear the venue data
-  void clearVenue() {
-    state = null;
-  }
-
-  // Function to fetch the venue data from Firestore and set it
+  // 2) Fetch from Firestore
   Future<void> fetchVenue(String userId, String venueId) async {
     final venueData = await FirestoreVenue().getVenueById(userId, venueId);
     if (venueData != null) {
@@ -35,7 +29,7 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // Update sellAlcohol in additionalInfo
+// Update sellAlcohol in additionalInfo
   void updateSellAlcohol(bool sellAlcohol) {
     if (state != null) {
       final updatedInfo = {
@@ -69,21 +63,63 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // Update venueName
-  void updateVenueName(String venueName) {
-    if (state != null) {
-      state = state!.copyWith(venueName: venueName);
+  // 3) Multi-lingual venueName update
+  void updateVenueName(Map<String, String> newName) {
+    if (state == null) return;
+    state = state!.copyWith(venueName: newName);
+  }
+
+  // 4) Multi-lingual tagLine update
+  void updateTagLine(Map<String, String> newTagLine) {
+    if (state == null) return;
+    state = state!.copyWith(tagLine: newTagLine);
+  }
+
+  // 5) Add or remove languages
+  void addLanguage(String langCode) {
+    if (state == null) return;
+
+    final current = [...state!.languageOptions];
+    // Avoid duplicates
+    if (!current.contains(langCode)) {
+      current.add(langCode);
+      state = state!.copyWith(languageOptions: current);
     }
   }
 
-  // Update venueName
-  void updateTagline(String tagLine) {
-    if (state != null) {
-      state = state!.copyWith(tagLine: tagLine);
+  void removeLanguage(String langCode) {
+    if (state == null) return;
+    if (state!.languageOptions.first == langCode) {
+      // It's the default language => cannot remove or decide your logic
+      return;
     }
+    final filtered =
+        state!.languageOptions.where((l) => l != langCode).toList();
+    state = state!.copyWith(languageOptions: filtered);
   }
 
-  // Refactored updateAddress method
+  // 6) Update the "default language," moving it to index 0
+  void updateDefaultLanguage(String code) {
+    if (state == null) return;
+
+    final updatedInfo = {...state!.additionalInfo};
+    updatedInfo['defaultLanguage'] = code;
+
+    final currentLangs = [...state!.languageOptions];
+    // remove it if present
+    currentLangs.remove(code);
+    // Insert as first
+    currentLangs.insert(0, code);
+
+    state = state!.copyWith(
+      languageOptions: currentLangs,
+      additionalInfo: updatedInfo,
+    );
+  }
+
+  // 7) Additional info updates
+
+  // 8) Address updates
   void updateAddress({
     String? newDisplayAddress,
     String? newStreet,
@@ -93,31 +129,18 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     String? newCountry,
     LatLng? newLocation,
   }) {
-    if (newState != null ||
-        newCity != null ||
-        newCountry != null ||
-        newStreet != null ||
-        newPostalCode != null ||
-        newDisplayAddress != null ||
-        newLocation != null) {
-      if (state != null) {
-        Address currentAddress = state!.address;
-
-        // Create an updated address by selectively replacing fields
-        Address updatedAddress = currentAddress.copyWith(
-          displayAddress: newDisplayAddress ?? currentAddress.displayAddress,
-          street: newStreet ?? currentAddress.street,
-          city: newCity ?? currentAddress.city,
-          state: newState ?? currentAddress.state,
-          postalCode: newPostalCode ?? currentAddress.postalCode,
-          country: newCountry ?? currentAddress.country,
-          location: newLocation ?? currentAddress.location,
-        );
-
-        // Update the state with the new address
-        state = state!.copyWith(address: updatedAddress);
-      }
-    }
+    if (state == null) return;
+    final currentAddress = state!.address;
+    final updatedAddress = currentAddress.copyWith(
+      displayAddress: newDisplayAddress ?? currentAddress.displayAddress,
+      street: newStreet ?? currentAddress.street,
+      city: newCity ?? currentAddress.city,
+      state: newState ?? currentAddress.state,
+      postalCode: newPostalCode ?? currentAddress.postalCode,
+      country: newCountry ?? currentAddress.country,
+      location: newLocation ?? currentAddress.location,
+    );
+    state = state!.copyWith(address: updatedAddress);
   }
 
   void updateCountryStateCity({
@@ -193,11 +216,10 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  // Method to update DesignAndDisplay
+  // 10) Update design display
   void updateDesignAndDisplay(DesignAndDisplay newDesign) {
-    if (state != null) {
-      state = state!.copyWith(designAndDisplay: newDesign);
-    }
+    if (state == null) return;
+    state = state!.copyWith(designAndDisplay: newDesign);
   }
 
 // In VenueNotifier
@@ -217,7 +239,7 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     // );
   }
 
-  // Contact update methods
+// Contact update methods
   void updateContact({
     String? email,
     String? website,
@@ -242,8 +264,8 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
 
   /// Comprehensive method to update multiple fields of the VenueModel.
   void updateVenue({
-    String? venueName,
-    String? tagLine,
+    Map<String, String>? venueName,
+    Map<String, String>? tagLine,
     Address? address,
     Contact? contact,
     List<String>? languageOptions,
@@ -292,34 +314,21 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
     }
   }
 
-  
-
-  void updateDefaultLanguage(String code) {
-  if (state == null) return;
-
-  final updatedInfo = {...state!.additionalInfo};
-  updatedInfo['defaultLanguage'] = code;
-
-  // Ensure it's in the languageOptions array at index 0
-  final current = [...state!.languageOptions];
-  // Remove it first if present
-  current.remove(code);
-  // Insert as first
-  current.insert(0, code);
-
-  state = state!.copyWith(
-    languageOptions: current,
-    additionalInfo: updatedInfo,
-  );
-}
-
-  // Specific methods to update individual color fields
+  // For background color, accent color, etc.:
   void updateBackgroundColor(String hex) {
-    if (state != null) {
-      final updatedDesign =
-          state!.designAndDisplay.copyWith(backgroundColor: hex);
-      state = state!.copyWith(designAndDisplay: updatedDesign);
-    }
+    if (state == null) return;
+    final updated = state!.designAndDisplay.copyWith(backgroundColor: hex);
+    state = state!.copyWith(designAndDisplay: updated);
+  }
+
+  // 11) Save to Firestore manually if needed
+  Future<void> saveVenueToFirestore(String userId) async {
+    if (state == null) return;
+
+    // For example, build updatedData from state!.toMap():
+    final updatedData = state!.toMap();
+
+    await FirestoreVenue().updateVenue(userId, state!.venueId, updatedData);
   }
 
   void updateCardBackgroundColor(String hex) {
@@ -350,6 +359,18 @@ class VenueNotifier extends StateNotifier<VenueModel?> {
       state = state!.copyWith(designAndDisplay: updatedDesign);
     }
   }
-}
-  // Add more methods as needed for other fields
 
+  /// Update the entire venueName map at once.
+  void updateVenueNameMap(Map<String, String> newMap) {
+    if (state == null) return;
+    state = state!.copyWith(venueName: newMap);
+  }
+
+  /// Update the entire tagLine map at once.
+  void updateTagLineMap(Map<String, String> newMap) {
+    if (state == null) return;
+    state = state!.copyWith(tagLine: newMap);
+  }
+
+  // Additional partial updates as needed...
+}

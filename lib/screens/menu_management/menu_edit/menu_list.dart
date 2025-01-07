@@ -27,6 +27,7 @@ class _MenuListState extends ConsumerState<MenuList> {
   Widget build(BuildContext context) {
     // 1) We watch the "draftVenue" to know which venue is selected
     final draftVenue = ref.watch(draftVenueProvider);
+    final langCode = ref.watch(languageProvider);
 
     // If no venue is selected, show a loading or "no venue" message
     if (draftVenue == null) {
@@ -35,8 +36,6 @@ class _MenuListState extends ConsumerState<MenuList> {
 
     // 2) We watch the provider that fetches a list of menus for this venue
     final menusAsync = ref.watch(menusListProvider(draftVenue.venueId));
-
-    
 
     // 3) Return UI based on AsyncValue state
     return menusAsync.when(
@@ -84,7 +83,7 @@ class _MenuListState extends ConsumerState<MenuList> {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          draftVenue.venueName,
+                          draftVenue.venueName[langCode]!,
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!
@@ -136,8 +135,8 @@ class _MenuListState extends ConsumerState<MenuList> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF5E1E),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

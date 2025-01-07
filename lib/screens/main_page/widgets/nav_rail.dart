@@ -38,6 +38,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
   Widget build(BuildContext context) {
     final isRtl = Directionality.of(context) == TextDirection.rtl;
     final selectedIndex = ref.watch(selectedMenuIndexProvider);
+    final langCode = ref.read(languageProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -76,7 +77,7 @@ class _CustomNavigationState extends ConsumerState<CustomNavigation> {
 
               // Navigation Items
               VenueNavigation(
-                label: ref.watch(venueProvider)?.venueName ?? '',
+                label: ref.watch(venueProvider)?.venueName[langCode] ?? '',
                 iconPath: 'assets/icons/arrow.svg',
                 onCloseOverlay: () {
                   _updateIndex(0, '', closeDrawer: false);
