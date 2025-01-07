@@ -133,17 +133,20 @@ class MenuCard extends ConsumerWidget {
     final localization = AppLocalizations.of(context)!;
     final chips = <Widget>[];
     if (menu.visibleOnQr) {
-      chips.add(_buildTagChip(localization.translate('menu.dine_in'),'Dine-in' , context));
+      chips.add(_buildTagChip(
+          localization.translate('menu.dine_in'), 'Dine-in', context));
     }
     if (menu.visibleOnPickup) {
-      chips.add(_buildTagChip(localization.translate('menu.pickup'), 'Pickup', context));
+      chips.add(_buildTagChip(
+          localization.translate('menu.pickup'), 'Pickup', context));
     }
     if (menu.visibleOnDelivery) {
-      chips
-          .add(_buildTagChip(localization.translate('menu.delivery'),  'Delivery',context));
+      chips.add(_buildTagChip(
+          localization.translate('menu.delivery'), 'Delivery', context));
     }
     if (menu.visibleOnTablet) {
-      chips.add(_buildTagChip(localization.translate('menu.tablet'), 'Tablet',context));
+      chips.add(_buildTagChip(
+          localization.translate('menu.tablet'), 'Tablet', context));
     }
     return chips;
   }
@@ -299,89 +302,90 @@ class MenuCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // 2) 3-dots for Settings or Delete
-                 // 2) 3-dots for Settings or Delete
-PopupMenuButton<String>(
-  icon: const Icon(
-    Icons.more_vert,
-    color: AppThemeLocal.accent,
-    size: 28.0,
-  ),
-  onSelected: (String value) async {
-    final venue = ref.read(draftVenueProvider);
-    if (venue == null) return;
+                  // 2) 3-dots for Settings or Delete
+                  PopupMenuButton<String>(
+                    icon: const Icon(
+                      Icons.more_vert,
+                      color: AppThemeLocal.accent,
+                      size: 28.0,
+                    ),
+                    onSelected: (String value) async {
+                      final venue = ref.read(draftVenueProvider);
+                      if (venue == null) return;
 
-    switch (value) {
-      case 'settings':
-        // Handle settings action
-        break;
-      case 'delete':
-        await ref
-            .read(menusListProvider(venue.venueId).notifier)
-            .deleteMenu(menu.menuId);
-        break;
-      case 'move_up':
-        await ref
-            .read(menusListProvider(venue.venueId).notifier)
-            .moveUp(menu.menuId);
-        break;
-      case 'move_down':
-        await ref
-            .read(menusListProvider(venue.venueId).notifier)
-            .moveDown(menu.menuId);
-        break;
-      case 'duplicate':
-        // NEW: Duplicate the menu
-        await ref
-            .read(menusListProvider(venue.venueId).notifier)
-            .duplicateMenu(menu.menuId);
-        break;
-    }
-  },
-  itemBuilder: (BuildContext context) {
-    final items = <PopupMenuEntry<String>>[];
+                      switch (value) {
+                        case 'settings':
+                          // Handle settings action
+                          break;
+                        case 'delete':
+                          await ref
+                              .read(menusListProvider(venue.venueId).notifier)
+                              .deleteMenu(menu.menuId);
+                          break;
+                        case 'move_up':
+                          await ref
+                              .read(menusListProvider(venue.venueId).notifier)
+                              .moveUp(menu.menuId);
+                          break;
+                        case 'move_down':
+                          await ref
+                              .read(menusListProvider(venue.venueId).notifier)
+                              .moveDown(menu.menuId);
+                          break;
+                        case 'duplicate':
+                          // NEW: Duplicate the menu
+                          await ref
+                              .read(menusListProvider(venue.venueId).notifier)
+                              .duplicateMenu(menu.menuId);
+                          break;
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      final items = <PopupMenuEntry<String>>[];
 
-    items.add(
-      PopupMenuItem(
-        value: 'settings',
-        child: Text(localization.translate('menu.settings')),
-      ),
-    );
-    items.add(
-      PopupMenuItem(
-        value: 'duplicate',
-        child: Text(localization.translate('menu.duplicate')),
-      ),
-    );
-    items.add(
-      PopupMenuItem(
-        value: 'delete',
-        child: Text(localization.translate('menu.delete')),
-      ),
-    );
+                      items.add(
+                        PopupMenuItem(
+                          value: 'settings',
+                          child: Text(localization.translate('menu.settings')),
+                        ),
+                      );
+                      items.add(
+                        PopupMenuItem(
+                          value: 'duplicate',
+                          child: Text(localization.translate('menu.duplicate')),
+                        ),
+                      );
+                      items.add(
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text(localization.translate('menu.delete')),
+                        ),
+                      );
 
-    // Add "Move Up" if not first
-    if (!isFirst) {
-      items.add(
-        PopupMenuItem(
-          value: 'move_up',
-          child: Text(localization.translate('menu.move_up')),
-        ),
-      );
-    }
+                      // Add "Move Up" if not first
+                      if (!isFirst) {
+                        items.add(
+                          PopupMenuItem(
+                            value: 'move_up',
+                            child: Text(localization.translate('menu.move_up')),
+                          ),
+                        );
+                      }
 
-    // Add "Move Down" if not last
-    if (!isLast) {
-      items.add(
-        PopupMenuItem(
-          value: 'move_down',
-          child: Text(localization.translate('menu.move_down')),
-        ),
-      );
-    }
+                      // Add "Move Down" if not last
+                      if (!isLast) {
+                        items.add(
+                          PopupMenuItem(
+                            value: 'move_down',
+                            child:
+                                Text(localization.translate('menu.move_down')),
+                          ),
+                        );
+                      }
 
-    return items;
-  },
-),
+                      return items;
+                    },
+                  ),
 
                   // 4) Toggle isOnline
                   Row(
@@ -399,13 +403,13 @@ PopupMenuButton<String>(
                           borderRadius: BorderRadius.circular(4),
                         ),
 
-                        side: BorderSide(
-                          color: AppThemeLocal.accent2,
+                        side: const BorderSide(
+                          color: AppThemeLocal.accent,
                           width: 1,
                         ),
                         activeColor:
-                            AppThemeLocal.grey2, // Set the accent color
-                        checkColor: AppThemeLocal.accent,
+                            AppThemeLocal.accent, // Set the accent color
+                        checkColor: AppThemeLocal.white,
                         value: menu.isOnline,
                         onChanged: (val) async {
                           if (val == null) return;

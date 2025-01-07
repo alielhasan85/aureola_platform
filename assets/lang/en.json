@@ -199,7 +199,7 @@
   "Select_and_save_your_preferred_colors_to_personalize_your_QR_menu.": "Select and save your preferred colors to personalize your QR menu.",
 
 "menu.visibility": "Visibility",
-  
+ 
     "menu.error": "Error: ",
     "menu.availableMenusAt": "Available Menus at",
     "menu.noMenusFound": "No menus found.",
@@ -211,7 +211,7 @@
     "menu.tabletSubtitle": "Display the menu on tablets.",
     "menu.qrMenu": "QR Code Menu",
     "menu.qrSubtitle": "Display the menu via QR codes.",
-
+    
     "menu.pickupMenu": "Pickup Menu",
     "menu.pickupSubtitle": "Display the menu for pickup orders.",
 
@@ -277,8 +277,12 @@
   
   "Translation": "Translation", 
 
-  "Edit": "Edit"
- 
+  "Edit_Translations":"Edit Translations",
+
+ "You_are_editing_translations_for": "You are editing translations for {label}.",
+
+ "Auto_Translate":"Auto Translate",
+ "EnterTextIn": "Enter Text In {langName}"
    
    
   

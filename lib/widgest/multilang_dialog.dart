@@ -148,15 +148,16 @@ class _MultiLangDialogState extends ConsumerState<MultiLangDialog> {
                           FloatingActionButton(
                             heroTag: null, // avoid hero conflicts
                             onPressed: _isTranslating ? null : _autoTranslate,
-                            backgroundColor:
-                                _isTranslating ? Colors.grey : AppThemeLocal.red,
+                            backgroundColor: _isTranslating
+                                ? Colors.grey
+                                : AppThemeLocal.red,
                             child: const Icon(Icons.translate),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            localization.translate('Auto_Translate'),
+                            localization.translate("Auto_Translate"),
                             style: AppThemeLocal.paragraph.copyWith(
-                              fontSize: 14,
+                              fontSize: 12,
                               color: _isTranslating
                                   ? AppThemeLocal.grey
                                   : AppThemeLocal.primary,
@@ -181,17 +182,15 @@ class _MultiLangDialogState extends ConsumerState<MultiLangDialog> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             codeToName(langCode),
-                            style: AppThemeLocal.paragraph
-                                .copyWith(fontWeight: FontWeight.bold),
+                            style: AppThemeLocal.paragraph,
                           ),
                         ),
                         const SizedBox(height: 6),
                         TextFormField(
                           controller: _controllers[langCode],
                           style: AppThemeLocal.paragraph,
-                          decoration: AppThemeLocal
-                                  .textFieldinputDecoration()
-                              .copyWith(
+                          decoration:
+                              AppThemeLocal.textFieldinputDecoration().copyWith(
                             hintText: localization
                                 .translate("EnterTextIn")
                                 .replaceAll(

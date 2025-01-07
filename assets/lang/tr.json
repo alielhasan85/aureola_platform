@@ -246,7 +246,14 @@
   "Add_New_Menu": "Yeni Menü Ekle",
   "Edit_Menu": "Menüyü Düzenle",
   "create": "Oluştur",
-  "menu.duplicate": "Duplicate"
+  
+
+  "menu.duplicate": "Çoğalt",
+  "Translation": "Çeviri",
+  "Edit_Translations": "Çevirileri Düzenle",
+  "You_are_editing_translations_for": "{label} için çevirileri düzenliyorsunuz.",
+  "Auto_Translate": "Otomatik Çeviri",
+  "EnterTextIn": "{langName} dilinde metni girin"
     
  
 

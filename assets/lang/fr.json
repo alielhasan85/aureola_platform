@@ -251,16 +251,20 @@
   "Add_New_Menu": "Ajouter un nouveau menu",
   "Edit_Menu": "Modifier le menu",
   "create": "Créer",
-  "menu.duplicate": "Duplicate",
 
   "Translations_": "Traductions",
-  "Auto_Translate": "Traduction automatique",
   "Enter_text": "Entrez le texte en {language}",
   "Translating_": "Traduction en cours...",
  
-  "Translation_failed": "Échec de la traduction : {error}"
+  "Translation_failed": "Échec de la traduction : {error}",
+
       
-   
+   "menu.duplicate": "Dupliquer",
+  "Translation": "Traduction",
+  "Edit_Translations": "Modifier les traductions",
+  "You_are_editing_translations_for": "Vous modifiez les traductions pour {label}.",
+  "Auto_Translate": "Traduction automatique",
+  "EnterTextIn": "Entrez le texte en {langName}"
   
   
 

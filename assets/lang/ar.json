@@ -271,7 +271,12 @@
   "Add_New_Menu": "إضافة قائمة جديدة",
   "Edit_Menu": "تحرير القائمة",
   "create": "إنشاء",
-  "menu.duplicate": "Duplicate"
+  "menu.duplicate": "نسخ",
+  "Translation": "ترجمة",
+  "Edit_Translations": "تحرير الترجمات",
+  "You_are_editing_translations_for": "أنت تقوم بتحرير الترجمات لـ {label}.",
+  "Auto_Translate": "الترجمة التلقائية",
+  "EnterTextIn": "أدخل النص باللغة {langName}"
     
 
 

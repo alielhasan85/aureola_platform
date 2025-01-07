@@ -231,7 +231,14 @@
   "Add_New_Menu": "Agregar nuevo menú",
   "Edit_Menu": "Editar menú",
   "create": "Crear",
-  "menu.duplicate": "Duplicate"
+ 
+
+  "menu.duplicate": "Duplicar",
+  "Translation": "Traducción",
+  "Edit_Translations": "Editar traducciones",
+  "You_are_editing_translations_for": "Estás editando las traducciones para {label}.",
+  "Auto_Translate": "Traducción automática",
+  "EnterTextIn": "Ingrese el texto en {langName}"
 
  
 }
