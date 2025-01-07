@@ -133,29 +133,29 @@ class MenuCard extends ConsumerWidget {
     final localization = AppLocalizations.of(context)!;
     final chips = <Widget>[];
     if (menu.visibleOnQr) {
-      chips.add(_buildTagChip(localization.translate('menu.dine_in'), context));
+      chips.add(_buildTagChip(localization.translate('menu.dine_in'),'Dine-in' , context));
     }
     if (menu.visibleOnPickup) {
-      chips.add(_buildTagChip(localization.translate('menu.pickup'), context));
+      chips.add(_buildTagChip(localization.translate('menu.pickup'), 'Pickup', context));
     }
     if (menu.visibleOnDelivery) {
       chips
-          .add(_buildTagChip(localization.translate('menu.delivery'), context));
+          .add(_buildTagChip(localization.translate('menu.delivery'),  'Delivery',context));
     }
     if (menu.visibleOnTablet) {
-      chips.add(_buildTagChip(localization.translate('menu.tablet'), context));
+      chips.add(_buildTagChip(localization.translate('menu.tablet'), 'Tablet',context));
     }
     return chips;
   }
 
-  Widget _buildTagChip(String label, BuildContext context) {
+  Widget _buildTagChip(String label, String iconName, BuildContext context) {
     return Chip(
       padding: EdgeInsets.zero,
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           SvgPicture.asset(
-            'assets/icons/$label.svg',
+            'assets/icons/$iconName.svg',
             width: 20,
             height: 20,
             colorFilter:
@@ -299,77 +299,89 @@ class MenuCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // 2) 3-dots for Settings or Delete
-                  PopupMenuButton<String>(
-                    icon: const Icon(
-                      Icons.more_vert,
-                      color: AppThemeLocal.accent,
-                      size: 28.0,
-                    ),
-                    onSelected: (String value) async {
-                      final venue = ref.read(draftVenueProvider);
-                      if (venue == null) return;
-// TODO: to work on the ui f this pop down menu
-                      switch (value) {
-                        case 'settings':
-                          // Handle settings action
-                          break;
-                        case 'delete':
-                          await ref
-                              .read(menusListProvider(venue.venueId).notifier)
-                              .deleteMenu(menu.menuId);
-                          break;
-                        case 'move_up':
-                          await ref
-                              .read(menusListProvider(venue.venueId).notifier)
-                              .moveUp(menu.menuId);
-                          break;
-                        case 'move_down':
-                          await ref
-                              .read(menusListProvider(venue.venueId).notifier)
-                              .moveDown(menu.menuId);
-                          break;
-                      }
-                    },
-                    itemBuilder: (BuildContext context) {
-                      final items = <PopupMenuEntry<String>>[];
+                 // 2) 3-dots for Settings or Delete
+PopupMenuButton<String>(
+  icon: const Icon(
+    Icons.more_vert,
+    color: AppThemeLocal.accent,
+    size: 28.0,
+  ),
+  onSelected: (String value) async {
+    final venue = ref.read(draftVenueProvider);
+    if (venue == null) return;
 
-                      items.add(
-                        PopupMenuItem(
-                          value: 'settings',
-                          child: Text(localization.translate('menu.settings')),
-                        ),
-                      );
-                      items.add(
-                        PopupMenuItem(
-                          value: 'delete',
-                          child: Text(localization.translate('menu.delete')),
-                        ),
-                      );
+    switch (value) {
+      case 'settings':
+        // Handle settings action
+        break;
+      case 'delete':
+        await ref
+            .read(menusListProvider(venue.venueId).notifier)
+            .deleteMenu(menu.menuId);
+        break;
+      case 'move_up':
+        await ref
+            .read(menusListProvider(venue.venueId).notifier)
+            .moveUp(menu.menuId);
+        break;
+      case 'move_down':
+        await ref
+            .read(menusListProvider(venue.venueId).notifier)
+            .moveDown(menu.menuId);
+        break;
+      case 'duplicate':
+        // NEW: Duplicate the menu
+        await ref
+            .read(menusListProvider(venue.venueId).notifier)
+            .duplicateMenu(menu.menuId);
+        break;
+    }
+  },
+  itemBuilder: (BuildContext context) {
+    final items = <PopupMenuEntry<String>>[];
 
-                      // Add "Move Up" if not first
-                      if (!isFirst) {
-                        items.add(
-                          PopupMenuItem(
-                            value: 'move_up',
-                            child: Text(localization.translate('menu.move_up')),
-                          ),
-                        );
-                      }
+    items.add(
+      PopupMenuItem(
+        value: 'settings',
+        child: Text(localization.translate('menu.settings')),
+      ),
+    );
+    items.add(
+      PopupMenuItem(
+        value: 'duplicate',
+        child: Text(localization.translate('menu.duplicate')),
+      ),
+    );
+    items.add(
+      PopupMenuItem(
+        value: 'delete',
+        child: Text(localization.translate('menu.delete')),
+      ),
+    );
 
-                      // Add "Move Down" if not last
-                      if (!isLast) {
-                        items.add(
-                          PopupMenuItem(
-                            value: 'move_down',
-                            child:
-                                Text(localization.translate('menu.move_down')),
-                          ),
-                        );
-                      }
+    // Add "Move Up" if not first
+    if (!isFirst) {
+      items.add(
+        PopupMenuItem(
+          value: 'move_up',
+          child: Text(localization.translate('menu.move_up')),
+        ),
+      );
+    }
 
-                      return items;
-                    },
-                  ),
+    // Add "Move Down" if not last
+    if (!isLast) {
+      items.add(
+        PopupMenuItem(
+          value: 'move_down',
+          child: Text(localization.translate('menu.move_down')),
+        ),
+      );
+    }
+
+    return items;
+  },
+),
 
                   // 4) Toggle isOnline
                   Row(

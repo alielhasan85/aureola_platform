@@ -29,7 +29,7 @@ class Menu extends ConsumerStatefulWidget {
   static const double minFormWidth = 450.0;
   static const double maxFormWidth = 600.0;
   static const double cardSpacing = 16.0;
-  static const double mobileBreakpoint = 600.0;
+  static const double mobileBreakpoint = 600.0; 
 
   @override
   ConsumerState<Menu> createState() => _MenuState();

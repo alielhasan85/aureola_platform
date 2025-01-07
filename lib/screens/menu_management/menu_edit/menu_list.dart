@@ -9,9 +9,8 @@ import 'package:aureola_platform/providers/menus_list_provider.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
 import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/screens/menu_management/menu_edit/menu_card.dart';
+import 'package:aureola_platform/screens/menu_management/menu_edit/edit_menu.dart';
 
-/// This widget displays all menus for the current draftVenue (if any),
-/// using the menusListProvider to load data from Firestore.
 class MenuList extends ConsumerStatefulWidget {
   final String layout;
 
@@ -37,14 +36,20 @@ class _MenuListState extends ConsumerState<MenuList> {
     // 2) We watch the provider that fetches a list of menus for this venue
     final menusAsync = ref.watch(menusListProvider(draftVenue.venueId));
 
+    
+
     // 3) Return UI based on AsyncValue state
     return menusAsync.when(
       loading: () => const SizedBox(
-          height: 700,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        height: 700,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             Text('Loading Available menus'),
-            Center(child: CircularProgressIndicator())
-          ])),
+            Center(child: CircularProgressIndicator()),
+          ],
+        ),
+      ),
       error: (err, stack) => Center(
         child: Text(
           AppLocalizations.of(context)!
@@ -70,18 +75,6 @@ class _MenuListState extends ConsumerState<MenuList> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 8),
-
-                    // Row: "Available Menus at {VenueName}"
-                    // Row(
-                    //   children: [
-                    //     Expanded(
-                    //       child: Text(
-                    //         AppLocalizations.of(context)!
-                    //             .translate('menuList.availableMenusAt')
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                     Row(
                       children: [
                         Text(
@@ -112,9 +105,7 @@ class _MenuListState extends ConsumerState<MenuList> {
                         ),
                       ),
                     ] else ...[
-                      // For each menu, figure out if it's first or last
                       for (int i = 0; i < menus.length; i++) ...[
-                        // Determine if this is top or bottom in the list
                         MenuCard(
                           menu: menus[i],
                           isSelected: menus[i].menuId == _selectedMenuId,
@@ -126,7 +117,6 @@ class _MenuListState extends ConsumerState<MenuList> {
                           isFirst: i == 0,
                           isLast: i == menus.length - 1,
                         ),
-
                         const SizedBox(height: 16),
                       ],
                     ],
@@ -146,33 +136,45 @@ class _MenuListState extends ConsumerState<MenuList> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF5E1E),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 16),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   onPressed: () async {
-                    // 4) Create a new blank/placeholder menu
+                    // Create a new MenuModel but do NOT upsert it yet.
                     final newMenu = MenuModel(
-                      menuId: '', // Let Firestore assign an ID
+                      menuId: '', // Let Firestore assign an ID later
                       venueId: draftVenue.venueId,
-                      menuName: {'en': 'Untitled Menu'},
+                      menuName: {'en': ''}, // Empty to force user to fill
                       description: {},
                       notes: {},
-                      imageUrl: null,
                       isOnline: false,
-                      sortOrder: menus.length, // put it at the end
+                      sortOrder: menus.length,
                     );
 
-                    // Use the provider to upsert (add) this new menu
-                    await ref
-                        .read(menusListProvider(draftVenue.venueId).notifier)
-                        .upsertMenu(newMenu);
+                    // Open the SAME EditMenuDialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return EditMenuDialog(
+                          menu: newMenu,
+                          onSave: (finalMenu) async {
+                            // Only upsert if user pressed "Save"
+                            await ref
+                                .read(menusListProvider(draftVenue.venueId)
+                                    .notifier)
+                                .upsertMenu(finalMenu);
 
-                    // Optionally, automatically select it
-                    // We might need to refetch the updated list or do it after upsert
-                    // For simplicity, rely on the list refreshing itself
+                            // Optionally select this new menu after saving
+                            setState(() {
+                              _selectedMenuId = finalMenu.menuId;
+                            });
+                          },
+                        );
+                      },
+                    );
                   },
                   child: Text(
                     AppLocalizations.of(context)!.translate('menu.addNewMenu'),

@@ -3,57 +3,68 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+// Example imports for your app:
 import 'package:aureola_platform/providers/providers.dart';
-import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/service/localization/localization.dart';
+import 'package:aureola_platform/service/theme/theme.dart';
 import 'package:aureola_platform/widgest/language_config.dart';
 
-/// A widget that shows multiple text fields (each with a TextEditingController)
-/// for [availableLanguages], and provides a "Translate" button to fill missing
-/// fields from a chosen source language.
-class MultilangFieldDialogContent extends ConsumerStatefulWidget {
-  /// Example:
-  ///   initialValues = {'en': 'Breakfast', 'ar': ''}
-  ///   availableLanguages might be ["en","ar","fr","tr"]
-  ///
-  /// onSave returns the final map [String -> text] for all languages
-  /// after the user presses "Save".
+/// A standard AlertDialog that shows multiple text fields for each language,
+/// plus optional Google Translate support. On "Save," it returns
+/// a Map<String,String> with the updated text for each language.
+///
+/// Usage:
+///   final result = await showDialog<Map<String,String>>(
+///     context: context,
+///     builder: (_) => MultiLangDialog(
+///       initialValues: {'en': 'Hello', 'ar': ''},
+///       availableLanguages: ['en','ar','fr'],
+///     ),
+///   );
+///   if (result != null) {
+///     // user pressed "Save" => result is the updated map
+///   } else {
+///     // user canceled
+///   }
+class MultiLangDialog extends ConsumerStatefulWidget {
   final Map<String, String> initialValues;
   final List<String> availableLanguages;
-  final ValueChanged<Map<String, String>> onSave;
-  final VoidCallback onCancel;
 
-  const MultilangFieldDialogContent({
+  /// Optionally provide a default language code. This is used as
+  /// the "first" field in the dialog and also the main source for auto-translate
+  /// if it has text.
+  final String? defaultLang;
+
+  /// If you want to do Google Translate, provide an API key.
+  /// If empty, the "Translate" button is hidden or disabled.
+  final String googleApiKey;
+
+  const MultiLangDialog({
     super.key,
     required this.initialValues,
     required this.availableLanguages,
-    required this.onSave,
-    required this.onCancel,
+    this.defaultLang,
+    this.googleApiKey = '',
   });
 
   @override
-  ConsumerState<MultilangFieldDialogContent> createState() =>
-      _MultilangFieldDialogContentState();
+  ConsumerState<MultiLangDialog> createState() => _MultiLangDialogState();
 }
 
-class _MultilangFieldDialogContentState
-    extends ConsumerState<MultilangFieldDialogContent> {
+class _MultiLangDialogState extends ConsumerState<MultiLangDialog> {
   final _formKey = GlobalKey<FormState>();
 
-  /// A `TextEditingController` for each language in [availableLanguages].
+  /// One TextEditingController per language
   late final Map<String, TextEditingController> _controllers;
 
-  /// Replace with your actual Google Cloud Translation API key
-  final String apiKey = 'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA';
-
-  bool isTranslating = false;
-  String translationError = '';
+  bool _isTranslating = false;
+  String _translationError = '';
 
   @override
   void initState() {
     super.initState();
 
-    // Build a controller for each language code, setting initial text
+    // Build a controller for each language code
     _controllers = {};
     for (final lang in widget.availableLanguages) {
       _controllers[lang] = TextEditingController(
@@ -64,7 +75,6 @@ class _MultilangFieldDialogContentState
 
   @override
   void dispose() {
-    // Dispose all controllers
     for (final ctrl in _controllers.values) {
       ctrl.dispose();
     }
@@ -72,110 +82,136 @@ class _MultilangFieldDialogContentState
   }
 
   @override
-  Widget build(BuildContext context) {
-    final venue = ref.read(draftVenueProvider);
-    final defaultLang = venue?.additionalInfo['defaultLanguage'] ?? 'en';
+Widget build(BuildContext context) {
+  final localization = AppLocalizations.of(context)!;
 
-    // Reorder so that defaultLang is first, if present
-    final reorderedLangs =
-        _reorderLanguages(widget.availableLanguages, defaultLang);
-//TODO: to fix the issue of overflex whgen running on mobile app
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // --- Title row with "Translate" button ---
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.translate("Translations_"),
-                style: AppThemeLocal.appBarTitle,
-              ),
-              ElevatedButton.icon(
-                style: AppThemeLocal.addButtonStyle,
-                onPressed: _autoTranslateFields,
-                icon: Icon(Icons.translate,
-                    color: AppThemeLocal.addButtonStyle.foregroundColor
-                        ?.resolve({})),
-                label: Text(
-                  AppLocalizations.of(context)!.translate("Translate_"),
-                  style: AppThemeLocal.appBarTitle,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+  // If no defaultLang is provided, fallback to 'en' or the first in the list.
+  final effectiveDefaultLang =
+      widget.defaultLang ?? (widget.availableLanguages.isNotEmpty
+          ? widget.availableLanguages.first
+          : 'en');
 
-          // --- Multilingual Fields (one per language) ---
-          for (final langCode in reorderedLangs) ...[
-            Text(codeToName(langCode), style: AppThemeLocal.paragraph),
-            const SizedBox(height: 8),
-            TextFormField(
-              controller: _controllers[langCode],
-              decoration: AppThemeLocal.textFieldinputDecoration().copyWith(
-                hintText: 'Enter text in ${codeToName(langCode)}',
-                border: const OutlineInputBorder(),
-              ),
-              validator: (val) {
-                if (val == null || val.isEmpty) {
-                  return 'Please enter text in ${codeToName(langCode)}';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-          ],
+  // Reorder so that defaultLang is at the front
+  final reorderedLangs = _reorderLangs(
+    widget.availableLanguages,
+    effectiveDefaultLang,
+  );
 
-          // Display an error if there's a translation issue
-          if (translationError.isNotEmpty) ...[
-            Text(
-              translationError,
-              style: AppThemeLocal.paragraph.copyWith(color: AppThemeLocal.red),
-            ),
-            const SizedBox(height: 8),
-          ],
-
-          // Show a simple spinner if translating
-          if (isTranslating) ...[
-            const Row(
-              children: [
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
-                SizedBox(width: 8),
-                Text('Translating...'),
-              ],
-            ),
-            const SizedBox(height: 8),
-          ],
-
-          // --- Actions row (Cancel, Save) ---
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: widget.onCancel,
-                child: const Text('Cancel'),
-              ),
-              const SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: _onSavePressed,
-                child: const Text('Save'),
-              ),
-            ],
-          ),
-        ],
+  return Dialog(
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxWidth: 450, 
       ),
-    );
-  }
-
-  /// Reorder so [defaultLang] is first in the list, if it's present
-  List<String> _reorderLanguages(List<String> langs, String defaultLang) {
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Adjust height dynamically
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(localization.translate('Translations_')),
+                  if (widget.googleApiKey.isNotEmpty)
+                    Column(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    FloatingActionButton(
+      onPressed: _isTranslating ? null : _autoTranslate,
+      backgroundColor: _isTranslating
+          ? Colors.grey
+          : AppThemeLocal.red,
+      child: const Icon(Icons.translate),
+    ),
+    const SizedBox(height: 8), // Space between the button and text
+    Text(
+      localization.translate('Auto_Translate'),
+      style: AppThemeLocal.paragraph.copyWith(
+        fontSize: 14,
+        
+        color: _isTranslating ? AppThemeLocal.grey : AppThemeLocal.primary,
+      ),
+    ),
+  ],
+),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, // Allow dynamic resizing
+                  children: [
+                    // Fields for each language
+                    for (final langCode in reorderedLangs) ...[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          codeToName(langCode),
+                          style: AppThemeLocal.paragraph
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      TextFormField(
+                        controller: _controllers[langCode],
+                        decoration: AppThemeLocal.textFieldinputDecoration()
+                            .copyWith(
+                          hintText: 'Enter ${codeToName(langCode)} text',
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                    if (_translationError.isNotEmpty) ...[
+                      Text(
+                        _translationError,
+                        style: AppThemeLocal.paragraph
+                            .copyWith(color: AppThemeLocal.red),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                    if (_isTranslating) ...[
+                      const Row(
+                        children: [
+                          SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          SizedBox(width: 8),
+                          Text('Translating...'),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () =>
+                        Navigator.pop<Map<String, String>>(context, null),
+                    child: Text(localization.translate('cancel')),
+                  ),
+                  ElevatedButton(
+                    onPressed: _onSave,
+                    child: Text(localization.translate('save')),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+  /// Reorders so defaultLang is first in the list
+  List<String> _reorderLangs(List<String> langs, String defaultLang) {
     if (!langs.contains(defaultLang)) return langs;
     return [
       defaultLang,
@@ -183,82 +219,73 @@ class _MultilangFieldDialogContentState
     ];
   }
 
-  /// When user taps "Save", we gather text from each controller into a map
-  /// and pass it to `widget.onSave`.
-  void _onSavePressed() {
+  void _onSave() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Build the final map from controllers
-      final updatedMap = <String, String>{};
+      // Gather all the text into a final map
+      final result = <String, String>{};
       for (final lang in widget.availableLanguages) {
-        updatedMap[lang] = _controllers[lang]!.text;
+        result[lang] = _controllers[lang]!.text.trim();
       }
-      widget.onSave(updatedMap);
+      Navigator.pop(context, result);
     }
   }
 
-  /// Attempt to translate from some source language into all other missing fields
-  Future<void> _autoTranslateFields() async {
+  Future<void> _autoTranslate() async {
     setState(() {
-      isTranslating = true;
-      translationError = '';
+      _isTranslating = true;
+      _translationError = '';
     });
 
     try {
-      final venue = ref.read(draftVenueProvider);
-      final defaultLang = venue?.additionalInfo['defaultLanguage'] ?? 'en';
-
-      // 1) figure out a "sourceLang" that actually has text
-      final sourceLang = _findSourceLanguage(defaultLang);
+      // 1) Find a sourceLang that actually has text
+      final sourceLang = _findSourceLanguage();
       final sourceText = _controllers[sourceLang]!.text.trim();
 
-      // 2) Fill only missing fields
-      for (final langCode in widget.availableLanguages) {
-        if (langCode == sourceLang) continue;
+      // 2) Translate only empty fields
+      for (final targetLang in widget.availableLanguages) {
+        if (targetLang == sourceLang) continue;
 
-        final currentVal = _controllers[langCode]!.text.trim();
+        final currentVal = _controllers[targetLang]!.text.trim();
         if (currentVal.isEmpty) {
-          final translated =
-              await translateText(sourceText, sourceLang, langCode);
+          final translated = await _translateText(
+            sourceText,
+            sourceLang,
+            targetLang,
+            widget.googleApiKey,
+          );
           setState(() {
-            _controllers[langCode]!.text = translated;
+            _controllers[targetLang]!.text = translated;
           });
         }
       }
     } catch (e) {
       setState(() {
-        translationError = 'Translation failed: $e';
+        _translationError = 'Translation failed: $e';
       });
     } finally {
-      setState(() => isTranslating = false);
+      setState(() => _isTranslating = false);
     }
   }
 
-  /// If the default language has text, use that. Otherwise,
-  /// pick the first language in `availableLanguages` that has text.
-  /// If none has text, throw an error.
-  String _findSourceLanguage(String defaultLang) {
-    // 1) If defaultLang is in the list and has text, use it
-    if (widget.availableLanguages.contains(defaultLang)) {
-      final text = _controllers[defaultLang]!.text.trim();
-      if (text.isNotEmpty) return defaultLang;
+  String _findSourceLanguage() {
+    // If defaultLang has text, use that
+    final defaultLang = widget.defaultLang ?? 'en';
+    if (_controllers[defaultLang]?.text.trim().isNotEmpty == true) {
+      return defaultLang;
     }
-
-    // 2) Otherwise, find the first language with text
+    // Otherwise pick the first that is non-empty
     for (final lang in widget.availableLanguages) {
-      final text = _controllers[lang]!.text.trim();
-      if (text.isNotEmpty) return lang;
+      if (_controllers[lang]!.text.trim().isNotEmpty) return lang;
     }
-
-    throw Exception('No valid source language found (all fields are empty).');
+    throw Exception('No source language found - all fields are empty.');
   }
 
-  /// Example function calling Google Cloud Translate
-  Future<String> translateText(
-      String text, String sourceLang, String targetLang) async {
-    if (apiKey.isEmpty) {
-      throw Exception('Translation API key is missing.');
-    }
-
+  Future<String> _translateText(
+    String text,
+    String sourceLang,
+    String targetLang,
+    String apiKey,
+  ) async {
     final url = Uri.parse(
       'https://translation.googleapis.com/language/translate/v2?key=$apiKey',
     );
@@ -279,7 +306,7 @@ class _MultilangFieldDialogContentState
       final translatedText = data['data']['translations'][0]['translatedText'];
       return translatedText;
     } else {
-      throw Exception('API call failed: ${response.body}');
+      throw Exception('API error: ${response.body}');
     }
   }
 }

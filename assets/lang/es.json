@@ -227,7 +227,11 @@
   "day_sunday": "Domingo",
   "edit.PleaseEnterMenuName": "Por favor, ingrese el nombre del menú",
   "edit.KeepUnder120Chars": "Mantenga la descripción del menú breve",
-  "edit.KeepNotes120Chars": "Mantenga las notas breves"
+  "edit.KeepNotes120Chars": "Mantenga las notas breves",
+  "Add_New_Menu": "Agregar nuevo menú",
+  "Edit_Menu": "Editar menú",
+  "create": "Crear",
+  "menu.duplicate": "Duplicate"
 
  
 }

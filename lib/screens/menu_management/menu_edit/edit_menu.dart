@@ -162,9 +162,21 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
     final localization = AppLocalizations.of(context)!;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final bool isMobile = screenWidth < 500; // or your custom breakpoint
+    final bool isMobile = screenWidth < 500; 
     // We'll define a maxWidth for large screens
     // const double maxDialogWidth = 600;
+
+    // Check if it's a new menu (menuId is empty):
+  final bool isNew = widget.menu.menuId.isEmpty;
+
+  // Decide the dialog title and button text
+  final dialogTitle = isNew
+      ? localization.translate("Add_New_Menu")
+      : localization.translate("Edit_Menu");
+  final saveButtonText = isNew
+      ? localization.translate("create")
+      : localization.translate("update");
+
 
     // Decide on a size
     double dialogWidth = isMobile ? screenWidth : 500;
@@ -204,7 +216,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    localization.translate("Edit_Menu"),
+                    dialogTitle,
                     style: AppThemeLocal.appBarTitle,
                   ),
                   IconButton(
@@ -243,41 +255,36 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                           }
                           return null;
                         },
-                        dialogWidth: dialogWidth - 8,
-                        popoverOffset: const Offset(
-                            4, 6), // place it just below the textfield
-                        popoverDecoration: BoxDecoration(
-                          color: AppThemeLocal.background2,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade300),
-                        ),
+                        dialogWidth: dialogWidth ,
+                        
+                        
                       ),
                       const SizedBox(height: 16),
                       // Description
 
-                      MenuDescriptionFields(
-                        descriptionMap: _descriptionMap,
-                        onDescriptionChanged: (updatedMap) {
-                          setState(() {
-                            _descriptionMap = updatedMap;
-                          });
-                        },
-                        validator: (val) {
-                          if (val!.length > 120) {
-                            return 
-                            localization.translate("edit.KeepUnder120Chars")
-                            ;
-                          }
-                          return null;
-                        },
-                        dialogWidth: dialogWidth - 8,
-                        popoverOffset: const Offset(4, 6),
-                        popoverDecoration: BoxDecoration(
-                          color: AppThemeLocal.background2,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade300),
-                        ),
-                      ),
+                      // MenuDescriptionFields(
+                      //   descriptionMap: _descriptionMap,
+                      //   onDescriptionChanged: (updatedMap) {
+                      //     setState(() {
+                      //       _descriptionMap = updatedMap;
+                      //     });
+                      //   },
+                      //   validator: (val) {
+                      //     if (val!.length > 120) {
+                      //       return 
+                      //       localization.translate("edit.KeepUnder120Chars")
+                      //       ;
+                      //     }
+                      //     return null;
+                      //   },
+                      //   dialogWidth: dialogWidth - 8,
+                      //   popoverOffset: const Offset(4, 6),
+                      //   popoverDecoration: BoxDecoration(
+                      //     color: AppThemeLocal.background2,
+                      //     borderRadius: BorderRadius.circular(8),
+                      //     border: Border.all(color: Colors.grey.shade300),
+                      //   ),
+                      // ),
                       const SizedBox(height: 16),
                       // Notes
                       MenuNotesFields(
@@ -296,12 +303,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                           return null;
                         },
                         dialogWidth: dialogWidth - 8,
-                        popoverOffset: const Offset(4, 6),
-                        popoverDecoration: BoxDecoration(
-                          color: AppThemeLocal.background2,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey.shade300),
-                        ),
+                       
                       ),
                       const SizedBox(height: 16),
                       // Images
@@ -441,7 +443,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                       style: AppThemeLocal.saveButtonStyle,
                       onPressed: _onSave,
                       child: Text(
-                        AppLocalizations.of(context)!.translate("update"),
+                        saveButtonText,
                       )),
                 ],
               ),

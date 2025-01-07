@@ -267,7 +267,11 @@
   "day_sunday": "الأحد",
   "edit.PleaseEnterMenuName": "يرجى إدخال اسم القائمة",
   "edit.KeepUnder120Chars": "حافظ على وصف القائمة قصيرًا",
-  "edit.KeepNotes120Chars": "حافظ على الملاحظات قصيرة"
+  "edit.KeepNotes120Chars": "حافظ على الملاحظات قصيرة",
+  "Add_New_Menu": "إضافة قائمة جديدة",
+  "Edit_Menu": "تحرير القائمة",
+  "create": "إنشاء",
+  "menu.duplicate": "Duplicate"
     
 
 

@@ -242,7 +242,11 @@
   "day_sunday": "Pazar",
   "edit.PleaseEnterMenuName": "Lütfen Menü Adını Girin",
   "edit.KeepUnder120Chars": "Menü açıklamasını kısa tutun",
-  "edit.KeepNotes120Chars": "Notları kısa tutun"
+  "edit.KeepNotes120Chars": "Notları kısa tutun",
+  "Add_New_Menu": "Yeni Menü Ekle",
+  "Edit_Menu": "Menüyü Düzenle",
+  "create": "Oluştur",
+  "menu.duplicate": "Duplicate"
     
  
 

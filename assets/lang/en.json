@@ -267,7 +267,15 @@
   "day_sunday": "Sunday",
   "edit.PleaseEnterMenuName":"Please Menu Name", 
   "edit.KeepUnder120Chars": "Keep Menu Description short", 
-  "edit.KeepNotes120Chars": "Keep Notes Short"
+  "edit.KeepNotes120Chars": "Keep Notes Short",
+
+  "Add_New_Menu": "Add New Menu",
+  "Edit_Menu": "Edit Menu",
+  "create": "Create",
+ 
+  "menu.duplicate": "Duplicate"
+  
+ 
    
    
   
