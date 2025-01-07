@@ -19,27 +19,14 @@ class MenuNotesFields extends ConsumerStatefulWidget {
   final String? Function(String?)? validator;
 
   final double dialogWidth;
-  // final Offset popoverOffset;
-  // final BoxDecoration popoverDecoration;
-
+ 
   const MenuNotesFields({
     super.key,
     required this.notesMap,
     required this.onNotesChanged,
     this.validator,
     required this.dialogWidth,
-    // this.popoverOffset = const Offset(0, 8.0),
-    // this.popoverDecoration = const BoxDecoration(
-    //   color: Colors.white,
-    //   borderRadius: BorderRadius.all(Radius.circular(8)),
-    //   boxShadow: [
-    //     BoxShadow(
-    //       color: Colors.black26,
-    //       blurRadius: 4,
-    //       offset: Offset(0, 2),
-    //     ),
-    //   ],
-    // ),
+  
   });
 
   @override
@@ -47,10 +34,7 @@ class MenuNotesFields extends ConsumerStatefulWidget {
 }
 
 class _MenuNotesFieldsState extends ConsumerState<MenuNotesFields> {
-  // final LayerLink _layerLink = LayerLink();
-  // OverlayEntry? _multilangOverlay;
-
-  // final GlobalKey _fieldKey = GlobalKey();
+  
 
   late TextEditingController _controller;
 
@@ -70,79 +54,8 @@ class _MenuNotesFieldsState extends ConsumerState<MenuNotesFields> {
     super.dispose();
   }
 
-  // void _removeOverlay() {
-  //   _multilangOverlay?.remove();
-  //   _multilangOverlay = null;
-  // }
-
-  // void _showMultilangDialog() {
-  //   // Remove any existing overlay
-  //   _removeOverlay();
-  //   final overlay = Overlay.of(context);
-  //   // if (overlay == null) return;
-
-  //   final RenderBox? renderBox =
-  //       _fieldKey.currentContext?.findRenderObject() as RenderBox?;
-  //   if (renderBox == null) return;
-
-  //   final Size fieldSize = renderBox.size;
-  //   final Offset fieldPosition = renderBox.localToGlobal(Offset.zero);
-
-  //   _multilangOverlay = OverlayEntry(
-  //     builder: (context) {
-  //       return Stack(
-  //         children: [
-  //           // Transparent barrier to detect outside taps
-  //           Positioned.fill(
-  //             child: GestureDetector(
-  //               onTap: _removeOverlay,
-  //               behavior: HitTestBehavior.translucent,
-  //               child: Container(color: Colors.transparent),
-  //             ),
-  //           ),
-  //           Positioned(
-  //             left: fieldPosition.dx,
-  //             top:
-  //                 fieldPosition.dy + fieldSize.height + widget.popoverOffset.dy,
-  //             child: Material(
-  //               elevation: 4,
-  //               color: Colors.transparent,
-  //               child: Container(
-  //                 width: fieldSize.width,
-  //                 decoration: widget.popoverDecoration,
-  //                 padding: const EdgeInsets.all(16),
-  //                 child: GestureDetector(
-  //                   onTap: () {}, // so taps inside won't close the popover
-  //                   child: _buildMultilangFields(),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-
-  //   overlay.insert(_multilangOverlay!);
-  // }
-
-  // Widget _buildMultilangFields() {
-  //   final venue = ref.read(draftVenueProvider);
-  //   final currentLang = ref.read(languageProvider);
-
-  //   final availableLangs = venue?.languageOptions ?? [currentLang];
-
-  //   return MultilangFieldDialogContent(
-  //     initialValues: widget.notesMap,
-  //     availableLanguages: availableLangs,
-  //     onSave: (updatedMap) {
-  //       widget.onNotesChanged(updatedMap);
-  //       _removeOverlay();
-  //     },
-  //     onCancel: _removeOverlay,
-  //   );
-  // }
-
+  
+ 
 
   /// Opens a standard dialog with `MultiLangDialog`.
   Future<void> _showMultiLangDialog(BuildContext context) async {
@@ -204,29 +117,16 @@ class _MenuNotesFieldsState extends ConsumerState<MenuNotesFields> {
             hint: AppLocalizations.of(context)!
                 .translate("edit.NotesDescription"),
             suffixIcon: availableLangs.length > 1
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(
-                        height: 30,
-                        child: VerticalDivider(
-                          color: AppThemeLocal.accent,
-                          thickness: 0.5,
-                          width: 4,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.translate,
-                          color: AppThemeLocal.accent,
-                        ),
-                        tooltip: AppLocalizations.of(context)!
-                .translate("edit.editInOtherLanguages")
-                        ,
-                        onPressed: () => _showMultiLangDialog(context),
-                      ),
-                    ],
-                  )
+                ? IconButton(
+                  icon: const Icon(
+                    Icons.translate,
+                    color: AppThemeLocal.accent,
+                  ),
+                  tooltip: AppLocalizations.of(context)!
+                                .translate("edit.editInOtherLanguages")
+                  ,
+                  onPressed: () => _showMultiLangDialog(context),
+                )
                 : null,
           ),
         ),

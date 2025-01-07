@@ -273,8 +273,11 @@
   "Edit_Menu": "Edit Menu",
   "create": "Create",
  
-  "menu.duplicate": "Duplicate"
+  "menu.duplicate": "Duplicate",
   
+  "Translation": "Translation", 
+
+  "Edit": "Edit"
  
    
    

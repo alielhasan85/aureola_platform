@@ -62,7 +62,7 @@ class _MenuNameFieldsState extends ConsumerState<MenuNameFields> {
   }
 
   /// Opens a standard dialog with `MultiLangDialog`.
-  Future<void> _showMultiLangDialog(BuildContext context) async {
+  Future<void> _showMultiLangDialog(BuildContext context, String label) async {
     final venue = ref.read(draftVenueProvider);
     final currentLang = ref.read(languageProvider);
 
@@ -74,6 +74,7 @@ class _MenuNameFieldsState extends ConsumerState<MenuNameFields> {
       context: context,
       builder: (_) {
         return MultiLangDialog(
+          label: label,
           initialValues: widget.menuName,
           availableLanguages: availableLangs,
           defaultLang: venue?.additionalInfo['defaultLanguage'] ?? 'en',
@@ -125,7 +126,7 @@ class _MenuNameFieldsState extends ConsumerState<MenuNameFields> {
                 ? IconButton(
                     icon: const Icon(Icons.translate, color: AppThemeLocal.accent),
                     tooltip: localization.translate("edit.editInOtherLanguages"),
-                    onPressed: () => _showMultiLangDialog(context),
+                    onPressed: () => _showMultiLangDialog( context, "edit.menuName"),
                   )
                 : null,
           ),

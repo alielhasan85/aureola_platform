@@ -213,6 +213,7 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                 ),
               ),
               child: Row(
+                
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -262,29 +263,24 @@ class _EditMenuDialogState extends ConsumerState<EditMenuDialog> {
                       const SizedBox(height: 16),
                       // Description
 
-                      // MenuDescriptionFields(
-                      //   descriptionMap: _descriptionMap,
-                      //   onDescriptionChanged: (updatedMap) {
-                      //     setState(() {
-                      //       _descriptionMap = updatedMap;
-                      //     });
-                      //   },
-                      //   validator: (val) {
-                      //     if (val!.length > 120) {
-                      //       return 
-                      //       localization.translate("edit.KeepUnder120Chars")
-                      //       ;
-                      //     }
-                      //     return null;
-                      //   },
-                      //   dialogWidth: dialogWidth - 8,
-                      //   popoverOffset: const Offset(4, 6),
-                      //   popoverDecoration: BoxDecoration(
-                      //     color: AppThemeLocal.background2,
-                      //     borderRadius: BorderRadius.circular(8),
-                      //     border: Border.all(color: Colors.grey.shade300),
-                      //   ),
-                      // ),
+                      MenuDescriptionFields(
+                        descriptionMap: _descriptionMap,
+                        onDescriptionChanged: (updatedMap) {
+                          setState(() {
+                            _descriptionMap = updatedMap;
+                          });
+                        },
+                        validator: (val) {
+                          if (val!.length > 120) {
+                            return 
+                            localization.translate("edit.KeepUnder120Chars")
+                            ;
+                          }
+                          return null;
+                        },
+                        dialogWidth: dialogWidth ,
+                      
+                      ),
                       const SizedBox(height: 16),
                       // Notes
                       MenuNotesFields(

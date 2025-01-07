@@ -184,7 +184,8 @@
       "menu.error": "Erreur : {error}",
       "menu.availableMenusAt": "Menus disponibles à",
       "menu.noMenusFound": "Aucun menu trouvé.",
-      "menu.addNewMenu": "Ajouter un nouveau menu", "cancel": "Annuler",
+      "menu.addNewMenu": "Ajouter un nouveau menu", 
+      "cancel": "Annuler",
   "update": "Mettre à jour",
    "menu.VisibilityPrompt": "Sélectionnez où votre menu sera visible.",
    "menu.tabletMenu": "Menu Tablette",
@@ -250,7 +251,14 @@
   "Add_New_Menu": "Ajouter un nouveau menu",
   "Edit_Menu": "Modifier le menu",
   "create": "Créer",
-  "menu.duplicate": "Duplicate"
+  "menu.duplicate": "Duplicate",
+
+  "Translations_": "Traductions",
+  "Auto_Translate": "Traduction automatique",
+  "Enter_text": "Entrez le texte en {language}",
+  "Translating_": "Traduction en cours...",
+ 
+  "Translation_failed": "Échec de la traduction : {error}"
       
    
   
