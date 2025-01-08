@@ -136,7 +136,6 @@
   "phone_number_required": "El número de teléfono es obligatorio.",
   "invalid_phone_number": "Introduce un número de teléfono válido.",
   "Language_Options": "Opciones de idioma",
-  "other_languages": "Otros idiomas",
   "save": "Guardar",
   "enter_hex_color_code_tooltip": "Introduce un código de color hexadecimal (e.g., #FFFFFF)",
   "enter_hex_color_code_hint": "Introduce el código de color hexadecimal",
@@ -238,7 +237,15 @@
   "Edit_Translations": "Editar traducciones",
   "You_are_editing_translations_for": "Estás editando las traducciones para {label}.",
   "Auto_Translate": "Traducción automática",
-  "EnterTextIn": "Ingrese el texto en {langName}"
+  "EnterTextIn": "Ingrese el texto en {langName}",
+  "set": "Establecer",
+  "Select_Main_Language": "Seleccionar idioma principal",
+  "please_select_language": "Por favor, seleccione un idioma",
+  "add": "Agregar",
+  "cannot_add_default_language": "No se puede agregar el idioma predeterminado",
+  "language_already_exists": "El idioma ya existe",
+  "other_languages": "Idiomas adicionales opcionales",
+   "Add_a_language": "Agregar un idioma"
 
  
 }

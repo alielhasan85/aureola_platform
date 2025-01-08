@@ -16,8 +16,7 @@ class MenuNameFields extends ConsumerStatefulWidget {
 
   /// You can keep these if you need them, or remove if unused
   final double dialogWidth;
-  // final Offset popoverOffset;
-  // final BoxDecoration popoverDecoration;
+ 
 
   const MenuNameFields({
     super.key,
@@ -25,18 +24,7 @@ class MenuNameFields extends ConsumerStatefulWidget {
     required this.onMenuNameChanged,
     this.validator,
     required this.dialogWidth,
-    // this.popoverOffset = const Offset(0, 8.0),
-    // this.popoverDecoration = const BoxDecoration(
-    //   color: Colors.white,
-    //   borderRadius: BorderRadius.all(Radius.circular(8)),
-    //   boxShadow: [
-    //     BoxShadow(
-    //       color: Colors.black26,
-    //       blurRadius: 4,
-    //       offset: Offset(0, 2),
-    //     ),
-    //   ],
-    // ),
+    
   });
 
   @override
@@ -121,7 +109,7 @@ class _MenuNameFieldsState extends ConsumerState<MenuNameFields> {
             widget.onMenuNameChanged(updatedMap);
           },
           decoration: AppThemeLocal.textFieldinputDecoration(
-            hint: localization.translate("edit.menuNameDescritpion"),
+            hint: localization.translate("edit.PleaseEnterMenuName"),
             suffixIcon: availableLangs.length > 1
                 ? IconButton(
                     icon: const Icon(Icons.translate, color: AppThemeLocal.accent),

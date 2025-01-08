@@ -43,6 +43,12 @@ class AppThemeLocal {
   // Text Styles
   // ===========================
 
+
+/// Google API Key
+  static const String googleApiKey = "AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA";
+
+
+  
   static const TextStyle titleAureola = TextStyle(
     fontFamily: 'CinzelDecorative',
     fontWeight: FontWeight.bold,
@@ -248,6 +254,9 @@ static const TextStyle headingCard = TextStyle(
       ),
     );
   }
+  
+
+
 
 
 /// Define a global InputDecorationTheme for consistency

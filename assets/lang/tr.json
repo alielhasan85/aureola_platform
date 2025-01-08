@@ -9,7 +9,6 @@
     "log_out": "Çıkış Yap",
     "notifications": "Bildirimler",
     "Language_Options": "Language Options",
-    "other_languages":  "Other Languages",
     
     "dashboard": "Gösterge Paneli",
     "order": "Sipariş",
@@ -253,7 +252,15 @@
   "Edit_Translations": "Çevirileri Düzenle",
   "You_are_editing_translations_for": "{label} için çevirileri düzenliyorsunuz.",
   "Auto_Translate": "Otomatik Çeviri",
-  "EnterTextIn": "{langName} dilinde metni girin"
+  "EnterTextIn": "{langName} dilinde metni girin",
+   "set": "Ayarla",
+   "Select_Main_Language": "Ana Dili Seç",
+   "please_select_language": "Lütfen bir dil seçin",
+   "add": "Ekle",
+   "cannot_add_default_language": "Varsayılan dil eklenemez",
+   "language_already_exists": "Dil zaten mevcut",
+   "other_languages": "İsteğe Bağlı Ek Diller",
+    "Add_a_language": "Bir dil ekle"
     
  
 

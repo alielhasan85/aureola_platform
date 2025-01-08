@@ -51,7 +51,28 @@ class _VenueAddLanguagesState extends ConsumerState<VenueAddLanguages> {
             AppLocalizations.of(context)!.translate('other_languages'),
             style: AppThemeLocal.paragraph,
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height:8),
+
+         
+          // Wrap for the "additional" languages as chips
+          Wrap(
+            spacing: 8.0,
+            runSpacing: 4.0,
+            children: additionalLangs.map((code) {
+              final display = codeToName(code);
+              return Chip(
+                 deleteIconColor: AppThemeLocal.accent, 
+                side: const BorderSide(
+    color: AppThemeLocal.accent, // Replace with your desired accent color
+    width: 0.5, // Optional: Adjust the border width
+  ),
+                label: Text(display, style: AppThemeLocal.paragraph.copyWith(fontSize: 14)),
+                // Let the user remove additional languages
+                onDeleted: () => _removeLanguage(code),
+              );
+            }).toList(),
+          ),
+ const SizedBox(height: 16),
 
           // Row with a dropdown + add button
           Row(
@@ -118,12 +139,10 @@ class _VenueAddLanguagesState extends ConsumerState<VenueAddLanguages> {
                   ),
                 ),
               
-              const SizedBox(width: 8),
+              const SizedBox(width: 16),
 
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppThemeLocal.accent,
-                ),
+                style: AppThemeLocal.cancelButtonStyle.copyWith(elevation: WidgetStateProperty.all(0.0) ),
                 onPressed: _onAddLanguage,
                 child: Text(
                   AppLocalizations.of(context)!.translate("add"),
@@ -132,21 +151,7 @@ class _VenueAddLanguagesState extends ConsumerState<VenueAddLanguages> {
             ],
           ),
 
-          const SizedBox(height: 12),
-
-          // Wrap for the "additional" languages as chips
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
-            children: additionalLangs.map((code) {
-              final display = codeToName(code);
-              return Chip(
-                label: Text(display, style: AppThemeLocal.paragraph),
-                // Let the user remove additional languages
-                onDeleted: () => _removeLanguage(code),
-              );
-            }).toList(),
-          ),
+          
         ],
       ),
     );

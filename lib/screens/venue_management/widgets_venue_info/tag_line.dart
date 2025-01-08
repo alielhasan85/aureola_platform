@@ -14,27 +14,20 @@ class TaglineWidget extends ConsumerStatefulWidget {
   final String? Function(String?)? validator;
 
   const TaglineWidget({
-    Key? key,
+    super.key,
     required this.width,
     required this.controller,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<TaglineWidget> createState() => _TaglineWidgetState();
 }
 
 class _TaglineWidgetState extends ConsumerState<TaglineWidget> {
-  late String currentLang;
-
-  @override
-  void initState() {
-    super.initState();
-    currentLang = ref.read(languageProvider);
-  }
-
-  Future<void> _showMultiLangDialog(BuildContext context) async {
+  Future<void> _showMultiLangDialog(BuildContext context, String currentLang) async {
     final venue = ref.read(draftVenueProvider);
+    final localization = AppLocalizations.of(context)!;
     if (venue == null) return;
 
     final currentMap = venue.tagLine;
@@ -45,26 +38,40 @@ class _TaglineWidgetState extends ConsumerState<TaglineWidget> {
     final updatedMap = await showDialog<Map<String, String>>(
       context: context,
       builder: (_) => MultiLangDialog(
-        label: 'Edit Tagline',
+        label: localization.translate("Tagline"),
         initialValues: currentMap,
         availableLanguages: availableLangs,
         defaultLang: venue.additionalInfo['defaultLanguage'] ?? 'en',
-        googleApiKey: 'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA',
+        googleApiKey: AppThemeLocal.googleApiKey,
       ),
     );
+
     if (updatedMap != null) {
       ref.read(draftVenueProvider.notifier).updateTagLineMap(updatedMap);
 
-      final updatedText = updatedMap[currentLang] ?? '';
-      widget.controller.text = updatedText;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          widget.controller.text = updatedMap[currentLang] ?? '';
+        }
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final currentLang = ref.watch(languageProvider);
     final venue = ref.watch(draftVenueProvider);
     final entireMap = venue?.tagLine ?? {currentLang: ''};
+
+    final newText = entireMap[currentLang] ?? '';
+    if (widget.controller.text != newText) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          widget.controller.text = newText;
+        }
+      });
+    }
 
     return SizedBox(
       width: widget.width,
@@ -86,7 +93,7 @@ class _TaglineWidgetState extends ConsumerState<TaglineWidget> {
                   ? IconButton(
                       icon: const Icon(Icons.translate,
                           color: AppThemeLocal.accent),
-                      onPressed: () => _showMultiLangDialog(context),
+                      onPressed: () => _showMultiLangDialog(context, currentLang),
                     )
                   : null,
             ),

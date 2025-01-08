@@ -25,55 +25,55 @@ class VenueNameField extends ConsumerStatefulWidget {
 }
 
 class _VenueNameFieldState extends ConsumerState<VenueNameField> {
-  // We might store the current language code so we don't read it repeatedly
-  late String currentLang;
-
-  @override
-  void initState() {
-    super.initState();
-    // read the current UI language once
-    currentLang = ref.read(languageProvider);
-  }
-
-  Future<void> _showMultiLangDialog(BuildContext context) async {
+  Future<void> _showMultiLangDialog(BuildContext context, String currentLang) async {
     final venue = ref.read(draftVenueProvider);
+    final localization = AppLocalizations.of(context)!;
     if (venue == null) return;
 
-    // The current map of all languages for venueName
     final currentMap = venue.venueName;
-    // The list of available languages
     final availableLangs = venue.languageOptions.isNotEmpty
         ? venue.languageOptions
         : [currentLang];
 
-    // Show the multi-lang dialog
     final updatedMap = await showDialog<Map<String, String>>(
       context: context,
       builder: (_) => MultiLangDialog(
-        label: 'Edit Venue Name',
+        label: localization.translate("venue_name"),
         initialValues: currentMap,
         availableLanguages: availableLangs,
         defaultLang: venue.additionalInfo['defaultLanguage'] ?? 'en',
-        googleApiKey: 'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA',
+        googleApiKey: AppThemeLocal.googleApiKey,
       ),
     );
 
     if (updatedMap != null) {
-      // user pressed save => updatedMap is the new entire map
+      // Update the entire map in the provider
       ref.read(draftVenueProvider.notifier).updateVenueNameMap(updatedMap);
 
-      // Also update the controller with the text for the current language
-      final updatedText = updatedMap[currentLang] ?? '';
-      widget.controller.text = updatedText;
+      // Defer updating the controller text
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.controller.text = updatedMap[currentLang] ?? '';
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
+    final currentLang = ref.watch(languageProvider);
     final venue = ref.watch(draftVenueProvider);
-    // if no venue, or no map, fallback
     final entireMap = venue?.venueName ?? {currentLang: ''};
+
+    // Check if we need to update the controller text
+    final newText = entireMap[currentLang] ?? '';
+    if (widget.controller.text != newText) {
+      // Defer the text update until after build
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          widget.controller.text = newText;
+        }
+      });
+    }
 
     return SizedBox(
       width: widget.width,
@@ -95,12 +95,12 @@ class _VenueNameFieldState extends ConsumerState<VenueNameField> {
                   ? IconButton(
                       icon: const Icon(Icons.translate,
                           color: AppThemeLocal.accent),
-                      onPressed: () => _showMultiLangDialog(context),
+                      onPressed: () => _showMultiLangDialog(context, currentLang),
                     )
                   : null,
             ),
             onChanged: (val) {
-              // user typing => update only the current language's text
+              // Only update the current language key in the map
               final updated = {...entireMap};
               updated[currentLang] = val;
               ref.read(draftVenueProvider.notifier).updateVenueNameMap(updated);

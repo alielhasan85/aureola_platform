@@ -1,4 +1,7 @@
 {
+
+"default_language": "اللغة الأساسية للقائمة",
+
 "English": "English",
   "Arabic": "العربية",
   "French": "Français",
@@ -44,7 +47,6 @@
     "venue_sells_alcohol": "هل يبيع متجرك الكحول؟",
     "yes": "نعم",
     "no": "لا",
-    "default_language": "اللغة الافتراضية",
     "english_": "الإنجليزية",
     "arabic_": "العربية",
     "french_": "الفرنسية",
@@ -137,7 +139,6 @@
 
 "Language_Options": "Language Options",
 
-"other_languages":  "Other Languages",
       "forgot_password": "Forgot Password?",
   "reset_password": "Reset Password",
   "enter_email_to_reset_password": "Enter your email address to reset your password.",
@@ -276,7 +277,15 @@
   "Edit_Translations": "تحرير الترجمات",
   "You_are_editing_translations_for": "أنت تقوم بتحرير الترجمات لـ {label}.",
   "Auto_Translate": "الترجمة التلقائية",
-  "EnterTextIn": "أدخل النص باللغة {langName}"
+  "EnterTextIn": "أدخل النص باللغة {langName}",
+  "set": "تعيين",
+  "Select_Main_Language": "اختر اللغة الرئيسية",
+  "please_select_language": "يرجى اختيار اللغة",
+  "add": "إضافة",
+  "cannot_add_default_language": "لا يمكن إضافة اللغة الافتراضية",
+  "language_already_exists": "اللغة موجودة بالفعل",
+  "other_languages": "لغات إضافية اختيارية",
+  "Add_a_language": "أضف لغة"
     
 
 

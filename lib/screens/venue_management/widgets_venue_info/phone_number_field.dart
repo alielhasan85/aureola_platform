@@ -75,41 +75,46 @@ class _PhoneNumberFieldState extends ConsumerState<PhoneNumberField> {
             style: AppThemeLocal.paragraph,
           ),
           const SizedBox(height: 6),
-          IntlPhoneField(
-            languageCode: languageCode,
-            pickerDialogStyle: PickerDialogStyle(
-              width: widget.width,
-              countryNameStyle: AppThemeLocal.paragraph,
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: IntlPhoneField(
+              
+              //languageCode: languageCode,
+              pickerDialogStyle: PickerDialogStyle(
+                width: widget.width,
+                countryNameStyle: AppThemeLocal.paragraph,
+                searchFieldInputDecoration: AppThemeLocal.textFieldinputDecoration(), 
+              ),
+              controller: _phoneController,
+              style: AppThemeLocal.paragraph,
+              cursorColor: AppThemeLocal.accent,
+              decoration: AppThemeLocal.textFieldinputDecoration(
+                hint:
+                    AppLocalizations.of(context)!.translate("enter_phone_number"),
+              ),
+              initialCountryCode: initialCountryCode,
+              onChanged: (phone) {
+                // User-initiated change
+                ref
+                    .read(draftVenueProvider.notifier)
+                    .updateContactPhoneNumber(phone.number);
+                ref
+                    .read(draftVenueProvider.notifier)
+                    .updateContactCountryDial(phone.countryCode);
+              },
+              onCountryChanged: (country) {
+                ref
+                    .read(draftVenueProvider.notifier)
+                    .updateContactCountryName(country.name);
+                ref
+                    .read(draftVenueProvider.notifier)
+                    .updateContactCountryCode(country.code);
+              },
+              dropdownTextStyle: AppThemeLocal.paragraph,
+              textAlign: TextAlign.start,
+              validator: widget.validator,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
-            controller: _phoneController,
-            style: AppThemeLocal.paragraph,
-            cursorColor: AppThemeLocal.accent,
-            decoration: AppThemeLocal.textFieldinputDecoration(
-              hint:
-                  AppLocalizations.of(context)!.translate("enter_phone_number"),
-            ),
-            initialCountryCode: initialCountryCode,
-            onChanged: (phone) {
-              // User-initiated change
-              ref
-                  .read(draftVenueProvider.notifier)
-                  .updateContactPhoneNumber(phone.number);
-              ref
-                  .read(draftVenueProvider.notifier)
-                  .updateContactCountryDial(phone.countryCode);
-            },
-            onCountryChanged: (country) {
-              ref
-                  .read(draftVenueProvider.notifier)
-                  .updateContactCountryName(country.name);
-              ref
-                  .read(draftVenueProvider.notifier)
-                  .updateContactCountryCode(country.code);
-            },
-            dropdownTextStyle: AppThemeLocal.paragraph,
-            textAlign: TextAlign.start,
-            validator: widget.validator,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
         ],
       ),

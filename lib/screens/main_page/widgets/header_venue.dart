@@ -5,7 +5,7 @@ import 'package:aureola_platform/service/theme/theme.dart';
 class HeaderContainer extends StatelessWidget {
   final String userName;
 
-  HeaderContainer({super.key, required this.userName});
+  const HeaderContainer({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {

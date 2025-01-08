@@ -9,7 +9,6 @@
   "log_out": "Se Déconnecter",
   "notifications": "Notifications",
 "Language_Options": "Language Options",
-"other_languages":  "Other Languages",
     "dashboard": "Tableau de bord",
     "order": "Commande",
     "menu_management": "Gestion du menu",
@@ -264,7 +263,16 @@
   "Edit_Translations": "Modifier les traductions",
   "You_are_editing_translations_for": "Vous modifiez les traductions pour {label}.",
   "Auto_Translate": "Traduction automatique",
-  "EnterTextIn": "Entrez le texte en {langName}"
+  "EnterTextIn": "Entrez le texte en {langName}",
+  "set": "Définir",
+   "Select_Main_Language": "Sélectionner la langue principale",
+    "please_select_language": "Veuillez sélectionner une langue",
+    "add": "Ajouter",
+    
+    "cannot_add_default_language": "Impossible d'ajouter la langue par défaut",
+    "language_already_exists": "La langue existe déjà",
+    "other_languages": "Langues supplémentaires facultatives",
+    "Add_a_language": "Ajouter une langue"
   
   
 

@@ -1,5 +1,6 @@
 // lib/screens/menu_management/menu_edit/menu_list.dart
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -79,16 +80,28 @@ class _MenuListState extends ConsumerState<MenuList> {
                         Text(
                           AppLocalizations.of(context)!
                               .translate('menu.availableMenusAt'),
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: AppThemeLocal.paragraph,
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          draftVenue.venueName[langCode]!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: AppThemeLocal.red),
-                        ),
+
+SizedBox(
+  width: 220,
+  child: AutoSizeText(
+                       draftVenue.venueName[langCode]!,
+                      style:  AppThemeLocal.paragraph
+                                .copyWith(color: AppThemeLocal.red),
+                          
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      minFontSize: 16,
+                      maxFontSize:18,
+                    ),
+),
+              
+             
+              
+
+
                       ],
                     ),
                     const SizedBox(height: 16),

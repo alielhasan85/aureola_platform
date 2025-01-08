@@ -35,8 +35,9 @@ class VenueInfo extends ConsumerStatefulWidget {
 
 class _VenueInfoState extends ConsumerState<VenueInfo> {
   //TODO: to remove api key from codes
+  
   final locationService =
-      LocationService(apiKey: 'AIzaSyDGko8GkwRTwIukbxljTuuvocEdUgWxXRA');
+      LocationService(apiKey: AppThemeLocal.googleApiKey);
 
   final _formKey = GlobalKey<FormState>();
 
@@ -263,18 +264,22 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
               thickness: 0.5),
           const SizedBox(height: 12),
-          Text(
-            AppLocalizations.of(context)!.translate("Language_Options"),
-            style: AppThemeLocal.paragraph,
-          ),
-          DefaultLanguageDropdown(
+
+           
+          VenueDefaultLanguage(
             width: fieldWidth,
-            initialLanguage: _selectedDefaultLanguage ?? 'en',
-            onChanged: (val) {
-              setState(() => _selectedDefaultLanguage = val);
-              ref.read(draftVenueProvider.notifier).updateDefaultLanguage(val);
-            },
+            // initialLanguage: _selectedDefaultLanguage ?? 'en',
+            // onChanged: (val) {
+            //   setState(() => _selectedDefaultLanguage = val);
+            //   ref.read(draftVenueProvider.notifier).updateDefaultLanguage(val);
+            // },
           ),
+          // const SizedBox(height: 16),
+          // Text(
+          //   AppLocalizations.of(context)!.translate("Language_Options"),
+          //   style: AppThemeLocal.paragraph,
+          // ),
+          
           const SizedBox(height: 16),
           VenueAddLanguages(width: fieldWidth),
           const SizedBox(height: 12),
@@ -348,12 +353,12 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
         ],
       );
     } else {
-      // Desktop layout code unchanged
+      // Desktop layout 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //venue name + tagline
-          //TODO: to add multi language support
+          
           Row(
             children: [
               VenueNameField(
@@ -426,21 +431,24 @@ class _VenueInfoState extends ConsumerState<VenueInfo> {
               color: AppThemeLocal.accent.withAlpha((0.5 * 255).toInt()),
               thickness: 0.5),
           const SizedBox(height: 12),
-          Text(
-            AppLocalizations.of(context)!.translate("Language_Options"),
-            style: AppThemeLocal.paragraph,
-          ),
-          const SizedBox(height: 6),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            DefaultLanguageDropdown(
+          // Text(
+          //   AppLocalizations.of(context)!.translate("Language_Options"),
+          //   style: AppThemeLocal.paragraph,
+          // ),
+          // const SizedBox(height: 6),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start, 
+            
+            children: [
+            VenueDefaultLanguage(
               width: fieldWidth,
-              initialLanguage: _selectedDefaultLanguage ?? 'en',
-              onChanged: (val) {
-                setState(() => _selectedDefaultLanguage = val);
-                ref
-                    .read(draftVenueProvider.notifier)
-                    .updateDefaultLanguage(val);
-              },
+              // initialLanguage: _selectedDefaultLanguage ?? 'en',
+              // onChanged: (val) {
+              //   setState(() => _selectedDefaultLanguage = val);
+              //   ref
+              //       .read(draftVenueProvider.notifier)
+              //       .updateDefaultLanguage(val);
+              // },
             ),
             SizedBox(width: spacing),
             VenueAddLanguages(width: fieldWidth),
